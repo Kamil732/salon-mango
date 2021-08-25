@@ -1,0 +1,42 @@
+@import '../../abstarct/variables';
+@import '../../abstarct/config';
+
+$prefix: form-control;
+$form-control-vertical-margin: 2.5rem;
+
+.form-group {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	width: 100%;
+	margin: -#{$form-control-vertical-margin} 0;
+
+	&:first-of-type {
+		margin-top: 0;
+	}
+
+	&:last-of-type {
+		margin-bottom: 0;
+	}
+}
+
+.#{$prefix} {
+	position: relative;
+	margin: $form-control-vertical-margin 0;
+	width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+	.form-group.wrap {
+		display: block;
+
+		& > .form-control {
+			margin-bottom: 0;
+		}
+	}
+}
+
+@import './checkbox';
+@import './input';
+@import './label';
+@import './textarea';

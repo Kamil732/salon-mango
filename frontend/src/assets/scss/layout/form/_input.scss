@@ -1,0 +1,53 @@
+.form-control__input {
+	&__border {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 3px;
+		background-color: $active-element;
+		z-index: 3;
+		transform: scaleX(0);
+		transition: transform 0.15s ease-in-out;
+	}
+
+	&:focus + &__border,
+	&__container:focus::after {
+		transform: scaleX(1);
+	}
+
+	position: relative;
+	width: 100%;
+	border: none;
+	font-size: 0.8em;
+	padding: 3px 0;
+	outline: 0;
+	border-bottom: 2px solid $border-color;
+	background-color: transparent;
+	z-index: 2;
+	display: block;
+
+	&:required:invalid {
+		box-shadow: none;
+		border-color: $error-color;
+	}
+
+	&:required:valid {
+		border-color: $success-color;
+	}
+
+	&:disabled {
+		background-color: rgba($error-color, 0.03) !important;
+		cursor: not-allowed;
+	}
+}
+
+.inline-inputs {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+
+	.form-control {
+		margin: 0;
+	}
+}

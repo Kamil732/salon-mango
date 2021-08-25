@@ -1,0 +1,48 @@
+// .card-container {
+// 	display: flex;
+// 	gap: 4rem;
+// 	flex-direction: column;
+// 	width: 100%;
+
+// 	& > .card {
+// 		margin: 0 auto;
+// 	}
+// }
+
+.card {
+	$border-radius: 10px;
+
+	width: 100%;
+	background-color: $surface-color;
+	border-radius: $border-radius;
+	border: 1px solid #ccc;
+
+	& > &__title {
+		background-color: $secondary-color;
+		color: set-text-color($secondary-color);
+		padding: 1.5rem;
+		font-size: 1.3em;
+		font-weight: 600;
+		letter-spacing: 1px;
+		text-align: center;
+		border-radius: $border-radius $border-radius 0 0;
+	}
+
+	& > &__body {
+		padding: 1rem 1.5rem;
+	}
+}
+
+@include media-laptop {
+	// .card-container {
+	// 	flex-direction: row;
+
+	// 	&.vertical {
+	// 		flex-direction: column;
+	// 	}
+	// }
+
+	.card > .card__body {
+		padding: 2rem 3rem;
+	}
+}

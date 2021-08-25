@@ -1,0 +1,108 @@
+.dashboard {
+	display: flex;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 100vh;
+	overflow: hidden;
+	width: 100vw;
+
+	&__menu {
+		overflow: auto;
+		position: fixed;
+		left: 4rem;
+		top: 1rem;
+		background-color: $surface-color;
+		z-index: 5;
+		border-radius: 0 10px 10px;
+		display: none;
+		max-height: 100%;
+		width: 100%;
+		@include box-shadow;
+
+		&.open {
+			display: block;
+		}
+	}
+
+	&__nav {
+		overflow-y: auto;
+		background-color: $primary-color;
+		color: set-text-color($primary-color);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		height: 100%;
+		border-radius: 0;
+		border-right: 1px solid #000;
+	}
+
+	&__btn {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		background-color: transparent;
+		font-size: 0.7em;
+		width: 100%;
+		padding: 0.75rem 3px;
+		text-align: center;
+		color: set-text-color($primary-color);
+		opacity: 0.5;
+		text-transform: lowercase;
+
+		&:hover,
+		&.active {
+			opacity: 1;
+		}
+
+		&__icon {
+			font-size: 1.8em;
+			margin-bottom: -0.3em;
+			color: set-text-color($primary-color);
+		}
+
+		&-open {
+			text-transform: uppercase;
+			cursor: pointer;
+
+			& > &__icon {
+				margin-bottom: -0.3em;
+			}
+		}
+	}
+
+	& > &__body {
+		background-color: $background-color;
+		width: 100%;
+		border-top: 1px solid $border-color;
+		margin-top: $header-height;
+		padding: 1rem 1rem 0 1rem;
+		overflow-y: auto;
+	}
+}
+
+@include media-tablet {
+	.dashboard {
+		&__menu {
+			display: flex;
+			align-items: flex-start;
+			position: static;
+			width: 220px;
+			box-shadow: none;
+			margin-top: $header-height;
+			border-top: 1px solid $border-color;
+			border-right: 1px solid $border-color;
+			border-radius: 0;
+		}
+
+		& > &__body {
+			padding-left: 1.5rem;
+		}
+
+		&__btn-open {
+			display: none;
+		}
+	}
+}

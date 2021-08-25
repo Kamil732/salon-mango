@@ -1,0 +1,334 @@
+.btn-container {
+	display: flex;
+	gap: 1rem;
+	align-items: center;
+}
+
+.btn-resources-container {
+	cursor: default;
+	user-select: none;
+	font-size: 0.8em;
+
+	&:hover,
+	&.active {
+		background-color: $shadow-color;
+	}
+
+	& > label {
+		padding: 4px 0.3rem;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		gap: 0.2rem;
+
+		& > span {
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		& > .box-color {
+			margin-left: auto;
+		}
+	}
+}
+
+.btn-group-container {
+	display: flex;
+	align-items: center;
+
+	&.categories-group {
+		margin-bottom: 0.5rem;
+
+		.categories-group__icon {
+			position: absolute;
+			left: 0;
+			opacity: 0.8;
+			margin-left: 0.5rem;
+			font-size: 1.6em;
+		}
+	}
+
+	button {
+		border-radius: 0;
+		white-space: nowrap;
+
+		&:first-child {
+			border-radius: 6px 0 0 6px;
+		}
+
+		&:last-child {
+			border-radius: 0 6px 6px 0;
+		}
+
+		&.btn-category {
+			background-color: #fff;
+			padding: 0.5rem;
+			border: 1px solid $border-color;
+			border-radius: 6px;
+			justify-content: center;
+			text-align: center;
+			width: 100%;
+			display: none;
+
+			&.active {
+				background-color: $secondary-color;
+				display: inherit;
+			}
+
+			&:hover,
+			&:focus {
+				background-color: $secondary-color;
+			}
+		}
+	}
+}
+
+.btn {
+	display: flex;
+	align-items: center;
+	outline: none;
+	border: 4px solid black;
+	border-radius: 6px;
+	cursor: pointer;
+	width: fit-content;
+	text-align: center;
+	transition: background-color 0.1s ease-in, border-color 0.1s ease-in,
+		border-radius 0.1s ease-in;
+	font-size: 0.9em;
+
+	&-picker {
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		font-size: 0.9em;
+		padding: 0.4rem;
+		border-width: 1px;
+
+		&:hover,
+		&:focus {
+			background-color: $shadow-color;
+		}
+	}
+
+	&-close {
+		position: relative;
+		width: 32px;
+		height: 32px;
+		opacity: 0.8;
+		cursor: pointer;
+
+		&::before,
+		&::after {
+			position: absolute;
+			content: '';
+			height: 33px;
+			width: 2px;
+			background-color: $primary-color;
+		}
+
+		&::before {
+			transform: rotate(45deg);
+		}
+		&::after {
+			transform: rotate(-45deg);
+		}
+	}
+
+	&__small {
+		padding: 0.2rem 0.5rem !important;
+
+		&.btn__loading {
+			padding: 0.2rem 0.5rem !important;
+		}
+	}
+
+	&__extraSmall {
+		color: $active-element;
+		padding: 0;
+		border: none;
+		background-color: transparent;
+	}
+
+	&__rounded {
+		background-color: transparent;
+		padding: 0.5rem !important;
+		border: none;
+		border-radius: 30px;
+
+		&:hover,
+		&:focus {
+			background-color: $shadow-color;
+		}
+	}
+
+	&__primary,
+	&__success,
+	&__danger {
+		padding: 1rem 2rem;
+	}
+
+	&__primary {
+		border-color: $primary-color;
+		background-color: $primary-color;
+		color: set-text-color($primary-color);
+
+		&:hover,
+		&:focus {
+			border-color: $primary-color-hover;
+			border-bottom-color: $primary-color;
+			background-color: $primary-color-hover;
+			color: set-text-color($primary-color-hover);
+		}
+	}
+
+	&__secondary {
+		background-color: $secondary-color;
+		color: set-text-color($secondary-color);
+		border-width: 1px;
+		padding: calc(1rem + 4px) 2rem;
+
+		&:hover,
+		&:focus {
+			border-color: transparent;
+			border-bottom-color: grey;
+			background-color: transparent;
+			border-radius: 0;
+		}
+	}
+
+	&__success {
+		border-color: $success-color;
+		background-color: $success-color;
+		color: set-text-color($success-color);
+
+		&:hover,
+		&:focus {
+			$hover-color: darken($success-color, 15%);
+			border-color: $hover-color;
+			border-bottom-color: $success-color;
+			background-color: $hover-color;
+			color: set-text-color($hover-color);
+		}
+	}
+
+	&__danger {
+		border-color: $error-color;
+		background-color: $error-color;
+		color: set-text-color($error-color);
+
+		&:hover,
+		&:focus {
+			$hover-color: darken($error-color, 15%);
+			border-color: $hover-color;
+			border-bottom-color: $error-color;
+			background-color: $hover-color;
+			color: set-text-color($hover-color);
+		}
+	}
+
+	&[disabled] {
+		opacity: 0.7;
+		cursor: default;
+		pointer-events: none;
+	}
+
+	&__loading {
+		padding: 0.7rem 1.5rem;
+
+		&::before {
+			content: '';
+			display: inline-block;
+			width: 2rem;
+			height: 2rem;
+			margin-right: 8px;
+			border-radius: 50%;
+			border: 4px solid #fff;
+			border-color: #000 transparent #000 transparent;
+			animation: lds-dual-ring 1.2s linear infinite;
+		}
+	}
+}
+
+@include media-tablet {
+	.btn-group-container {
+		&.categories-group {
+			margin-bottom: -1px;
+
+			.categories-group__icon {
+				display: none;
+			}
+		}
+
+		&.show-categories {
+			flex-direction: row;
+		}
+
+		button.btn-category {
+			$border: 1px solid $border-color;
+			background-color: $surface-color;
+			border: $border;
+			border-left: none;
+			border-radius: 0;
+			display: inherit;
+			// width: auto;
+
+			&:first-child {
+				border-left: $border;
+				border-top-left-radius: 6px;
+			}
+
+			&:last-child {
+				border-top-right-radius: 6px;
+			}
+
+			&.active {
+				border-bottom-color: $secondary-color;
+				cursor: default;
+			}
+		}
+	}
+
+	.btn {
+		&__primary,
+		&__success,
+		&__danger {
+			padding: 1rem 2.5rem;
+		}
+
+		&__small {
+			padding: 0.5rem 1rem !important;
+		}
+	}
+}
+
+@media only screen and (max-width: 768px) {
+	.btn-group-container.show-categories {
+		$border: 1px solid $border-color;
+		flex-direction: column;
+
+		button.btn-category {
+			display: inherit;
+			border-radius: 0;
+			border: $border;
+			border-bottom: none;
+
+			&:first-child {
+				border-radius: 6px 6px 0 0;
+			}
+
+			&:last-child {
+				border-radius: 0 0 6px 6px;
+				border: $border;
+			}
+		}
+	}
+}
+
+@keyframes lds-dual-ring {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
