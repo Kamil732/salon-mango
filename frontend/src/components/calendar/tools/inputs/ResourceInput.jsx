@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { useId } from 'react-id-generator'
 
-import { loadBarbers } from '../../../../redux/actions/data'
+import { loadEmployees } from '../../../../redux/actions/data'
 
 import FormControl from '../../../../layout/forms/FormControl'
 import Dropdown from '../../../../layout/buttons/dropdowns/Dropdown'
@@ -37,11 +37,11 @@ ResourceInput.prototype.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-	resources: state.data.cms.data.resources,
+	resources: state.data.salon.resources,
 })
 
 const mapDispatchToProps = {
-	loadBarbers,
+	loadEmployees,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResourceInput)

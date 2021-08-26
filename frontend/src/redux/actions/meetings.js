@@ -41,20 +41,20 @@ const setMeeting = (data, getState) => {
 		for (let j = 0; j < data.services[i].resources.length; j++)
 			res.push({
 				...eventData,
-				color: getState().data.cms.data.resources.find(
+				color: getState().data.salon.resources.find(
 					({ id }) => id === data.services[i].resources[j]
 				).color,
 				resourceId: `resource-${data.services[i].resources[j]}`,
 			})
 
 		// TODO: TypeError: Cannot read property 'color' of undefined
-		// TODO: Barbers are not loaded yet
+		// TODO: Employees are not loaded yet
 		res.push({
 			...eventData,
-			color: getState().data.barbers.find(
-				({ id }) => id === data.services[i].barber
+			color: getState().data.employees.find(
+				({ id }) => id === data.services[i].employee
 			).color,
-			resourceId: `barber-${data.services[i].barber}`,
+			resourceId: `employee-${data.services[i].employee}`,
 		})
 	}
 

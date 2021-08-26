@@ -16,12 +16,12 @@ import Dropdown from '../../../layout/buttons/dropdowns/Dropdown'
 import { options } from '../tools/inputs/RepeatEventInput'
 
 const AddCustomerForm = lazy(() => import('./AddCustomerForm'))
-const BarberInput = lazy(() => import('../tools/inputs/BarberInput'))
+const EmployeeInput = lazy(() => import('../tools/inputs/EmployeeInput'))
 const ResourceInput = lazy(() => import('../tools/inputs/ResourceInput'))
 const CustomerInput = lazy(() => import('../tools/inputs/CustomerInput'))
 const ServicesInput = lazy(() => import('../tools/inputs/ServicesInput'))
-const BarberAndResourceInputs = lazy(() =>
-	import('../tools/inputs/BarberAndResourceInputs')
+const EmployeeAndResourceInputs = lazy(() =>
+	import('../tools/inputs/EmployeeAndResourceInputs')
 )
 const RepeatEventInput = lazy(() => import('../tools/inputs/RepeatEventInput'))
 
@@ -32,7 +32,7 @@ class AddMeetingAdminForm extends Component {
 		isBlocked: PropTypes.bool,
 		startDate: PropTypes.instanceOf(Date),
 		calendarStep: PropTypes.number,
-		barbers: PropTypes.array,
+		employees: PropTypes.array,
 		resources: PropTypes.array,
 		resourceMap: PropTypes.object,
 		addMeeting: PropTypes.func.isRequired,
@@ -42,7 +42,7 @@ class AddMeetingAdminForm extends Component {
 	constructor(props) {
 		super(props)
 
-		// Get barber's id from resources
+		// Get employee's id from resources
 		const selectedResourceMap = props.resourceMap.isMany
 			? props.resourceMap.data.find(({ id }) => id === props.resourceId)
 			: props.resourceMap.selected
@@ -59,9 +59,9 @@ class AddMeetingAdminForm extends Component {
 				appearancesNum: 1,
 				endDate: props.startDate,
 			},
-			barber: selectedResourceMap?.barberId
-				? props.barbers.find(
-						({ id }) => id === selectedResourceMap.barberId
+			employee: selectedResourceMap?.employeeId
+				? props.employees.find(
+						({ id }) => id === selectedResourceMap.employeeId
 				  )
 				: null,
 			resource: selectedResourceMap?.resourceId
@@ -81,7 +81,7 @@ class AddMeetingAdminForm extends Component {
 
 	componentDidUpdate(_, prevState) {
 		if (prevState.blocked !== this.state.blocked && prevState.blocked)
-			this.setState({ barber: null })
+			this.setState({ employee: null })
 
 		setMeetingEndDate(
 			prevState,
@@ -97,7 +97,7 @@ class AddMeetingAdminForm extends Component {
 		const {
 			blocked,
 			customer,
-			barber,
+			employee,
 			resource,
 			services,
 			private_description,
@@ -106,7 +106,7 @@ class AddMeetingAdminForm extends Component {
 
 		const payload = blocked
 			? {
-					barber: barber?.id,
+					employee: employee?.id,
 					resource: resource?.id,
 					private_description,
 			  }
@@ -114,7 +114,7 @@ class AddMeetingAdminForm extends Component {
 					customer: customer.id,
 					services: services.map((service) => ({
 						id: service.value.id,
-						barber: service.barber.id,
+						employee: service.employee.id,
 						resources: service.resources.map(
 							(resource) => resource.id
 						),
@@ -144,7 +144,7 @@ class AddMeetingAdminForm extends Component {
 			blocked,
 			repeatData,
 			customer,
-			barber,
+			employee,
 			resource,
 			services,
 			private_description,
@@ -240,7 +240,7 @@ class AddMeetingAdminForm extends Component {
 												showMoreOptions={
 													showMoreOptions
 												}
-												defaultBarber={barber}
+												defaultEmployee={employee}
 												defaultResource={resource}
 												required={!blocked}
 												value={services}
@@ -253,11 +253,11 @@ class AddMeetingAdminForm extends Component {
 											/>
 
 											{services.length === 0 && (
-												<BarberAndResourceInputs
-													barber={barber}
-													updateBarber={(state) =>
+												<EmployeeAndResourceInputs
+													employee={employee}
+													updateEmployee={(state) =>
 														this.setState({
-															barber: state,
+															employee: state,
 														})
 													}
 													resource={resource}
@@ -293,12 +293,12 @@ class AddMeetingAdminForm extends Component {
 							{blocked && (
 								<>
 									<Dropdown.InputContainer>
-										<BarberInput
+										<EmployeeInput
 											required={resource == null}
-											value={barber}
+											value={employee}
 											onChange={(option) =>
 												this.setState({
-													barber: option,
+													employee: option,
 												})
 											}
 											extraOptions={[
@@ -312,24 +312,24 @@ class AddMeetingAdminForm extends Component {
 										<Dropdown.ClearBtn
 											clear={() =>
 												this.setState({
-													barber: null,
+													employee: null,
 												})
 											}
-											value={barber}
+											value={employee}
 										/>
 									</Dropdown.InputContainer>
 
 									<FormGroup>
 										<Dropdown.InputContainer>
 											<ResourceInput
-												required={barber == null}
+												required={employee == null}
 												value={resource}
 												onChange={(option) =>
 													this.setState({
 														resource: option,
 													})
 												}
-												disabled={barber != null}
+												disabled={employee != null}
 											/>
 											<Dropdown.ClearBtn
 												clear={() =>
@@ -397,8 +397,8 @@ class AddMeetingAdminForm extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	barbers: state.data.barbers,
-	resources: state.data.cms.data.resources,
+	employees: state.data.employees,
+	resources: state.data.salon.resources,
 	resourceMap: state.meetings.resourceMap,
 })
 

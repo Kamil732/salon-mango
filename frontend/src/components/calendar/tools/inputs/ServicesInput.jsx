@@ -20,13 +20,13 @@ import ButtonContainer from '../../../../layout/buttons/ButtonContainer'
 import moment from 'moment'
 import ConsumptionInput from './ConsumptionInput'
 
-const BarberInput = lazy(() => import('./BarberInput'))
+const EmployeeInput = lazy(() => import('./EmployeeInput'))
 const ResourcesInput = lazy(() => import('./ResourcesInput'))
 
 const CATEOGRIES = [0, 1, 2]
 
 function ServicesInput({
-	defaultBarber,
+	defaultEmployee,
 	defaultResource,
 	value,
 	services,
@@ -46,11 +46,11 @@ function ServicesInput({
 	const [dropdownId] = useId(1, 'service-')
 	const [multiListId] = useId(1, 'multiList-')
 
-	const getServiceBarberTime = useCallback(
-		(barber, id, returnDisplayTime = true) => {
-			if (barber === null) return null
+	const getServiceEmployeeTime = useCallback(
+		(employee, id, returnDisplayTime = true) => {
+			if (employee === null) return null
 
-			const serviceDate = barber.services_data.find(
+			const serviceDate = employee.services_data.find(
 				({ service }) => service === id
 			)
 
@@ -81,12 +81,15 @@ function ServicesInput({
 		() =>
 			value.reduce((prev, curr) => {
 				const time =
-					getServiceBarberTime(curr.barber, curr.value.id, false) ||
-					curr.value.time
+					getServiceEmployeeTime(
+						curr.employee,
+						curr.value.id,
+						false
+					) || curr.value.time
 
 				return parseInt(prev) + parseInt(time)
 			}, 0),
-		[value, getServiceBarberTime]
+		[value, getServiceEmployeeTime]
 	)
 
 	useEffect(() => {
@@ -99,11 +102,11 @@ function ServicesInput({
 
 	const formatOptionLabel = (
 		{ id, name, display_time, price },
-		barber = defaultBarber,
+		employee = defaultEmployee,
 		selectedFormat
 	) => {
-		const time = barber
-			? getServiceBarberTime(barber, id) || display_time
+		const time = employee
+			? getServiceEmployeeTime(employee, id) || display_time
 			: display_time
 
 		return (
@@ -140,10 +143,10 @@ function ServicesInput({
 		)
 	}
 
-	const getBarberInput = () => {
+	const getEmployeeInput = () => {
 		return (
-			<BarberInput
-				value={findValueBySelectedId().barber}
+			<EmployeeInput
+				value={findValueBySelectedId().employee}
 				serviceId={selected.value.id}
 				serviceDisplayTime={selected.value.display_time}
 				onChange={(option) =>
@@ -153,7 +156,7 @@ function ServicesInput({
 								return service
 
 							const duration =
-								getServiceBarberTime(
+								getServiceEmployeeTime(
 									option,
 									selected.value.id,
 									false
@@ -161,7 +164,7 @@ function ServicesInput({
 
 							return {
 								...service,
-								barber: option,
+								employee: option,
 								end: moment(findValueBySelectedId().start)
 									.add(duration, 'minutes')
 									.toDate(),
@@ -180,8 +183,8 @@ function ServicesInput({
 					<Modal.Header>
 						<span className="text-broken">
 							{selected.value.name} (
-							{getServiceBarberTime(
-								selected.barber,
+							{getServiceEmployeeTime(
+								selected.employee,
 								selected.value.id
 							) || selected.value.display_time}
 							, {selected.value.price} zł)
@@ -198,10 +201,10 @@ function ServicesInput({
 							>
 								{findValueBySelectedId().resources.length ===
 								0 ? (
-									getBarberInput()
+									getEmployeeInput()
 								) : (
 									<Dropdown.InputContainer>
-										{getBarberInput()}
+										{getEmployeeInput()}
 										<Dropdown.ClearBtn
 											clear={() =>
 												updateState(
@@ -214,13 +217,13 @@ function ServicesInput({
 
 														return {
 															...service,
-															barber: null,
+															employee: null,
 														}
 													})
 												)
 											}
 											value={
-												findValueBySelectedId().barber
+												findValueBySelectedId().employee
 											}
 										/>
 									</Dropdown.InputContainer>
@@ -348,7 +351,7 @@ function ServicesInput({
 										<td>
 											{formatOptionLabel(
 												option.value,
-												option.barber,
+												option.employee,
 												true
 											)}
 										</td>
@@ -367,26 +370,26 @@ function ServicesInput({
 																)
 															}
 															className={`btn-picker ${
-																option.barber
+																option.employee
 																	? option
-																			.barber
+																			.employee
 																			.color
 																	: ''
 															}`}
 															data-tip={
-																option.barber
-																	? `pracownik: ${option.barber.full_name}`
+																option.employee
+																	? `pracownik: ${option.employee.full_name}`
 																	: 'brak pracownika'
 															}
-															data-for={`barberBtnTip-${option.value.id}`}
+															data-for={`employeeBtnTip-${option.value.id}`}
 														>
-															{option.barber
+															{option.employee
 																?.full_name || (
 																<GrUserWorker />
 															)}
 														</Button>
 														<ReactTooltip
-															id={`barberBtnTip-${option.value.id}`}
+															id={`employeeBtnTip-${option.value.id}`}
 															effect="solid"
 															place="top"
 														/>
@@ -745,15 +748,17 @@ function ServicesInput({
 								start,
 								end: moment(start)
 									.add(
-										getServiceBarberTime(
-											defaultBarber,
+										getServiceEmployeeTime(
+											defaultEmployee,
 											option.id,
 											false
 										) || option.time,
 										'minutes'
 									)
 									.toDate(),
-								barber: defaultBarber ? defaultBarber : null,
+								employee: defaultEmployee
+									? defaultEmployee
+									: null,
 								resources: defaultResource
 									? [defaultResource]
 									: [],
@@ -826,7 +831,7 @@ function ServicesInput({
 }
 
 ServicesInput.prototype.propTypes = {
-	defaultBarber: PropTypes.object,
+	defaultEmployee: PropTypes.object,
 	defaultResource: PropTypes.object,
 	value: PropTypes.any.isRequired,
 	isAdminPanel: PropTypes.bool,
@@ -837,9 +842,9 @@ ServicesInput.prototype.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-	calendar_step: state.data.cms.data.calendar_step,
-	services: state.data.cms.data.services,
-	resources: state.data.cms.data.resources,
+	calendar_step: state.data.salon.calendar_step,
+	services: state.data.salon.services,
+	resources: state.data.salon.resources,
 })
 
 export default connect(mapStateToProps, null)(ServicesInput)

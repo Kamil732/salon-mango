@@ -1,5 +1,5 @@
 import {
-	GET_DATA,
+	GET_SALON_DATA,
 	GET_NOTIFICATIONS,
 	NOTIFICATIONS_LOADING,
 	GET_NOTIFICATIONS_ERROR,
@@ -8,7 +8,7 @@ import {
 	GET_NOTIFICATION,
 	NOTIFICATION_CONNECT_WS,
 	ADD_UNREAD_NOTIFICATIONS_AMOUNT,
-	LOAD_BARBERS,
+	LOAD_EMPLOYEES,
 	LOAD_CUSTOMERS,
 } from './types'
 
@@ -17,14 +17,15 @@ import { NotificationManager } from 'react-notifications'
 import getHeaders from '../../helpers/getHeaders'
 import axios from 'axios'
 
-export const getCMSData = () => async (dispatch) => {
+export const getSalonData = (id) => async (dispatch, getState) => {
 	try {
+		const salonId = id ? id : getState().auth.data.salons[0]
 		const res = await axios.get(
-			`${process.env.REACT_APP_API_URL}/data/cms/`
+			`${process.env.REACT_APP_API_URL}/data/salons/${salonId}/`
 		)
 
 		dispatch({
-			type: GET_DATA,
+			type: GET_SALON_DATA,
 			payload: res.data,
 		})
 	} catch (err) {
@@ -36,14 +37,16 @@ export const getCMSData = () => async (dispatch) => {
 	}
 }
 
-export const loadBarbers = () => async (dispatch) => {
+export const loadEmployees = () => async (dispatch, getState) => {
 	try {
 		const res = await axios.get(
-			`${process.env.REACT_APP_API_URL}/accounts/barbers/`
+			`${process.env.REACT_APP_API_URL}/data/salons/${
+				getState().data.salon.id
+			}/employees/`
 		)
 
 		dispatch({
-			type: LOAD_BARBERS,
+			type: LOAD_EMPLOYEES,
 			payload: res.data,
 		})
 	} catch (err) {
@@ -58,7 +61,9 @@ export const loadBarbers = () => async (dispatch) => {
 export const loadCustomers = (value) => async (dispatch, getState) => {
 	try {
 		const res = await axios.get(
-			`${process.env.REACT_APP_API_URL}/accounts/customers/?search=${value}`
+			`${process.env.REACT_APP_API_URL}/data/salons/${
+				getState().data.salon.id
+			}/customers/?search=${value}`
 		)
 
 		dispatch({

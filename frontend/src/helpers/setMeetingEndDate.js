@@ -16,9 +16,9 @@ function setMeetingEndDate(
 				state.services.length === 0
 					? calendarStep
 					: state.services.reduce(
-							(prev, { barber, value: { id, time } }) => {
+							(prev, { employee, value: { id, time } }) => {
 								time =
-									barber?.services_data.find(
+									employee?.services_data.find(
 										({ service }) => service === id
 									)?.time || time
 

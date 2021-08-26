@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import 'react-calendar/dist/Calendar.css'
 
 import moment from 'moment'
-import { loadBarbers } from '../../../redux/actions/data'
+import { loadEmployees } from '../../../redux/actions/data'
 import {
 	updateCalendarDates,
 	updateResourceMap,
@@ -18,8 +18,8 @@ import { NotificationManager } from 'react-notifications'
 const Calendar = lazy(() => import('react-calendar'))
 
 function CalendarMenu({
-	loadBarbers,
-	barbers,
+	loadEmployees,
+	employees,
 	resources,
 	resourceMap,
 	currentDate,
@@ -30,8 +30,8 @@ function CalendarMenu({
 	const formatShortWeekday = (_, date) => moment(date).format('dd')
 
 	useEffect(() => {
-		if (barbers.length === 0) loadBarbers()
-	}, [barbers, loadBarbers])
+		if (employees.length === 0) loadEmployees()
+	}, [employees, loadEmployees])
 
 	useEffect(() => {
 		setActiveDay(currentDate)
@@ -45,15 +45,15 @@ function CalendarMenu({
 	const onChangeResource = (e) => {
 		const resourceId = e.target.getAttribute('data-id')
 		const resourceTitle = e.target.getAttribute('data-title')
-		const resourceBarberId =
-			parseInt(e.target.getAttribute('data-barber')) || null
+		const resourceEmployeeId =
+			parseInt(e.target.getAttribute('data-employee')) || null
 		const resourceResourceId =
 			parseInt(e.target.getAttribute('data-resource')) || null
 
 		const data = {
 			id: resourceId,
 			title: resourceTitle,
-			barberId: resourceBarberId,
+			employeeId: resourceEmployeeId,
 			resourceId: resourceResourceId,
 		}
 
@@ -104,27 +104,27 @@ function CalendarMenu({
 
 			{resourceMap.isMany !== null && (
 				<>
-					{barbers.length > 0 && (
+					{employees.length > 0 && (
 						<div className="tools-menu__item">
 							<h4 className="tools-menu__item__title">
 								PRACOWNICY
 							</h4>
 
-							{barbers.map((barber) => {
+							{employees.map((employee) => {
 								const isChecked = resourceMap.isMany
 									? resourceMap.data.some(
 											({ id }) =>
-												id === `barber-${barber.id}`
+												id === `employee-${employee.id}`
 									  )
 									: resourceMap.selected?.id ===
-									  `barber-${barber.id}`
+									  `employee-${employee.id}`
 
 								return (
 									<div
 										className={`btn-resources-container${
 											isChecked ? ' active' : ''
 										}`}
-										key={barber.id}
+										key={employee.id}
 									>
 										<label>
 											<input
@@ -133,16 +133,16 @@ function CalendarMenu({
 														? 'checkbox'
 														: 'radio'
 												}
-												data-id={`barber-${barber.id}`}
-												data-title={barber.full_name}
-												data-barber={barber.id}
+												data-id={`employee-${employee.id}`}
+												data-title={employee.full_name}
+												data-employee={employee.id}
 												checked={isChecked}
 												onChange={onChangeResource}
 											/>
 
-											<span>{barber.full_name}</span>
+											<span>{employee.full_name}</span>
 											<div
-												className={`box-color ${barber.color}`}
+												className={`box-color ${employee.color}`}
 											></div>
 										</label>
 									</div>
@@ -217,18 +217,18 @@ function CalendarMenu({
 }
 
 CalendarMenu.prototype.propTypes = {
-	barbers: PropTypes.array,
+	employees: PropTypes.array,
 	resources: PropTypes.array,
 	resourceMap: PropTypes.object.isRequired,
 	currentDate: PropTypes.instanceOf(Date),
-	loadBarbers: PropTypes.func.isRequired,
+	loadEmployees: PropTypes.func.isRequired,
 	updateCalendarDates: PropTypes.func.isRequired,
 	updateResourceMap: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => ({
-	barbers: state.data.barbers,
-	resources: state.data.cms.data.resources,
+	employees: state.data.employees,
+	resources: state.data.salon.resources,
 	resourceMap: state.meetings.resourceMap,
 	currentDate: state.meetings.calendarDates.currentDate,
 })
@@ -236,7 +236,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
 	updateCalendarDates,
 	updateResourceMap,
-	loadBarbers,
+	loadEmployees,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CalendarMenu)

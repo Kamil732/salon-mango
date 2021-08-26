@@ -21,7 +21,7 @@ import { default as NavigationMenu } from '../components/navigation/Menu'
 function Header({
 	message,
 	ws,
-	loadingCMSData,
+	loadingSalon,
 	isAuthenticated,
 	getUnreadNotificationsAmount,
 	getNotifications,
@@ -55,7 +55,7 @@ function Header({
 		body.style.overflow = isOpen ? 'hidden' : 'auto'
 	}, [isOpen])
 
-	if (loadingCMSData) return null
+	if (loadingSalon) return null
 
 	return (
 		<>
@@ -151,9 +151,10 @@ Header.prototype.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-	message: state.data.cms.data.message,
 	ws: state.data.notifications.ws,
-	loadingCMSData: state.data.cms.loading,
+	loadingSalon:
+		state.auth.isAuthenticated &&
+		Object.keys(state.data.salon).length === 0,
 	notificationLoading: state.data.notifications.loading,
 	notificationLoaded: state.data.notifications.loaded,
 	notifications: state.data.notifications.data,

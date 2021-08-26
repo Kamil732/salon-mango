@@ -16,7 +16,7 @@ const getWorkHours = (weekDay, converted = true) => {
 		end_work_saturday,
 		start_work_sunday,
 		end_work_sunday,
-	} = store.getState().data.cms.data
+	} = store.getState().data.salon
 
 	let isNonWorkingDay = false
 	let start,

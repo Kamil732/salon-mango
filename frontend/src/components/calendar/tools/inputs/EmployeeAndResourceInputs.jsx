@@ -11,30 +11,30 @@ import Button from '../../../../layout/buttons/Button'
 import ErrorBoundary from '../../../ErrorBoundary'
 import CircleLoader from '../../../../layout/loaders/CircleLoader'
 
-const BarberInput = lazy(() => import('./BarberInput'))
+const EmployeeInput = lazy(() => import('./EmployeeInput'))
 const ResourceInput = lazy(() => import('./ResourceInput'))
 
-function BarberAndResourceInputs({
-	barber,
-	updateBarber,
+function EmployeeAndResourceInputs({
+	employee,
+	updateEmployee,
 	resource,
 	updateResource,
 	resources,
 }) {
 	const [isOpen, setIsOpen] = useState(false)
 
-	const barberInput = (
-		<BarberInput
+	const employeeInput = (
+		<EmployeeInput
 			required={resource === null}
-			value={barber}
-			onChange={(option) => updateBarber(option)}
+			value={employee}
+			onChange={(option) => updateEmployee(option)}
 		/>
 	)
 
 	const resourceInput =
 		resources.length > 0 ? (
 			<ResourceInput
-				required={barber === null}
+				required={employee === null}
 				value={resource}
 				onChange={(option) => updateResource(option)}
 			/>
@@ -55,20 +55,22 @@ function BarberAndResourceInputs({
 								}
 							>
 								{resource === null ? (
-									barberInput
+									employeeInput
 								) : (
 									<FormGroup>
 										<Dropdown.InputContainer>
-											{barberInput}
+											{employeeInput}
 											<Dropdown.ClearBtn
-												clear={() => updateBarber(null)}
-												value={barber}
+												clear={() =>
+													updateEmployee(null)
+												}
+												value={employee}
 											/>
 										</Dropdown.InputContainer>
 									</FormGroup>
 								)}
 
-								{barber === null ? (
+								{employee === null ? (
 									resourceInput
 								) : (
 									<FormGroup>
@@ -94,26 +96,26 @@ function BarberAndResourceInputs({
 				<Button
 					type="button"
 					onClick={() => setIsOpen(true)}
-					className={`btn-picker ${barber ? barber.color : ''}`}
+					className={`btn-picker ${employee ? employee.color : ''}`}
 					data-tip={
-						barber
-							? `pracownik: ${barber.full_name}`
+						employee
+							? `pracownik: ${employee.full_name}`
 							: 'brak pracownika'
 					}
 					style={{
 						maxWidth: '100%',
 					}}
-					data-for="barberBtnTip"
+					data-for="employeeBtnTip"
 				>
-					{barber ? (
-						`${barber?.first_name.charAt(
+					{employee ? (
+						`${employee?.first_name.charAt(
 							0
-						)}.${barber?.last_name.charAt(0)}.`
+						)}.${employee?.last_name.charAt(0)}.`
 					) : (
 						<GrUserWorker />
 					)}
 				</Button>
-				<ReactTooltip id="barberBtnTip" effect="solid" place="top" />
+				<ReactTooltip id="employeeBtnTip" effect="solid" place="top" />
 
 				{/* Resource btn */}
 				<div
@@ -151,7 +153,7 @@ function BarberAndResourceInputs({
 }
 
 const mapStateToProps = (state) => ({
-	resources: state.data.cms.data.resources,
+	resources: state.data.salon.resources,
 })
 
-export default connect(mapStateToProps, null)(BarberAndResourceInputs)
+export default connect(mapStateToProps, null)(EmployeeAndResourceInputs)

@@ -45,7 +45,7 @@ import getEventTooltip from '../../helpers/getEventTooltip'
 const AddMeetingAdminForm = lazy(() => import('./forms/AddMeetingAdminForm'))
 const EditMeetingAdminForm = lazy(() => import('./forms/EditMeetingAdminForm'))
 
-moment.locale('PL')
+moment.locale('US')
 const localizer = momentLocalizer(moment)
 
 class Calendar extends Component {
@@ -57,7 +57,7 @@ class Calendar extends Component {
 		loadedDates: PropTypes.array,
 		visibleMeetings: PropTypes.array,
 		resourceMap: PropTypes.object.isRequired,
-		barbers: PropTypes.array,
+		employees: PropTypes.array,
 
 		calendarDates: PropTypes.shape({
 			currentDate: PropTypes.instanceOf(Date),
@@ -106,7 +106,7 @@ class Calendar extends Component {
 				view !== 'threedays' &&
 				view !== 'reception') ||
 			(view === 'reception' &&
-				props.barbers.length + props.resourcesLength <= 1)
+				props.employees.length + props.resourcesLength <= 1)
 		) {
 			view = Views.WEEK
 			localStorage.setItem('view', view)
@@ -652,7 +652,7 @@ class Calendar extends Component {
 		const {
 			loading,
 
-			barbers,
+			employees,
 			userId,
 			visibleMeetings,
 			services,
@@ -833,7 +833,7 @@ class Calendar extends Component {
 								threedays: ThreeDaysView,
 								day: true,
 							},
-							barbers.length + resourcesLength > 1
+							employees.length + resourcesLength > 1
 								? { reception: Day }
 								: {}
 						)}
@@ -937,26 +937,26 @@ const mapStateToProps = (state) => ({
 	visibleMeetings: state.meetings.visibleData,
 	calendarDates: state.meetings.calendarDates,
 	resourceMap: state.meetings.resourceMap,
-	barbers: state.data.barbers,
-	resourcesLength: state.data.cms.data.resources.length,
-	services: state.data.cms.data.services,
-	one_slot_max_meetings: state.data.cms.data.one_slot_max_meetings,
-	calendar_step: state.data.cms.data.calendar_step,
-	calendar_timeslots: state.data.cms.data.calendar_timeslots,
-	end_work_sunday: state.data.cms.data.end_work_sunday || '',
-	start_work_sunday: state.data.cms.data.start_work_sunday || '',
-	end_work_saturday: state.data.cms.data.end_work_saturday || '',
-	start_work_saturday: state.data.cms.data.start_work_saturday || '',
-	end_work_friday: state.data.cms.data.end_work_friday || '',
-	start_work_friday: state.data.cms.data.start_work_friday || '',
-	end_work_thursday: state.data.cms.data.end_work_thursday || '',
-	start_work_thursday: state.data.cms.data.start_work_thursday || '',
-	end_work_wednesday: state.data.cms.data.end_work_wednesday || '',
-	start_work_wednesday: state.data.cms.data.start_work_wednesday || '',
-	end_work_tuesday: state.data.cms.data.end_work_tuesday || '',
-	start_work_tuesday: state.data.cms.data.start_work_tuesday || '',
-	end_work_monday: state.data.cms.data.end_work_monday || '',
-	start_work_monday: state.data.cms.data.start_work_monday || '',
+	employees: state.data.employees,
+	resourcesLength: state.data.salon.resources.length,
+	services: state.data.salon.services,
+	one_slot_max_meetings: state.data.salon.one_slot_max_meetings,
+	calendar_step: state.data.salon.calendar_step,
+	calendar_timeslots: state.data.salon.calendar_timeslots,
+	end_work_sunday: state.data.salon.end_work_sunday || '',
+	start_work_sunday: state.data.salon.start_work_sunday || '',
+	end_work_saturday: state.data.salon.end_work_saturday || '',
+	start_work_saturday: state.data.salon.start_work_saturday || '',
+	end_work_friday: state.data.salon.end_work_friday || '',
+	start_work_friday: state.data.salon.start_work_friday || '',
+	end_work_thursday: state.data.salon.end_work_thursday || '',
+	start_work_thursday: state.data.salon.start_work_thursday || '',
+	end_work_wednesday: state.data.salon.end_work_wednesday || '',
+	start_work_wednesday: state.data.salon.start_work_wednesday || '',
+	end_work_tuesday: state.data.salon.end_work_tuesday || '',
+	start_work_tuesday: state.data.salon.start_work_tuesday || '',
+	end_work_monday: state.data.salon.end_work_monday || '',
+	start_work_monday: state.data.salon.start_work_monday || '',
 })
 
 const mapDispatchToProps = {

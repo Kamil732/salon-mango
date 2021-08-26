@@ -1,12 +1,12 @@
 import {
 	ADD_UNREAD_NOTIFICATIONS_AMOUNT,
 	CLEAR_NOTIFICATIONS,
-	GET_DATA,
+	GET_SALON_DATA,
 	GET_NOTIFICATION,
 	GET_NOTIFICATIONS,
 	GET_NOTIFICATIONS_ERROR,
 	GET_NOTIFICATIONS_UNREAD_AMOUNT,
-	LOAD_BARBERS,
+	LOAD_EMPLOYEES,
 	LOAD_CUSTOMERS,
 	NOTIFICATIONS_LOADING,
 	NOTIFICATION_CONNECT_WS,
@@ -17,10 +17,9 @@ import {
 import notifySound from '../../assets/sounds/pristine-609.mp3'
 
 const initialState = {
-	cms: {
-		loading: true,
-		data: {},
-	},
+	salon: {},
+	employees: [],
+	customers: [],
 	notifications: {
 		loading: false,
 		ws: null,
@@ -28,30 +27,24 @@ const initialState = {
 		loaded: false,
 		data: [],
 	},
-	barbers: [],
-	customers: [],
 }
 
 // eslint-disable-next-line
 export default function (state = initialState, action) {
 	switch (action.type) {
 		case UPDATE_DATA:
-		case GET_DATA:
+		case GET_SALON_DATA:
 			return {
 				...state,
-				cms: {
-					...state.cms,
-					loading: false,
-					data: {
-						...state.cms.data,
-						...action.payload,
-					},
+				salon: {
+					...state.salon,
+					...action.payload,
 				},
 			}
-		case LOAD_BARBERS:
+		case LOAD_EMPLOYEES:
 			return {
 				...state,
-				barbers: action.payload,
+				employees: action.payload,
 			}
 		case LOAD_CUSTOMERS:
 			let newCustomers = []

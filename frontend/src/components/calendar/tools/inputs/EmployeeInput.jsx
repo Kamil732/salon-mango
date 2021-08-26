@@ -3,27 +3,27 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { useId } from 'react-id-generator'
 
-import { loadBarbers } from '../../../../redux/actions/data'
+import { loadEmployees } from '../../../../redux/actions/data'
 
 import FormControl from '../../../../layout/forms/FormControl'
 import Dropdown from '../../../../layout/buttons/dropdowns/Dropdown'
 
-function BarberInput({
+function EmployeeInput({
 	value,
 	extraOptions,
 	serviceId,
 	serviceDisplayTime,
 	options,
-	barbers,
-	loadBarbers,
+	employees,
+	loadEmployees,
 	onChange,
 	...props
 }) {
-	const [id] = useId(1, 'barber-')
+	const [id] = useId(1, 'employee-')
 
 	useEffect(() => {
-		if (barbers.length === 0) loadBarbers()
-	}, [barbers, loadBarbers])
+		if (employees.length === 0) loadEmployees()
+	}, [employees, loadEmployees])
 
 	const getOptionLabel = (option) => option.full_name
 
@@ -53,10 +53,10 @@ function BarberInput({
 				onChange={onChange}
 				options={
 					extraOptions?.length > 0
-						? [...extraOptions, ...barbers]
+						? [...extraOptions, ...employees]
 						: options?.length > 0
 						? options
-						: barbers
+						: employees
 				}
 				{...props}
 			/>
@@ -64,21 +64,21 @@ function BarberInput({
 	)
 }
 
-BarberInput.prototype.propTypes = {
+EmployeeInput.prototype.propTypes = {
 	value: PropTypes.any.isRequired,
-	barbers: PropTypes.array,
+	employees: PropTypes.array,
 	extraOptions: PropTypes.array,
 	options: PropTypes.array,
-	loadBarbers: PropTypes.func.isRequired,
+	loadEmployees: PropTypes.func.isRequired,
 	onChange: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => ({
-	barbers: state.data.barbers,
+	employees: state.data.employees,
 })
 
 const mapDispatchToProps = {
-	loadBarbers,
+	loadEmployees,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BarberInput)
+export default connect(mapStateToProps, mapDispatchToProps)(EmployeeInput)

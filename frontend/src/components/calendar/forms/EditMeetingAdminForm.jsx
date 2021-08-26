@@ -13,18 +13,18 @@ import setMeetingEndDate from '../../../helpers/setMeetingEndDate'
 import Modal from '../../../layout/Modal'
 
 const AddCustomerForm = lazy(() => import('./AddCustomerForm'))
-const BarberInput = lazy(() => import('../tools/inputs/BarberInput'))
+const EmployeeInput = lazy(() => import('../tools/inputs/EmployeeInput'))
 const CustomerInput = lazy(() => import('../tools/inputs/CustomerInput'))
 const ServicesInput = lazy(() => import('../tools/inputs/ServicesInput'))
-const BarberAndResourceInputs = lazy(() =>
-	import('../tools/inputs/BarberAndResourceInputs')
+const EmployeeAndResourceInputs = lazy(() =>
+	import('../tools/inputs/EmployeeAndResourceInputs')
 )
 
 class EditMeetingAdminForm extends Component {
 	static propTypes = {
 		selected: PropTypes.object.isRequired,
 		saveMeeting: PropTypes.func.isRequired,
-		barbers: PropTypes.array,
+		employees: PropTypes.array,
 		customers: PropTypes.array,
 		resources: PropTypes.array,
 		servicesData: PropTypes.array.isRequired,
@@ -38,7 +38,7 @@ class EditMeetingAdminForm extends Component {
 	constructor(props) {
 		super(props)
 
-		// Get barber's id from resources
+		// Get employee's id from resources
 		const selectedResourceMap = props.resourceMap.isMany
 			? props.resourceMap.data.find(
 					({ id }) => id === props.selected.resourceId
@@ -53,9 +53,9 @@ class EditMeetingAdminForm extends Component {
 			customer: props.customers.find(
 				(customer) => customer.id === props.selected.data.customer
 			),
-			barber: selectedResourceMap?.barberId
-				? props.barbers.find(
-						({ id }) => id === selectedResourceMap.barberId
+			employee: selectedResourceMap?.employeeId
+				? props.employees.find(
+						({ id }) => id === selectedResourceMap.employeeId
 				  )
 				: null,
 			resource: selectedResourceMap?.resourceId
@@ -69,8 +69,8 @@ class EditMeetingAdminForm extends Component {
 						(resource) => resource.id === resourceId
 					)
 				),
-				barber: props.barbers.find(
-					(barber) => barber.id === service.barber
+				employee: props.employees.find(
+					(employee) => employee.id === service.employee
 				),
 				value: props.servicesData.find(
 					(_service) => _service.id === service.id
@@ -114,7 +114,7 @@ class EditMeetingAdminForm extends Component {
 		} = this.props
 		const {
 			customer,
-			barber,
+			employee,
 			resource,
 			services,
 			private_description,
@@ -123,7 +123,7 @@ class EditMeetingAdminForm extends Component {
 
 		const payload = blocked
 			? {
-					barber: barber?.id,
+					employee: employee?.id,
 					resource: resource?.id,
 					private_description,
 			  }
@@ -131,7 +131,7 @@ class EditMeetingAdminForm extends Component {
 					customer: customer.id,
 					services: services.map((service) => ({
 						id: service.value.id,
-						barber: service.barber.id,
+						employee: service.employee.id,
 						resources: service.resources.map(
 							(resource) => resource.id
 						),
@@ -152,7 +152,7 @@ class EditMeetingAdminForm extends Component {
 			deleteLoading,
 			isAddCustomerForm,
 			customer,
-			barber,
+			employee,
 			resource,
 			services,
 			private_description,
@@ -197,11 +197,11 @@ class EditMeetingAdminForm extends Component {
 							<CSRFToken />
 
 							{selected.blocked ? (
-								<BarberInput
+								<EmployeeInput
 									required={selected.blocked}
-									value={barber}
+									value={employee}
 									onChange={(option) =>
-										this.setState({ barber: option })
+										this.setState({ employee: option })
 									}
 									extraChoices={[
 										{
@@ -235,16 +235,16 @@ class EditMeetingAdminForm extends Component {
 													services: state,
 												})
 											}
-											defaultBarber={barber}
+											defaultEmployee={employee}
 											defaultResource={resource}
 										/>
 
 										{services.length === 0 && (
-											<BarberAndResourceInputs
-												barber={barber}
-												updateBarber={(state) =>
+											<EmployeeAndResourceInputs
+												employee={employee}
+												updateEmployee={(state) =>
 													this.setState({
-														barber: state,
+														employee: state,
 													})
 												}
 												resource={resource}
@@ -319,7 +319,7 @@ class EditMeetingAdminForm extends Component {
 									loadingText="Zapisywanie"
 									disabled={
 										deleteLoading ||
-										(barber === selected.barber &&
+										(employee === selected.employee &&
 											customer === selected.customer &&
 											services === selected.services)
 									}
@@ -336,10 +336,10 @@ class EditMeetingAdminForm extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	barbers: state.data.barbers,
+	employees: state.data.employees,
 	customers: state.data.customers,
-	resources: state.data.cms.data.resources,
-	servicesData: state.data.cms.data.services,
+	resources: state.data.salon.resources,
+	servicesData: state.data.salon.services,
 	resourceMap: state.meetings.resourceMap,
 })
 

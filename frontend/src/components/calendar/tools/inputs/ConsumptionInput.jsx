@@ -107,7 +107,7 @@ ConsumptionInput.prototype.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-	products: state.data.cms.data.products,
+	products: state.data.salon.products,
 })
 
 export default connect(mapStateToProps, null)(ConsumptionInput)

@@ -13,12 +13,10 @@ import { NotificationContainer } from 'react-notifications'
 import { Provider } from 'react-redux'
 import store from '../redux/store'
 import { loadUser } from '../redux/actions/auth'
-import { getCMSData } from '../redux/actions/data'
 
 function App() {
 	useEffect(() => {
 		const getDatas = async () => {
-			await store.dispatch(getCMSData())
 			await store.dispatch(loadUser())
 
 			AOS.init({

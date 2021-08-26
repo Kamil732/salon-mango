@@ -13,11 +13,11 @@ const Panel = lazy(() => import('../containers/Panel'))
 
 class Routes extends Component {
 	static propTypes = {
-		loadingCMSData: PropTypes.bool,
+		loadingSalon: PropTypes.bool,
 	}
 
 	render() {
-		const { loadingCMSData } = this.props
+		const { loadingSalon } = this.props
 
 		const loader = (
 			<PageHero>
@@ -25,7 +25,7 @@ class Routes extends Component {
 			</PageHero>
 		)
 
-		if (loadingCMSData) return loader
+		if (loadingSalon) return loader
 
 		return (
 			<Suspense fallback={loader}>
@@ -48,7 +48,9 @@ class Routes extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	loadingCMSData: state.data.cms.loading,
+	loadingSalon:
+		state.auth.isAuthenticated &&
+		Object.keys(state.data.salon).length === 0,
 })
 
 export default connect(mapStateToProps, null)(Routes)

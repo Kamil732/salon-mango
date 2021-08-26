@@ -54,7 +54,7 @@ ServicesMenu.prototype.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-	serviceGroups: state.data.cms.data.service_groups,
+	serviceGroups: state.data.salon.service_groups,
 })
 
 export default connect(mapStateToProps, null)(ServicesMenu)
