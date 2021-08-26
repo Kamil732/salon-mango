@@ -17,7 +17,7 @@ from . import serializers
 
 @method_decorator(csrf_protect, name='create')
 class MeetingListAPIView(generics.ListCreateAPIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
     def get_serializer_class(self):
         if self.request.user.is_authenticated and self.request.user.is_admin:
@@ -29,11 +29,16 @@ class MeetingListAPIView(generics.ListCreateAPIView):
         today = datetime.today()
         monday = today - timedelta(days=today.weekday())
 
-        from_ = datetime.strptime(self.request.query_params.get('from', today), '%Y-%m-%d')
-        to = datetime.strptime(self.request.query_params.get(
-            'to', monday + timedelta(days=7)), '%Y-%m-%d') + timedelta(days=1)
+        from_ = datetime.strptime(self.request.query_params.get('from', today),
+                                  '%Y-%m-%d')
+        to = datetime.strptime(
+            self.request.query_params.get('to', monday + timedelta(days=7)),
+            '%Y-%m-%d') + timedelta(days=1)
 
-        return Meeting.objects.filter(start__gte=from_, start__lte=to).select_related('customer', 'barber', 'resource').prefetch_related('services')
+        return Meeting.objects.filter(
+            start__gte=from_, start__lte=to).select_related(
+                'customer', 'employee',
+                'resource').prefetch_related('services')
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -41,10 +46,11 @@ class MeetingListAPIView(generics.ListCreateAPIView):
 
         data = self.get_serializer(queryset, many=True).data
 
-        if user.is_authenticated and not(user.is_admin):
+        if user.is_authenticated and not (user.is_admin):
             for i in range(len(data)):
                 if data[i]['customer'] == user.profile.id:
-                    data[i] = serializers.AdminMeetingSerializer(Meeting.objects.get(id=data[i]['id']), many=False).data
+                    data[i] = serializers.AdminMeetingSerializer(
+                        Meeting.objects.get(id=data[i]['id']), many=False).data
 
         return Response(data)
 
@@ -52,8 +58,9 @@ class MeetingListAPIView(generics.ListCreateAPIView):
 @method_decorator(csrf_protect, name='update')
 @method_decorator(csrf_protect, name='destroy')
 class MeetingDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsOwnerOrIsAdminOrReadOnly,)
-    queryset = Meeting.objects.select_related('customer', 'barber', 'resource').prefetch_related('services')
+    permission_classes = (IsOwnerOrIsAdminOrReadOnly, )
+    queryset = Meeting.objects.select_related(
+        'customer', 'employee', 'resource').prefetch_related('services')
     lookup_field = 'id'
     lookup_url_kwarg = 'meeting_id'
 
@@ -71,7 +78,9 @@ class MeetingDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
 
-        if request.user.is_authenticated and (request.user.is_admin or instance.customer_id == request.user.id):
+        if request.user.is_authenticated and (request.user.is_admin
+                                              or instance.customer_id
+                                              == request.user.id):
             serializer = serializers.AdminMeetingSerializer(instance)
         else:
             serializer = serializers.CustomerMeetingSerializer(instance)
@@ -102,11 +111,12 @@ class MeetingDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
                 notify.save()
                 notify.recivers.add(customer_account)
 
-                async_to_sync(channel_layer.group_send)(customer_account.room_name, {
-                    'type': 'send_data',
-                    'event': 'GET_NOTIFICATION',
-                    'payload': notify.id,
-                })
+                async_to_sync(channel_layer.group_send)(
+                    customer_account.room_name, {
+                        'type': 'send_data',
+                        'event': 'GET_NOTIFICATION',
+                        'payload': notify.id,
+                    })
             elif customer_account == user:
                 admins = Account.objects.filter(is_admin=True)
 
@@ -121,8 +131,9 @@ class MeetingDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
                 notify.recivers.add(*admins)
 
                 for admin in admins:
-                    async_to_sync(channel_layer.group_send)(admin.room_name, {
-                        'type': 'send_data',
-                        'event': 'GET_NOTIFICATION',
-                        'payload': notify.id,
-                    })
+                    async_to_sync(channel_layer.group_send)(
+                        admin.room_name, {
+                            'type': 'send_data',
+                            'event': 'GET_NOTIFICATION',
+                            'payload': notify.id,
+                        })

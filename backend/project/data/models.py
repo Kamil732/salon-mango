@@ -1,12 +1,49 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+from autoslug import AutoSlugField
 
 from server.abstract.models import Group, Color
 from accounts.models import Account
 from meetings.models import Meeting
 
 
-class Data(models.Model):
+class Salon(models.Model):
+    LANGUAGE = (('pl', 'Polish'), )
+
+    DATE_FORMAT = (
+        ('DD/MM/YYYY', 'dd/mm/yyyy'),
+        ('DD.MM.YYYY', 'dd.mm.yyyy'),
+        ('DD-MM-YYYY', 'dd-mm-yyyy'),
+        ('MM/DD/YYYY', 'mm/dd/yyyy'),
+        ('YYYY-MM-DD', 'yyyy-mm-dd'),
+    )
+
+    TIME_FORMAT = (
+        (24, '24h'),
+        (12, '12h'),
+    )
+
+    name = models.CharField(default='Twój salon', max_length=100)
+    description = models.TextField(max_length=1000, blank=True)
+    logo = models.ImageField(upload_to='salon_logos', blank=True)
+    email = models.EmailField(max_length=100)
+    phone_number = PhoneNumberField(blank=True)
+    website = models.URLField(blank=True)
+    country = models.CharField(max_length=100)
+    city = models.CharField(max_length=100, blank=True)
+    postal_code = models.CharField(max_length=6, blank=True)
+    address = models.CharField(max_length=100, blank=True)
+    language = models.CharField(max_length=2, choices=LANGUAGE, default='pl')
+    timezone = models.CharField(max_length=100)
+    currency = models.CharField(max_length=3, default='EUR')
+    calling_code = models.CharField(max_length=3)
+    date_format = models.CharField(max_length=10,
+                                   choices=DATE_FORMAT,
+                                   default=DATE_FORMAT[0][0])
+    time_format = models.PositiveSmallIntegerField(choices=TIME_FORMAT,
+                                                   default=24)
+    start_with_sunday = models.BooleanField(default=False)
+
     meeting_bail = models.DecimalField(decimal_places=2,
                                        default=10,
                                        max_digits=4)
@@ -14,15 +51,6 @@ class Data(models.Model):
                                              default=15,
                                              max_digits=4)
     free_cancel_hours = models.PositiveSmallIntegerField(default=2)
-    message = models.CharField(max_length=100, blank=True)
-    contact_content_second = models.TextField(blank=True)
-    gallery_content = models.TextField(blank=True)
-    gallery_title = models.CharField(max_length=100, blank=True)
-    contact_content = models.TextField(blank=True)
-    contact_title = models.CharField(max_length=100, blank=True)
-    home_content = models.TextField(blank=True)
-    home_title = models.CharField(max_length=100, blank=True)
-    one_slot_max_meetings = models.PositiveIntegerField(default=0)
     calendar_step = models.PositiveSmallIntegerField(default=15)
     calendar_timeslots = models.PositiveSmallIntegerField(default=4)
     end_work_sunday = models.TimeField(null=True, blank=True)
@@ -39,34 +67,83 @@ class Data(models.Model):
     start_work_tuesday = models.TimeField(null=True, blank=True)
     end_work_monday = models.TimeField(null=True, blank=True)
     start_work_monday = models.TimeField(null=True, blank=True)
-    google_maps_url = models.URLField(blank=True, max_length=500)
-    location = models.CharField(max_length=100, blank=True)
-    phone_number = PhoneNumberField(blank=True)
 
-    def save(self, *args, **kwargs):
-        # this will check if the variable exist so we can update the existing ones
-        save_permission = Data.has_add_permission(self)
+    def __str__(self):
+        return self.name
 
-        # if there's more than two objects it will not save them in the database
-        if Data.objects.all().count() < 2 or save_permission:
-            return super(Data, self).save(*args, **kwargs)
 
-    def has_add_permission(self):
-        return Data.objects.filter(id=self.id).exists()
+class Customer(models.Model):
+    salon = models.ForeignKey(Salon,
+                              on_delete=models.CASCADE,
+                              related_name='customers')
+    account = models.OneToOneField(
+        'accounts.Account',
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="profile",
+    )
+    first_name = models.CharField(verbose_name="Imię", max_length=20)
+    last_name = models.CharField(verbose_name="Nazwisko", max_length=20)
+    phone_number = PhoneNumberField(verbose_name="Numer telefonu")
+    fax_number = PhoneNumberField(verbose_name="Zapasowy Numer telefonu",
+                                  blank=True)
+    bookings = models.PositiveIntegerField(default=0)
+    no_shows = models.PositiveIntegerField(default=0)
+    revenue = models.PositiveIntegerField(default=0)
+    trusted = models.BooleanField(default=False)
+    slug = AutoSlugField(populate_from="first_name", unique=True)
+
+    def __str__(self):
+        return self.get_full_name()
+
+    def get_full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
+
+class Employee(Color):
+    salon = models.ForeignKey(Salon,
+                              on_delete=models.CASCADE,
+                              related_name='employees')
+    first_name = models.CharField(verbose_name="Imię", max_length=20)
+    last_name = models.CharField(verbose_name="Nazwisko", max_length=20)
+    slug = AutoSlugField(populate_from="first_name", unique=True)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+    def get_full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
+
+class CustomerImage(models.Model):
+    image = models.ImageField(upload_to="customer_images/%Y/%m/%d/")
+    title = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.title
 
 
 class PaymentMethod(models.Model):
+    salon = models.ForeignKey(Salon,
+                              on_delete=models.CASCADE,
+                              related_name='payment_methods')
     name = models.CharField(max_length=50)
     firm_salary = models.BooleanField(default=True)
-    barbers_salary = models.BooleanField(default=True)
+    employees_salary = models.BooleanField(default=True)
 
 
 class ServiceGroup(Group):
-    barbers = models.ManyToManyField("accounts.Barber",
-                                     related_name="service_groups")
+    salon = models.ForeignKey(Salon,
+                              on_delete=models.CASCADE,
+                              related_name='service_groups')
+    employees = models.ManyToManyField(Employee, related_name="service_groups")
 
 
 class Service(models.Model):
+    salon = models.ForeignKey(Salon,
+                              on_delete=models.CASCADE,
+                              related_name='services')
     group = models.ForeignKey(
         ServiceGroup,
         on_delete=models.CASCADE,
@@ -74,9 +151,9 @@ class Service(models.Model):
         null=True,
         related_name="services",
     )
-    barbers = models.ManyToManyField("accounts.Barber",
-                                     through="ServiceBarber",
-                                     related_name="services")
+    employees = models.ManyToManyField(Employee,
+                                       through="ServiceEmployee",
+                                       related_name="services")
     name = models.CharField(max_length=25)
     time = models.PositiveIntegerField(default=0)
     price = models.DecimalField(decimal_places=2, max_digits=5)
@@ -103,24 +180,29 @@ class ServiceImage(models.Model):
     image = models.ImageField(upload_to="service_images/%Y/%m/%d/")
 
 
-class ServiceBarber(models.Model):
+class ServiceEmployee(models.Model):
     service = models.ForeignKey(Service,
                                 on_delete=models.CASCADE,
-                                related_name="service_barber_data")
-    barber = models.ForeignKey("accounts.Barber",
-                               on_delete=models.CASCADE,
-                               related_name="service_barber_data")
+                                related_name="service_employee_data")
+    employee = models.ForeignKey(Employee,
+                                 on_delete=models.CASCADE,
+                                 related_name="service_employee_data")
     time = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return f"{self.barber} - {self.service}"
+        return f"{self.employee} - {self.service}"
 
 
 class ResourceGroup(Group):
-    pass
+    salon = models.ForeignKey(Salon,
+                              on_delete=models.CASCADE,
+                              related_name='resource_groups')
 
 
 class Resource(Color):
+    salon = models.ForeignKey(Salon,
+                              on_delete=models.CASCADE,
+                              related_name='resources')
     name = models.CharField(max_length=30)
     group = models.ForeignKey(
         ResourceGroup,
@@ -136,13 +218,18 @@ class Resource(Color):
 
 
 class ProductGroup(Group):
-    pass
+    salon = models.ForeignKey(Salon,
+                              on_delete=models.CASCADE,
+                              related_name='product_groups')
 
     def __str__(self):
         return self.name
 
 
 class Producer(models.Model):
+    salon = models.ForeignKey(Salon,
+                              on_delete=models.CASCADE,
+                              related_name='producers')
     name = models.CharField(max_length=60)
 
     def __str__(self):
@@ -161,6 +248,9 @@ class Product(models.Model):
         (1, "Jednostki"),
     )
 
+    salon = models.ForeignKey(Salon,
+                              on_delete=models.CASCADE,
+                              related_name='products')
     name = models.CharField(max_length=200)
     is_ware = models.BooleanField(default=True,
                                   help_text="Produkt do odsprzedaży")

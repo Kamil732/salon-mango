@@ -1,8 +1,7 @@
-from django.db import models
 from rest_framework import serializers
 
 from server.abstract.serializers import Subgroups
-from data.models import Data, Service, ServiceGroup, ServiceBarber, Notification, Resource, ResourceGroup, ServiceResources
+from data.models import Salon, Customer, CustomerImage, Employee, Service, ServiceGroup, ServiceEmployee, Notification, Resource, ResourceGroup, ServiceResources
 
 
 class ResourceGroupSerializer(Subgroups):
@@ -24,10 +23,10 @@ class ServiceResourcesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ServiceResources
-        fields = ('resources',)
+        fields = ('resources', )
 
 
-class ServiceBarberSerializer(serializers.ModelSerializer):
+class ServiceEmployeeSerializer(serializers.ModelSerializer):
     display_time = serializers.SerializerMethodField('get_display_time')
 
     def get_display_time(self, obj):
@@ -39,8 +38,12 @@ class ServiceBarberSerializer(serializers.ModelSerializer):
         return f'{minutes} min'
 
     class Meta:
-        model = ServiceBarber
-        fields = ('display_time', 'time', 'service',)
+        model = ServiceEmployee
+        fields = (
+            'display_time',
+            'time',
+            'service',
+        )
 
 
 class ServiceSerializer(serializers.ModelSerializer):
@@ -66,7 +69,10 @@ class ServiceSerializerAdmin(ServiceSerializer):
 
 class ServiceSerializerCustomer(ServiceSerializer):
     class Meta(ServiceSerializer.Meta):
-        exclude = ('private_description', 'choosen_times',)
+        exclude = (
+            'private_description',
+            'choosen_times',
+        )
 
 
 class ServiceGroupSerializer(Subgroups):
@@ -76,7 +82,7 @@ class ServiceGroupSerializer(Subgroups):
         model = ServiceGroup
 
 
-class DataSerializer(serializers.ModelSerializer):
+class SalonSerializer(serializers.ModelSerializer):
     service_groups = serializers.SerializerMethodField('get_service_groups')
     services = serializers.SerializerMethodField('get_services')
     resource_groups = serializers.SerializerMethodField('get_resource_groups')
@@ -86,77 +92,146 @@ class DataSerializer(serializers.ModelSerializer):
         user = self.context.get('request').user
         serializer = ServiceSerializerAdmin if user.is_authenticated and user.is_admin else ServiceSerializerCustomer
 
-        return serializer(Service.objects.select_related('group').prefetch_related('barbers', 'resources_data'), many=True).data
+        return serializer(Service.objects.filter(
+            salon_id=obj.id).select_related('group').prefetch_related(
+                'employees', 'resources_data'),
+                          many=True).data
 
     def get_service_groups(self, obj):
-        return ServiceGroupSerializer(ServiceGroup.objects.filter(parent=None).prefetch_related('barbers', 'services'), many=True).data
+        return ServiceGroupSerializer(ServiceGroup.objects.filter(
+            salon_id=obj.id,
+            parent=None).prefetch_related('employees', 'services'),
+                                      many=True).data
 
     def get_resources(self, obj):
-        return ResourceSerializer(Resource.objects.select_related('group'), many=True).data
+        return ResourceSerializer(
+            Resource.objects.filter(salon_id=obj.id).select_related('group'),
+            many=True).data
 
     def get_resource_groups(self, obj):
-        return ResourceGroupSerializer(ResourceGroup.objects.filter(parent=None), many=True).data
+        return ResourceGroupSerializer(ResourceGroup.objects.filter(
+            salon_id=obj.id, parent=None),
+                                       many=True).data
 
     def to_internal_value(self, data):
-        if 'start_work_sunday' in data and not(data['start_work_sunday']):
+        if 'start_work_sunday' in data and not (data['start_work_sunday']):
             data['start_work_sunday'] = None
-        if 'end_work_sunday' in data and not(data['end_work_sunday']):
+        if 'end_work_sunday' in data and not (data['end_work_sunday']):
             data['end_work_sunday'] = None
-        if 'end_work_saturday' in data and not(data['end_work_saturday']):
+        if 'end_work_saturday' in data and not (data['end_work_saturday']):
             data['end_work_saturday'] = None
-        if 'start_work_saturday' in data and not(data['start_work_saturday']):
+        if 'start_work_saturday' in data and not (data['start_work_saturday']):
             data['start_work_saturday'] = None
-        if 'end_work_friday' in data and not(data['end_work_friday']):
+        if 'end_work_friday' in data and not (data['end_work_friday']):
             data['end_work_friday'] = None
-        if 'start_work_friday' in data and not(data['start_work_friday']):
+        if 'start_work_friday' in data and not (data['start_work_friday']):
             data['start_work_friday'] = None
-        if 'end_work_thursday' in data and not(data['end_work_thursday']):
+        if 'end_work_thursday' in data and not (data['end_work_thursday']):
             data['end_work_thursday'] = None
-        if 'start_work_thursday' in data and not(data['start_work_thursday']):
+        if 'start_work_thursday' in data and not (data['start_work_thursday']):
             data['start_work_thursday'] = None
-        if 'end_work_wednesday' in data and not(data['end_work_wednesday']):
+        if 'end_work_wednesday' in data and not (data['end_work_wednesday']):
             data['end_work_wednesday'] = None
-        if 'start_work_wednesday' in data and not(data['start_work_wednesday']):
+        if 'start_work_wednesday' in data and not (
+                data['start_work_wednesday']):
             data['start_work_wednesday'] = None
-        if 'end_work_tuesday' in data and not(data['end_work_tuesday']):
+        if 'end_work_tuesday' in data and not (data['end_work_tuesday']):
             data['end_work_tuesday'] = None
-        if 'start_work_tuesday' in data and not(data['start_work_tuesday']):
+        if 'start_work_tuesday' in data and not (data['start_work_tuesday']):
             data['start_work_tuesday'] = None
-        if 'end_work_monday' in data and not(data['end_work_monday']):
+        if 'end_work_monday' in data and not (data['end_work_monday']):
             data['end_work_monday'] = None
-        if 'start_work_monday' in data and not(data['start_work_monday']):
+        if 'start_work_monday' in data and not (data['start_work_monday']):
             data['start_work_monday'] = None
 
-        return super(DataSerializer, self).to_internal_value(data)
+        return super(SalonSerializer, self).to_internal_value(data)
 
     class Meta:
-        model = Data
-        exclude = ('id',)
+        model = Salon
+        fields = "__all__"
         extra_kwargs = {
-            'end_work_sunday': {'allow_null': True},
-            'start_work_sunday': {'allow_null': True},
-            'end_work_saturday': {'allow_null': True},
-            'start_work_saturday': {'allow_null': True},
-            'end_work_friday': {'allow_null': True},
-            'start_work_friday': {'allow_null': True},
-            'end_work_thursday': {'allow_null': True},
-            'start_work_thursday': {'allow_null': True},
-            'end_work_wednesday': {'allow_null': True},
-            'start_work_wednesday': {'allow_null': True},
-            'end_work_tuesday': {'allow_null': True},
-            'start_work_tuesday': {'allow_null': True},
-            'end_work_monday': {'allow_null': True},
-            'start_work_monday': {'allow_null': True},
+            'end_work_sunday': {
+                'allow_null': True
+            },
+            'start_work_sunday': {
+                'allow_null': True
+            },
+            'end_work_saturday': {
+                'allow_null': True
+            },
+            'start_work_saturday': {
+                'allow_null': True
+            },
+            'end_work_friday': {
+                'allow_null': True
+            },
+            'start_work_friday': {
+                'allow_null': True
+            },
+            'end_work_thursday': {
+                'allow_null': True
+            },
+            'start_work_thursday': {
+                'allow_null': True
+            },
+            'end_work_wednesday': {
+                'allow_null': True
+            },
+            'start_work_wednesday': {
+                'allow_null': True
+            },
+            'end_work_tuesday': {
+                'allow_null': True
+            },
+            'start_work_tuesday': {
+                'allow_null': True
+            },
+            'end_work_monday': {
+                'allow_null': True
+            },
+            'start_work_monday': {
+                'allow_null': True
+            },
         }
+
+
+class CustomerSerializer(serializers.ModelSerializer):
+    # account = AccountSerializer()
+    full_name = serializers.ReadOnlyField(source='get_full_name')
+
+    class Meta:
+        model = Customer
+        # fields = '__all__'
+        exclude = ('account', )
+
+
+class EmployeeSerializer(serializers.ModelSerializer):
+    services_data = ServiceEmployeeSerializer(source='service_employee_data',
+                                              many=True)
+    full_name = serializers.ReadOnlyField(source='get_full_name')
+
+    class Meta:
+        model = Employee
+        fields = '__all__'
+
+
+class CustomerImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomerImage
+        fields = (
+            'image',
+            'title',
+            'id',
+        )
 
 
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        exclude = ('recivers',)
+        exclude = ('recivers', )
 
 
 class NotificationWriteSerializer(NotificationSerializer):
     class Meta(NotificationSerializer.Meta):
         exclude = ()
-        fields = ('read',)
+        fields = ('read', )

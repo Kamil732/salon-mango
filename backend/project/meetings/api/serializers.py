@@ -8,8 +8,8 @@ from django.db.models import Q
 from rest_framework import serializers
 
 from meetings.models import Meeting, ServiceData
-from accounts.models import Account, Customer
-from data.models import Notification, Service
+from accounts.models import Account
+from data.models import Notification, Service, Customer
 
 
 class ServiceDataSerializer(serializers.ModelSerializer):
@@ -18,7 +18,7 @@ class ServiceDataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ServiceData
-        fields = ("id", "start", "end", "barber", "resources")
+        fields = ("id", "start", "end", "employee", "resources")
 
 
 class MeetingSerializer(serializers.ModelSerializer):
@@ -34,7 +34,7 @@ class MeetingSerializer(serializers.ModelSerializer):
 
     #     # Get meetings in the same slot
     #     same_slot_meetings = Meeting.objects.filter(
-    #         start__lte=data['start'], end__gt=data['start']).exclude(id=self.context.get('meeting_id')).select_related('customer', 'barber', 'resource')
+    #         start__lte=data['start'], end__gt=data['start']).exclude(id=self.context.get('meeting_id')).select_related('customer', 'employee', 'resource')
 
     #     working_hours = get_working_hours(data['start'].weekday())
     #     start_meeting = int(data['start'].hour) * 60 + int(data['start'].minute)
@@ -51,9 +51,9 @@ class MeetingSerializer(serializers.ModelSerializer):
     #     if working_hours['is_non_working_hour'] or ((data['end'] - data['start']).seconds % 3600) // 60 < cms_data.work_time or start_meeting < working_hours['start'] or start_meeting > working_hours['end'] - cms_data.work_time:
     #         raise serializers.ValidationError('Nie poprawna data wizyty')
 
-    #     # Validate if barber is occupied
-    #     for barber in same_slot_meetings.values_list('barber__slug', flat=True):
-    #         if barber == data['barber'].slug:
+    #     # Validate if employee is occupied
+    #     for employee in same_slot_meetings.values_list('employee__slug', flat=True):
+    #         if employee == data['employee'].slug:
     #             raise serializers.ValidationError({'detail': 'Nie umówić wizyty z zablokowanym fryzjerem'})
 
     #     if pass_cached_data:
@@ -75,7 +75,7 @@ class MeetingSerializer(serializers.ModelSerializer):
                     MeetingServicesThroughModel(
                         meeting=meeting,
                         service=service["service"],
-                        barber=service["barber"],
+                        employee=service["employee"],
                     ) for service in services_data
                 ])
 
@@ -89,7 +89,7 @@ class MeetingSerializer(serializers.ModelSerializer):
 
         #     for service in validated_data['services']:
         #         try:
-        #             meeting_duration += service.service_barber_data.get(barber=service.).time
+        #             meeting_duration += service.service_employee_data.get(employee=service.).time
         #         except:
         #             meeting_duration += service.time
 
@@ -108,11 +108,11 @@ class MeetingSerializer(serializers.ModelSerializer):
                 ServiceData(
                     meeting=instance,
                     service=service_data["service"],
-                    barber=service_data["barber"],
+                    employee=service_data["employee"],
                 ) for service_data in services_data
             ],
             filters=Q(meeting_id=instance.id),
-            fields=["barber", "service"],
+            fields=["employee", "service"],
             key_fields=("service_id", ),
         )
 
@@ -128,7 +128,7 @@ class MeetingSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "customer",
-            "barber",
+            "employee",
             "resource",
             "start",
             "end",

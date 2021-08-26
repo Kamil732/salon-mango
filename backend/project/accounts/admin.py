@@ -4,7 +4,7 @@ from django.contrib.admin import ModelAdmin
 from django.forms import ModelForm
 from django.contrib.auth.hashers import make_password, check_password
 
-from .models import Account, Barber, Customer, CustomerImage
+from .models import Account
 
 
 class UserCreationForm(ModelForm):
@@ -26,26 +26,7 @@ class UserCreationForm(ModelForm):
 class AccountAdmin(ModelAdmin):
     form = UserCreationForm
     empty_value_display = '--empty--'
-    readonly_fields = ('id',)
-
-
-@admin.register(Barber)
-class BarberAdmin(ModelAdmin):
-    readonly_fields = ('id', 'slug',)
-
-
-@admin.register(Customer)
-class CustomerAdmin(ModelAdmin):
-    list_display = ('first_name', 'last_name', 'phone_number',)
-    search_fields = ('first_name', 'last_name', 'phone_number', 'fax_number')
-    readonly_fields = ('id', 'slug',)
-
-
-@admin.register(CustomerImage)
-class CustomerImageAdmin(ModelAdmin):
-    list_display = ('title',)
-    search_fields = ('title',)
-    readonly_fields = ('id',)
+    readonly_fields = ('id', )
 
 
 # admin.site.unregister(Group)

@@ -86,16 +86,20 @@ AUTH_USER_MODEL = "accounts.Account"
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME":
+        "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "NAME":
+        "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        "NAME":
+        "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        "NAME":
+        "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -116,8 +120,8 @@ CHANNEL_LAYERS = {
 
 LANGUAGE_CODE = "pl"
 
-PHONENUMBER_DB_FORMAT = "NATIONAL"
-PHONENUMBER_DEFAULT_REGION = "PL"
+PHONENUMBER_DB_FORMAT = "INTERNATIONAL"
+# PHONENUMBER_DEFAULT_REGION = "PL"
 
 TIME_ZONE = "Europe/Warsaw"
 
@@ -157,7 +161,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOW_CREDENTIALS = True
 
-RECAPTCHA_SECRET_KEY = env("RECAPTCHA_SECRET_KEY")
+# RECAPTCHA_SECRET_KEY = env("RECAPTCHA_SECRET_KEY")
 
 REST_FRAMEWORK = {
     "TIME_FORMAT": "%H:%M",

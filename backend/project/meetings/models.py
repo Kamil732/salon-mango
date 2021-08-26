@@ -4,13 +4,14 @@ from django.core.exceptions import ValidationError
 
 from datetime import timedelta
 
-from accounts.models import Customer, Barber
-
 
 class Meeting(models.Model):
-    barber = models.ForeignKey(
+    salon = models.ForeignKey('data.Salon',
+                              on_delete=models.CASCADE,
+                              related_name='meetings')
+    employee = models.ForeignKey(
         verbose_name="Fryzjer",
-        to=Barber,
+        to="data.Employee",
         on_delete=models.CASCADE,
         blank=True,
         null=True,
@@ -25,7 +26,7 @@ class Meeting(models.Model):
     )
     customer = models.ForeignKey(
         verbose_name="Klient",
-        to=Customer,
+        to="data.Customer",
         on_delete=models.CASCADE,
         blank=True,
         null=True,
@@ -49,7 +50,7 @@ class Meeting(models.Model):
                                            through="ProductSale",
                                            blank=True)
     sold_by = models.ForeignKey(
-        Barber,
+        "data.Employee",
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
@@ -60,7 +61,7 @@ class Meeting(models.Model):
                                       blank=True)
 
     def __str__(self):
-        return f"{self.barber} - {self.customer} - {self.id}"
+        return f"{self.employee} - {self.customer} - {self.id}"
 
     def clean(self):
         if self.end and self.end <= self.start:
@@ -74,8 +75,8 @@ class Meeting(models.Model):
 
 
 class Payment(models.Model):
-    method = models.ForeignKey("data.PaymentMethod", on_delete=models.CASCADE)
     meeting = models.ForeignKey(Meeting, on_delete=models.DO_NOTHING)
+    method = models.ForeignKey("data.PaymentMethod", on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=8, decimal_places=2)
 
 
@@ -104,9 +105,9 @@ class ServiceData(models.Model):
     service = models.ForeignKey("data.Service",
                                 on_delete=models.CASCADE,
                                 related_name="services_data")
-    barber = models.ForeignKey(Barber,
-                               on_delete=models.CASCADE,
-                               related_name="services_data")
+    employee = models.ForeignKey("data.Employee",
+                                 on_delete=models.CASCADE,
+                                 related_name="services_data")
     resources = models.ManyToManyField("data.Resource",
                                        blank=True,
                                        related_name="services_data")
