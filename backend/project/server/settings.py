@@ -34,12 +34,32 @@ INSTALLED_APPS = [
     "meetings.apps.MeetingsConfig",
 ]
 
+
+###########################################################
+# Only in development
+###########################################################
+class DisableCSRFMiddleware(object):
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        setattr(request, '_dont_enforce_csrf_checks', True)
+        response = self.get_response(request)
+        return response
+
+
+###########################################################
+
 MIDDLEWARE = [
+    #############################################
+    # Enable only in development !!!
+    "server.settings.DisableCSRFMiddleware",
+    #############################################
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+    # "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
