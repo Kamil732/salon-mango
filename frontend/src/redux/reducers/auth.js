@@ -9,6 +9,9 @@ import {
 	AUTH_LOADING,
 } from '../actions/types'
 
+import { getSalonData } from '../actions/data'
+import store from '../store'
+
 const initialState = {
 	isAuthenticated: null,
 	loading: null,
@@ -26,6 +29,8 @@ export default function (state = initialState, action) {
 		case AUTH_SUCCESS:
 		case LOGIN_SUCCESS:
 		case REGISTER_SUCCESS:
+			store.dispatch(getSalonData(action.payload.salons[0]))
+
 			return {
 				...state,
 				isAuthenticated: true,

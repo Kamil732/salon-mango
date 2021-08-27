@@ -17,9 +17,8 @@ import { NotificationManager } from 'react-notifications'
 import getHeaders from '../../helpers/getHeaders'
 import axios from 'axios'
 
-export const getSalonData = (id) => async (dispatch, getState) => {
+export const getSalonData = (salonId) => async (dispatch) => {
 	try {
-		const salonId = id ? id : getState().auth.data.salons[0]
 		const res = await axios.get(
 			`${process.env.REACT_APP_API_URL}/data/salons/${salonId}/`
 		)

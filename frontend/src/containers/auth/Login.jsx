@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { login } from '../../redux/actions/auth'
-import { getSalonData } from '../../redux/actions/data'
 
 import AuthIllustration from '../../assets/svgs/auth-illustration.svg'
 
@@ -18,7 +17,6 @@ class Login extends Component {
 	static propTypes = {
 		isAuthenticated: PropTypes.bool,
 		login: PropTypes.func.isRequired,
-		getSalonData: PropTypes.func.isRequired,
 	}
 
 	constructor(props) {
@@ -42,8 +40,6 @@ class Login extends Component {
 		this.setState({ loading: true })
 		await this.props.login('xd', this.state.email, this.state.password)
 		this.setState({ loading: false })
-
-		this.props.getSalonData()
 	}
 
 	render() {
@@ -129,7 +125,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
 	login,
-	getSalonData,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)

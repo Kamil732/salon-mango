@@ -12,6 +12,10 @@ import {
 	NOTIFICATION_CONNECT_WS,
 	UPDATE_DATA,
 	UPDATE_NOTIFICATION,
+	LOGOUT,
+	LOGIN_FAIL,
+	REGISTER_FAIL,
+	AUTH_ERROR,
 } from '../actions/types'
 
 import notifySound from '../../assets/sounds/pristine-609.mp3'
@@ -174,6 +178,16 @@ export default function (state = initialState, action) {
 						}
 					}),
 				},
+			}
+		case AUTH_ERROR:
+		case REGISTER_FAIL:
+		case LOGIN_FAIL:
+		case LOGOUT:
+			return {
+				...state,
+				salon: initialState.salon,
+				employees: initialState.employees,
+				customers: initialState.customers,
 			}
 		default:
 			return state
