@@ -4,11 +4,11 @@ $prefix: dropdown-select;
 	background-color: $surface-color;
 	border-radius: 12px;
 	position: absolute;
-	top: 60px;
-	left: -6.5rem;
+	bottom: -1.25rem;
+	left: 3.8rem;
 	width: 250px;
 	height: 350px;
-	z-index: 2;
+	z-index: 999;
 	border: 1px solid rgba(0, 0, 0, 0.04);
 	white-space: normal;
 	border: 1px solid #ccc;
@@ -21,6 +21,7 @@ $prefix: dropdown-select;
 	}
 
 	& > &__inner {
+		color: set-text-color($surface-color);
 		padding: 1rem 0;
 		position: relative;
 		width: 100%;
@@ -29,12 +30,12 @@ $prefix: dropdown-select;
 		&::before {
 			content: '';
 			position: absolute;
-			left: 6.9rem;
-			top: -2rem;
+			left: -2rem;
+			bottom: 1.5rem;
 			width: 0;
 			height: 0;
 			border: 16px solid transparent;
-			border-bottom-color: $surface-color;
+			border-right-color: $surface-color;
 		}
 
 		& > .#{$prefix}__content {
@@ -87,12 +88,12 @@ $prefix: dropdown-select;
 	.#{$prefix} {
 		width: 300px;
 		height: 400px;
-		left: auto;
-		right: -1.2rem;
+		// left: auto;
+		// right: -1.2rem;
 
-		& > &__inner::before {
-			left: auto;
-			right: 1.7rem;
-		}
+		// & > &__inner::before {
+		// 	left: auto;
+		// 	right: 1.7rem;
+		// }
 	}
 }

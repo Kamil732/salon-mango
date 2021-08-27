@@ -8,36 +8,6 @@
 	overflow: hidden;
 	width: 100vw;
 
-	&__menu {
-		overflow: auto;
-		position: fixed;
-		left: 4rem;
-		top: 1rem;
-		background-color: $surface-color;
-		z-index: 5;
-		border-radius: 0 10px 10px;
-		display: none;
-		max-height: 100%;
-		width: 100%;
-		@include box-shadow;
-
-		&.open {
-			display: block;
-		}
-	}
-
-	&__nav {
-		overflow-y: auto;
-		background-color: $primary-color;
-		color: set-text-color($primary-color);
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		height: 100%;
-		border-radius: 0;
-		border-right: 1px solid #000;
-	}
-
 	&__btn {
 		display: flex;
 		flex-direction: column;
@@ -64,12 +34,61 @@
 		}
 
 		&-open {
-			text-transform: uppercase;
-			cursor: pointer;
-
 			& > &__icon {
 				margin-bottom: -0.3em;
 			}
+		}
+	}
+
+	&__menu {
+		overflow: auto;
+		position: fixed;
+		left: 4rem;
+		top: 1rem;
+		background-color: $surface-color;
+		z-index: 5;
+		border-radius: 0 10px 10px;
+		display: none;
+		max-height: 100%;
+		width: 100%;
+		@include box-shadow;
+
+		&.open {
+			display: block;
+		}
+
+		&-btn {
+			margin-top: 0.5rem;
+			padding: 0;
+			text-transform: uppercase;
+			cursor: pointer;
+
+			&__icon {
+				font-size: 2.2em;
+			}
+		}
+	}
+
+	&__nav {
+		height: 100vh;
+		background-color: $primary-color;
+		color: set-text-color($primary-color);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-between;
+		border-radius: 0;
+		border-right: 1px solid #000;
+
+		&__header,
+		&__footer {
+			margin: 1rem 0;
+		}
+
+		&__body {
+			overflow-y: auto;
+			height: 100%;
+			margin: 0.5rem 0;
 		}
 	}
 
@@ -77,7 +96,6 @@
 		background-color: $background-color;
 		width: 100%;
 		border-top: 1px solid $border-color;
-		margin-top: $header-height;
 		padding: 1rem 1rem 0 1rem;
 		overflow-y: auto;
 	}
@@ -91,18 +109,17 @@
 			position: static;
 			width: 220px;
 			box-shadow: none;
-			margin-top: $header-height;
 			border-top: 1px solid $border-color;
 			border-right: 1px solid $border-color;
 			border-radius: 0;
+
+			&-btn {
+				display: none;
+			}
 		}
 
 		& > &__body {
 			padding-left: 1.5rem;
-		}
-
-		&__btn-open {
-			display: none;
 		}
 	}
 }
