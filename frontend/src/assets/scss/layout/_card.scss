@@ -33,16 +33,12 @@
 	}
 }
 
-@include media-laptop {
-	// .card-container {
-	// 	flex-direction: row;
+// @include media-laptop {
+// .card-container {
+// 	flex-direction: row;
 
-	// 	&.vertical {
-	// 		flex-direction: column;
-	// 	}
-	// }
-
-	.card > .card__body {
-		padding: 2rem 3rem;
-	}
-}
+// 	&.vertical {
+// 		flex-direction: column;
+// 	}
+// }
+// }

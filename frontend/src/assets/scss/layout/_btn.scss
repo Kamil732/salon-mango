@@ -135,37 +135,17 @@
 		}
 	}
 
-	&__small {
-		padding: 0.2rem 0.5rem !important;
-
-		&.btn__loading {
-			padding: 0.2rem 0.5rem !important;
-		}
-	}
-
-	&__extraSmall {
+	&__link {
+		display: initial;
+		border: none;
+		background: transparent;
 		color: $active-element;
-		padding: 0;
-		border: none;
-		background-color: transparent;
-	}
-
-	&__rounded {
-		background-color: transparent;
-		padding: 0.5rem !important;
-		border: none;
-		border-radius: 30px;
-
-		&:hover,
-		&:focus {
-			background-color: $shadow-color;
-		}
 	}
 
 	&__primary,
 	&__success,
 	&__danger {
-		padding: 1rem 2rem;
+		padding: 0.5rem 1.5rem;
 	}
 
 	&__primary {
@@ -186,7 +166,8 @@
 		background-color: $secondary-color;
 		color: set-text-color($secondary-color);
 		border-width: 1px;
-		padding: calc(1rem + 4px) 2rem;
+		// padding: calc(1rem + 4px) 2rem;
+		padding: calc(0.5rem + 4px) 1.5rem;
 
 		&:hover,
 		&:focus {
@@ -227,14 +208,31 @@
 		}
 	}
 
-	&[disabled] {
-		opacity: 0.7;
-		cursor: default;
-		pointer-events: none;
+	&__small {
+		padding: 0.25rem 0.75rem;
+	}
+
+	&__extraSmall {
+		color: $active-element;
+		padding: 0;
+		border: none;
+		background-color: transparent;
+	}
+
+	&__rounded {
+		background-color: transparent;
+		padding: 0.5rem;
+		border: none;
+		border-radius: 30px;
+
+		&:hover,
+		&:focus {
+			background-color: $shadow-color;
+		}
 	}
 
 	&__loading {
-		padding: 0.7rem 1.5rem;
+		padding: 0rem 0.3rem;
 
 		&::before {
 			content: '';
@@ -247,6 +245,12 @@
 			border-color: #000 transparent #000 transparent;
 			animation: lds-dual-ring 1.2s linear infinite;
 		}
+	}
+
+	&[disabled] {
+		opacity: 0.7;
+		cursor: default;
+		pointer-events: none;
 	}
 }
 
@@ -288,16 +292,30 @@
 			}
 		}
 	}
+}
 
+@include media-laptop {
 	.btn {
 		&__primary,
 		&__success,
 		&__danger {
-			padding: 1rem 2.5rem;
+			padding: 0.75rem 1.75rem;
+		}
+
+		&__secondary {
+			padding: calc(0.75rem + 4px) 1.75rem;
 		}
 
 		&__small {
-			padding: 0.5rem 1rem !important;
+			padding: 0.5rem 1rem;
+
+			&.btn__loading {
+				padding: 0.05rem 0.5rem !important;
+			}
+		}
+
+		&__loading {
+			padding: 0.3rem 1rem;
 		}
 	}
 }
