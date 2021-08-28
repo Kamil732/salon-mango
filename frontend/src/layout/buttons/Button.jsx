@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 function Button({
 	children,
 	to,
+	link,
 	primary,
 	secondary,
 	success,
@@ -28,7 +29,7 @@ function Button({
 					secondary ? ' btn__secondary' : ''
 				}${success ? ' btn__success' : ''}${
 					danger ? ' btn__danger' : ''
-				}${loading ? ' btn__loading' : ''}${to ? ' btn__link' : ''}${
+				}${loading ? ' btn__loading' : ''}${
 					small ? ' btn__small' : ''
 				}${extraSmall ? ' btn__extraSmall slide-floor' : ''}${
 					rounded ? ' btn__rounded' : ''
@@ -47,7 +48,7 @@ function Button({
 				secondary ? ' btn__secondary' : ''
 			}${success ? ' btn__success' : ''}${danger ? ' btn__danger' : ''}${
 				loading ? ' btn__loading' : ''
-			}${to ? ' btn__link' : ''}${small ? ' btn__small' : ''}${
+			}${link ? ' btn__link' : ''}${small ? ' btn__small' : ''}${
 				extraSmall ? ' btn__extraSmall slide-floor' : ''
 			}${rounded ? ' btn__rounded' : ''} ${className}`}
 			disabled={loading || disabled}
@@ -69,6 +70,7 @@ Button.prototype.propTypes = {
 	small: PropTypes.bool,
 	extraSmall: PropTypes.bool,
 	rounded: PropTypes.bool,
+	link: PropTypes.bool,
 	to: PropTypes.string,
 	className: PropTypes.string,
 }
