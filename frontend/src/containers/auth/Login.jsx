@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
@@ -12,50 +12,48 @@ import FormControl from '../../layout/forms/FormControl'
 import Button from '../../layout/buttons/Button'
 import { Link, Redirect } from 'react-router-dom'
 import PageHero from '../../layout/PageHero'
+import Modal from '../../layout/Modal'
+import RegisterForm from './RegisterForm'
 
-class Login extends Component {
-	static propTypes = {
-		isAuthenticated: PropTypes.bool,
-		login: PropTypes.func.isRequired,
-	}
+function Login({ isAuthenticated, login }) {
+	const [loading, setLoading] = useState(false)
+	const [email, setEmail] = useState('')
+	const [password, setPassword] = useState('')
+	const [isRegisterForm, setIsRegisterForm] = useState(false)
 
-	constructor(props) {
-		super(props)
-
-		this.state = {
-			loading: false,
-			email: '',
-			password: '',
-		}
-
-		this.onChange = this.onChange.bind(this)
-		this.onSubmit = this.onSubmit.bind(this)
-	}
-
-	onChange = (e) => this.setState({ [e.target.name]: e.target.value })
-
-	onSubmit = async (e) => {
+	const onSubmit = async (e) => {
 		e.preventDefault()
 
-		this.setState({ loading: true })
-		await this.props.login('xd', this.state.email, this.state.password)
-		this.setState({ loading: false })
+		setLoading(true)
+		await login('xd', email, password)
+		setLoading(false)
 	}
 
-	render() {
-		const { loading, email, password } = this.state
+	if (isAuthenticated)
+		return <Redirect to={process.env.REACT_APP_PANEL_URL} />
 
-		if (this.props.isAuthenticated)
-			return <Redirect to={process.env.REACT_APP_PANEL_URL} />
+	return (
+		<>
+			{isRegisterForm && (
+				<Modal closeModal={() => setIsRegisterForm(false)}>
+					<Modal.Header>Rejestracja</Modal.Header>
+					<Modal.Body>
+						<RegisterForm />
+					</Modal.Body>
+				</Modal>
+			)}
 
-		return (
 			<PageHero data-aos="fade-up">
 				<PageHero.Img src={AuthIllustration}>
 					<p className="text-broken">
 						Nie masz jeszcze konta? Kliknij{' '}
-						<Link to="/register" className="slide-floor">
+						<Button
+							link
+							className="slide-floor"
+							onClick={() => setIsRegisterForm(true)}
+						>
 							tutaj
-						</Link>{' '}
+						</Button>{' '}
 						by je utworzyć
 					</p>
 				</PageHero.Img>
@@ -65,7 +63,7 @@ class Login extends Component {
 
 					<Card>
 						<Card.Body>
-							<form onSubmit={this.onSubmit}>
+							<form onSubmit={onSubmit}>
 								<CSRFToken />
 
 								<FormControl>
@@ -80,7 +78,9 @@ class Login extends Component {
 										type="email"
 										id="email"
 										name="email"
-										onChange={this.onChange}
+										onChange={(e) =>
+											setEmail(e.target.value)
+										}
 										value={email}
 									/>
 								</FormControl>
@@ -96,27 +96,38 @@ class Login extends Component {
 										type="password"
 										id="password"
 										name="password"
-										onChange={this.onChange}
+										onChange={(e) =>
+											setPassword(e.target.value)
+										}
 										value={password}
 										min="3"
 									/>
 								</FormControl>
 
-								<Button
-									primary
-									loading={loading}
-									loadingText="Logowanie"
-									className="center-item"
-								>
-									Zaloguj się
-								</Button>
+								<div className="space-between wrap-vertical">
+									<Button
+										primary
+										loading={loading}
+										loadingText="Logowanie"
+									>
+										Zaloguj się
+									</Button>
+									<Link to="/" className="slide-floor">
+										Nie pamiętasz hasła?
+									</Link>
+								</div>
 							</form>
 						</Card.Body>
 					</Card>
 				</PageHero.Content>
 			</PageHero>
-		)
-	}
+		</>
+	)
+}
+
+Login.prototype.propTypes = {
+	isAuthenticated: PropTypes.bool,
+	login: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => ({
