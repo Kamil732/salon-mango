@@ -30,6 +30,11 @@ a {
 	color: $active-element;
 }
 
+header {
+	margin-bottom: 0.5rem;
+	opacity: 0.85;
+}
+
 .global-message {
 	background-color: $info-color;
 	color: set-text-color($info-color);
@@ -73,7 +78,6 @@ a {
 	display: flex;
 	justify-content: center;
 	align-items: flex-start;
-	padding: 1rem;
 }
 
 .header {

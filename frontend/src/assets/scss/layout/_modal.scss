@@ -4,16 +4,18 @@
 	z-index: 999;
 	min-width: 90%;
 	margin: 0 auto;
-	background-color: $surface-color;
+	background-color: $background-color;
 	border: 1px solid $border-color;
 	border-radius: $border-radius;
 	position: relative;
+	margin: 2rem;
 
 	& > &__header {
 		border-radius: $border-radius $border-radius 0 0;
 		padding: 1rem;
-		background-color: $secondary-color;
-		color: set-text-color($secondary-color);
+		background-color: $background-color;
+		color: set-text-color($background-color);
+		border-bottom: 1px solid $border-color;
 		font-size: 1.3em;
 	}
 
@@ -23,6 +25,14 @@
 
 	animation: show 0.4s;
 	@include box-shadow;
+
+	&.fullscreen {
+		min-width: 100%;
+		width: 100%;
+		min-height: 100%;
+		margin: 0;
+		box-shadow: none;
+	}
 }
 
 @keyframes show {

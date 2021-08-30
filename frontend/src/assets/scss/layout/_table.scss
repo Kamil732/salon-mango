@@ -1,8 +1,10 @@
-.table {
+table {
+	min-width: 100%;
 	border-collapse: collapse;
 	border-spacing: 0;
-	min-width: 100%;
+}
 
+.table {
 	thead {
 		background-color: $primary-color;
 		color: set-text-color($primary-color);
@@ -28,9 +30,6 @@
 }
 
 .table-border {
-	border-collapse: collapse;
-	border-spacing: 0;
-	min-width: 100%;
 	text-align: center;
 
 	th,
@@ -59,5 +58,30 @@
 				color: $error-color;
 			}
 		}
+	}
+}
+
+.step-table {
+	tr {
+		border-bottom: 1px solid $border-color;
+
+		&:last-child {
+			border-bottom: none;
+		}
+	}
+
+	td {
+		// padding: 1rem 0;
+		margin: 1rem;
+
+		&:last-of-type {
+			margin-right: 0;
+		}
+	}
+}
+
+@media (max-width: 768px) {
+	.step-table {
+		word-break: break-all;
 	}
 }

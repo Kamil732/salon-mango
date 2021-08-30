@@ -1,13 +1,13 @@
-// .card-container {
-// 	display: flex;
-// 	gap: 4rem;
-// 	flex-direction: column;
-// 	width: 100%;
+.card-container {
+	display: flex;
+	gap: 1rem;
+	flex-direction: column;
+	width: 100%;
 
-// 	& > .card {
-// 		margin: 0 auto;
-// 	}
-// }
+	& > .card {
+		margin: 0 auto;
+	}
+}
 
 .card {
 	$border-radius: 10px;
@@ -15,7 +15,7 @@
 	width: 100%;
 	background-color: $surface-color;
 	border-radius: $border-radius;
-	border: 1px solid #ccc;
+	@include shadow-sm;
 
 	& > &__title {
 		background-color: $secondary-color;
@@ -31,14 +31,27 @@
 	& > &__body {
 		padding: 1rem 1.5rem;
 	}
+
+	&.form-card {
+		width: 100%;
+		height: 100%;
+
+		& > .card__body {
+			padding: 2rem 1.5rem;
+		}
+	}
 }
 
-// @include media-laptop {
-// .card-container {
-// 	flex-direction: row;
+@include media-laptop {
+	.card.form-card {
+		width: 448px;
+	}
 
-// 	&.vertical {
-// 		flex-direction: column;
-// 	}
-// }
-// }
+	.card-container {
+		flex-direction: row;
+
+		&.vertical {
+			flex-direction: column;
+		}
+	}
+}
