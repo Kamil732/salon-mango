@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { lazy, Suspense, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
@@ -13,7 +13,10 @@ import Button from '../../layout/buttons/Button'
 import { Link, Redirect } from 'react-router-dom'
 import PageHero from '../../layout/PageHero'
 import Modal from '../../layout/Modal'
-import RegisterForm from './RegisterForm'
+import ErrorBoundary from '../../components/ErrorBoundary'
+import CircleLoader from '../../layout/loaders/CircleLoader'
+
+const RegisterForm = lazy(() => import('./RegisterForm'))
 
 function Login({ isAuthenticated, login }) {
 	const [loading, setLoading] = useState(false)
@@ -35,10 +38,20 @@ function Login({ isAuthenticated, login }) {
 	return (
 		<>
 			{isRegisterForm && (
-				<Modal closeModal={() => setIsRegisterForm(false)}>
+				<Modal closeModal={() => setIsRegisterForm(false)} fullscreen>
 					<Modal.Header>Rejestracja</Modal.Header>
 					<Modal.Body>
-						<RegisterForm />
+						<ErrorBoundary>
+							<Suspense
+								fallback={
+									<div className="center-container">
+										<CircleLoader />
+									</div>
+								}
+							>
+								<RegisterForm />
+							</Suspense>
+						</ErrorBoundary>
 					</Modal.Body>
 				</Modal>
 			)}
