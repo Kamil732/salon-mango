@@ -1,9 +1,9 @@
 import React from 'react'
 
-function CardContainer(props) {
+function CardContainer({ vertical, ...props }) {
 	return (
 		<div
-			className={`card-container${props.vertical ? ' vertical' : ''}`}
+			className={`card-container${vertical ? ' vertical' : ''}`}
 			{...props}
 		/>
 	)

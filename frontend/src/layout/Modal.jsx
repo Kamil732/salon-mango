@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import { CloseButton } from './buttons/Button'
 
-function Modal({ children, closeModal, isChild, ...props }) {
+function Modal({ children, closeModal, isChild, fullscreen, ...props }) {
 	const modalRef = useRef(null)
 
 	useEffect(() => {
@@ -29,7 +29,11 @@ function Modal({ children, closeModal, isChild, ...props }) {
 
 	const modal = (
 		<div className="dark-bg">
-			<div className="modal" {...props} ref={modalRef}>
+			<div
+				className={`modal${fullscreen ? ' fullscreen' : ''}`}
+				{...props}
+				ref={modalRef}
+			>
 				<CloseButton trCorner onClick={closeModal} />
 				{children}
 			</div>
@@ -51,6 +55,7 @@ function Body(props) {
 
 Modal.prototype.propTypes = {
 	isChild: PropTypes.bool,
+	fullscreen: PropTypes.bool,
 	closeModal: PropTypes.func.isRequired,
 }
 

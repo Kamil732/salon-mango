@@ -1,7 +1,19 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
-function Card(props) {
-	return <div className="card" {...props} />
+function Card({ formCard, className, ...props }) {
+	return (
+		<div
+			className={`card${formCard ? ' form-card' : ''}${
+				className ? ` ${className}` : ''
+			}`}
+			{...props}
+		/>
+	)
+}
+
+Card.prototype.propTypes = {
+	formCard: PropTypes.bool,
 }
 
 function Title(props) {
