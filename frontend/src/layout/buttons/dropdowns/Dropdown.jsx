@@ -13,6 +13,7 @@ class Dropdown extends Component {
 	static propTypes = {
 		required: PropTypes.bool,
 		searchAsync: PropTypes.bool,
+		isLoading: PropTypes.bool,
 		loadOptions: PropTypes.func,
 		isMulti: PropTypes.bool,
 		editable: PropTypes.bool,
@@ -24,6 +25,7 @@ class Dropdown extends Component {
 		getOptionValue: PropTypes.func,
 		getValuesValue: PropTypes.func,
 		formatOptionLabel: PropTypes.func,
+		formatSelectedOptionValue: PropTypes.func,
 		setShowInput: PropTypes.func,
 	}
 
@@ -36,7 +38,10 @@ class Dropdown extends Component {
 			isOpen: false,
 			inputValue: '',
 			filteredOptions: props.options,
-			loading: props.options.length === 0,
+			loading:
+				props.isLoading === null
+					? props.options.length === 0
+					: props.isLoading,
 			navigatedIndex: 0,
 		}
 
@@ -159,7 +164,10 @@ class Dropdown extends Component {
 		document.removeEventListener('mousedown', this.handleClickOutside)
 
 	componentDidUpdate(prevProps, prevState) {
-		if (prevProps.options.length !== this.props.options.length)
+		if (
+			this.props.isLoading === null &&
+			prevProps.options.length !== this.props.options.length
+		)
 			this.setState({ loading: this.props.options.length === 0 })
 
 		if (prevState.filteredOptions !== this.state.filteredOptions)
@@ -200,6 +208,15 @@ class Dropdown extends Component {
 		}
 
 		if (
+			JSON.stringify(this.props.options) !==
+			JSON.stringify(prevProps.options)
+		)
+			this.setState({
+				filteredOptions: this.props.options,
+				inputValue: '',
+			})
+
+		if (
 			(!this.props.isMulti &&
 				JSON.stringify(prevProps.value) !==
 					JSON.stringify(this.props.value)) ||
@@ -219,6 +236,7 @@ class Dropdown extends Component {
 			searchAsync,
 			loadOptions,
 			isMulti,
+			isLoading,
 			options,
 			value,
 			onChange,
@@ -226,6 +244,7 @@ class Dropdown extends Component {
 			getOptionValue,
 			getValuesValue,
 			formatOptionLabel,
+			formatSelectedOptionValue,
 			setShowInput,
 			...props
 		} = this.props
@@ -240,8 +259,15 @@ class Dropdown extends Component {
 				onKeyDown={this.handleKeyDown}
 			>
 				{!isMulti && value && inputValue === '' && (
-					<div className="dropdown__value">
-						{getOptionLabel(value)}
+					<div
+						className="dropdown__value"
+						style={
+							formatSelectedOptionValue ? { bottom: '-3px' } : {}
+						}
+					>
+						{formatSelectedOptionValue
+							? formatSelectedOptionValue(value)
+							: getOptionLabel(value)}
 					</div>
 				)}
 
@@ -254,6 +280,7 @@ class Dropdown extends Component {
 						onChange={(e) =>
 							this.setState({ inputValue: e.target.value })
 						}
+						autoComplete="off"
 						{...props}
 					/>
 				</div>
