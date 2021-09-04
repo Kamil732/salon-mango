@@ -11,7 +11,7 @@ function ChooseCategories({ categories, onChangeCategory }) {
 			</div>
 			<FormControl>
 				{Object.keys(categories).map((key) => (
-					<>
+					<div key={key}>
 						<FormControl.CheckBoxLabel key={key}>
 							<FormControl.CheckBox
 								name={key}
@@ -22,7 +22,7 @@ function ChooseCategories({ categories, onChangeCategory }) {
 						</FormControl.CheckBoxLabel>
 
 						<hr className="seperator lg-space" />
-					</>
+					</div>
 				))}
 			</FormControl>
 		</>

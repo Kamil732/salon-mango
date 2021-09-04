@@ -1,7 +1,6 @@
-import React, { lazy, Suspense, useState } from 'react'
+import React, { lazy, Suspense, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router-dom'
 
 // import { register } from '../../redux/actions/auth'
 import { HiOutlineArrowLeft } from 'react-icons/hi'
@@ -11,18 +10,20 @@ import Card from '../../layout/cards/Card'
 import ErrorBoundary from '../../components/ErrorBoundary'
 import CircleLoader from '../../layout/loaders/CircleLoader'
 import Button from '../../layout/buttons/Button'
+import axios from 'axios'
 
-const SalonInformation = lazy(() => import('./forms/SalonInformation'))
-const Credentials = lazy(() => import('./forms/Credentials'))
-const AcceptTerms = lazy(() => import('./forms/AcceptTerms'))
-const ChooseCategories = lazy(() => import('./forms/ChooseCategories'))
-const SetWorkingHours = lazy(() => import('./forms/SetWorkingHours'))
-const WorkType = lazy(() => import('./forms/WorkType'))
-const FindAddress = lazy(() => import('./forms/FindAddress'))
+const SalonInformation = lazy(() => import('./steps/SalonInformation'))
+const Credentials = lazy(() => import('./steps/Credentials'))
+const AcceptTerms = lazy(() => import('./steps/AcceptTerms'))
+const ChooseCategories = lazy(() => import('./steps/ChooseCategories'))
+const SetWorkingHours = lazy(() => import('./steps/SetWorkingHours'))
+const WorkType = lazy(() => import('./steps/WorkType'))
+const FindAddress = lazy(() => import('./steps/FindAddress'))
+const SetAddress = lazy(() => import('./steps/SetAddress'))
 
 const STEPS_AMOUNT = 10
 
-function RegisterForm({ isAuthenticated, register }) {
+function RegisterForm({ register }) {
 	const [loading, setLoading] = useState(false)
 	const [
 		{
@@ -51,7 +52,15 @@ function RegisterForm({ isAuthenticated, register }) {
 			start_work_tuesday,
 			end_work_monday,
 			start_work_monday,
+
+			country,
 			address,
+			premises_number,
+			city,
+			postal_code,
+			share_premises,
+			common_premises_name,
+			common_premises_number,
 		},
 		setData,
 	] = useState({
@@ -166,14 +175,26 @@ function RegisterForm({ isAuthenticated, register }) {
 		end_work_monday: '19:00',
 		start_work_monday: '10:00',
 		working_type: null,
+
+		country: 'PL',
 		address: '',
+		premises_number: '',
+		city: {},
+		postal_code: '',
+		share_premises: '',
+		common_premises_name: '',
+		common_premises_number: '',
 	})
 	const [step, setStep] = useState(1)
 
-	if (isAuthenticated)
-		return <Redirect to={process.env.REACT_APP_PANEL_URL} />
-
-	// useEffect(() => {}, [address])
+	useEffect(
+		() =>
+			setData((prevData) => ({
+				...prevData,
+				city: {},
+			})),
+		[postal_code]
+	)
 
 	const onChange = (e) => {
 		const value =
@@ -184,6 +205,12 @@ function RegisterForm({ isAuthenticated, register }) {
 			[e.target.name]: value,
 		}))
 	}
+
+	const onChangeDropdown = (key, val) =>
+		setData((prevData) => ({
+			...prevData,
+			[key]: val,
+		}))
 
 	const onChangeCategory = (e) =>
 		setData((prevData) => ({
@@ -247,9 +274,11 @@ function RegisterForm({ isAuthenticated, register }) {
 							{step === 1 ? (
 								<SalonInformation
 									onChange={onChange}
+									onChangeDropdown={onChangeDropdown}
 									salon_name={salon_name}
 									first_name={first_name}
 									last_name={last_name}
+									phone_prefix={phone_prefix}
 									phone_number={phone_number}
 								/>
 							) : step === 2 ? (
@@ -293,11 +322,25 @@ function RegisterForm({ isAuthenticated, register }) {
 								/>
 							) : step === 7 ? (
 								<FindAddress
-									onChange={onChange}
-									address={address}
+									nextStep={() =>
+										setStep((prevStep) => prevStep + 1)
+									}
 								/>
 							) : step === 8 ? (
-								<></>
+								<SetAddress
+									country={country}
+									address={address}
+									premises_number={premises_number}
+									city={city}
+									postal_code={postal_code}
+									share_premises={share_premises}
+									common_premises_name={common_premises_name}
+									common_premises_number={
+										common_premises_number
+									}
+									onChange={onChange}
+									onChangeDropdown={onChangeDropdown}
+								/>
 							) : step === 9 ? (
 								<></>
 							) : step === 10 ? (
@@ -314,7 +357,7 @@ function RegisterForm({ isAuthenticated, register }) {
 								>
 									Zakończ
 								</Button>
-							) : step !== 6 ? (
+							) : step !== 6 && step !== 7 ? (
 								<Button
 									primary
 									onClick={() =>
@@ -335,16 +378,11 @@ function RegisterForm({ isAuthenticated, register }) {
 }
 
 RegisterForm.prototype.propTypes = {
-	isAuthenticated: PropTypes.bool,
 	register: PropTypes.func.isRequired,
 }
-
-const mapStateToProps = (state) => ({
-	isAuthenticated: state.auth.isAuthenticated,
-})
 
 const mapDispatchToProps = {
 	// register,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RegisterForm)
+export default connect(null, mapDispatchToProps)(RegisterForm)
