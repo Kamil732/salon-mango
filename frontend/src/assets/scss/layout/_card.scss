@@ -42,16 +42,18 @@
 	}
 }
 
-@include media-laptop {
-	.card.form-card {
-		width: 448px;
-	}
-
+@include media-tablet {
 	.card-container {
 		flex-direction: row;
 
 		&.vertical {
 			flex-direction: column;
 		}
+	}
+}
+
+@media screen and (min-width: 640px) {
+	.card.form-card {
+		width: 448px;
 	}
 }
