@@ -20,6 +20,7 @@ class Dropdown extends Component {
 		regexValidation: PropTypes.string,
 		options: PropTypes.array,
 		value: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+		searchable: PropTypes.array,
 		onChange: PropTypes.func.isRequired,
 		getOptionLabel: PropTypes.func,
 		getOptionValue: PropTypes.func,
@@ -184,10 +185,21 @@ class Dropdown extends Component {
 					filteredOptions: this.props.options.filter(
 						(option) =>
 							this.isNotSelected(option) &&
-							this.props
-								.getOptionLabel(option)
-								.toLowerCase()
-								.includes(this.state.inputValue.toLowerCase())
+							((this.props.searchable.length === 0 &&
+								this.props
+									.getOptionLabel(option)
+									.toLowerCase()
+									.includes(
+										this.state.inputValue.toLowerCase()
+									)) ||
+								(this.props.searchable.length > 0 &&
+									this.props.searchable.some((key) =>
+										option[key]
+											.toLowerCase()
+											.includes(
+												this.state.inputValue.toLowerCase()
+											)
+									)))
 					),
 				})
 
@@ -258,18 +270,22 @@ class Dropdown extends Component {
 				onFocus={() => this.setState({ isOpen: true })}
 				onKeyDown={this.handleKeyDown}
 			>
-				{!isMulti && value && inputValue === '' && (
-					<div
-						className="dropdown__value"
-						style={
-							formatSelectedOptionValue ? { bottom: '-3px' } : {}
-						}
-					>
-						{formatSelectedOptionValue
-							? formatSelectedOptionValue(value)
-							: getOptionLabel(value)}
-					</div>
-				)}
+				{!isMulti &&
+					Object.keys(value).length > 0 &&
+					inputValue === '' && (
+						<div
+							className="dropdown__value"
+							style={
+								formatSelectedOptionValue
+									? { bottom: '-3px' }
+									: {}
+							}
+						>
+							{formatSelectedOptionValue
+								? formatSelectedOptionValue(value)
+								: getOptionLabel(value)}
+						</div>
+					)}
 
 				<div className="dropdown__input-container">
 					<FormControl.Input
