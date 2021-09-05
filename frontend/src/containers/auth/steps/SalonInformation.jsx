@@ -16,12 +16,10 @@ function SalonInformation({
 	phone_prefix,
 	phone_number,
 }) {
-	const formatOptionLabel = ({ flag, isoCode, dialCode, name }) => {
+	const formatOptionLabel = ({ dialCode, name }) => {
 		return (
 			<div className="inline-wrap">
-				<img src={flag} alt={isoCode} width={26} height={26} />
-				<span>{dialCode}</span> |{' '}
-				<span className="text-broken">{name}</span>
+				<span>{dialCode}</span> | <span>{name}</span>
 			</div>
 		)
 	}
@@ -94,7 +92,7 @@ function SalonInformation({
 				<FormControl style={{ width: '6.5rem' }}>
 					<FormControl.Label
 						htmlFor="phone-prefix"
-						inputValue={phone_prefix}
+						inputValue={Object.keys(phone_prefix).length > 0}
 					>
 						Prefix
 					</FormControl.Label>
@@ -102,7 +100,6 @@ function SalonInformation({
 						id="phone-prefix"
 						required
 						value={phone_prefix}
-						getOptionLabel={(opt) => opt.dialCode}
 						getOptionValue={(opt) => opt.isoCode}
 						getValuesValue={(opt) => opt.isoCode}
 						formatOptionLabel={formatOptionLabel}
@@ -111,6 +108,7 @@ function SalonInformation({
 							onChangeDropdown('phone_prefix', val)
 						}
 						options={countries}
+						searchable={['name', 'isoCode', 'dialCode']}
 					/>
 				</FormControl>
 				<FormControl>
