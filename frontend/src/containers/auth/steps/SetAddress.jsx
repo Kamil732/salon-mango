@@ -16,11 +16,16 @@ function SetAddress({
 	common_premises_name,
 	common_premises_number,
 	onChange,
-	onChangeDropdown,
+	onChangeByKey,
 }) {
 	const [citiesLoading, setCitiesLoading] = useState(false)
 	const [cities, setCities] = useState([])
 	const debouncedSearch = useDebounce(postal_code, 500)
+
+	useEffect(() => {
+		if (postal_code.length !== 6 && cities.length !== 0) setCities([])
+		// if (!citiesLoading) setCitiesLoading(true)
+	}, [postal_code, cities, citiesLoading])
 
 	useEffect(() => {
 		if (debouncedSearch.length !== 6) return
@@ -28,7 +33,7 @@ function SetAddress({
 
 		axios
 			.get(
-				`https://app.zipcodebase.com/api/v1/search?codes=${debouncedSearch}&country=${country}&apikey=d8d66b60-0b62-11ec-96f1-4fef55f384da`
+				`https://app.zipcodebase.com/api/v1/search?codes=${debouncedSearch}&country=${country}&apikey=${process.env.REACT_APP_ZIPCODEBASE_KEY}`
 			)
 			.then((res) => {
 				if (res.data.results.length === 0) {
@@ -37,8 +42,7 @@ function SetAddress({
 				}
 				setCities(res.data.results[res.data.query.codes[0]])
 			})
-
-		setCitiesLoading(false)
+			.finally(() => setCitiesLoading(false))
 	}, [debouncedSearch, country])
 
 	return (
@@ -97,10 +101,7 @@ function SetAddress({
 					/>
 				</FormControl>
 				<FormControl>
-					<FormControl.Label
-						htmlFor="city"
-						inputValue={Object.keys(city).length > 0}
-					>
+					<FormControl.Label htmlFor="city" inputValue={city}>
 						Miejscowość
 					</FormControl.Label>
 
@@ -110,7 +111,7 @@ function SetAddress({
 						getOptionLabel={(opt) => opt.city}
 						getOptionValue={(opt) => opt.city}
 						getValuesValue={(opt) => opt.city}
-						onChange={(val) => onChangeDropdown('city', val)}
+						onChange={(val) => onChangeByKey('city', val)}
 						options={cities}
 						isLoading={citiesLoading}
 						disabled={debouncedSearch.length !== 6}
@@ -131,7 +132,7 @@ SetAddress.prototype.propTypes = {
 	common_premises_name: PropTypes.string,
 	common_premises_number: PropTypes.string,
 	onChange: PropTypes.func.isRequired,
-	onChangeDropdown: PropTypes.func.isRequired,
+	onChangeByKey: PropTypes.func.isRequired,
 }
 
 export default SetAddress

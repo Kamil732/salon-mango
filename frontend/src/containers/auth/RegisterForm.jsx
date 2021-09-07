@@ -10,7 +10,6 @@ import Card from '../../layout/cards/Card'
 import ErrorBoundary from '../../components/ErrorBoundary'
 import CircleLoader from '../../layout/loaders/CircleLoader'
 import Button from '../../layout/buttons/Button'
-import axios from 'axios'
 
 const SalonInformation = lazy(() => import('./steps/SalonInformation'))
 const Credentials = lazy(() => import('./steps/Credentials'))
@@ -53,6 +52,9 @@ function RegisterForm({ register }) {
 			end_work_monday,
 			start_work_monday,
 
+			work_stationary,
+			work_remotely,
+
 			country,
 			address,
 			premises_number,
@@ -61,6 +63,8 @@ function RegisterForm({ register }) {
 			share_premises,
 			common_premises_name,
 			common_premises_number,
+			latitude,
+			longitude,
 		},
 		setData,
 	] = useState({
@@ -70,7 +74,7 @@ function RegisterForm({ register }) {
 		salon_name: '',
 		first_name: '',
 		last_name: '',
-		phone_prefix: '',
+		phone_prefix: {},
 		phone_number: '',
 		recomendation_code: '',
 		accept_terms: false,
@@ -174,16 +178,20 @@ function RegisterForm({ register }) {
 		start_work_tuesday: '10:00',
 		end_work_monday: '19:00',
 		start_work_monday: '10:00',
-		working_type: null,
+
+		work_stationary: true,
+		work_remotely: false,
 
 		country: 'PL',
 		address: '',
 		premises_number: '',
-		city: {},
+		city: null,
 		postal_code: '',
 		share_premises: '',
 		common_premises_name: '',
 		common_premises_number: '',
+		latitude: null,
+		longitude: null,
 	})
 	const [step, setStep] = useState(1)
 
@@ -191,7 +199,7 @@ function RegisterForm({ register }) {
 		() =>
 			setData((prevData) => ({
 				...prevData,
-				city: {},
+				city: null,
 			})),
 		[postal_code]
 	)
@@ -206,7 +214,7 @@ function RegisterForm({ register }) {
 		}))
 	}
 
-	const onChangeDropdown = (key, val) =>
+	const onChangeByKey = (key, val) =>
 		setData((prevData) => ({
 			...prevData,
 			[key]: val,
@@ -230,14 +238,6 @@ function RegisterForm({ register }) {
 			[`start_work_${e.target.name}`]: e.target.checked ? '10:00' : null,
 			[`end_work_${e.target.name}`]: e.target.checked ? '19:00' : null,
 		}))
-
-	const chooseWorkingType = (type) => {
-		setData((prevData) => ({
-			...prevData,
-			working_type: type,
-		}))
-		setStep((prevStep) => prevStep + 1)
-	}
 
 	const onSubmit = async (e) => {
 		e.preventDefault()
@@ -274,12 +274,13 @@ function RegisterForm({ register }) {
 							{step === 1 ? (
 								<SalonInformation
 									onChange={onChange}
-									onChangeDropdown={onChangeDropdown}
+									onChangeByKey={onChangeByKey}
 									salon_name={salon_name}
 									first_name={first_name}
 									last_name={last_name}
 									phone_prefix={phone_prefix}
 									phone_number={phone_number}
+									recomendation_code={recomendation_code}
 								/>
 							) : step === 2 ? (
 								<Credentials
@@ -299,6 +300,34 @@ function RegisterForm({ register }) {
 									categories={categories}
 								/>
 							) : step === 5 ? (
+								<SetAddress
+									country={country}
+									address={address}
+									premises_number={premises_number}
+									city={city}
+									postal_code={postal_code}
+									share_premises={share_premises}
+									common_premises_name={common_premises_name}
+									common_premises_number={
+										common_premises_number
+									}
+									onChange={onChange}
+									onChangeByKey={onChangeByKey}
+								/>
+							) : step === 6 ? (
+								<FindAddress
+									city={city}
+									latitude={latitude}
+									longitude={longitude}
+									onChangeByKey={onChangeByKey}
+								/>
+							) : step === 7 ? (
+								<WorkType
+									work_stationary={work_stationary}
+									work_remotely={work_remotely}
+									onChange={onChange}
+								/>
+							) : step === 8 ? (
 								<SetWorkingHours
 									onChangeIsWorkingDay={onChangeIsWorkingDay}
 									start_work_monday={start_work_monday}
@@ -316,31 +345,6 @@ function RegisterForm({ register }) {
 									start_work_sunday={start_work_sunday}
 									end_work_sunday={end_work_sunday}
 								/>
-							) : step === 6 ? (
-								<WorkType
-									chooseWorkingType={chooseWorkingType}
-								/>
-							) : step === 7 ? (
-								<FindAddress
-									nextStep={() =>
-										setStep((prevStep) => prevStep + 1)
-									}
-								/>
-							) : step === 8 ? (
-								<SetAddress
-									country={country}
-									address={address}
-									premises_number={premises_number}
-									city={city}
-									postal_code={postal_code}
-									share_premises={share_premises}
-									common_premises_name={common_premises_name}
-									common_premises_number={
-										common_premises_number
-									}
-									onChange={onChange}
-									onChangeDropdown={onChangeDropdown}
-								/>
 							) : step === 9 ? (
 								<></>
 							) : step === 10 ? (
@@ -357,7 +361,7 @@ function RegisterForm({ register }) {
 								>
 									Zakończ
 								</Button>
-							) : step !== 6 && step !== 7 ? (
+							) : (
 								<Button
 									primary
 									onClick={() =>
@@ -368,7 +372,7 @@ function RegisterForm({ register }) {
 								>
 									Dalej
 								</Button>
-							) : null}
+							)}
 						</Suspense>
 					</ErrorBoundary>
 				</form>
