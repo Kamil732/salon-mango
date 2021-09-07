@@ -171,6 +171,9 @@ class Dropdown extends Component {
 		)
 			this.setState({ loading: this.props.options.length === 0 })
 
+		if (prevProps.isLoading !== this.props.isLoading)
+			this.setState({ loading: this.props.isLoading })
+
 		if (prevState.filteredOptions !== this.state.filteredOptions)
 			this.setState({ navigatedIndex: 0 })
 
@@ -185,14 +188,14 @@ class Dropdown extends Component {
 					filteredOptions: this.props.options.filter(
 						(option) =>
 							this.isNotSelected(option) &&
-							((this.props.searchable.length === 0 &&
+							((this.props.searchable == null &&
 								this.props
 									.getOptionLabel(option)
 									.toLowerCase()
 									.includes(
 										this.state.inputValue.toLowerCase()
 									)) ||
-								(this.props.searchable.length > 0 &&
+								(this.props.searchable != null &&
 									this.props.searchable.some((key) =>
 										option[key]
 											.toLowerCase()
@@ -271,6 +274,7 @@ class Dropdown extends Component {
 				onKeyDown={this.handleKeyDown}
 			>
 				{!isMulti &&
+					value !== null &&
 					Object.keys(value).length > 0 &&
 					inputValue === '' && (
 						<div
