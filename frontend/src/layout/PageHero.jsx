@@ -1,6 +1,5 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import useIntersectionObserver from '../helpers/hooks/intersectionObserver'
 
 function PageHero({ children, vertical, ...props }) {
 	return (

@@ -1,13 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { IoIosArrowForward } from 'react-icons/io'
-import CardContainer from '../../../layout/cards/CardContainer'
-import Card from '../../../layout/cards/Card'
 import FormControl from '../../../layout/forms/FormControl'
-import Button from '../../../layout/buttons/Button'
 
-function WorkType({ chooseWorkingType }) {
+function WorkType({ work_stationary, work_remotely, onChange }) {
 	return (
 		<>
 			<div className="title">
@@ -16,87 +12,62 @@ function WorkType({ chooseWorkingType }) {
 			</div>
 
 			<FormControl>
-				<CardContainer vertical>
-					<Card>
-						<Card.Body>
-							<div className="space-between">
-								<section>
-									<header>
-										<h4>Tylko stacjonarnie</h4>
-									</header>
+				<FormControl.CheckBoxLabel>
+					<FormControl.CheckBox
+						name="work_stationary"
+						checked={work_stationary}
+						onChange={onChange}
+						required={
+							work_remotely === false && work_stationary === false
+						}
+					/>
+					<p>
+						Pracuje stacjonarnie
+						<br />
+						<small className="text-broken">
+							Pracuję stacjonarnie. Prowadzę salon
+						</small>
+					</p>
+				</FormControl.CheckBoxLabel>
 
-									<p className="text-broken">
-										Pracuję tylko stacjonarnie, Prowadzę
-										salon
-									</p>
-								</section>
-								<Button
-									rounded
-									onClick={() =>
-										chooseWorkingType('stationary')
-									}
-								>
-									<IoIosArrowForward size="20" />
-								</Button>
-							</div>
-						</Card.Body>
-					</Card>
-					<Card>
-						<Card.Body>
-							<div className="space-between">
-								<section>
-									<header>
-										<h4>
-											Pracuję stacjonarnie i świadczę
-											usługi mobilne
-										</h4>
-									</header>
+				<hr className="seperator lg-space" />
 
-									<p className="text-broken">
-										Pracuję stacjonarnie, ale niektóre
-										usługi świadczę również z dojazdem do
-										klienta.
-									</p>
-								</section>
-								<Button
-									rounded
-									onClick={() => chooseWorkingType('both')}
-								>
-									<IoIosArrowForward size="20" />
-								</Button>
-							</div>
-						</Card.Body>
-					</Card>
-					<Card>
-						<Card.Body>
-							<div className="space-between">
-								<section>
-									<header>
-										<h4>Świadczę tylko usługi mobilne</h4>
-									</header>
+				<FormControl.CheckBoxLabel>
+					<FormControl.CheckBox
+						name="work_remotely"
+						checked={work_remotely}
+						onChange={onChange}
+						required={
+							work_remotely === false && work_stationary === false
+						}
+					/>
+					<p>
+						Świadczę usługi mobilne
+						<br />
+						<small className="text-broken">
+							Oferuję usługi z dojazdem do klienta
+						</small>
+					</p>
+				</FormControl.CheckBoxLabel>
 
-									<p className="text-broken">
-										Oferuję jedynie usługi z dojazdem do
-										klienta.
-									</p>
-								</section>
-								<Button
-									rounded
-									onClick={() => chooseWorkingType('mobile')}
-								>
-									<IoIosArrowForward size="20" />
-								</Button>
-							</div>
-						</Card.Body>
-					</Card>
-				</CardContainer>
+				<hr className="seperator lg-space" />
+
+				{work_remotely === false && work_stationary === false && (
+					<div className="center-container">
+						<small className="text-broken">
+							Wybierz conajmniej jedną opcję
+						</small>
+					</div>
+				)}
 			</FormControl>
 		</>
 	)
 }
 
 WorkType.prototype.propTypes = {
-	chooseWorkingType: PropTypes.func.isRequired,
+	work_stationary: PropTypes.bool,
+	work_remotely: PropTypes.bool,
+	onChange: PropTypes.func.isRequired,
 }
 
 export default WorkType
