@@ -1,21 +1,28 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { FaMapMarkerAlt } from 'react-icons/fa'
+
 import FormControl from '../../../layout/forms/FormControl'
 import { GoogleMap, useJsApiLoader, Marker, Data } from '@react-google-maps/api'
+import Card from '../../../layout/cards/Card'
 
-function FindAddress({ city, latitude, longitude, onChangeByKey }) {
+function FindAddress({
+	city,
+	address,
+	postal_code,
+	latitude,
+	longitude,
+	setData,
+}) {
 	const { isLoaded } = useJsApiLoader({
 		googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
 	})
 
-	const center =
-		latitude === null && longitude === null
-			? {
-					lat: parseFloat(city.latitude),
-					lng: parseFloat(city.longitude),
-			  }
-			: null
+	const center = {
+		lat: latitude,
+		lng: longitude,
+	}
 
 	return (
 		<>
@@ -28,6 +35,20 @@ function FindAddress({ city, latitude, longitude, onChangeByKey }) {
 			</div>
 
 			<FormControl>
+				<Card className="address-card">
+					<Card.Body>
+						<div>
+							<small className="text-broken">ADRES</small>
+							<br />
+							{address}
+							<br />
+							{city}
+							<br />
+							{postal_code}
+						</div>
+						<FaMapMarkerAlt size="25" />
+					</Card.Body>
+				</Card>
 				{isLoaded && (
 					<GoogleMap
 						mapContainerStyle={{
@@ -35,16 +56,15 @@ function FindAddress({ city, latitude, longitude, onChangeByKey }) {
 							height: '400px',
 						}}
 						center={center}
-						zoom={14}
+						zoom={17}
 					>
-						{latitude !== null && longitude !== null && (
-							<Marker
-								position={{
-									lat: latitude,
-									lng: longitude,
-								}}
-							/>
-						)}
+						<Marker
+							position={{
+								lat: latitude,
+								lng: longitude,
+							}}
+						/>
+
 						<Data
 							options={{
 								controlPosition: window.google
@@ -53,10 +73,11 @@ function FindAddress({ city, latitude, longitude, onChangeByKey }) {
 									: undefined,
 								controls: ['Point'],
 								drawingMode: 'Point',
-								featureFactory: ({ g: { lat, lng } }) => {
-									onChangeByKey('latitude', lat())
-									onChangeByKey('longitude', lng())
-								},
+								featureFactory: ({ g: { lat, lng } }) =>
+									setData({
+										latitude: lat(),
+										longitude: lng(),
+									}),
 							}}
 						/>
 					</GoogleMap>
@@ -67,14 +88,12 @@ function FindAddress({ city, latitude, longitude, onChangeByKey }) {
 }
 
 FindAddress.prototype.propTypes = {
-	city: PropTypes.shape({
-		city: PropTypes.string.isRequired,
-		latitude: PropTypes.number.isRequired,
-		longitude: PropTypes.number.isRequired,
-	}).isRequired,
+	city: PropTypes.string.isRequired,
+	address: PropTypes.string.isRequired,
+	postal_code: PropTypes.string.isRequired,
 	latitude: PropTypes.number,
 	longitude: PropTypes.number,
-	onChangeByKey: PropTypes.func.isRequired,
+	setData: PropTypes.func.isRequired,
 }
 
 export default React.memo(FindAddress)

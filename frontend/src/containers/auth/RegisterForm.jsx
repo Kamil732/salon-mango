@@ -214,12 +214,6 @@ function RegisterForm({ register }) {
 		}))
 	}
 
-	const onChangeByKey = (key, val) =>
-		setData((prevData) => ({
-			...prevData,
-			[key]: val,
-		}))
-
 	const onChangeCategory = (e) =>
 		setData((prevData) => ({
 			...prevData,
@@ -274,7 +268,12 @@ function RegisterForm({ register }) {
 							{step === 1 ? (
 								<SalonInformation
 									onChange={onChange}
-									onChangeByKey={onChangeByKey}
+									setData={(data) =>
+										setData((prevData) => ({
+											...prevData,
+											...data,
+										}))
+									}
 									salon_name={salon_name}
 									first_name={first_name}
 									last_name={last_name}
@@ -312,14 +311,26 @@ function RegisterForm({ register }) {
 										common_premises_number
 									}
 									onChange={onChange}
-									onChangeByKey={onChangeByKey}
+									setData={(data) =>
+										setData((prevData) => ({
+											...prevData,
+											...data,
+										}))
+									}
 								/>
 							) : step === 6 ? (
 								<FindAddress
-									city={city}
+									city={city.city}
+									address={address}
+									postal_code={postal_code}
 									latitude={latitude}
 									longitude={longitude}
-									onChangeByKey={onChangeByKey}
+									setData={(data) =>
+										setData((prevData) => ({
+											...prevData,
+											...data,
+										}))
+									}
 								/>
 							) : step === 7 ? (
 								<WorkType

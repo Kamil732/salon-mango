@@ -16,7 +16,7 @@ function SetAddress({
 	common_premises_name,
 	common_premises_number,
 	onChange,
-	onChangeByKey,
+	setData,
 }) {
 	const [citiesLoading, setCitiesLoading] = useState(false)
 	const [cities, setCities] = useState([])
@@ -111,7 +111,13 @@ function SetAddress({
 						getOptionLabel={(opt) => opt.city}
 						getOptionValue={(opt) => opt.city}
 						getValuesValue={(opt) => opt.city}
-						onChange={(val) => onChangeByKey('city', val)}
+						onChange={(val) => {
+							setData({
+								city: val,
+								latitude: parseFloat(val.latitude),
+								longitude: parseFloat(val.longitude),
+							})
+						}}
 						options={cities}
 						isLoading={citiesLoading}
 						disabled={debouncedSearch.length !== 6}
@@ -132,7 +138,7 @@ SetAddress.prototype.propTypes = {
 	common_premises_name: PropTypes.string,
 	common_premises_number: PropTypes.string,
 	onChange: PropTypes.func.isRequired,
-	onChangeByKey: PropTypes.func.isRequired,
+	setData: PropTypes.func.isRequired,
 }
 
 export default SetAddress

@@ -9,7 +9,7 @@ const countries = require('../../../helpers/data/countries.json')
 
 function SalonInformation({
 	onChange,
-	onChangeByKey,
+	setData,
 	salon_name,
 	first_name,
 	last_name,
@@ -104,7 +104,7 @@ function SalonInformation({
 						getValuesValue={(opt) => opt.isoCode}
 						formatOptionLabel={formatOptionLabel}
 						formatSelectedOptionValue={formatSelectedOptionValue}
-						onChange={(val) => onChangeByKey('phone_prefix', val)}
+						onChange={(val) => setData({ phone_prefix: val })}
 						options={countries}
 						searchable={['name', 'isoCode', 'dialCode']}
 					/>
@@ -132,7 +132,7 @@ function SalonInformation({
 
 SalonInformation.prototype.propTypes = {
 	onChange: PropTypes.func.isRequired,
-	onChangeByKey: PropTypes.func.isRequired,
+	setData: PropTypes.func.isRequired,
 	salon_name: PropTypes.string,
 	first_name: PropTypes.string,
 	last_name: PropTypes.string,
