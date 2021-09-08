@@ -40,6 +40,22 @@
 			padding: 2rem 1.5rem;
 		}
 	}
+
+	&.address-card {
+		width: 275px;
+		position: absolute;
+		z-index: 1;
+		bottom: 1.55rem;
+		left: 0.4rem;
+
+		& > .card__body {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			font-size: 0.85em;
+			line-height: 1.5;
+		}
+	}
 }
 
 @include media-tablet {
