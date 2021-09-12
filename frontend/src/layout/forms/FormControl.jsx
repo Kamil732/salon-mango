@@ -1,12 +1,14 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
+
+import moment from 'moment'
+import useClickOutside from '../../helpers/hooks/clickOutside'
+import { timeValidation } from '../../helpers/validations'
+
 import TextareaAutosize from 'react-textarea-autosize'
 import ErrorBoundary from '../../components/ErrorBoundary'
-import moment from 'moment'
 import CircleLoader from '../loaders/CircleLoader'
 import Dropdown from '../buttons/dropdowns/Dropdown'
-
-import { timeValidation } from '../../helpers/validations'
 
 const DatePickerCalendar = lazy(() => import('react-calendar'))
 
@@ -86,19 +88,8 @@ CheckBox.prototype.propTypes = {
 function DatePicker({ value, onChange, minDate, maxDate, ...props }) {
 	const [isOpen, setIsOpen] = useState(false)
 	const container = useRef(null)
+	useClickOutside(container, () => setIsOpen(false))
 	const formatShortWeekday = (_, date) => moment(date).format('dd')
-
-	useEffect(() => {
-		const handleClickOutside = (e) => {
-			if (container.current && !container.current.contains(e.target))
-				setIsOpen(false)
-		}
-
-		document.addEventListener('mousedown', handleClickOutside)
-
-		return () =>
-			document.removeEventListener('mousedown', handleClickOutside)
-	}, [])
 
 	return (
 		<div ref={container}>

@@ -73,7 +73,9 @@ class Dropdown extends Component {
 
 		if (
 			this.container.current &&
-			!this.container.current.contains(e.target)
+			!this.container.current.contains(e.target) &&
+			e.offsetX <= e.target.clientWidth - 1 &&
+			e.offsetY <= e.target.clientHeight - 1
 		) {
 			this.setState({ isOpen: false, inputValue: '' })
 

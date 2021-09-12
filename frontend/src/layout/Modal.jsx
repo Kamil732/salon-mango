@@ -1,10 +1,13 @@
 import React, { useEffect, useRef } from 'react'
-import ReactDOM from 'react-dom'
+import { createPortal } from 'react-dom'
 import PropTypes from 'prop-types'
+
+import useClickOutside from '../helpers/hooks/clickOutside'
 import { CloseButton } from './buttons/Button'
 
 function Modal({ children, closeModal, isChild, fullscreen, ...props }) {
 	const modalRef = useRef(null)
+	useClickOutside(modalRef, closeModal)
 
 	useEffect(() => {
 		const body = document.querySelector('body')
@@ -14,18 +17,6 @@ function Modal({ children, closeModal, isChild, fullscreen, ...props }) {
 			if (!isChild) body.style.overflowY = 'auto'
 		}
 	}, [isChild])
-
-	useEffect(() => {
-		const handleClickOutside = (e) => {
-			if (modalRef.current && !modalRef.current.contains(e.target))
-				closeModal()
-		}
-
-		document.addEventListener('mousedown', handleClickOutside)
-
-		return () =>
-			document.removeEventListener('mousedown', handleClickOutside)
-	}, [closeModal])
 
 	const modal = (
 		<div className="dark-bg">
@@ -42,7 +33,7 @@ function Modal({ children, closeModal, isChild, fullscreen, ...props }) {
 
 	if (isChild) return modal
 
-	return ReactDOM.createPortal(modal, document.querySelector('body'))
+	return createPortal(modal, document.querySelector('body'))
 }
 
 function Header(props) {

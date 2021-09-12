@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 
 import { BiLeftArrowAlt } from 'react-icons/bi'
+import useClickOutside from '../../../helpers/hooks/clickOutside'
 
 import Truncate from 'react-truncate'
 import Button from '../Button'
@@ -25,20 +26,10 @@ function DropdownSelect({
 		data: {},
 	})
 	const container = useRef(null)
-
-	useEffect(() => {
-		const handleClickOutside = (e) => {
-			if (container.current && !container.current.contains(e.target)) {
-				setSelected((selected) => ({ ...selected, isOpen: false }))
-				setIsOpen(false)
-			}
-		}
-
-		document.addEventListener('mousedown', handleClickOutside)
-
-		return () =>
-			document.removeEventListener('mousedown', handleClickOutside)
-	}, [])
+	useClickOutside(container, () => {
+		setSelected((selected) => ({ ...selected, isOpen: false }))
+		setIsOpen(false)
+	})
 
 	useEffect(() => {
 		if (selected.isOpen && !selected.data.read && markRead)

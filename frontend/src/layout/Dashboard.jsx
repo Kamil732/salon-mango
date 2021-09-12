@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
+import useClickOutside from '../helpers/hooks/clickOutside'
 import { RiMenuUnfoldFill } from 'react-icons/ri'
 
 function Dashboard({ children, ...props }) {
@@ -43,20 +44,7 @@ function NavFooter({ children, ...props }) {
 }
 
 function Menu({ children, navContainer, isOpen, toggleMenu, ...props }) {
-	useEffect(() => {
-		const handleClickOutside = (e) => {
-			if (
-				navContainer.current &&
-				!navContainer.current.contains(e.target)
-			)
-				toggleMenu(false)
-		}
-
-		document.addEventListener('mousedown', handleClickOutside)
-
-		return () =>
-			document.removeEventListener('mousedown', handleClickOutside)
-	}, [isOpen, toggleMenu, navContainer])
+	useClickOutside(navContainer, () => toggleMenu(false))
 
 	return (
 		<div className={`dashboard__menu${isOpen ? ' open' : ''}`} {...props}>
@@ -72,6 +60,7 @@ function MenuToggleBtn({ children, isOpen, toggleMenu, ...props }) {
 				isOpen ? ' active' : ''
 			}`}
 			onClick={() => toggleMenu()}
+			{...props}
 		>
 			<RiMenuUnfoldFill className="dashboard__menu-btn__icon" />
 			{children}
