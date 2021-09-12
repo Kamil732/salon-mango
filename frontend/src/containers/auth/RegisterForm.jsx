@@ -19,7 +19,10 @@ const SetWorkingHours = lazy(() => import('./steps/SetWorkingHours'))
 const WorkType = lazy(() => import('./steps/WorkType'))
 const FindAddress = lazy(() => import('./steps/FindAddress'))
 const SetAddress = lazy(() => import('./steps/SetAddress'))
+const TravellingFee = lazy(() => import('./steps/TravellingFee'))
 
+const BILLING_TYPES = require('../../helpers/data/billing_types.json')
+const MAX_TRAVEL_DISTANCES = require('../../helpers/data/max_travel_distances.json')
 const STEPS_AMOUNT = 10
 
 function RegisterForm({ register }) {
@@ -65,6 +68,11 @@ function RegisterForm({ register }) {
 			common_premises_number,
 			latitude,
 			longitude,
+
+			billing_type,
+			travel_fee,
+			max_travel_distance,
+			travel_fee_rules,
 		},
 		setData,
 	] = useState({
@@ -180,7 +188,7 @@ function RegisterForm({ register }) {
 		start_work_monday: '10:00',
 
 		work_stationary: true,
-		work_remotely: false,
+		work_remotely: true, // false
 
 		country: 'PL',
 		address: '',
@@ -192,6 +200,11 @@ function RegisterForm({ register }) {
 		common_premises_number: '',
 		latitude: null,
 		longitude: null,
+
+		billing_type: BILLING_TYPES[0],
+		travel_fee: 0,
+		max_travel_distance: MAX_TRAVEL_DISTANCES[3],
+		travel_fee_rules: '',
 	})
 	const [step, setStep] = useState(1)
 
@@ -203,6 +216,13 @@ function RegisterForm({ register }) {
 			})),
 		[postal_code]
 	)
+
+	const nextStep = () => {
+		let num = 1
+
+		if (step === 7 && !work_remotely) num = 2
+		setStep((prevStep) => prevStep + num)
+	}
 
 	const onChange = (e) => {
 		const value =
@@ -258,6 +278,9 @@ function RegisterForm({ register }) {
 				>
 					<HiOutlineArrowLeft size="25" />
 				</Button>
+				<Button rounded onClick={() => setStep(6)}>
+					Go to 6
+				</Button>
 			</Card.Title>
 			<Card.Body>
 				<form onSubmit={onSubmit}>
@@ -299,6 +322,12 @@ function RegisterForm({ register }) {
 									categories={categories}
 								/>
 							) : step === 5 ? (
+								<WorkType
+									work_stationary={work_stationary}
+									work_remotely={work_remotely}
+									onChange={onChange}
+								/>
+							) : step === 6 ? (
 								<SetAddress
 									country={country}
 									address={address}
@@ -318,9 +347,9 @@ function RegisterForm({ register }) {
 										}))
 									}
 								/>
-							) : step === 6 ? (
+							) : step === 7 ? (
 								<FindAddress
-									city={city.city}
+									city={city.placeName}
 									address={address}
 									postal_code={postal_code}
 									latitude={latitude}
@@ -332,13 +361,23 @@ function RegisterForm({ register }) {
 										}))
 									}
 								/>
-							) : step === 7 ? (
-								<WorkType
-									work_stationary={work_stationary}
-									work_remotely={work_remotely}
-									onChange={onChange}
-								/>
 							) : step === 8 ? (
+								<TravellingFee
+									onChange={onChange}
+									setData={(data) =>
+										setData((prevData) => ({
+											...prevData,
+											...data,
+										}))
+									}
+									billing_type={billing_type}
+									travel_fee={travel_fee}
+									max_travel_distance={max_travel_distance}
+									travel_fee_rules={travel_fee_rules}
+									latitude={latitude}
+									longitude={longitude}
+								/>
+							) : step === 9 ? (
 								<SetWorkingHours
 									onChangeIsWorkingDay={onChangeIsWorkingDay}
 									start_work_monday={start_work_monday}
@@ -356,8 +395,6 @@ function RegisterForm({ register }) {
 									start_work_sunday={start_work_sunday}
 									end_work_sunday={end_work_sunday}
 								/>
-							) : step === 9 ? (
-								<></>
 							) : step === 10 ? (
 								<></>
 							) : null}
@@ -375,9 +412,7 @@ function RegisterForm({ register }) {
 							) : (
 								<Button
 									primary
-									onClick={() =>
-										setStep((prevStep) => prevStep + 1)
-									}
+									onClick={nextStep}
 									type="button"
 									style={{ width: '100%' }}
 								>
