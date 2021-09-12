@@ -56,7 +56,7 @@ function FindAddress({
 							height: '400px',
 						}}
 						center={center}
-						zoom={17}
+						zoom={13}
 					>
 						<Marker
 							position={{

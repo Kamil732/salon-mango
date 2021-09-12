@@ -33,14 +33,15 @@ function SetAddress({
 
 		axios
 			.get(
-				`https://app.zipcodebase.com/api/v1/search?codes=${debouncedSearch}&country=${country}&apikey=${process.env.REACT_APP_ZIPCODEBASE_KEY}`
+				`${process.env.REACT_APP_GEONAMES_SEARCH_POSTALCODE}?username=${process.env.REACT_APP_GEONAMES_USERNAME}&postalcode=${debouncedSearch}&country=${country}`
 			)
 			.then((res) => {
-				if (res.data.results.length === 0) {
+				if (res.data.postalCodes.length === 0) {
 					setCities([])
 					return
 				}
-				setCities(res.data.results[res.data.query.codes[0]])
+
+				setCities(res.data.postalCodes)
 			})
 			.finally(() => setCitiesLoading(false))
 	}, [debouncedSearch, country])
@@ -108,14 +109,14 @@ function SetAddress({
 					<Dropdown
 						id="city"
 						value={city}
-						getOptionLabel={(opt) => opt.city}
-						getOptionValue={(opt) => opt.city}
-						getValuesValue={(opt) => opt.city}
+						getOptionLabel={(opt) => opt.placeName}
+						getOptionValue={(opt) => opt.placeName}
+						getValuesValue={(opt) => opt.placeName}
 						onChange={(val) => {
 							setData({
 								city: val,
-								latitude: parseFloat(val.latitude),
-								longitude: parseFloat(val.longitude),
+								latitude: parseFloat(val.lat),
+								longitude: parseFloat(val.lng),
 							})
 						}}
 						options={cities}

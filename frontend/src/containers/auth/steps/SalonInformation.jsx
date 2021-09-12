@@ -16,22 +16,18 @@ function SalonInformation({
 	phone_prefix,
 	phone_number,
 }) {
-	const formatOptionLabel = ({ dialCode, name }) => {
-		return (
-			<div className="inline-wrap">
-				<span>{dialCode}</span> | <span>{name}</span>
-			</div>
-		)
-	}
+	const formatOptionLabel = ({ dialCode, name }) => (
+		<div className="inline-wrap">
+			<span>{dialCode}</span> | <span>{name}</span>
+		</div>
+	)
 
-	const formatSelectedOptionValue = ({ flag, isoCode, dialCode }) => {
-		return (
-			<div className="inline-wrap">
-				<img src={flag} alt={isoCode} width={26} height={26} />
-				<span>{dialCode}</span>
-			</div>
-		)
-	}
+	const formatSelectedOptionValue = ({ flag, isoCode, dialCode }) => (
+		<div className="inline-wrap">
+			<img src={flag} alt={isoCode} width={26} height={26} />
+			<span>{dialCode}</span>
+		</div>
+	)
 
 	return (
 		<>
