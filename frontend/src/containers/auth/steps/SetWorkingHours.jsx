@@ -1,11 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { IoIosArrowForward } from 'react-icons/io'
 import FormControl from '../../../layout/forms/FormControl'
+import FormGroup from '../../../layout/forms/FormGroup'
+import Modal from '../../../layout/Modal'
+import ButtonContainer from '../../../layout/buttons/ButtonContainer'
+import Button from '../../../layout/buttons/Button'
 
 function SetWorkingHours({
 	onChangeIsWorkingDay,
+	setData,
+
 	start_work_monday,
 	end_work_monday,
 	start_work_tuesday,
@@ -21,108 +27,182 @@ function SetWorkingHours({
 	start_work_sunday,
 	end_work_sunday,
 }) {
-	return (
-		<FormControl>
-			<table className="step-table">
-				<tbody>
-					<tr>
-						<td
-							style={{
-								width: '1%',
-								whiteSpace: 'nowrap',
+	const [selected, setSelected] = useState(null)
+
+	const day = (start, end, name, displayName) => (
+		<tr>
+			<td
+				style={{
+					width: '1%',
+					whiteSpace: 'nowrap',
+				}}
+			>
+				<FormControl.CheckBoxLabel>
+					<FormControl.CheckBox
+						name={name}
+						onChange={onChangeIsWorkingDay}
+						checked={start !== null || end !== null}
+					/>
+					{displayName}
+				</FormControl.CheckBoxLabel>
+			</td>
+			<td
+				className={`space-between${
+					start !== null && end !== null ? ' clickable' : ''
+				}`}
+				onClick={() => {
+					if (start === null || end === null) return
+					setSelected({
+						start,
+						end,
+						name,
+						displayName,
+					})
+				}}
+			>
+				<span>
+					{start === null || end === null ? (
+						'Zamknięte'
+					) : (
+						<>
+							{start} - {end}
+						</>
+					)}
+				</span>
+				<IoIosArrowForward size="20" />
+			</td>
+		</tr>
+	)
+
+	const formatEndWorkTimeValue = ({ value, label }) => (
+		<>
+			<span>{label}</span>
+			<small></small>
+		</>
+	)
+
+	const getSelectedModal = () => {
+		return (
+			<Modal closeModal={() => setSelected(null)} isChild small>
+				<Modal.Header>
+					<h3>{selected.displayName}</h3>
+				</Modal.Header>
+				<Modal.Body>
+					<FormControl.Inline>
+						<FormControl.Label htmlFor="open-hours">
+							Godziny otwarcia
+						</FormControl.Label>
+						<FormGroup id="open-hours">
+							<FormControl.TimePicker
+								name={`start_work_${selected.name}`}
+								value={selected.start}
+								endLimit={selected.end}
+								lessThanEndLimit
+								onChange={(val) =>
+									setSelected((prev) => ({
+										...prev,
+										start: val,
+									}))
+								}
+							/>
+							<FormControl.TimePicker
+								name={`end_work_${selected.name}`}
+								value={selected.end}
+								onChange={(val) =>
+									setSelected((prev) => ({
+										...prev,
+										end: val,
+									}))
+								}
+								beginLimit={selected.start}
+								moreThanBeginLimit
+								formatOptionValue={formatEndWorkTimeValue}
+							/>
+						</FormGroup>
+					</FormControl.Inline>
+
+					<ButtonContainer style={{ justifyContent: 'right' }}>
+						<Button secondary onClick={() => setSelected(null)}>
+							Anuluj
+						</Button>
+						<Button
+							primary
+							onClick={() => {
+								setData({
+									[`start_work_${selected.name}`]:
+										selected.start,
+									[`end_work_${selected.name}`]: selected.end,
+								})
+								setSelected(null)
 							}}
 						>
-							<FormControl.CheckBoxLabel>
-								<FormControl.CheckBox
-									name="monday"
-									onChange={onChangeIsWorkingDay}
-									checked={
-										start_work_monday !== null ||
-										end_work_monday !== null
-									}
-								/>
-								poniedziałek
-							</FormControl.CheckBoxLabel>
-						</td>
-						<td className="space-between">
-							<span>
-								{start_work_monday === null ||
-								end_work_monday === null ? (
-									'Zamknięte'
-								) : (
-									<>
-										{start_work_monday} -{end_work_monday}
-									</>
-								)}
-							</span>
-							<IoIosArrowForward size="20" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<FormControl.CheckBoxLabel>
-								<FormControl.CheckBox
-									name="tuesday"
-									onChange={onChangeIsWorkingDay}
-									checked={
-										start_work_tuesday !== null ||
-										end_work_tuesday !== null
-									}
-								/>
-								wtorek
-							</FormControl.CheckBoxLabel>
-						</td>
-						<td className="space-between">
-							<span>
-								{start_work_tuesday === null ||
-								end_work_tuesday === null ? (
-									'Zamknięte'
-								) : (
-									<>
-										{start_work_tuesday} -{' '}
-										{end_work_tuesday}
-									</>
-								)}
-							</span>
-							<IoIosArrowForward size="20" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<FormControl.CheckBoxLabel>
-								<FormControl.CheckBox
-									name="sunday"
-									onChange={onChangeIsWorkingDay}
-									checked={
-										start_work_sunday !== null ||
-										end_work_sunday !== null
-									}
-								/>
-								niedziela
-							</FormControl.CheckBoxLabel>
-						</td>
-						<td className="space-between">
-							<span>
-								{start_work_sunday === null ||
-								end_work_sunday === null ? (
-									'Zamknięte'
-								) : (
-									<>
-										{start_work_sunday} - {end_work_sunday}
-									</>
-								)}
-							</span>
-							<IoIosArrowForward size="20" />
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</FormControl>
+							Zapisz
+						</Button>
+					</ButtonContainer>
+				</Modal.Body>
+			</Modal>
+		)
+	}
+
+	return (
+		<>
+			{selected && getSelectedModal()}
+
+			<FormControl>
+				<table className="step-table">
+					<tbody>
+						{day(
+							start_work_monday,
+							end_work_monday,
+							'monday',
+							'poniedziałek'
+						)}
+						{day(
+							start_work_tuesday,
+							end_work_tuesday,
+							'tuesday',
+							'wtorek'
+						)}
+						{day(
+							start_work_wednesday,
+							end_work_wednesday,
+							'wednesday',
+							'środa'
+						)}
+						{day(
+							start_work_thursday,
+							end_work_thursday,
+							'thursday',
+							'czwartek'
+						)}
+						{day(
+							start_work_friday,
+							end_work_friday,
+							'friday',
+							'piątek'
+						)}
+						{day(
+							start_work_saturday,
+							end_work_saturday,
+							'saturday',
+							'sobota'
+						)}
+						{day(
+							start_work_sunday,
+							end_work_sunday,
+							'sunday',
+							'niedziela'
+						)}
+					</tbody>
+				</table>
+			</FormControl>
+		</>
 	)
 }
 
 SetWorkingHours.prototype.propTypes = {
 	onChangeIsWorkingDay: PropTypes.func.isRequired,
+	setData: PropTypes.func.isRequired,
 	start_work_monday: PropTypes.oneOfType([
 		PropTypes.string,
 		PropTypes.instanceOf(null),

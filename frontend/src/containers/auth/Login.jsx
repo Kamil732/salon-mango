@@ -39,7 +39,6 @@ function Login({ isAuthenticated, login }) {
 		<>
 			{isRegisterForm && (
 				<Modal closeModal={() => setIsRegisterForm(false)} fullscreen>
-					<Modal.Header>Rejestracja</Modal.Header>
 					<Modal.Body>
 						<ErrorBoundary>
 							<Suspense
@@ -49,7 +48,9 @@ function Login({ isAuthenticated, login }) {
 									</div>
 								}
 							>
-								<RegisterForm />
+								<RegisterForm
+									closeModal={() => setIsRegisterForm(false)}
+								/>
 							</Suspense>
 						</ErrorBoundary>
 					</Modal.Body>

@@ -25,7 +25,7 @@ const BILLING_TYPES = require('../../helpers/data/billing_types.json')
 const MAX_TRAVEL_DISTANCES = require('../../helpers/data/max_travel_distances.json')
 const STEPS_AMOUNT = 10
 
-function RegisterForm({ register }) {
+function RegisterForm({ closeModal, register }) {
 	const [loading, setLoading] = useState(false)
 	const [
 		{
@@ -273,7 +273,9 @@ function RegisterForm({ register }) {
 				<Button
 					rounded
 					onClick={() =>
-						step > 1 ? setStep((prevStep) => prevStep - 1) : null
+						step > 1
+							? setStep((prevStep) => prevStep - 1)
+							: closeModal()
 					}
 				>
 					<HiOutlineArrowLeft size="25" />
@@ -380,6 +382,12 @@ function RegisterForm({ register }) {
 							) : step === 9 ? (
 								<SetWorkingHours
 									onChangeIsWorkingDay={onChangeIsWorkingDay}
+									setData={(data) =>
+										setData((prevData) => ({
+											...prevData,
+											...data,
+										}))
+									}
 									start_work_monday={start_work_monday}
 									end_work_monday={end_work_monday}
 									start_work_tuesday={start_work_tuesday}
@@ -428,6 +436,7 @@ function RegisterForm({ register }) {
 }
 
 RegisterForm.prototype.propTypes = {
+	closeModal: PropTypes.func.isRequired,
 	register: PropTypes.func.isRequired,
 }
 
