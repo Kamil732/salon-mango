@@ -1,14 +1,13 @@
-.modal {
-	$border-radius: 6px;
+$border-radius: 6px;
 
+.modal {
 	z-index: 999;
-	min-width: 90%;
-	margin: 0 auto;
-	background-color: $background-color;
+	min-width: 90vw;
+	margin: 2rem;
 	border: 1px solid $border-color;
 	border-radius: $border-radius;
+	background-color: $background-color;
 	position: relative;
-	margin: 2rem;
 
 	& > &__header {
 		border-radius: $border-radius $border-radius 0 0;
@@ -27,11 +26,17 @@
 	@include box-shadow;
 
 	&.fullscreen {
-		min-width: 100%;
-		width: 100%;
-		min-height: 100%;
+		width: 100vw;
+		min-height: 100vh;
 		margin: 0;
 		box-shadow: none;
+		border: none;
+		border-radius: 0;
+
+		& > .modal__body {
+			// overflow-x: auto;
+			min-height: 100vh;
+		}
 	}
 }
 
@@ -43,6 +48,13 @@
 	to {
 		opacity: 1;
 		transform: translateY(0);
+	}
+}
+
+@include media-phone {
+	.modal.small {
+		min-width: 447px;
+		width: 448px;
 	}
 }
 

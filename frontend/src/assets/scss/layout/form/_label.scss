@@ -4,7 +4,7 @@
 }
 
 .#{$prefix} {
-	&__label {
+	& &__label {
 		cursor: text;
 		color: inherit;
 		font-size: 1em;
@@ -18,7 +18,11 @@
 	}
 
 	&:focus-within > &__label,
-	&__label.active {
+	& &__label.active {
 		@include active-label;
+	}
+
+	&-inline &__label {
+		opacity: 0.9;
 	}
 }

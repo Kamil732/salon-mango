@@ -68,14 +68,14 @@ table {
 		&:last-child {
 			border-bottom: none;
 		}
-	}
 
-	td {
-		// padding: 1rem 0;
-		margin: 1rem;
+		& > td {
+			margin: 1rem;
+			padding: 4px 0;
 
-		&:last-of-type {
-			margin-right: 0;
+			&:last-child {
+				margin-right: 0;
+			}
 		}
 	}
 }

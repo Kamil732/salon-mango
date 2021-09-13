@@ -2,6 +2,7 @@
 	display: flex;
 	gap: 1rem;
 	align-items: center;
+	flex-wrap: wrap;
 }
 
 .btn-resources-container {
@@ -89,13 +90,16 @@
 	justify-content: center;
 	outline: none;
 	border: 4px solid black;
-	border-radius: 6px;
+	border-radius: 8px;
 	cursor: pointer;
 	width: fit-content;
 	text-align: center;
 	transition: background-color 0.1s ease-in, border-color 0.1s ease-in,
 		border-radius 0.1s ease-in;
-	font-size: 0.9em;
+	text-transform: uppercase;
+	font-weight: 600;
+	font-size: 0.85em;
+	line-height: 1.15;
 	color: inherit;
 
 	&-picker {
@@ -105,6 +109,7 @@
 		font-size: 0.9em;
 		padding: 0.4rem;
 		border-width: 1px;
+		text-transform: initial;
 
 		&:hover,
 		&:focus {

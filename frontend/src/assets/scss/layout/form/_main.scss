@@ -20,10 +20,17 @@ $form-control-vertical-margin: 2.5rem;
 	}
 }
 
-.#{$prefix} {
+.#{$prefix},
+.#{$prefix}-inline {
 	position: relative;
 	margin: $form-control-vertical-margin 0;
 	width: 100%;
+}
+
+.#{$prefix}-inline {
+	display: inline-flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 @media screen and (max-width: 768px) {
