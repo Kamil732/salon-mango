@@ -17,7 +17,7 @@ class Dropdown extends Component {
 		loadOptions: PropTypes.func,
 		isMulti: PropTypes.bool,
 		editable: PropTypes.bool,
-		regexValidation: PropTypes.string,
+		regexValidation: PropTypes.instanceOf(RegExp),
 		options: PropTypes.array,
 		value: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 		searchable: PropTypes.array,
@@ -263,6 +263,8 @@ class Dropdown extends Component {
 			formatOptionLabel,
 			formatSelectedOptionValue,
 			setShowInput,
+			editable,
+			regexValidation,
 			...props
 		} = this.props
 		const { inputValue, isOpen, loading, filteredOptions, navigatedIndex } =

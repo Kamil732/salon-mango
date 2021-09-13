@@ -20,6 +20,14 @@ function FormControl({ children, ...props }) {
 	)
 }
 
+function FormControlInline({ children, ...props }) {
+	return (
+		<div className="form-control-inline" {...props}>
+			{children}
+		</div>
+	)
+}
+
 function Label({ inputValue, ...props }) {
 	return (
 		<label
@@ -140,12 +148,31 @@ DatePicker.prototype.propTypes = {
 	maxDate: PropTypes.instanceOf(Date),
 }
 
-function TimePicker({ value, onChange, beginLimit, endLimit, step, ...props }) {
+function TimePicker({
+	value,
+	onChange,
+	beginLimit,
+	endLimit,
+	moreThanBeginLimit,
+	lessThanEndLimit,
+	step,
+	...props
+}) {
 	const [options, setOptions] = useState([])
 
 	beginLimit = beginLimit ? beginLimit : '00:00'
 	endLimit = endLimit ? endLimit : '23:59'
 	step = step ? step : 15
+
+	if (beginLimit && moreThanBeginLimit)
+		beginLimit = moment(beginLimit, 'HH:mm')
+			.add(step, 'minutes')
+			.format('HH:mm')
+
+	if (endLimit && lessThanEndLimit)
+		endLimit = moment(endLimit, 'HH:mm')
+			.subtract(step, 'minutes')
+			.format('HH:mm')
 
 	useEffect(() => {
 		let _options = []
@@ -193,12 +220,15 @@ function TimePicker({ value, onChange, beginLimit, endLimit, step, ...props }) {
 
 TimePicker.prototype.propTypes = {
 	value: PropTypes.string,
-	onChange: PropTypes.func,
+	onChange: PropTypes.func.isRequired,
 	beginLimit: PropTypes.string,
 	endLimit: PropTypes.string,
+	moreThanBeginLimit: PropTypes.bool,
+	lessThanEndLimit: PropTypes.bool,
 	step: PropTypes.number,
 }
 
+FormControl.Inline = FormControlInline
 FormControl.Label = Label
 FormControl.CheckBoxLabel = CheckBoxLabel
 FormControl.Input = Input

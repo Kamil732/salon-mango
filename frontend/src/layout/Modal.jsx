@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import useClickOutside from '../helpers/hooks/clickOutside'
 import { CloseButton } from './buttons/Button'
 
-function Modal({ children, closeModal, isChild, fullscreen, ...props }) {
+function Modal({ children, closeModal, isChild, small, fullscreen, ...props }) {
 	const modalRef = useRef(null)
 	useClickOutside(modalRef, closeModal)
 
@@ -21,7 +21,9 @@ function Modal({ children, closeModal, isChild, fullscreen, ...props }) {
 	const modal = (
 		<div className="dark-bg">
 			<div
-				className={`modal${fullscreen ? ' fullscreen' : ''}`}
+				className={`modal${small ? ' small' : ''}${
+					fullscreen ? ' fullscreen' : ''
+				}`}
 				{...props}
 				ref={modalRef}
 			>
@@ -46,6 +48,7 @@ function Body(props) {
 
 Modal.prototype.propTypes = {
 	isChild: PropTypes.bool,
+	small: PropTypes.bool,
 	fullscreen: PropTypes.bool,
 	closeModal: PropTypes.func.isRequired,
 }
