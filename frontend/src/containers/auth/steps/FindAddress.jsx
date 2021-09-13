@@ -34,25 +34,22 @@ function FindAddress({
 				</p>
 			</div>
 
-			<FormControl>
-				<Card className="address-card">
-					<Card.Body>
-						<div>
-							<small className="text-broken">ADRES</small>
-							<br />
-							{address}
-							<br />
-							{city}
-							<br />
-							{postal_code}
-						</div>
-						<FaMapMarkerAlt size="25" />
-					</Card.Body>
-				</Card>
-				{isLoaded && (
+			{isLoaded && (
+				<FormControl>
+					<Card className="address-card">
+						<Card.Body>
+							<div>
+								<small className="text-broken">ADRES</small>
+								<p>{address}</p>
+								<p>{city}</p>
+								<p>{postal_code}</p>
+							</div>
+							<FaMapMarkerAlt size="25" />
+						</Card.Body>
+					</Card>
 					<GoogleMap
 						mapContainerStyle={{
-							width: '400px',
+							width: '100%',
 							height: '400px',
 						}}
 						center={center}
@@ -81,8 +78,8 @@ function FindAddress({
 							}}
 						/>
 					</GoogleMap>
-				)}
-			</FormControl>
+				</FormControl>
+			)}
 		</>
 	)
 }
