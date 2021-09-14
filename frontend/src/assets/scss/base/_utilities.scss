@@ -12,10 +12,6 @@
 
 .clickable {
 	cursor: pointer;
-
-	// &:hover {
-	// 	background-color: $shadow-color;
-	// }
 }
 
 .title {
@@ -73,6 +69,7 @@
 .title > p {
 	opacity: 0.6;
 	font-size: 0.85em;
+	line-height: 1.57143em;
 }
 
 .slide-floor {

@@ -1,10 +1,9 @@
-$border-radius: 6px;
+$border-radius: 8px;
 
 .modal {
 	z-index: 999;
 	min-width: 90vw;
 	margin: 2rem;
-	border: 1px solid $border-color;
 	border-radius: $border-radius;
 	background-color: $background-color;
 	position: relative;
@@ -23,7 +22,6 @@ $border-radius: 6px;
 	}
 
 	animation: show 0.4s;
-	@include box-shadow;
 
 	&.fullscreen {
 		width: 100vw;
@@ -60,7 +58,7 @@ $border-radius: 6px;
 
 @include media-tablet {
 	.modal {
-		min-width: 60%;
+		min-width: 60vw;
 
 		& > &__body {
 			padding: 2rem;

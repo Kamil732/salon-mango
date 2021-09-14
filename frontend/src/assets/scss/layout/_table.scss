@@ -73,8 +73,9 @@ table {
 			margin: 1rem;
 			padding: 4px 0;
 
-			&:last-child {
+			&:last-of-type {
 				margin-right: 0;
+				padding-right: 0;
 			}
 		}
 	}

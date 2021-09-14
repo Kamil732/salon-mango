@@ -97,7 +97,6 @@
 	transition: background-color 0.1s ease-in, border-color 0.1s ease-in,
 		border-radius 0.1s ease-in;
 	text-transform: uppercase;
-	font-weight: 600;
 	font-size: 0.85em;
 	line-height: 1.15;
 	color: inherit;
@@ -152,6 +151,13 @@
 	&__success,
 	&__danger {
 		padding: 0.5rem 1.5rem;
+	}
+
+	&__primary,
+	&__success,
+	&__danger,
+	&__secondary {
+		font-weight: 600;
 	}
 
 	&__primary {
@@ -216,6 +222,7 @@
 
 	&__small {
 		padding: 0.25rem 0.75rem;
+		font-weight: 500;
 	}
 
 	&__extraSmall {
