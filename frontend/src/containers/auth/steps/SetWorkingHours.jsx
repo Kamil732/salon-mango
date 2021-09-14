@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import nextId from 'react-id-generator'
 
 import { IoIosArrowForward } from 'react-icons/io'
+
 import FormControl from '../../../layout/forms/FormControl'
 import FormGroup from '../../../layout/forms/FormGroup'
 import Modal from '../../../layout/Modal'
 import ButtonContainer from '../../../layout/buttons/ButtonContainer'
 import Button from '../../../layout/buttons/Button'
+import ReactTooltip from 'react-tooltip'
+import moment from 'moment'
 
 function SetWorkingHours({
 	onChangeIsWorkingDay,
@@ -29,57 +33,86 @@ function SetWorkingHours({
 }) {
 	const [selected, setSelected] = useState(null)
 
-	const day = (start, end, name, displayName) => (
-		<tr>
-			<td
-				style={{
-					width: '1%',
-					whiteSpace: 'nowrap',
-				}}
-			>
-				<FormControl.CheckBoxLabel>
-					<FormControl.CheckBox
-						name={name}
-						onChange={onChangeIsWorkingDay}
-						checked={start !== null || end !== null}
-					/>
-					{displayName}
-				</FormControl.CheckBoxLabel>
-			</td>
-			<td
-				className={`space-between${
-					start !== null && end !== null ? ' clickable' : ''
-				}`}
-				onClick={() => {
-					if (start === null || end === null) return
-					setSelected({
-						start,
-						end,
-						name,
-						displayName,
-					})
-				}}
-			>
-				<span>
-					{start === null || end === null ? (
-						'Zamknięte'
-					) : (
-						<>
-							{start} - {end}
-						</>
-					)}
-				</span>
-				<IoIosArrowForward size="20" />
-			</td>
-		</tr>
-	)
+	const day = (start, end, name, displayName) => {
+		const tooltipId = nextId('tooltipId-')
 
-	const formatEndWorkTimeValue = ({ value, label }) => (
-		<>
-			<span>{label}</span>
-			<small></small>
-		</>
-	)
+		return (
+			<tr>
+				<td
+					style={{
+						width: '1%',
+						whiteSpace: 'nowrap',
+					}}
+				>
+					<FormControl.CheckBoxLabel>
+						<FormControl.CheckBox
+							name={name}
+							onChange={onChangeIsWorkingDay}
+							checked={start !== null || end !== null}
+						/>
+						{displayName}
+					</FormControl.CheckBoxLabel>
+				</td>
+				<td
+					className={`space-between${
+						start !== null && end !== null ? ' clickable' : ''
+					}`}
+					onClick={() => {
+						if (start === null || end === null) return
+						setSelected({
+							start,
+							end,
+							name,
+							displayName,
+						})
+					}}
+					data-tip="Kliknij by edytować"
+					data-for={tooltipId}
+				>
+					<span>
+						{start === null || end === null ? (
+							'Zamknięte'
+						) : (
+							<>
+								{start} - {end}
+							</>
+						)}
+					</span>
+					{start !== null && end !== null && (
+						<IoIosArrowForward size="20" />
+					)}
+				</td>
+				{start !== null && end !== null && (
+					<ReactTooltip
+						id={tooltipId}
+						place="right"
+						effect="solid"
+						type="info"
+						delayShow={150}
+					/>
+				)}
+			</tr>
+		)
+	}
+
+	const formatEndWorkTimeLabel = ({ value, label }) => {
+		const diff = moment(value, 'HH:mm').diff(
+			moment(selected.start, 'HH:mm'),
+			'minutes'
+		)
+		const hours = Math.floor(diff / 60)
+		const minutes = Math.round((diff / 60 - hours) * 60)
+
+		return (
+			<>
+				<span>{label}</span>
+				<br />
+				<small className="text-broken">
+					{hours}h {minutes}min
+				</small>
+			</>
+		)
+	}
 
 	const getSelectedModal = () => {
 		return (
@@ -88,6 +121,11 @@ function SetWorkingHours({
 					<h3>{selected.displayName}</h3>
 				</Modal.Header>
 				<Modal.Body>
+					<p className="text-broken">
+						Ustaw godziny otwarcia Twojego biznesu. Jeśli chcesz
+						ustalić godziny dla poszczególnych dni, przejdź do
+						kalendarza.
+					</p>
 					<FormControl.Inline>
 						<FormControl.Label htmlFor="open-hours">
 							Godziny otwarcia
@@ -116,7 +154,7 @@ function SetWorkingHours({
 								}
 								beginLimit={selected.start}
 								moreThanBeginLimit
-								formatOptionValue={formatEndWorkTimeValue}
+								formatOptionLabel={formatEndWorkTimeLabel}
 							/>
 						</FormGroup>
 					</FormControl.Inline>

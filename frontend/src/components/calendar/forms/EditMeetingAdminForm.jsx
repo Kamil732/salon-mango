@@ -173,6 +173,7 @@ class EditMeetingAdminForm extends Component {
 							this.setState({ isAddCustomerForm: false })
 						}
 						isChild
+						small
 					>
 						<Modal.Header>Dodaj nowego klienta</Modal.Header>
 						<Modal.Body>
