@@ -9,7 +9,6 @@
 }
 
 body {
-	font-family: 'Roboto', sans-serif;
 	background-color: $background-color;
 	color: set-text-color($background-color);
 	min-height: 100vh;
@@ -25,6 +24,13 @@ body {
 	font-weight: 400;
 }
 
+body,
+input,
+textarea,
+select {
+	font-family: 'Roboto', sans-serif;
+}
+
 a {
 	text-decoration: none;
 	color: $active-element;
@@ -32,7 +38,17 @@ a {
 
 header {
 	margin-bottom: 0.5rem;
-	opacity: 0.85;
+	color: $grey-color;
+}
+
+fieldset {
+	border: none;
+
+	& > legend {
+		font-weight: 500;
+		font-size: 1.1em;
+		margin-bottom: 4px;
+	}
 }
 
 .global-message {

@@ -17,7 +17,6 @@
 .title {
 	text-align: center;
 	margin-bottom: 3rem;
-	opacity: 0.8;
 
 	& > p {
 		margin-top: 1rem;
@@ -67,7 +66,7 @@
 
 .text-broken,
 .title > p {
-	opacity: 0.6;
+	color: $grey-color;
 	font-size: 0.85em;
 	line-height: 1.57143em;
 }

@@ -43,7 +43,7 @@
 	&__label {
 		position: relative;
 		color: set-text-color($surface-color);
-		opacity: 0.7;
+		color: $grey-color;
 		cursor: pointer;
 		padding-left: 2rem;
 		line-height: 2rem;
