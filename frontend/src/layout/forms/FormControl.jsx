@@ -5,6 +5,7 @@ import moment from 'moment'
 import useClickOutside from '../../helpers/hooks/clickOutside'
 import { timeValidation } from '../../helpers/validations'
 
+import FormGroup from './FormGroup'
 import TextareaAutosize from 'react-textarea-autosize'
 import ErrorBoundary from '../../components/ErrorBoundary'
 import CircleLoader from '../loaders/CircleLoader'
@@ -228,6 +229,62 @@ TimePicker.prototype.propTypes = {
 	step: PropTypes.number,
 }
 
+function DurationInput({ value, onChange, ...props }) {
+	const hours = []
+	while (hours.length < 24)
+		hours.push({ label: `${hours.length}h`, value: hours.length })
+
+	const minutes = []
+	for (let i = 0; i < 60; i += 5) minutes.push({ label: `${i}m`, value: i })
+
+	const h = Math.floor(value / 60)
+	const m = Math.round(value % 60)
+
+	const getOptionLabel = (opt) => opt.label
+	const getOptionValue = (opt) => opt.value
+
+	return (
+		<>
+			<FormGroup>
+				<FormControl>
+					<FormControl.Label htmlFor="duration-hours" inputValue>
+						Godz.
+					</FormControl.Label>
+					<Dropdown
+						id="duration-hours"
+						value={{
+							label: `${h}h`,
+							value: h,
+						}}
+						onChange={({ value }) => onChange(value * 60 + m)}
+						options={hours}
+						getOptionLabel={getOptionLabel}
+						getOptionValue={getOptionValue}
+						getValuesValue={getOptionValue}
+					/>
+				</FormControl>
+				<FormControl>
+					<FormControl.Label htmlFor="duration-minutes" inputValue>
+						Min.
+					</FormControl.Label>
+					<Dropdown
+						id="duration-minutes"
+						value={{
+							label: `${m}m`,
+							value: m,
+						}}
+						onChange={({ value }) => onChange(value + h * 60)}
+						options={minutes}
+						getOptionLabel={getOptionLabel}
+						getOptionValue={getOptionValue}
+						getValuesValue={getOptionValue}
+					/>
+				</FormControl>
+			</FormGroup>
+		</>
+	)
+}
+
 FormControl.Inline = FormControlInline
 FormControl.Label = Label
 FormControl.CheckBoxLabel = CheckBoxLabel
@@ -236,5 +293,6 @@ FormControl.Textarea = Textarea
 FormControl.CheckBox = CheckBox
 FormControl.DatePicker = DatePicker
 FormControl.TimePicker = TimePicker
+FormControl.DurationInput = DurationInput
 
 export default FormControl

@@ -114,23 +114,24 @@ function SetWorkingHours({
 		)
 	}
 
-	const getSelectedModal = () => {
-		return (
-			<Modal closeModal={() => setSelected(null)} isChild small>
-				<Modal.Header>
-					<h3>{selected.displayName}</h3>
-				</Modal.Header>
-				<Modal.Body>
-					<p className="text-broken">
-						Ustaw godziny otwarcia Twojego biznesu. Jeśli chcesz
-						ustalić godziny dla poszczególnych dni, przejdź do
-						kalendarza.
-					</p>
-					<FormControl.Inline>
-						<FormControl.Label htmlFor="open-hours">
-							Godziny otwarcia
-						</FormControl.Label>
-						<FormGroup id="open-hours">
+	return (
+		<>
+			{selected && (
+				<Modal closeModal={() => setSelected(null)} isChild small>
+					<Modal.Header>
+						<h3>{selected.displayName}</h3>
+					</Modal.Header>
+					<Modal.Body>
+						<p className="text-broken">
+							Ustaw godziny otwarcia Twojego biznesu. Jeśli chcesz
+							ustalić godziny dla poszczególnych dni, przejdź do
+							kalendarza.
+						</p>
+						<FormControl.Inline>
+							<FormControl.Label id="open-hours">
+								Godziny otwarcia
+							</FormControl.Label>
+
 							<FormControl.TimePicker
 								name={`start_work_${selected.name}`}
 								value={selected.start}
@@ -142,7 +143,9 @@ function SetWorkingHours({
 										start: val,
 									}))
 								}
+								aria-labelledby="open-hours"
 							/>
+
 							<FormControl.TimePicker
 								name={`end_work_${selected.name}`}
 								value={selected.end}
@@ -155,36 +158,37 @@ function SetWorkingHours({
 								beginLimit={selected.start}
 								moreThanBeginLimit
 								formatOptionLabel={formatEndWorkTimeLabel}
+								aria-labelledby="open-hours"
 							/>
-						</FormGroup>
-					</FormControl.Inline>
+						</FormControl.Inline>
 
-					<ButtonContainer style={{ justifyContent: 'right' }}>
-						<Button secondary onClick={() => setSelected(null)}>
-							Anuluj
-						</Button>
-						<Button
-							primary
-							onClick={() => {
-								setData({
-									[`start_work_${selected.name}`]:
-										selected.start,
-									[`end_work_${selected.name}`]: selected.end,
-								})
-								setSelected(null)
-							}}
-						>
-							Zapisz
-						</Button>
-					</ButtonContainer>
-				</Modal.Body>
-			</Modal>
-		)
-	}
+						<ButtonContainer style={{ justifyContent: 'right' }}>
+							<Button secondary onClick={() => setSelected(null)}>
+								Anuluj
+							</Button>
+							<Button
+								primary
+								onClick={() => {
+									setData({
+										[`start_work_${selected.name}`]:
+											selected.start,
+										[`end_work_${selected.name}`]:
+											selected.end,
+									})
+									setSelected(null)
+								}}
+							>
+								Zapisz
+							</Button>
+						</ButtonContainer>
+					</Modal.Body>
+				</Modal>
+			)}
 
-	return (
-		<>
-			{selected && getSelectedModal()}
+			<div className="title">
+				<h2>Godziny otwarcia</h2>
+				<p>W jakich godzinach przyjmujesz klientów?</p>
+			</div>
 
 			<FormControl>
 				<table className="step-table">
