@@ -44,7 +44,6 @@ function ServicesInput({
 	const [showCategories, setShowsCategories] = useState(false)
 	const [showInput, setShowInput] = useState(value.length === 0)
 	const [dropdownId] = useId(1, 'service-')
-	const [multiListId] = useId(1, 'multiList-')
 
 	const getServiceEmployeeTime = useCallback(
 		(employee, id, returnDisplayTime = true) => {
@@ -179,7 +178,7 @@ function ServicesInput({
 	return (
 		<FormControl>
 			{Object.keys(selected).length > 0 && (
-				<Modal closeModal={() => setSelected({})} isChild>
+				<Modal closeModal={() => setSelected({})} isChild small>
 					<Modal.Header>
 						<span className="text-broken">
 							{selected.value.name} (
@@ -279,10 +278,8 @@ function ServicesInput({
 			)}
 
 			{value.length > 0 && (
-				<div className="multi-list__container">
-					<FormControl.Label htmlFor={multiListId} inputValue>
-						Usługi
-					</FormControl.Label>
+				<fieldset className="multi-list__container">
+					<legend>Usługi</legend>
 					{showMoreOptions && (
 						<ButtonContainer.Group
 							className={`categories-group${
@@ -332,7 +329,7 @@ function ServicesInput({
 						</ButtonContainer.Group>
 					)}
 
-					<div style={{ overflow: 'auto' }}>
+					<div style={{ overflow: 'auto hidden' }}>
 						<table
 							className="multi-list"
 							style={
@@ -343,7 +340,6 @@ function ServicesInput({
 									  }
 									: null
 							}
-							id={multiListId}
 						>
 							{value.map((option) => (
 								<tbody key={option.value.id}>
@@ -494,7 +490,7 @@ function ServicesInput({
 												<div className="inline-inputs">
 													<FormControl
 														style={{
-															width: '5em',
+															width: '6.5em',
 														}}
 													>
 														<FormControl.DatePicker
@@ -726,7 +722,7 @@ function ServicesInput({
 							))}
 						</table>
 					</div>
-				</div>
+				</fieldset>
 			)}
 			{showInput ? (
 				<>
