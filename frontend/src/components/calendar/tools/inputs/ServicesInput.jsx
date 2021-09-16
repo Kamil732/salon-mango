@@ -329,367 +329,311 @@ function ServicesInput({
 						</ButtonContainer.Group>
 					)}
 
-					<div style={{ overflow: 'auto hidden' }}>
-						<table
-							className="multi-list"
-							style={
-								showMoreOptions
-									? {
-											borderTopLeftRadius: 0,
-											borderTopRightRadius: 0,
-									  }
-									: null
-							}
-						>
-							{value.map((option) => (
-								<tbody key={option.value.id}>
-									<tr>
-										<td>
-											{formatOptionLabel(
-												option.value,
-												option.employee,
-												true
-											)}
-										</td>
+					<table
+						className="multi-list"
+						style={
+							showMoreOptions
+								? {
+										borderTopLeftRadius: 0,
+										borderTopRightRadius: 0,
+								  }
+								: null
+						}
+					>
+						{value.map((option) => (
+							<tbody key={option.value.id}>
+								<tr>
+									<td>
+										{formatOptionLabel(
+											option.value,
+											option.employee,
+											true
+										)}
+									</td>
 
-										{!showMoreOptions ||
-										category === CATEOGRIES[0] ? (
-											<>
-												<td style={{ width: '1px' }}>
-													<div className="inline-wrap">
-														{/* Worker btn */}
-														<Button
-															type="button"
-															onClick={() =>
-																setSelected(
-																	option
-																)
-															}
-															className={`btn-picker ${
-																option.employee
-																	? option
-																			.employee
-																			.color
-																	: ''
-															}`}
-															data-tip={
-																option.employee
-																	? `pracownik: ${option.employee.full_name}`
-																	: 'brak pracownika'
-															}
-															data-for={`employeeBtnTip-${option.value.id}`}
-														>
-															{option.employee
-																?.full_name || (
-																<GrUserWorker />
-															)}
-														</Button>
-														<ReactTooltip
-															id={`employeeBtnTip-${option.value.id}`}
-															effect="solid"
-															place="top"
-														/>
-
-														{isAdminPanel && (
-															<div
-																style={{
-																	position:
-																		'relative',
-																}}
-															>
-																{/* Resource btn */}
-																<Button
-																	type="button"
-																	onClick={() =>
-																		setSelected(
-																			option
-																		)
-																	}
-																	className="btn-picker"
-																	style={{
-																		maxWidth:
-																			'100%',
-																	}}
-																	data-tip={
-																		option
-																			.resources
-																			.length >
-																		0
-																			? `zasoby: ${option.resources
-																					.map(
-																						(
-																							resource
-																						) =>
-																							resource.name
-																					)
-																					.join(
-																						', '
-																					)}`
-																			: 'brak zasobów'
-																	}
-																	data-for={`resourcesBtnTip-${option.value.id}`}
-																>
-																	<GrResources />
-																	{option
-																		.resources
-																		.length >
-																		0 && (
-																		<div className="badge">
-																			{
-																				option
-																					.resources
-																					.length
-																			}
-																		</div>
-																	)}
-																</Button>
-
-																<ReactTooltip
-																	id={`resourcesBtnTip-${option.value.id}`}
-																	effect="solid"
-																	place="top"
-																/>
-															</div>
-														)}
-													</div>
-												</td>
-												<td style={{ width: '1px' }}>
-													{/* Delete btn */}
+									{!showMoreOptions ||
+									category === CATEOGRIES[0] ? (
+										<>
+											<td style={{ width: '1px' }}>
+												<div className="inline-wrap">
+													{/* Worker btn */}
 													<Button
 														type="button"
-														rounded
 														onClick={() =>
-															updateState(
-																value.filter(
-																	(service) =>
-																		service
-																			.value
-																			.id !==
-																		option
-																			.value
-																			.id
-																)
-															)
+															setSelected(option)
 														}
-														data-tip="Usuń usługę"
-														data-for={`removeValueBtnTip-${option.id}`}
+														className={`btn-picker ${
+															option.employee
+																? option
+																		.employee
+																		.color
+																: ''
+														}`}
+														data-tip={
+															option.employee
+																? `pracownik: ${option.employee.full_name}`
+																: 'brak pracownika'
+														}
+														data-for={`employeeBtnTip-${option.value.id}`}
 													>
-														<FiTrash2 size="20" />
+														{option.employee
+															?.full_name || (
+															<GrUserWorker />
+														)}
 													</Button>
-
 													<ReactTooltip
-														id={`removeValueBtnTip-${option.id}`}
+														id={`employeeBtnTip-${option.value.id}`}
 														effect="solid"
-														place="right"
-														delayShow={250}
+														place="top"
 													/>
-												</td>
-											</>
-										) : category === CATEOGRIES[1] ? (
-											<td style={{ width: '1px' }}>
-												<div className="inline-inputs">
-													<FormControl
-														style={{
-															width: '6.5em',
-														}}
-													>
-														<FormControl.DatePicker
-															value={option.start}
-															onChange={(date) =>
-																updateState(
-																	value.map(
-																		(
-																			service
-																		) => {
-																			if (
-																				service
-																					.value
-																					.id !==
-																				option
-																					.value
-																					.id
-																			)
-																				return service
 
-																			date =
-																				moment(
-																					date
-																				)
-																			const newDate =
-																				moment(
-																					option.start
-																				).set(
-																					{
-																						date: date.date(),
-																						month: date.month(),
-																						year: date.year(),
-																					}
-																				)
-
-																			const duration =
-																				moment(
-																					option.end
-																				).diff(
-																					option.start,
-																					'minutes'
-																				)
-
-																			return {
-																				...service,
-																				start: newDate.toDate(),
-																				end: newDate
-																					.add(
-																						duration,
-																						'minutes'
-																					)
-																					.toDate(),
-																			}
-																		}
+													{isAdminPanel && (
+														<div
+															style={{
+																position:
+																	'relative',
+															}}
+														>
+															{/* Resource btn */}
+															<Button
+																type="button"
+																onClick={() =>
+																	setSelected(
+																		option
 																	)
-																)
-															}
-														/>
-													</FormControl>
-													<FormControl
-														style={{
-															width: '3.5em',
-														}}
-													>
-														<FormControl.TimePicker
-															onChange={(time) =>
-																updateState(
-																	value.map(
-																		(
-																			service
-																		) => {
-																			if (
-																				service
-																					.value
-																					.id !==
-																				option
-																					.value
-																					.id
-																			)
-																				return service
-
-																			const [
-																				hours,
-																				minutes,
-																			] =
-																				time.split(
-																					':'
+																}
+																className="btn-picker"
+																style={{
+																	maxWidth:
+																		'100%',
+																}}
+																data-tip={
+																	option
+																		.resources
+																		.length >
+																	0
+																		? `zasoby: ${option.resources
+																				.map(
+																					(
+																						resource
+																					) =>
+																						resource.name
 																				)
-																			const newDate =
-																				moment(
-																					option.start
-																				).set(
-																					{
-																						hour: parseInt(
-																							hours
-																						),
-																						minute: parseInt(
-																							minutes
-																						),
-																					}
-																				)
-
-																			const duration =
-																				moment(
-																					option.end
-																				).diff(
-																					option.start,
-																					'minutes'
-																				)
-
-																			return {
-																				...service,
-																				start: newDate.toDate(),
-																				end: newDate
-																					.add(
-																						duration,
-																						'minutes'
-																					)
-																					.toDate(),
-																			}
+																				.join(
+																					', '
+																				)}`
+																		: 'brak zasobów'
+																}
+																data-for={`resourcesBtnTip-${option.value.id}`}
+															>
+																<GrResources />
+																{option
+																	.resources
+																	.length >
+																	0 && (
+																	<div className="badge">
+																		{
+																			option
+																				.resources
+																				.length
 																		}
-																	)
-																)
-															}
-															value={moment(
-																option.start
-															).format('HH:mm')}
-															step={calendar_step}
-															beginLimit="06:00"
-															endLimit="22:00"
-														/>
-													</FormControl>
-													<FormControl
-														style={{
-															width: '3em',
-														}}
-													>
-														<FormControl.Input
-															type="number"
-															value={moment(
-																option.end
-															).diff(
-																option.start,
-																'minutes'
-															)}
-															min="1"
-															onInput={(e) =>
-																updateState(
-																	value.map(
-																		(
-																			service
-																		) => {
-																			if (
-																				service
-																					.value
-																					.id !==
-																				option
-																					.value
-																					.id
-																			)
-																				return service
+																	</div>
+																)}
+															</Button>
 
-																			return {
-																				...service,
-																				end: moment(
-																					service.start
-																				)
-																					.add(
-																						e
-																							.target
-																							.value,
-																						'minutes'
-																					)
-																					.toDate(),
-																			}
-																		}
-																	)
-																)
-															}
-														/>
-													</FormControl>
-													min
-													<span className="text-broken">
-														koniec:
-													</span>{' '}
-													{moment(option.end).format(
-														'HH:mm'
+															<ReactTooltip
+																id={`resourcesBtnTip-${option.value.id}`}
+																effect="solid"
+																place="top"
+															/>
+														</div>
 													)}
 												</div>
 											</td>
-										) : null}
-									</tr>
-									{showMoreOptions &&
-										category === CATEOGRIES[2] && (
-											<tr>
-												<td>
-													<ConsumptionInput
-														value={option.products}
-														updateValue={(state) =>
+											<td style={{ width: '1px' }}>
+												{/* Delete btn */}
+												<Button
+													type="button"
+													rounded
+													onClick={() =>
+														updateState(
+															value.filter(
+																(service) =>
+																	service
+																		.value
+																		.id !==
+																	option.value
+																		.id
+															)
+														)
+													}
+													data-tip="Usuń usługę"
+													data-for={`removeValueBtnTip-${option.id}`}
+												>
+													<FiTrash2 size="20" />
+												</Button>
+
+												<ReactTooltip
+													id={`removeValueBtnTip-${option.id}`}
+													effect="solid"
+													place="right"
+													delayShow={250}
+												/>
+											</td>
+										</>
+									) : category === CATEOGRIES[1] ? (
+										<td style={{ width: '1px' }}>
+											<div className="inline-inputs">
+												<FormControl
+													style={{
+														width: '6.5em',
+													}}
+												>
+													<FormControl.DatePicker
+														value={option.start}
+														onChange={(date) =>
+															updateState(
+																value.map(
+																	(
+																		service
+																	) => {
+																		if (
+																			service
+																				.value
+																				.id !==
+																			option
+																				.value
+																				.id
+																		)
+																			return service
+
+																		date =
+																			moment(
+																				date
+																			)
+																		const newDate =
+																			moment(
+																				option.start
+																			).set(
+																				{
+																					date: date.date(),
+																					month: date.month(),
+																					year: date.year(),
+																				}
+																			)
+
+																		const duration =
+																			moment(
+																				option.end
+																			).diff(
+																				option.start,
+																				'minutes'
+																			)
+
+																		return {
+																			...service,
+																			start: newDate.toDate(),
+																			end: newDate
+																				.add(
+																					duration,
+																					'minutes'
+																				)
+																				.toDate(),
+																		}
+																	}
+																)
+															)
+														}
+													/>
+												</FormControl>
+												<FormControl
+													style={{
+														width: '3.5em',
+													}}
+												>
+													<FormControl.TimePicker
+														onChange={(time) =>
+															updateState(
+																value.map(
+																	(
+																		service
+																	) => {
+																		if (
+																			service
+																				.value
+																				.id !==
+																			option
+																				.value
+																				.id
+																		)
+																			return service
+
+																		const [
+																			hours,
+																			minutes,
+																		] =
+																			time.split(
+																				':'
+																			)
+																		const newDate =
+																			moment(
+																				option.start
+																			).set(
+																				{
+																					hour: parseInt(
+																						hours
+																					),
+																					minute: parseInt(
+																						minutes
+																					),
+																				}
+																			)
+
+																		const duration =
+																			moment(
+																				option.end
+																			).diff(
+																				option.start,
+																				'minutes'
+																			)
+
+																		return {
+																			...service,
+																			start: newDate.toDate(),
+																			end: newDate
+																				.add(
+																					duration,
+																					'minutes'
+																				)
+																				.toDate(),
+																		}
+																	}
+																)
+															)
+														}
+														value={moment(
+															option.start
+														).format('HH:mm')}
+														step={calendar_step}
+														beginLimit="06:00"
+														endLimit="22:00"
+													/>
+												</FormControl>
+												<FormControl
+													style={{
+														width: '3em',
+													}}
+												>
+													<FormControl.Input
+														type="number"
+														value={moment(
+															option.end
+														).diff(
+															option.start,
+															'minutes'
+														)}
+														min="1"
+														onInput={(e) =>
 															updateState(
 																value.map(
 																	(
@@ -707,21 +651,63 @@ function ServicesInput({
 
 																		return {
 																			...service,
-																			products:
-																				state,
+																			end: moment(
+																				service.start
+																			)
+																				.add(
+																					e
+																						.target
+																						.value,
+																					'minutes'
+																				)
+																				.toDate(),
 																		}
 																	}
 																)
 															)
 														}
 													/>
-												</td>
-											</tr>
-										)}
-								</tbody>
-							))}
-						</table>
-					</div>
+												</FormControl>
+												min
+												<span className="text-broken">
+													koniec:
+												</span>{' '}
+												{moment(option.end).format(
+													'HH:mm'
+												)}
+											</div>
+										</td>
+									) : null}
+								</tr>
+								{showMoreOptions && category === CATEOGRIES[2] && (
+									<tr>
+										<td>
+											<ConsumptionInput
+												value={option.products}
+												updateValue={(state) =>
+													updateState(
+														value.map((service) => {
+															if (
+																service.value
+																	.id !==
+																option.value.id
+															)
+																return service
+
+															return {
+																...service,
+																products: state,
+															}
+														})
+													)
+												}
+											/>
+										</td>
+									</tr>
+								)}
+							</tbody>
+						))}
+					</table>
 				</fieldset>
 			)}
 			{showInput ? (

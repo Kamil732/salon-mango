@@ -80,7 +80,7 @@ function RepeatEventInput({
 				</label>
 			</FormControl>
 
-			<FormGroup style={{ margin: '0' }}>
+			<FormGroup>
 				<FormControl style={{ width: '8em' }}>
 					<FormControl.Label
 						htmlFor={repeatTimesId}
