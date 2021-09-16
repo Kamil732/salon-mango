@@ -6,6 +6,7 @@ import { FaMapMarkerAlt } from 'react-icons/fa'
 import FormControl from '../../../layout/forms/FormControl'
 import { GoogleMap, useJsApiLoader, Marker, Data } from '@react-google-maps/api'
 import Card from '../../../layout/cards/Card'
+import CircleLoader from '../../../layout/loaders/CircleLoader'
 
 function FindAddress({
 	city,
@@ -34,7 +35,7 @@ function FindAddress({
 				</p>
 			</div>
 
-			{isLoaded && (
+			{isLoaded ? (
 				<FormControl>
 					<Card className="address-card">
 						<Card.Body>
@@ -79,6 +80,10 @@ function FindAddress({
 						/>
 					</GoogleMap>
 				</FormControl>
+			) : (
+				<div className="center-container">
+					<CircleLoader />
+				</div>
 			)}
 		</>
 	)
