@@ -32,8 +32,8 @@ $border-radius: 8px;
 		border-radius: 0;
 
 		& > .modal__body {
-			// overflow-x: auto;
-			min-height: 100vh;
+			height: 100vh;
+			overflow: auto;
 		}
 	}
 }

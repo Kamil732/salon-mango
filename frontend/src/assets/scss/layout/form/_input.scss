@@ -8,7 +8,7 @@
 		background-color: $active-element;
 		z-index: 3;
 		transform: scaleX(0);
-		transition: transform 0.15s ease-in-out;
+		transition: transform 0.2s ease-in-out;
 	}
 
 	&:focus + &__border,
@@ -19,16 +19,17 @@
 	position: relative;
 	width: 100%;
 	border: none;
+	border-radius: 0;
 	font-size: 1em;
 	font-weight: 500;
 	padding: 3px 0;
 	outline: 0;
-	border-bottom: 2px solid $border-color;
 	background-color: transparent;
+	border-bottom: 2px solid $border-color;
 	z-index: 2;
 	display: block;
 
-	&:required:invalid {
+	&:invalid {
 		box-shadow: none;
 		border-color: $error-color;
 	}

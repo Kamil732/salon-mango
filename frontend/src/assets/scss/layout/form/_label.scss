@@ -9,12 +9,17 @@
 		bottom: 0.3em;
 		position: absolute;
 		transform-origin: top left;
-		transition: all 0.1s ease-in-out;
+		transition: transform 0.2s, font-size 0.2s;
 		z-index: 1;
 		color: darken($grey-color, 20%);
 
 		white-space: nowrap;
 		text-overflow: ellipsis;
+	}
+
+	&:focus-within > &__label {
+		font-weight: 500;
+		color: $active-element;
 	}
 
 	&:focus-within > &__label,

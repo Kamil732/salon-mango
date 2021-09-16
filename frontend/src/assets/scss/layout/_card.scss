@@ -38,6 +38,7 @@
 
 		& > .card__body {
 			padding: 2rem 1.5rem;
+			height: 100%;
 		}
 	}
 
@@ -72,5 +73,6 @@
 @include media-phone {
 	.card.form-card {
 		width: 448px;
+		height: auto;
 	}
 }
