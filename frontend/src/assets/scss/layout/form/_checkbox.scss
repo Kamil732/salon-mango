@@ -11,50 +11,47 @@
 	-ms-user-select: none;
 	user-select: none;
 
-	& > .form-control__checkbox {
-		position: absolute;
-		opacity: 0;
-		cursor: pointer;
-		height: 0;
-		width: 0;
+	&:hover .#{$prefix}__checkbox ~ .#{$prefix}__checkbox-checkmark {
+		background-color: lighten($border-color, 15%);
 	}
 
-	& > .form-control__checkbox-checkmark {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		height: 25px;
-		width: 25px;
-		background-color: #eee;
+	& > .#{$prefix}__checkbox {
+		position: absolute;
+		visibility: hidden;
+
+		&:checked ~ .#{$prefix}__checkbox-checkmark {
+			background-color: $primary-color;
+			border-color: $primary-color;
+
+			&:after {
+				display: block;
+			}
+		}
+	}
+
+	& > .#{$prefix}__checkbox-checkmark {
+		position: relative;
+		height: 24px;
+		width: 24px;
+		transition: background-color 0.2s ease-in-out,
+			border-color 0.2s ease-in-out;
+		background-color: #fff;
+		border: $border-color 1px solid;
+		border-radius: 6px;
 
 		&:after {
 			content: '';
 			position: absolute;
+			top: (24px/5.5);
+			left: (24px/3);
 			display: none;
+			width: 7px;
+			height: 12px;
+			border: solid #fff;
+			border-width: 0 2px 2px 0;
+			-webkit-transform: rotate(45deg);
+			-ms-transform: rotate(45deg);
+			transform: rotate(45deg);
 		}
-	}
-
-	&:hover .form-control__checkbox ~ .form-control__checkbox-checkmark {
-		background-color: #ccc;
-	}
-
-	& > .form-control__checkbox:checked ~ .form-control__checkbox-checkmark {
-		background-color: $active-element;
-	}
-
-	&
-		> .form-control__checkbox:checked
-		~ .form-control__checkbox-checkmark:after {
-		display: block;
-	}
-
-	& > .form-control__checkbox-checkmark:after {
-		width: 5px;
-		height: 10px;
-		border: solid #fff;
-		border-width: 0 3px 3px 0;
-		-webkit-transform: rotate(45deg);
-		-ms-transform: rotate(45deg);
-		transform: rotate(45deg);
 	}
 }
