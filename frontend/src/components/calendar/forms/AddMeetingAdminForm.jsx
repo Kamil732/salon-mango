@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import setMeetingEndDate from '../../../helpers/setMeetingEndDate'
+import { options } from '../tools/inputs/RepeatEventInput'
 
 import CSRFToken from '../../CSRFToken'
 import FormControl from '../../../layout/forms/FormControl'
@@ -13,7 +14,6 @@ import Modal from '../../../layout/Modal'
 import ErrorBoundary from '../../ErrorBoundary'
 import CircleLoader from '../../../layout/loaders/CircleLoader'
 import Dropdown from '../../../layout/buttons/dropdowns/Dropdown'
-import { options } from '../tools/inputs/RepeatEventInput'
 
 const AddCustomerForm = lazy(() => import('./AddCustomerForm'))
 const EmployeeInput = lazy(() => import('../tools/inputs/EmployeeInput'))

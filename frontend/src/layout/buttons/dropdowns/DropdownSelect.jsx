@@ -46,7 +46,7 @@ function DropdownSelect({
 
 					if (
 						loadItems &&
-						!isOpen &&
+						// !isOpen &&
 						!loading &&
 						!loaded &&
 						items.length === 0
@@ -146,7 +146,7 @@ function DropdownSelect({
 													})
 												}
 											>
-												<BiLeftArrowAlt />
+												<BiLeftArrowAlt size="25" />
 											</Button>
 
 											<span className="text-broken">

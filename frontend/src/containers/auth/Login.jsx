@@ -4,14 +4,13 @@ import { connect } from 'react-redux'
 
 import { login } from '../../redux/actions/auth'
 
-import AuthIllustration from '../../assets/svgs/auth-illustration.svg'
+import { ReactComponent as AuthIllustration } from '../../assets/svgs/auth-illustration.svg'
 
 import CSRFToken from '../../components/CSRFToken'
 import Card from '../../layout/cards/Card'
 import FormControl from '../../layout/forms/FormControl'
 import Button from '../../layout/buttons/Button'
 import { Link, Redirect } from 'react-router-dom'
-import PageHero from '../../layout/PageHero'
 import Modal from '../../layout/Modal'
 import ErrorBoundary from '../../components/ErrorBoundary'
 import CircleLoader from '../../layout/loaders/CircleLoader'
@@ -57,8 +56,9 @@ function Login({ isAuthenticated, login }) {
 				</Modal>
 			)}
 
-			<PageHero data-aos="fade-up">
-				<PageHero.Img src={AuthIllustration}>
+			<div className="page-hero">
+				<div className="page-hero__img-container">
+					<AuthIllustration className="page-hero__img" />
 					<p className="text-broken">
 						Nie masz jeszcze konta? Kliknij{' '}
 						<Button
@@ -70,10 +70,10 @@ function Login({ isAuthenticated, login }) {
 						</Button>{' '}
 						by je utworzyć
 					</p>
-				</PageHero.Img>
+				</div>
 
-				<PageHero.Content>
-					<PageHero.Title>Zaloguj się</PageHero.Title>
+				<div className="page-hero__content">
+					<div className="page-hero__title">Zaloguj się</div>
 
 					<Card>
 						<Card.Body>
@@ -133,8 +133,8 @@ function Login({ isAuthenticated, login }) {
 							</form>
 						</Card.Body>
 					</Card>
-				</PageHero.Content>
-			</PageHero>
+				</div>
+			</div>
 		</>
 	)
 }

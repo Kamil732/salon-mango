@@ -36,9 +36,22 @@ function Panel({
 	notificationLoaded,
 	notifications,
 	unReadNotificationsAmount,
+	getUnreadNotificationsAmount,
+	connectNotificationWS,
+	getNotifications,
+	markNotificationAsRead,
 }) {
 	const [isMenuOpen, toggleMenu] = useState(false)
 	const navContainer = useRef(null)
+
+	useEffect(() => {
+		const fetch = async () => {
+			await getUnreadNotificationsAmount()
+			await connectNotificationWS()
+		}
+
+		fetch()
+	}, [getUnreadNotificationsAmount, connectNotificationWS])
 
 	useEffect(() => {
 		const body = document.querySelector('body')
@@ -137,6 +150,8 @@ function Panel({
 						<DropdownSelect
 							btnContent={<IoMdNotifications size={25} />}
 							rounded
+							aria-label="Powiadomienia"
+							title="Powiadomienia"
 							loading={notificationLoading}
 							loaded={notificationLoaded}
 							loadItems={getNotifications}

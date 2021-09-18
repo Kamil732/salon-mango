@@ -43,11 +43,21 @@ const Toolbar = ({
 		<div className="toolbar-container">
 			<ButtonContainer>
 				<ButtonContainer.Group>
-					<Button primary small onClick={goToBack}>
+					<Button
+						primary
+						small
+						onClick={goToBack}
+						aria-label="Do tyłu"
+					>
 						<IoIosArrowBack />
 					</Button>
 
-					<Button primary small onClick={goToNext}>
+					<Button
+						primary
+						small
+						onClick={goToNext}
+						aria-label="Do przodu"
+					>
 						<IoIosArrowForward />
 					</Button>
 				</ButtonContainer.Group>

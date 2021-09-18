@@ -2,6 +2,8 @@ import React, { Component, lazy, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
+import setMeetingEndDate from '../../../helpers/setMeetingEndDate'
+
 import CSRFToken from '../../CSRFToken'
 import ButtonContainer from '../../../layout/buttons/ButtonContainer'
 import Button from '../../../layout/buttons/Button'
@@ -9,7 +11,6 @@ import FormControl from '../../../layout/forms/FormControl'
 import FormGroup from '../../../layout/forms/FormGroup'
 import ErrorBoundary from '../../ErrorBoundary'
 import CircleLoader from '../../../layout/loaders/CircleLoader'
-import setMeetingEndDate from '../../../helpers/setMeetingEndDate'
 import Modal from '../../../layout/Modal'
 
 const AddCustomerForm = lazy(() => import('./AddCustomerForm'))

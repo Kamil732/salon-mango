@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react'
 import 'react-notifications/lib/notifications.css'
-import 'aos/dist/aos.css'
 import '../assets/css/main.css'
 
 import { BrowserRouter as Router, Switch } from 'react-router-dom'
 
-import AOS from 'aos'
 import Routes from './Routes'
 import { NotificationContainer } from 'react-notifications'
 
@@ -17,11 +15,6 @@ function App() {
 	useEffect(() => {
 		const getDatas = async () => {
 			await store.dispatch(loadUser())
-
-			AOS.init({
-				duration: 500,
-				once: true,
-			})
 		}
 
 		getDatas()

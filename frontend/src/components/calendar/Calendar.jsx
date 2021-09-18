@@ -22,7 +22,6 @@ import {
 } from '../../redux/actions/meetings'
 import getWorkHours from '../../helpers/getWorkHours'
 
-import BrickLoader from '../../layout/loaders/BrickLoader'
 import CircleLoader from '../../layout/loaders/CircleLoader'
 import ErrorBoundary from '../ErrorBoundary'
 import Modal from '../../layout/Modal'
@@ -920,7 +919,7 @@ class Calendar extends Component {
 				</div>
 				{loading && (
 					<div className="center-container">
-						<BrickLoader />
+						<CircleLoader />
 					</div>
 				)}
 			</>

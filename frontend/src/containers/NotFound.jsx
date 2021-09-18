@@ -1,17 +1,18 @@
 import React from 'react'
 
-import Error404Illustration from '../assets/svgs/error-404-illustration.svg'
-import PageHero from '../layout/PageHero'
+import { ReactComponent as Error404Illustration } from '../assets/svgs/error-404-illustration.svg'
 
 function NotFound() {
 	return (
-		<PageHero vertical data-aos="slide-up">
-			<PageHero.Img src={Error404Illustration} />
-			<PageHero.Text>
+		<div className="page-hero vertical">
+			<div className="page-hero__img-container">
+				<Error404Illustration className="page-hero__img" />
+			</div>
+			<div className="page-hero__text">
 				Nie ma takiej strony. Użyj nawigacji na górze strony by dostać
 				się tam gdzie chcesz.
-			</PageHero.Text>
-		</PageHero>
+			</div>
+		</div>
 	)
 }
 

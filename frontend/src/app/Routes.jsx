@@ -3,8 +3,7 @@ import PropTypes from 'prop-types'
 import { Route, Switch } from 'react-router-dom'
 
 import { connect } from 'react-redux'
-import BrickLoader from '../layout/loaders/BrickLoader'
-import PageHero from '../layout/PageHero'
+import CircleLoader from '../layout/loaders/CircleLoader'
 import PrivateRoute from '../common/PrivateRoute'
 
 const NotFound = lazy(() => import('../containers/NotFound'))
@@ -20,9 +19,9 @@ class Routes extends Component {
 		const { loadingSalon } = this.props
 
 		const loader = (
-			<PageHero>
-				<BrickLoader />
-			</PageHero>
+			<div className="page-hero">
+				<CircleLoader />
+			</div>
 		)
 
 		if (loadingSalon) return loader
