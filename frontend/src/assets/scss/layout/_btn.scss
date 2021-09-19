@@ -1,7 +1,6 @@
 .btn-container {
-	display: flex;
+	@extend %flex-align-center;
 	gap: 1rem;
-	align-items: center;
 	flex-wrap: wrap;
 }
 
@@ -18,8 +17,7 @@
 	& > label {
 		padding: 4px 0.3rem;
 		width: 100%;
-		display: flex;
-		align-items: center;
+		@extend %flex-align-center;
 		gap: 0.2rem;
 
 		& > span {
@@ -34,14 +32,14 @@
 }
 
 .btn-group-container {
-	display: flex;
-	align-items: center;
+	@extend %flex-align-center;
 
-	&.categories-group {
+	$group-prfix: categories-group;
+	&.#{$group-prfix} {
 		margin-bottom: 0.5rem;
 		width: 100%;
 
-		.categories-group__icon {
+		.#{$group-prfix}__icon {
 			position: absolute;
 			left: 0;
 			opacity: 0.8;
@@ -63,7 +61,7 @@
 		}
 
 		&.btn-category {
-			background-color: #fff;
+			@include bg-color(#fff);
 			padding: 0.5rem;
 			border: 1px solid $border-color;
 			border-radius: 6px;
@@ -73,22 +71,20 @@
 			display: none;
 
 			&.active {
-				background-color: $secondary-color;
 				display: inherit;
 			}
 
+			&.active,
 			&:hover,
 			&:focus {
-				background-color: $secondary-color;
+				@include bg-color($secondary-color);
 			}
 		}
 	}
 }
 
 .btn {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	@extend %flex-center;
 	outline: none;
 	border: 4px solid black;
 	border-radius: 8px;
@@ -162,22 +158,17 @@
 	}
 
 	&__primary {
-		border-color: $primary-color;
-		background-color: $primary-color;
-		color: set-text-color($primary-color);
+		@include bg-color($primary-color, true);
 
 		&:hover,
 		&:focus {
-			border-color: $primary-color-hover;
+			@include bg-color($primary-color-hover, true);
 			border-bottom-color: $primary-color;
-			background-color: $primary-color-hover;
-			color: set-text-color($primary-color-hover);
 		}
 	}
 
 	&__secondary {
-		background-color: $secondary-color;
-		color: set-text-color($secondary-color);
+		@include bg-color($secondary-color);
 		border-width: 1px;
 		padding: calc(0.5rem + 4px) 1.5rem;
 
@@ -191,9 +182,7 @@
 	}
 
 	&__success {
-		border-color: $success-color;
-		background-color: $success-color;
-		color: set-text-color($success-color);
+		@include bg-color($success-color, true);
 
 		&:hover,
 		&:focus {
@@ -206,9 +195,7 @@
 	}
 
 	&__danger {
-		border-color: $error-color;
-		background-color: $error-color;
-		color: set-text-color($error-color);
+		@include bg-color($error-color, true);
 
 		&:hover,
 		&:focus {
@@ -309,6 +296,7 @@
 
 @include media-laptop {
 	.btn {
+		$this: &;
 		&__primary,
 		&__success,
 		&__danger {
@@ -322,7 +310,7 @@
 		&__small {
 			padding: 0.5rem 1rem;
 
-			&.btn__loading {
+			&#{$this}__loading {
 				padding: 0.05rem 0.5rem !important;
 			}
 		}

@@ -1,4 +1,4 @@
-@mixin active-label {
+%active-label {
 	font-size: 1.15em;
 	transform: translateY(-0.8em) scale(0.7);
 }
@@ -20,10 +20,10 @@
 	&:focus-within > &__label {
 		font-weight: 500;
 		color: $active-element;
+		@extend %active-label;
 	}
 
-	&:focus-within > &__label,
 	& &__label.active {
-		@include active-label;
+		@extend %active-label;
 	}
 }

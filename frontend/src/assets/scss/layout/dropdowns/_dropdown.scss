@@ -10,13 +10,12 @@
 
 	&__input-container {
 		width: 100%;
-		display: flex;
-		align-items: center;
+		@extend %flex-align-center;
 		gap: 0.5rem;
 	}
 
 	&-options {
-		background-color: $surface-color;
+		@include bg-color($surface-color);
 		position: absolute;
 		border: 1px solid $border-color;
 		padding: 0.3rem 0;
@@ -26,7 +25,7 @@
 		overflow: auto;
 		min-width: 100%;
 		width: auto;
-		@include box-shadow;
+		@extend %box-shadow;
 
 		&__option {
 			padding: 0.6rem 1rem;

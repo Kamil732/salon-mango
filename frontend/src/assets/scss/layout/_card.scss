@@ -11,15 +11,14 @@
 
 .card {
 	$border-radius: 10px;
+	@include bg-color($surface-color);
+	@extend %shadow-sm;
 
 	width: 100%;
-	background-color: $surface-color;
 	border-radius: $border-radius;
-	@include shadow-sm;
 
 	& > &__title {
-		background-color: $secondary-color;
-		color: set-text-color($secondary-color);
+		@include bg-color($secondary-color);
 		padding: 1.5rem;
 		font-size: 1.3em;
 		font-weight: 600;
@@ -34,7 +33,6 @@
 
 	&.form-card {
 		width: 100%;
-		height: 100%;
 
 		& > .card__body {
 			padding: 2rem 1.5rem;
@@ -50,9 +48,8 @@
 		left: 0.4rem;
 
 		& > .card__body {
-			display: flex;
+			@extend %flex-align-center;
 			justify-content: space-between;
-			align-items: center;
 			overflow-x: auto;
 			font-size: 0.85em;
 			line-height: 1.5;
@@ -73,6 +70,5 @@
 @include media-phone {
 	.card.form-card {
 		width: 448px;
-		height: auto;
 	}
 }

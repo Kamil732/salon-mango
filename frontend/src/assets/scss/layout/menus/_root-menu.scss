@@ -42,7 +42,6 @@
 
 	&__label {
 		position: relative;
-		color: set-text-color($surface-color);
 		color: $grey-color;
 		cursor: pointer;
 		padding-left: 2rem;
@@ -51,11 +50,10 @@
 		text-overflow: ellipsis;
 		border-radius: 0.5rem;
 		min-width: 100%;
-		display: flex;
 		width: max-content;
-		align-items: center;
 		gap: 0.5rem;
 		border: 1px solid transparent;
+		@extend %flex-align-center;
 
 		&:hover,
 		&.active {

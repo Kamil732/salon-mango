@@ -45,8 +45,7 @@
 }
 
 .inline-inputs {
-	display: flex;
-	align-items: center;
+	@extend %flex-align-center;
 	gap: 0.5rem;
 
 	.form-control {

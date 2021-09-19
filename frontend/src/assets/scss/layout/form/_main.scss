@@ -5,8 +5,7 @@ $prefix: form-control;
 $form-control-vertical-margin: 2rem;
 
 .form-group {
-	display: flex;
-	align-items: center;
+	@extend %flex-align-center;
 	gap: 1rem;
 	width: 100%;
 	margin: $form-control-vertical-margin 0;

@@ -6,23 +6,25 @@
 	}
 }
 
-@mixin color($color) {
+@mixin bg-color($color, $changeBorderColor: false) {
 	color: set-text-color($color);
-	background-color: $color !important;
-	border: 1px solid darken($color, 10%) !important;
+	background-color: $color;
+	@if $changeBorderColor {
+		border-color: $color;
+	}
 }
 
-@mixin box-shadow {
+%box-shadow {
 	box-shadow: 0 4px 25.2px rgba(0, 0, 0, 0.029),
 		0 9.3px 37.6px rgba(0, 0, 0, 0.075),
 		0 11.4px 49.4px rgba(0, 0, 0, 0.114), 0 12px 79px rgba(0, 0, 0, 0.14);
 }
 
-@mixin shadow-sm {
+%shadow-sm {
 	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-@mixin sliding-floor {
+%sliding-floor {
 	position: relative;
 
 	&::after {
@@ -47,6 +49,17 @@
 	&.active::after {
 		background-position: left;
 	}
+}
+
+%flex-center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+%flex-align-center {
+	display: flex;
+	align-items: center;
 }
 
 @mixin media-phone {

@@ -1,3 +1,5 @@
+$nav-color: $primary-color;
+
 .dashboard {
 	display: flex;
 	position: absolute;
@@ -9,16 +11,15 @@
 	width: 100vw;
 
 	&__btn {
-		display: flex;
+		@extend %flex-align-center;
 		flex-direction: column;
 		justify-content: center;
-		align-items: center;
 		background-color: transparent;
-		font-size: 0.7em;
+		font-size: 0.75em;
 		width: 100%;
 		padding: 0.75rem 3px;
 		text-align: center;
-		color: set-text-color($primary-color);
+		color: set-text-color($nav-color);
 		opacity: 0.5;
 		text-transform: lowercase;
 
@@ -30,7 +31,7 @@
 		&__icon {
 			font-size: 1.8em;
 			margin-bottom: -0.3em;
-			color: set-text-color($primary-color);
+			color: set-text-color($nav-color);
 		}
 
 		&-open {
@@ -51,7 +52,7 @@
 		display: none;
 		max-height: 100%;
 		width: 100%;
-		@include box-shadow;
+		@extend %shadow-sm;
 
 		&.open {
 			display: block;
@@ -71,11 +72,9 @@
 
 	&__nav {
 		height: 100vh;
-		background-color: $primary-color;
-		color: set-text-color($primary-color);
-		display: flex;
+		@include bg-color($nav-color);
+		@extend %flex-align-center;
 		flex-direction: column;
-		align-items: center;
 		justify-content: space-between;
 		border-radius: 0;
 		border-right: 1px solid #000;
@@ -94,7 +93,7 @@
 	}
 
 	& > &__body {
-		background-color: $background-color;
+		@include bg-color($background-color);
 		width: 100%;
 		padding: 1rem 1rem 0 1rem;
 		overflow-y: auto;
@@ -108,8 +107,6 @@
 			align-items: flex-start;
 			position: static;
 			width: 220px;
-			box-shadow: none;
-			border-right: 1px solid $border-color;
 			border-radius: 0;
 
 			&-btn {

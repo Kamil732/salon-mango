@@ -1,5 +1,5 @@
 .tools-menu {
-	@include menu;
+	@extend %menu;
 	gap: 1rem;
 
 	&__item {

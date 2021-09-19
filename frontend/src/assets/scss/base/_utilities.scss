@@ -1,7 +1,5 @@
 .center-container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	@extend %flex-center;
 	width: 100%;
 	height: 100%;
 }
@@ -27,13 +25,6 @@
 	white-space: pre;
 }
 
-.line-break {
-	position: absolute;
-	left: 0;
-	right: 0;
-	border-color: $secondary-color;
-}
-
 .seperator {
 	width: 70%;
 	opacity: 0.3;
@@ -46,16 +37,15 @@
 }
 
 .inline-wrap {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
+	@extend %flex-align-center;
+
+	gap: 0.75rem;
 	width: 100%;
 }
 
 .space-between {
-	display: flex;
+	@extend %flex-align-center;
 	justify-content: space-between;
-	align-items: center;
 	gap: 1rem;
 }
 
@@ -72,12 +62,11 @@
 }
 
 .slide-floor {
-	@include sliding-floor;
+	@extend %sliding-floor;
 }
 
 .icon-container {
-	display: flex;
-	align-items: center;
+	@extend %flex-align-center;
 
 	&__icon {
 		margin-right: 0.5rem;
@@ -85,41 +74,46 @@
 }
 
 .info-text {
-	background-color: $info-color;
-	color: set-text-color($info-color);
+	@include bg-color($info-color);
 	padding: 4px 8px;
 	border-radius: 12px;
 }
 
+@mixin box-color($color) {
+	color: set-text-color($color);
+	background-color: $color !important;
+	border-color: 1px solid darken($color, 10%) !important;
+}
+
 .black {
-	@include color($black-color);
+	@include box-color($black-color);
 }
 .light-blue {
-	@include color($light-blue-color);
+	@include box-color($light-blue-color);
 }
 .blue {
-	@include color($blue-color);
+	@include box-color($blue-color);
 }
 .light-green {
-	@include color($light-green-color);
+	@include box-color($light-green-color);
 }
 .green {
-	@include color($green-color);
+	@include box-color($green-color);
 }
 .pink {
-	@include color($pink-color);
+	@include box-color($pink-color);
 }
 .purple {
-	@include color($purple-color);
+	@include box-color($purple-color);
 }
 .brown {
-	@include color($brown-color);
+	@include box-color($brown-color);
 }
 .yellow {
-	@include color($yellow-color);
+	@include box-color($yellow-color);
 }
 .orange {
-	@include color($orange-color);
+	@include box-color($orange-color);
 }
 
 .box-color {

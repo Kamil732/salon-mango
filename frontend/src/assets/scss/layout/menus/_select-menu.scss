@@ -1,6 +1,6 @@
 .select-menu {
 	font-size: 0.9em;
-	@include menu;
+	@extend %menu;
 
 	& > &__item {
 		padding: 0.9rem 1rem;

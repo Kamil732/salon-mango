@@ -12,12 +12,11 @@ $prefix: dropdown-select;
 	border: 1px solid rgba(0, 0, 0, 0.04);
 	white-space: normal;
 	border: 1px solid #ccc;
-	@include box-shadow;
+	@extend %box-shadow;
 
 	&__header {
-		display: flex;
+		@extend %flex-align-center;
 		justify-content: space-between;
-		align-items: center;
 	}
 
 	& > &__inner {

@@ -4,20 +4,17 @@ $background-color: #f5f5f5;
 $surface-color: #ffffff;
 $active-element: #058c8c;
 
-// $primary-color: #423e3e;
-// $primary-color-hover: #616161;
 $primary-color: #2a2c32;
-$primary-color-hover: #423e3e;
+$primary-color-hover: lighten($primary-color, 10%);
 
-$secondary-color: #eeeeee;
+$secondary-color: #f5f5f5;
 $shadow-color: rgba(104, 123, 140, 0.12);
 
 $info-color: rgba(#058c8c, 0.5);
 $success-color: #558b2f;
 $error-color: #dd2c00;
 $important-color: #ff7968;
-
-$black-color: $primary-color;
+$black-color: #423e3e;
 $light-blue-color: #9ff8ec;
 $blue-color: #6bb7f5;
 $light-green-color: #73cba4;

@@ -2,16 +2,14 @@
 	width: 100%;
 	min-height: 100vh;
 	padding: 0 2rem;
-	display: flex;
+	@extend %flex-align-center;
 	justify-content: space-evenly;
-	align-items: center;
 	gap: 2rem;
 	flex-direction: column;
 
 	&__title {
 		margin-bottom: 50px;
 		font-size: 2em;
-
 		text-align: justify;
 	}
 

@@ -17,7 +17,6 @@ $rbc-css-prefix: calendar;
 	margin: 0 auto;
 	max-width: 100%;
 	overflow-x: auto;
-
 	height: 100%;
 }
 
@@ -26,8 +25,7 @@ $rbc-css-prefix: calendar;
 }
 
 .toolbar-container {
-	display: flex;
-	align-items: center;
+	@extend %flex-align-center;
 	justify-content: space-between;
 	flex-direction: column;
 	margin-bottom: 1rem;
@@ -78,9 +76,8 @@ $rbc-css-prefix: calendar;
 	max-width: 20rem;
 }
 
-@mixin doNotWorkSlog {
-	@include color($doNotWork-bg-color);
-	color: #000;
+%doNotWorkSlog {
+	@include bg-color($doNotWork-bg-color);
 
 	& > .rbc-event-content {
 		margin: 5px 0 5px;
@@ -88,7 +85,7 @@ $rbc-css-prefix: calendar;
 }
 
 .doNotWork {
-	@include doNotWorkSlog;
+	@extend %doNotWorkSlog;
 	opacity: 0.8;
 
 	&.selectable {
@@ -101,7 +98,7 @@ $rbc-css-prefix: calendar;
 }
 
 .rbc-event-allday {
-	@include doNotWorkSlog;
+	@extend %doNotWorkSlog;
 }
 
 .rbc-timeslot-group {
@@ -144,9 +141,8 @@ $rbc-css-prefix: calendar;
 .rbc-time-header-gutter {
 	font-size: 0.7em;
 	white-space: nowrap;
-	display: flex;
+	@extend %flex-align-center;
 	justify-content: center;
-	align-items: center;
 }
 
 .rbc-current-time-indicator {

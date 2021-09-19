@@ -11,8 +11,7 @@ $border-radius: 8px;
 	& > &__header {
 		border-radius: $border-radius $border-radius 0 0;
 		padding: 1rem;
-		background-color: $background-color;
-		color: set-text-color($background-color);
+		@include bg-color($background-color);
 		border-bottom: 1px solid $border-color;
 		font-size: 1.3em;
 	}

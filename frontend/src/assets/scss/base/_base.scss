@@ -183,7 +183,7 @@ fieldset {
 				color: $active-element;
 			}
 
-			@include sliding-floor;
+			@extend %sliding-floor;
 		}
 	}
 }
