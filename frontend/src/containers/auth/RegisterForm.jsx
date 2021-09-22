@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { HiOutlineArrowLeft } from 'react-icons/hi'
 
 import CSRFToken from '../../components/CSRFToken'
-import Card from '../../layout/cards/Card'
+import Card from '../../layout/Card'
 import ErrorBoundary from '../../components/ErrorBoundary'
 import CircleLoader from '../../layout/loaders/CircleLoader'
 import Button from '../../layout/buttons/Button'
@@ -20,10 +20,11 @@ const WorkType = lazy(() => import('./steps/WorkType'))
 const FindAddress = lazy(() => import('./steps/FindAddress'))
 const SetAddress = lazy(() => import('./steps/SetAddress'))
 const TravellingFee = lazy(() => import('./steps/TravellingFee'))
+const AddServices = lazy(() => import('./steps/AddServices'))
 
 const BILLING_TYPES = require('../../helpers/data/billing_types.json')
 const MAX_TRAVEL_DISTANCES = require('../../helpers/data/max_travel_distances.json')
-const STEPS_AMOUNT = 10
+const STEPS_AMOUNT = 11
 
 function RegisterForm({ closeModal, register }) {
 	const [loading, setLoading] = useState(false)
@@ -73,6 +74,8 @@ function RegisterForm({ closeModal, register }) {
 			travel_fee,
 			max_travel_distance,
 			travel_fee_rules,
+
+			services,
 		},
 		setData,
 	] = useState({
@@ -205,6 +208,8 @@ function RegisterForm({ closeModal, register }) {
 		travel_fee: 0,
 		max_travel_distance: MAX_TRAVEL_DISTANCES[3],
 		travel_fee_rules: '',
+
+		services: [],
 	})
 	const [step, setStep] = useState(1)
 
@@ -280,8 +285,8 @@ function RegisterForm({ closeModal, register }) {
 				>
 					<HiOutlineArrowLeft size="25" />
 				</Button>
-				<Button rounded onClick={() => setStep(6)}>
-					Go to 6
+				<Button rounded onClick={() => setStep(10)}>
+					Go to 10
 				</Button>
 			</Card.Title>
 			<Card.Body>
@@ -404,7 +409,15 @@ function RegisterForm({ closeModal, register }) {
 									end_work_sunday={end_work_sunday}
 								/>
 							) : step === 10 ? (
-								<></>
+								<AddServices
+									setServices={(data) =>
+										setData((prevData) => ({
+											...prevData,
+											services: data,
+										}))
+									}
+									services={services}
+								/>
 							) : null}
 
 							{step === STEPS_AMOUNT ? (

@@ -1,0 +1,148 @@
+@import '../../abstarct/variables';
+@import '../../abstarct/config';
+
+.btn-container {
+	@extend %flex-align-center;
+	gap: 1rem;
+	flex-wrap: wrap;
+}
+
+.btn-resources-container {
+	cursor: default;
+	user-select: none;
+	font-size: 0.8em;
+
+	&:hover,
+	&.active {
+		background-color: $shadow-color;
+	}
+
+	& > label {
+		padding: 4px 0.3rem;
+		width: 100%;
+		@extend %flex-align-center;
+		gap: 0.2rem;
+
+		& > span {
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		& > .box-color {
+			margin-left: auto;
+		}
+	}
+}
+
+.btn-group-container {
+	@extend %flex-align-center;
+
+	$group-prfix: categories-group;
+	&.#{$group-prfix} {
+		margin-bottom: 0.5rem;
+		width: 100%;
+
+		.#{$group-prfix}__icon {
+			position: absolute;
+			left: 0;
+			opacity: 0.8;
+			margin-left: 0.5rem;
+			font-size: 1.6em;
+		}
+	}
+
+	button {
+		border-radius: 0;
+		white-space: nowrap;
+
+		&:first-child {
+			border-radius: 6px 0 0 6px;
+		}
+
+		&:last-child {
+			border-radius: 0 6px 6px 0;
+		}
+
+		&.btn-category {
+			@include bg-color(#fff);
+			padding: 0.5rem;
+			border: 1px solid $border-color;
+			border-radius: 6px;
+			justify-content: center;
+			text-align: center;
+			width: 100%;
+			display: none;
+
+			&.active {
+				display: inherit;
+			}
+
+			&.active,
+			&:hover,
+			&:focus {
+				@include bg-color($secondary-color);
+			}
+		}
+	}
+}
+@include media-tablet {
+	.btn-group-container {
+		&.categories-group {
+			margin-bottom: -1px;
+
+			.categories-group__icon {
+				display: none;
+			}
+		}
+
+		&.show-categories {
+			flex-direction: row;
+		}
+
+		button.btn-category {
+			$border: 1px solid $border-color;
+			background-color: $surface-color;
+			border: $border;
+			border-left: none;
+			border-radius: 0;
+			display: inherit;
+			// width: auto;
+
+			&:first-child {
+				border-left: $border;
+				border-top-left-radius: 6px;
+			}
+
+			&:last-child {
+				border-top-right-radius: 6px;
+			}
+
+			&.active {
+				border-bottom-color: $secondary-color;
+				cursor: default;
+			}
+		}
+	}
+}
+@media only screen and (max-width: 768px) {
+	.btn-group-container.show-categories {
+		$border: 1px solid $border-color;
+		flex-direction: column;
+
+		button.btn-category {
+			display: inherit;
+			border-radius: 0;
+			border: $border;
+			border-bottom: none;
+
+			&:first-child {
+				border-radius: 6px 6px 0 0;
+			}
+
+			&:last-child {
+				border-radius: 0 0 6px 6px;
+				border: $border;
+			}
+		}
+	}
+}

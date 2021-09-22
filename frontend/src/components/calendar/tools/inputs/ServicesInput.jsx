@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { useId } from 'react-id-generator'
+import '../../../../assets/css/table.css'
 
 import { FiMenu, FiTrash2 } from 'react-icons/fi'
 import { GrUserWorker, GrResources } from 'react-icons/gr'
@@ -9,7 +10,11 @@ import { GiOfficeChair } from 'react-icons/gi'
 import { BiTime } from 'react-icons/bi'
 import { BsBoxArrowInDown } from 'react-icons/bs'
 
-import FormControl from '../../../../layout/forms/FormControl'
+import { FormControl } from '../../../../layout/forms/Forms'
+import DatePicker from '../../../../layout/forms/inputs/DatePicker'
+import Input from '../../../../layout/forms/inputs/Input'
+import Label from '../../../../layout/forms/inputs/Label'
+import TimePicker from '../../../../layout/forms/inputs/TimePicker'
 import Button from '../../../../layout/buttons/Button'
 import Modal from '../../../../layout/Modal'
 import ErrorBoundary from '../../../ErrorBoundary'
@@ -489,7 +494,7 @@ function ServicesInput({
 														width: '6.5em',
 													}}
 												>
-													<FormControl.DatePicker
+													<DatePicker
 														value={option.start}
 														onChange={(date) =>
 															updateState(
@@ -551,7 +556,7 @@ function ServicesInput({
 														width: '3.5em',
 													}}
 												>
-													<FormControl.TimePicker
+													<TimePicker
 														onChange={(time) =>
 															updateState(
 																value.map(
@@ -624,7 +629,7 @@ function ServicesInput({
 														width: '3em',
 													}}
 												>
-													<FormControl.Input
+													<Input
 														type="number"
 														value={moment(
 															option.end
@@ -713,9 +718,7 @@ function ServicesInput({
 			{showInput ? (
 				<>
 					{value.length === 0 && (
-						<FormControl.Label htmlFor={dropdownId}>
-							Usługi
-						</FormControl.Label>
+						<Label htmlFor={dropdownId}>Usługi</Label>
 					)}
 
 					<Dropdown

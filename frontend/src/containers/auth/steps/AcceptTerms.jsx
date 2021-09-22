@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import FormControl from '../../../layout/forms/FormControl'
+import { FormControl } from '../../../layout/forms/Forms'
+import CheckBox from '../../../layout/forms/inputs/CheckBox'
 
 function AcceptTerms({ onChange, accept_terms }) {
 	return (
@@ -15,14 +16,14 @@ function AcceptTerms({ onChange, accept_terms }) {
 				</p>
 			</div>
 			<FormControl>
-				<FormControl.CheckBoxLabel>
+				<CheckBox.Label>
 					Akceptuje regulamin
-					<FormControl.CheckBox
+					<CheckBox
 						name="accept_terms"
 						checked={accept_terms}
 						onChange={onChange}
 					/>
-				</FormControl.CheckBoxLabel>
+				</CheckBox.Label>
 			</FormControl>
 		</>
 	)

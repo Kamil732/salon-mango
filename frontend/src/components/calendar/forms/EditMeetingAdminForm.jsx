@@ -7,8 +7,9 @@ import setMeetingEndDate from '../../../helpers/setMeetingEndDate'
 import CSRFToken from '../../CSRFToken'
 import ButtonContainer from '../../../layout/buttons/ButtonContainer'
 import Button from '../../../layout/buttons/Button'
-import FormControl from '../../../layout/forms/FormControl'
-import FormGroup from '../../../layout/forms/FormGroup'
+import { FormControl, FormGroup } from '../../../layout/forms/Forms'
+import Label from '../../../layout/forms/inputs/Label'
+import Textarea from '../../../layout/forms/inputs/Textarea'
 import ErrorBoundary from '../../ErrorBoundary'
 import CircleLoader from '../../../layout/loaders/CircleLoader'
 import Modal from '../../../layout/Modal'
@@ -262,13 +263,13 @@ class EditMeetingAdminForm extends Component {
 							)}
 
 							<FormControl>
-								<FormControl.Label
+								<Label
 									htmlFor="customer_description"
 									inputValue={customer_description}
 								>
 									Wiadomość dla klienta
-								</FormControl.Label>
-								<FormControl.Textarea
+								</Label>
+								<Textarea
 									id="customer_description"
 									name="customer_description"
 									onChange={this.onChange}
@@ -277,15 +278,15 @@ class EditMeetingAdminForm extends Component {
 							</FormControl>
 
 							<FormControl>
-								<FormControl.Label
+								<Label
 									htmlFor="private_description"
 									inputValue={private_description}
 								>
 									{selected.blocked
 										? 'Powód'
 										: 'Opis (widoczny dla personelu)'}
-								</FormControl.Label>
-								<FormControl.Textarea
+								</Label>
+								<Textarea
 									id="private_description"
 									name="private_description"
 									onChange={this.onChange}

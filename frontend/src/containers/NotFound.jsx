@@ -1,4 +1,5 @@
 import React from 'react'
+import '../assets/css/pageHero.css'
 
 import { ReactComponent as Error404Illustration } from '../assets/svgs/error-404-illustration.svg'
 

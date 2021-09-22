@@ -1,0 +1,69 @@
+@import '../abstarct/variables';
+@import '../abstarct/config';
+
+$border-radius: 8px;
+
+.modal {
+	z-index: 999;
+	min-width: 90vw;
+	margin: 2rem;
+	border-radius: $border-radius;
+	background-color: $background-color;
+	position: relative;
+
+	& > &__header {
+		border-radius: $border-radius $border-radius 0 0;
+		padding: 1rem;
+		@include bg-color($background-color);
+		border-bottom: 1px solid $border-color;
+		font-size: 1.3em;
+	}
+
+	& > &__body {
+		padding: 1rem;
+	}
+
+	animation: show 0.4s;
+
+	&.fullscreen {
+		width: 100vw;
+		min-height: 100vh;
+		margin: 0;
+		box-shadow: none;
+		border: none;
+		border-radius: 0;
+
+		& > .modal__body {
+			height: 100vh;
+			overflow: auto;
+		}
+	}
+}
+
+@keyframes show {
+	from {
+		opacity: 0;
+		transform: translateY(-25%);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@include media-phone {
+	.modal.small {
+		min-width: 32rem;
+		width: 32rem;
+	}
+}
+
+@include media-tablet {
+	.modal {
+		min-width: 60vw;
+
+		& > &__body {
+			padding: 2rem;
+		}
+	}
+}

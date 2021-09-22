@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import FormControl from '../../../layout/forms/FormControl'
+import { FormControl } from '../../../layout/forms/Forms'
+import Input from '../../../layout/forms/inputs/Input'
+import Label from '../../../layout/forms/inputs/Label'
 
 function Credentials({ onChange, email, password, confirm_password }) {
 	return (
@@ -13,10 +15,10 @@ function Credentials({ onChange, email, password, confirm_password }) {
 				</p>
 			</div>
 			<FormControl>
-				<FormControl.Label htmlFor="email" inputValue={email}>
+				<Label htmlFor="email" inputValue={email}>
 					Email
-				</FormControl.Label>
-				<FormControl.Input
+				</Label>
+				<Input
 					required
 					type="text"
 					id="email"
@@ -26,10 +28,10 @@ function Credentials({ onChange, email, password, confirm_password }) {
 				/>
 			</FormControl>
 			<FormControl>
-				<FormControl.Label htmlFor="password" inputValue={password}>
+				<Label htmlFor="password" inputValue={password}>
 					Hasło
-				</FormControl.Label>
-				<FormControl.Input
+				</Label>
+				<Input
 					required
 					type="text"
 					id="password"
@@ -40,13 +42,10 @@ function Credentials({ onChange, email, password, confirm_password }) {
 				/>
 			</FormControl>
 			<FormControl>
-				<FormControl.Label
-					htmlFor="confirm_password"
-					inputValue={confirm_password}
-				>
+				<Label htmlFor="confirm_password" inputValue={confirm_password}>
 					Potwierdź hasło
-				</FormControl.Label>
-				<FormControl.Input
+				</Label>
+				<Input
 					required
 					type="text"
 					id="confirm_password"

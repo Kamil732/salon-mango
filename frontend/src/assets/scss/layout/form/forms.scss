@@ -1,0 +1,46 @@
+@import '../../abstarct/variables';
+@import '../../abstarct/config';
+
+@import './config';
+
+.form-group {
+	@extend %flex-align-center;
+	gap: 1rem;
+	width: 100%;
+	margin: $form-control-vertical-margin 0;
+
+	.#{$prefix},
+	.#{$prefix}-inline {
+		margin: 0;
+	}
+}
+
+.#{$prefix},
+.#{$prefix}-inline {
+	position: relative;
+	margin: $form-control-vertical-margin 0;
+	width: 100%;
+}
+
+fieldset > .#{$prefix},
+fieldset > .#{$prefix}-inline,
+fieldset > .form-group {
+	margin: 1.5rem 0 0 0;
+}
+
+.#{$prefix}-inline {
+	display: inline-flex;
+	justify-content: space-between;
+	gap: 1rem;
+	align-items: center;
+}
+
+@media screen and (max-width: 768px) {
+	.form-group.wrap {
+		display: block;
+
+		& > .form-control {
+			margin-bottom: 0;
+		}
+	}
+}

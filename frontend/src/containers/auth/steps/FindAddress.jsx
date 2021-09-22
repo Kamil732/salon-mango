@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 
 import { FaMapMarkerAlt } from 'react-icons/fa'
 
-import FormControl from '../../../layout/forms/FormControl'
+import { FormControl } from '../../../layout/forms/Forms'
 import { GoogleMap, useJsApiLoader, Marker, Data } from '@react-google-maps/api'
-import Card from '../../../layout/cards/Card'
+import Card from '../../../layout/Card'
 import CircleLoader from '../../../layout/loaders/CircleLoader'
 
 function FindAddress({

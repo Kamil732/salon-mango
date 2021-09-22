@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useId } from 'react-id-generator'
 
-import FormControl from '../../../../layout/forms/FormControl'
+import { FormControl, FormGroup } from '../../../../layout/forms/Forms'
+import DatePicker from '../../../../layout/forms/inputs/DatePicker'
+import Input from '../../../../layout/forms/inputs/Input'
+import Label from '../../../../layout/forms/inputs/Label'
 import Dropdown from '../../../../layout/buttons/dropdowns/Dropdown'
-import FormGroup from '../../../../layout/forms/FormGroup'
 
 export const options = [
 	{
@@ -82,13 +84,13 @@ function RepeatEventInput({
 
 			<FormGroup>
 				<FormControl style={{ width: '8em' }}>
-					<FormControl.Label
+					<Label
 						htmlFor={repeatTimesId}
 						inputValue={value.repeatTimes}
 					>
 						Powtarzaj co
-					</FormControl.Label>
-					<FormControl.Input
+					</Label>
+					<Input
 						required
 						id={repeatTimesId}
 						type="number"
@@ -115,13 +117,13 @@ function RepeatEventInput({
 
 				{repeatType === REPEAPT_TYPES[0] ? (
 					<FormControl style={{ width: '10em' }}>
-						<FormControl.Label
+						<Label
 							htmlFor={repeatEndId}
 							inputValue={value.appearancesNum}
 						>
 							Liczba wystąpień
-						</FormControl.Label>
-						<FormControl.Input
+						</Label>
+						<Input
 							required
 							id={repeatEndId}
 							type="number"
@@ -134,13 +136,13 @@ function RepeatEventInput({
 					</FormControl>
 				) : (
 					<FormControl style={{ width: '10em' }}>
-						<FormControl.Label
+						<Label
 							htmlFor={repeatEndId}
 							inputValue={value.endDate != null}
 						>
 							Data zakończenia
-						</FormControl.Label>
-						<FormControl.DatePicker
+						</Label>
+						<DatePicker
 							required
 							id={repeatEndId}
 							value={value.endDate}

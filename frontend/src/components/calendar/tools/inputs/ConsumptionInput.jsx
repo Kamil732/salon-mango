@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import '../../../../assets/css/table.css'
 
 import { FiTrash2 } from 'react-icons/fi'
 import { useId } from 'react-id-generator'

@@ -1,0 +1,51 @@
+@import '../../abstarct/variables';
+@import '../../abstarct/config';
+
+@import './multi-list';
+
+.dropdown {
+	position: relative;
+
+	&__value {
+		position: absolute;
+		padding: 3px 0;
+		font-size: 1em;
+		font-weight: 500;
+	}
+
+	&__input-container {
+		width: 100%;
+		@extend %flex-align-center;
+		gap: 0.5rem;
+	}
+
+	&-options {
+		@include bg-color($surface-color);
+		position: absolute;
+		border: 1px solid $border-color;
+		padding: 0.3rem 0;
+		border-radius: 6px;
+		z-index: 4;
+		max-height: 15rem;
+		overflow: auto;
+		min-width: 100%;
+		width: auto;
+		@extend %box-shadow;
+
+		&__option {
+			padding: 0.6rem 1rem;
+			cursor: default;
+
+			&.navigated {
+				background-color: $shadow-color;
+			}
+		}
+
+		&__text {
+			text-align: center;
+			width: 100%;
+			color: $grey-color;
+			padding: 0.5rem 0;
+		}
+	}
+}

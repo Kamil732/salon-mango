@@ -1,6 +1,7 @@
 import React, { Component, lazy, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import '../../assets/css/big-calendar.css'
 
 import moment from 'moment'
 import 'moment/locale/pl'
@@ -733,6 +734,12 @@ class Calendar extends Component {
 
 		console.log(view, meetings.length, visibleMeetings.length)
 
+		const loader = (
+			<div className="center-container">
+				<CircleLoader />
+			</div>
+		)
+
 		return (
 			<>
 				{Object.keys(selected).length > 0 && (
@@ -759,13 +766,7 @@ class Calendar extends Component {
 						</Modal.Header>
 						<Modal.Body>
 							<ErrorBoundary>
-								<Suspense
-									fallback={
-										<div className="center-container">
-											<CircleLoader />
-										</div>
-									}
-								>
+								<Suspense fallback={loader}>
 									{selected.selected_type === 'event' ? (
 										<EditMeetingAdminForm
 											saveMeeting={this.saveMeeting}
@@ -917,11 +918,8 @@ class Calendar extends Component {
 						}}
 					/>
 				</div>
-				{loading && (
-					<div className="center-container">
-						<CircleLoader />
-					</div>
-				)}
+
+				{loading && loader}
 			</>
 		)
 	}

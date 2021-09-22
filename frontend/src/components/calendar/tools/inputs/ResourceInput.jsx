@@ -5,7 +5,8 @@ import { useId } from 'react-id-generator'
 
 import { loadEmployees } from '../../../../redux/actions/data'
 
-import FormControl from '../../../../layout/forms/FormControl'
+import Label from '../../../../layout/forms/inputs/Label'
+import { FormControl } from '../../../../layout/forms/Forms'
 import Dropdown from '../../../../layout/buttons/dropdowns/Dropdown'
 
 function ResourceInput({ value, resources, onChange, ...props }) {
@@ -13,9 +14,9 @@ function ResourceInput({ value, resources, onChange, ...props }) {
 
 	return (
 		<FormControl>
-			<FormControl.Label htmlFor={id} inputValue={value?.name}>
+			<Label htmlFor={id} inputValue={value?.name}>
 				Zasób
-			</FormControl.Label>
+			</Label>
 			<Dropdown
 				id={id}
 				value={value}

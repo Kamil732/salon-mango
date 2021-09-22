@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import FormControl from '../../../layout/forms/FormControl'
+import { FormControl } from '../../../layout/forms/Forms'
+import CheckBox from '../../../layout/forms/inputs/CheckBox'
 
 function ChooseCategories({ categories, onChangeCategory }) {
 	return (
@@ -12,14 +13,14 @@ function ChooseCategories({ categories, onChangeCategory }) {
 			<FormControl>
 				{Object.keys(categories).map((key) => (
 					<div key={key}>
-						<FormControl.CheckBoxLabel key={key}>
-							<FormControl.CheckBox
+						<CheckBox.Label key={key}>
+							<CheckBox
 								name={key}
 								checked={categories[key].checked}
 								onChange={onChangeCategory}
 							/>
 							{categories[key].name}
-						</FormControl.CheckBoxLabel>
+						</CheckBox.Label>
 
 						<hr className="seperator lg-space" />
 					</div>

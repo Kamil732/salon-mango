@@ -1,0 +1,2 @@
+.select-menu{overflow:auto;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;height:100%;width:100%}.select-menu{font-size:0.9em}.select-menu>.select-menu__item{padding:0.9rem 1rem;cursor:pointer;width:100%;color:#2a2d32}.select-menu>.select-menu__item:hover,.select-menu>.select-menu__item.active{background-color:rgba(104,123,140,0.12)}
+/*# sourceMappingURL=select-menu.css.map */

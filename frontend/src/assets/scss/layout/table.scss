@@ -1,0 +1,91 @@
+@import '../abstarct/variables';
+@import '../abstarct/config';
+
+table {
+	min-width: 100%;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.table {
+	thead {
+		@include bg-color($primary-color);
+	}
+
+	tr {
+		min-width: 100%;
+		width: auto;
+		border-bottom: 1px solid $border-color;
+		border-top: 1px solid $border-color;
+
+		&:last-child {
+			border-bottom: none;
+		}
+	}
+
+	td,
+	th {
+		text-align: center;
+		padding: 8px;
+	}
+}
+
+.table-border {
+	text-align: center;
+
+	th,
+	tr,
+	td {
+		@include bg-color($primary-color);
+		border: 1px solid $border-color;
+	}
+
+	th {
+		font-weight: 500;
+		padding: 0.2rem;
+	}
+
+	td.delete-item-cell {
+		width: 1px;
+
+		& > .delete-item-cell__btn {
+			font-size: 1.3em;
+			vertical-align: middle;
+			cursor: pointer;
+			transition: color 0.15s ease-in-out;
+
+			&:hover {
+				color: $error-color;
+			}
+		}
+	}
+}
+
+.step-table {
+	tr {
+		border-bottom: 1px solid $border-color;
+
+		&:last-child {
+			border-bottom: none;
+		}
+
+		& > td {
+			padding: 0.5rem 0;
+			height: 100%;
+
+			&:last-of-type {
+				padding-right: 0;
+			}
+		}
+	}
+
+	&.large tr > td {
+		padding: 1rem 0;
+	}
+}
+
+@media (max-width: 768px) {
+	.step-table {
+		word-break: break-all;
+	}
+}

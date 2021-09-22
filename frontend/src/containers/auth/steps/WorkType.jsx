@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import FormControl from '../../../layout/forms/FormControl'
+import { FormControl } from '../../../layout/forms/Forms'
+import CheckBox from '../../../layout/forms/inputs/CheckBox'
 
 function WorkType({ work_stationary, work_remotely, onChange }) {
 	return (
@@ -12,8 +13,8 @@ function WorkType({ work_stationary, work_remotely, onChange }) {
 			</div>
 
 			<FormControl>
-				<FormControl.CheckBoxLabel>
-					<FormControl.CheckBox
+				<CheckBox.Label>
+					<CheckBox
 						name="work_stationary"
 						checked={work_stationary}
 						onChange={onChange}
@@ -28,12 +29,12 @@ function WorkType({ work_stationary, work_remotely, onChange }) {
 							Pracuję stacjonarnie. Prowadzę salon
 						</small>
 					</p>
-				</FormControl.CheckBoxLabel>
+				</CheckBox.Label>
 
 				<hr className="seperator lg-space" />
 
-				<FormControl.CheckBoxLabel>
-					<FormControl.CheckBox
+				<CheckBox.Label>
+					<CheckBox
 						name="work_remotely"
 						checked={work_remotely}
 						onChange={onChange}
@@ -48,7 +49,7 @@ function WorkType({ work_stationary, work_remotely, onChange }) {
 							Oferuję usługi z dojazdem do klienta
 						</small>
 					</p>
-				</FormControl.CheckBoxLabel>
+				</CheckBox.Label>
 
 				<hr className="seperator lg-space" />
 

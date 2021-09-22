@@ -1,0 +1,11 @@
+{
+    "version": 3,
+    "mappings": "AAQA,AALA,aAKa,AAcX,aAAa,CAAI,oBAAO,CAd1B,aAAa,CAoBT,oBAAO,AAAA,OAAO,AAzBJ,CACb,SAAS,CAAE,MAAM,CACjB,SAAS,CAAE,kBAAkB,CAAC,UAAU,CACxC,AAED,AACC,aADY,CACT,oBAAO,AAAC,CACV,MAAM,CAAE,IAAI,CACZ,MAAM,CAAE,KAAK,CACb,QAAQ,CAAE,QAAQ,CAClB,gBAAgB,CAAE,QAAQ,CAC1B,UAAU,CAAE,8BAA8B,CAC1C,OAAO,CAAE,CAAC,CACV,KAAK,CAAE,OAAwB,CAE/B,WAAW,CAAE,MAAM,CACnB,aAAa,CAAE,QAAQ,CACvB,AAZF,AAcC,aAdY,AAcX,aAAa,CAAI,oBAAO,AAAC,CACzB,WAAW,CAAE,GAAG,CAChB,KAAK,CCpBU,OAAO,CDsBtB",
+    "sources": [
+        "../scss/layout/form/label.scss",
+        "../scss/abstarct/_variables.scss",
+        "../scss/layout/form/_config.scss"
+    ],
+    "names": [],
+    "file": "label.css"
+}

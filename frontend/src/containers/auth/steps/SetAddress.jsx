@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import FormControl from '../../../layout/forms/FormControl'
+import { FormControl, FormGroup } from '../../../layout/forms/Forms'
+import Input from '../../../layout/forms/inputs/Input'
+import Label from '../../../layout/forms/inputs/Label'
 import Dropdown from '../../../layout/buttons/dropdowns/Dropdown'
 import useDebounce from '../../../helpers/hooks/debounce'
 import axios from 'axios'
-import FormGroup from '../../../layout/forms/FormGroup'
 
 function SetAddress({
 	country,
@@ -54,10 +55,10 @@ function SetAddress({
 			</div>
 
 			<FormControl>
-				<FormControl.Label htmlFor="address" inputValue={address}>
+				<Label htmlFor="address" inputValue={address}>
 					Ulica i numer domu
-				</FormControl.Label>
-				<FormControl.Input
+				</Label>
+				<Input
 					required
 					type="text"
 					id="address"
@@ -68,13 +69,10 @@ function SetAddress({
 				/>
 			</FormControl>
 			<FormControl>
-				<FormControl.Label
-					htmlFor="premises-number"
-					inputValue={premises_number}
-				>
+				<Label htmlFor="premises-number" inputValue={premises_number}>
 					Numer lokalu (opcjonalne)
-				</FormControl.Label>
-				<FormControl.Input
+				</Label>
+				<Input
 					type="text"
 					id="premises-number"
 					name="premises_number"
@@ -84,13 +82,10 @@ function SetAddress({
 			</FormControl>
 			<FormGroup>
 				<FormControl style={{ width: '12rem' }}>
-					<FormControl.Label
-						htmlFor="postal-code"
-						inputValue={postal_code}
-					>
+					<Label htmlFor="postal-code" inputValue={postal_code}>
 						Kod pocztowy
-					</FormControl.Label>
-					<FormControl.Input
+					</Label>
+					<Input
 						required
 						type="text"
 						id="postal-code"
@@ -102,9 +97,9 @@ function SetAddress({
 					/>
 				</FormControl>
 				<FormControl>
-					<FormControl.Label htmlFor="city" inputValue={city}>
+					<Label htmlFor="city" inputValue={city}>
 						Miejscowość
-					</FormControl.Label>
+					</Label>
 
 					<Dropdown
 						id="city"

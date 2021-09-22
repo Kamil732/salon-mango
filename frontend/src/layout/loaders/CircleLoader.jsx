@@ -1,4 +1,5 @@
 import React from 'react'
+import '../../assets/css/spinner.css'
 
 function CircleLoader(props) {
 	return (

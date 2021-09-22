@@ -1,16 +1,19 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import nextId from 'react-id-generator'
+import '../../../assets/css/table.css'
 
+import moment from 'moment'
 import { IoIosArrowForward } from 'react-icons/io'
 
-import FormControl from '../../../layout/forms/FormControl'
-import FormGroup from '../../../layout/forms/FormGroup'
+import { FormControl } from '../../../layout/forms/Forms'
+import CheckBox from '../../../layout/forms/inputs/CheckBox'
+import Label from '../../../layout/forms/inputs/Label'
+import TimePicker from '../../../layout/forms/inputs/TimePicker'
 import Modal from '../../../layout/Modal'
 import ButtonContainer from '../../../layout/buttons/ButtonContainer'
 import Button from '../../../layout/buttons/Button'
 import ReactTooltip from 'react-tooltip'
-import moment from 'moment'
 
 function SetWorkingHours({
 	onChangeIsWorkingDay,
@@ -40,18 +43,18 @@ function SetWorkingHours({
 			<tr>
 				<td
 					style={{
-						width: '1%',
+						width: '1px',
 						whiteSpace: 'nowrap',
 					}}
 				>
-					<FormControl.CheckBoxLabel>
-						<FormControl.CheckBox
+					<CheckBox.Label>
+						<CheckBox
 							name={name}
 							onChange={onChangeIsWorkingDay}
 							checked={start !== null || end !== null}
 						/>
 						{displayName}
-					</FormControl.CheckBoxLabel>
+					</CheckBox.Label>
 				</td>
 				<td
 					className={`space-between${
@@ -83,13 +86,15 @@ function SetWorkingHours({
 					)}
 				</td>
 				{start !== null && end !== null && (
-					<ReactTooltip
-						id={tooltipId}
-						place="right"
-						effect="solid"
-						type="info"
-						delayShow={150}
-					/>
+					<th style={{ width: '0' }}>
+						<ReactTooltip
+							id={tooltipId}
+							place="right"
+							effect="solid"
+							type="info"
+							delayShow={150}
+						/>
+					</th>
 				)}
 			</tr>
 		)
@@ -128,11 +133,9 @@ function SetWorkingHours({
 							kalendarza.
 						</p>
 						<FormControl.Inline>
-							<FormControl.Label id="open-hours">
-								Godziny otwarcia
-							</FormControl.Label>
+							<Label id="open-hours">Godziny otwarcia</Label>
 
-							<FormControl.TimePicker
+							<TimePicker
 								name={`start_work_${selected.name}`}
 								value={selected.start}
 								endLimit={selected.end}
@@ -146,7 +149,7 @@ function SetWorkingHours({
 								aria-labelledby="open-hours"
 							/>
 
-							<FormControl.TimePicker
+							<TimePicker
 								name={`end_work_${selected.name}`}
 								value={selected.end}
 								onChange={(val) =>
@@ -191,7 +194,7 @@ function SetWorkingHours({
 			</div>
 
 			<FormControl>
-				<table className="step-table">
+				<table className="step-table large">
 					<tbody>
 						{day(
 							start_work_monday,

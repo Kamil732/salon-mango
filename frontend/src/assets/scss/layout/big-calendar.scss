@@ -1,0 +1,161 @@
+@import '../abstarct/variables';
+@import '../abstarct/config';
+
+$current-time-color: green;
+$today-highlight-bg: rgba($secondary-color, 0.3);
+
+$event-bg: rgba($primary-color, 0.8);
+$event-color: set-text-color($event-bg);
+$event-border-radius: 8px;
+$event-padding: 0;
+
+$doNotWork-bg-color: rgba($error-color, 0.8);
+
+$rbc-css-prefix: calendar;
+
+@import '../../../../node_modules/react-big-calendar/lib/sass/styles.scss';
+
+.rbc-calendar {
+	background-color: transparent;
+	margin: 0 auto;
+	max-width: 100%;
+	overflow-x: auto;
+	height: 100%;
+}
+
+.rbc-time-view {
+	overflow-x: auto;
+}
+
+.toolbar-container {
+	@extend %flex-align-center;
+	justify-content: space-between;
+	flex-direction: column;
+	margin-bottom: 1rem;
+	width: 100%;
+	overflow: auto;
+}
+
+.rbc-event {
+	cursor: default;
+	border-radius: 6px;
+	z-index: 2;
+	opacity: 0.8;
+	line-height: 1.4;
+
+	&-label {
+		text-align: center;
+		width: 100% !important;
+		font-weight: 500;
+		padding-right: 0 !important;
+		font-size: 0.8em;
+	}
+
+	&-content {
+		margin-bottom: 1px;
+		padding: 0.3rem 0.2rem;
+		width: 100%;
+		flex: 0 1;
+		font-size: 0.7em;
+
+		white-space: pre-line;
+		background-color: rgba(255, 255, 255, 0.8);
+		color: rgba(#000000, 0.6);
+	}
+
+	&.selectable {
+		cursor: pointer;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+}
+
+.event-tooltip {
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+	max-width: 20rem;
+}
+
+%doNotWorkSlog {
+	@include bg-color($doNotWork-bg-color);
+
+	& > .rbc-event-content {
+		margin: 5px 0 5px;
+	}
+}
+
+.doNotWork {
+	@extend %doNotWorkSlog;
+	opacity: 0.8;
+
+	&.selectable {
+		cursor: pointer;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+}
+
+.rbc-event-allday {
+	@extend %doNotWorkSlog;
+}
+
+.rbc-timeslot-group {
+	min-height: auto;
+}
+
+.rbc-time-slot {
+	cursor: pointer;
+	z-index: 1;
+	opacity: 0.7;
+	min-height: 25px;
+	border-color: #ccc !important;
+
+	&:hover {
+		background-color: rgba(darken(#fff, 20%), 0.6);
+	}
+
+	&.disabled {
+		background-color: rgba($error-color, 0.1);
+		cursor: not-allowed;
+		pointer-events: none !important;
+	}
+}
+
+.rbc-time-gutter {
+	.rbc-time-slot {
+		cursor: default;
+		background-color: inherit;
+
+		&:hover {
+			background-color: inherit;
+		}
+	}
+}
+
+.rbc-time-header-cell {
+	min-height: auto !important;
+}
+
+.rbc-time-header-gutter {
+	font-size: 0.7em;
+	white-space: nowrap;
+	@extend %flex-align-center;
+	justify-content: center;
+}
+
+.rbc-current-time-indicator {
+	height: 2px;
+	box-shadow: 0 0 2px green;
+}
+
+@include media-tablet {
+	.toolbar-container {
+		flex-direction: row;
+		gap: 2rem;
+	}
+}

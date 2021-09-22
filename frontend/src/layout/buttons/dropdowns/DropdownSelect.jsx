@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import '../../../assets/css/dropdown-select.css'
 
 import { BiLeftArrowAlt } from 'react-icons/bi'
 import useClickOutside from '../../../helpers/hooks/clickOutside'

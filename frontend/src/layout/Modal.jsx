@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import PropTypes from 'prop-types'
+import '../assets/css/modal.css'
 
 import useClickOutside from '../helpers/hooks/clickOutside'
 import { CloseButton } from './buttons/Button'

@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { useId } from 'react-id-generator'
+import '../../../../assets/css/table.css'
 
 import { FiTrash2 } from 'react-icons/fi'
 import ReactTooltip from 'react-tooltip'
 import Button from '../../../../layout/buttons/Button'
 
-import FormControl from '../../../../layout/forms/FormControl'
+import { FormControl } from '../../../../layout/forms/Forms'
+import Label from '../../../../layout/forms/inputs/Label'
 import Dropdown from '../../../../layout/buttons/dropdowns/Dropdown'
 
 function ResourcesInput({
@@ -46,9 +48,9 @@ function ResourcesInput({
 		<>
 			{value.length > 0 && (
 				<div className="multi-list__container">
-					<FormControl.Label htmlFor={multiListId} inputValue>
+					<Label htmlFor={multiListId} inputValue>
 						Zasoby
-					</FormControl.Label>
+					</Label>
 					<table className="multi-list" id={multiListId}>
 						{value.map((option) => (
 							<tbody className="multi-list__item" key={option.id}>
@@ -87,9 +89,7 @@ function ResourcesInput({
 					input
 				) : (
 					<FormControl>
-						<FormControl.Label htmlFor={dropdownId}>
-							Zasoby
-						</FormControl.Label>
+						<Label htmlFor={dropdownId}>Zasoby</Label>
 
 						{input}
 					</FormControl>
