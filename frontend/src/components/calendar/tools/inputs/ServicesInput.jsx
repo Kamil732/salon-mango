@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 import { useId } from 'react-id-generator'
 import '../../../../assets/css/table.css'
 
-import { FiMenu, FiTrash2 } from 'react-icons/fi'
-import { GrUserWorker, GrResources } from 'react-icons/gr'
+import { FiMenu, FiTrash2, FiLayers } from 'react-icons/fi'
+import { GrUserWorker } from 'react-icons/gr'
 import { GiOfficeChair } from 'react-icons/gi'
 import { BiTime } from 'react-icons/bi'
 import { BsBoxArrowInDown } from 'react-icons/bs'
@@ -431,7 +431,7 @@ function ServicesInput({
 																}
 																data-for={`resourcesBtnTip-${option.value.id}`}
 															>
-																<GrResources />
+																<FiLayers />
 																{option
 																	.resources
 																	.length >

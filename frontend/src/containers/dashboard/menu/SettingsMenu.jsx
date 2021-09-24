@@ -2,9 +2,13 @@ import React from 'react'
 import '../../../assets/css/select-menu.css'
 
 import { RiBarChartHorizontalFill } from 'react-icons/ri'
-import { FaDatabase, FaCalendarAlt, FaIdCardAlt } from 'react-icons/fa'
+import {
+	FaDatabase,
+	FaCalendarAlt,
+	FaIdCardAlt,
+	FaLayerGroup,
+} from 'react-icons/fa'
 import { ImUsers } from 'react-icons/im'
-import { GrResources } from 'react-icons/gr'
 import { IoChatbubbles, IoCard } from 'react-icons/io5'
 import { NavLink } from 'react-router-dom'
 
@@ -50,7 +54,7 @@ function CalendarMenu() {
 				to={process.env.REACT_APP_PANEL_SETTINGS_RESOURCES_URL}
 				className="select-menu__item icon-container"
 			>
-				<GrResources className="icon-container__icon" />
+				<FaLayerGroup className="icon-container__icon" />
 				Zasoby
 			</NavLink>
 			<NavLink

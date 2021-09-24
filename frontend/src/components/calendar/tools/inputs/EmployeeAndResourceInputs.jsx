@@ -1,7 +1,8 @@
 import React, { useState, Suspense, lazy } from 'react'
 import { connect } from 'react-redux'
 
-import { GrUserWorker, GrResources } from 'react-icons/gr'
+import { GrUserWorker } from 'react-icons/gr'
+import { FiLayers } from 'react-icons/fi'
 
 import ReactTooltip from 'react-tooltip'
 import Modal from '../../../../layout/Modal'
@@ -43,7 +44,7 @@ function EmployeeAndResourceInputs({
 	return (
 		<>
 			{isOpen && (
-				<Modal closeModal={() => setIsOpen(false)} isChild>
+				<Modal closeModal={() => setIsOpen(false)} isChild small>
 					<Modal.Header>Wybór pracownika i zasobów</Modal.Header>
 					<Modal.Body>
 						<ErrorBoundary>
@@ -70,21 +71,23 @@ function EmployeeAndResourceInputs({
 									</FormGroup>
 								)}
 
-								{employee === null ? (
-									resourceInput
-								) : (
-									<FormGroup>
-										<Dropdown.InputContainer>
-											{resourceInput}
-											<Dropdown.ClearBtn
-												clear={() =>
-													updateResource(null)
-												}
-												value={resource}
-											/>
-										</Dropdown.InputContainer>
-									</FormGroup>
-								)}
+								{resourceInput ? (
+									employee === null ? (
+										resourceInput
+									) : (
+										<FormGroup>
+											<Dropdown.InputContainer>
+												{resourceInput}
+												<Dropdown.ClearBtn
+													clear={() =>
+														updateResource(null)
+													}
+													value={resource}
+												/>
+											</Dropdown.InputContainer>
+										</FormGroup>
+									)
+								) : null}
 							</Suspense>
 						</ErrorBoundary>
 					</Modal.Body>
@@ -137,7 +140,7 @@ function EmployeeAndResourceInputs({
 						}
 						data-for="resourcesBtnTip"
 					>
-						<GrResources />
+						<FiLayers />
 						{resource && <div className="badge">1</div>}
 					</Button>
 
