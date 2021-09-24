@@ -10,7 +10,9 @@ const middleware = [thunk]
 const store = createStore(
 	rootReducer,
 	initialState,
-	composeWithDevTools(applyMiddleware(...middleware))
+	!process.env.NODE_ENV || process.env.NODE_ENV === 'development'
+		? composeWithDevTools(applyMiddleware(...middleware))
+		: applyMiddleware(...middleware)
 )
 
 export default store

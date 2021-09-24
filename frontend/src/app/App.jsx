@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import 'react-notifications/lib/notifications.css'
 import '../assets/css/main.css'
+import 'react-notifications/lib/notifications.css'
 
 import { BrowserRouter as Router, Switch } from 'react-router-dom'
 
@@ -13,11 +13,7 @@ import { loadUser } from '../redux/actions/auth'
 
 function App() {
 	useEffect(() => {
-		const getDatas = async () => {
-			await store.dispatch(loadUser())
-		}
-
-		getDatas()
+		store.dispatch(loadUser())
 
 		// return () => window.location.reload()
 	}, [])

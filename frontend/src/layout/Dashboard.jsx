@@ -1,56 +1,39 @@
 import React from 'react'
+import '../assets/css/dashboard.css'
 
-import useClickOutside from '../helpers/hooks/clickOutside'
 import { RiMenuUnfoldFill } from 'react-icons/ri'
+import useClickOutside from '../helpers/hooks/clickOutside'
 
-function Dashboard({ children, ...props }) {
-	return (
-		<div className="dashboard" {...props}>
-			{children}
-		</div>
-	)
+function Dashboard(props) {
+	return <div className="dashboard" {...props} />
 }
 
-function Nav({ children, ...props }) {
-	return (
-		<div className="dashboard__nav" {...props}>
-			{children}
-		</div>
-	)
+function Nav(props) {
+	return <div className="dashboard__nav" {...props} />
 }
 
-function NavHeader({ children, ...props }) {
-	return (
-		<div className="dashboard__nav__header" {...props}>
-			{children}
-		</div>
-	)
+function NavHeader(props) {
+	return <div className="dashboard__nav__header" {...props} />
 }
 
-function NavBody({ children, ...props }) {
-	return (
-		<div className="dashboard__nav__body" {...props}>
-			{children}
-		</div>
-	)
+function NavBody(props) {
+	return <div className="dashboard__nav__body" {...props} />
 }
 
-function NavFooter({ children, ...props }) {
-	return (
-		<div className="dashboard__nav__footer" {...props}>
-			{children}
-		</div>
-	)
+function NavFooter(props) {
+	return <div className="dashboard__nav__footer" {...props} />
 }
 
-function Menu({ children, navContainer, isOpen, toggleMenu, ...props }) {
+function Menu({ navContainer, isOpen, toggleMenu, ...props }) {
 	useClickOutside(navContainer, () => toggleMenu(false))
 
 	return (
-		<div className={`dashboard__menu${isOpen ? ' open' : ''}`} {...props}>
-			{children}
-		</div>
+		<div className={`dashboard__menu${isOpen ? ' open' : ''}`} {...props} />
 	)
+}
+
+function Body(props) {
+	return <div className="dashboard__body" {...props} />
 }
 
 function MenuToggleBtn({ children, isOpen, toggleMenu, ...props }) {
@@ -68,20 +51,12 @@ function MenuToggleBtn({ children, isOpen, toggleMenu, ...props }) {
 	)
 }
 
-function Body({ children, ...props }) {
-	return (
-		<div className="dashboard__body" {...props}>
-			{children}
-		</div>
-	)
-}
-
-Dashboard.Nav = Nav
 Dashboard.NavHeader = NavHeader
 Dashboard.NavBody = NavBody
 Dashboard.NavFooter = NavFooter
-Dashboard.Menu = Menu
+Dashboard.Nav = Nav
 Dashboard.MenuToggleBtn = MenuToggleBtn
+Dashboard.Menu = Menu
 Dashboard.Body = Body
 
 export default Dashboard

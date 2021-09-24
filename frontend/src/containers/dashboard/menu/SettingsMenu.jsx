@@ -1,4 +1,5 @@
 import React from 'react'
+import '../../../assets/css/select-menu.css'
 
 import { RiBarChartHorizontalFill } from 'react-icons/ri'
 import { FaDatabase, FaCalendarAlt, FaIdCardAlt } from 'react-icons/fa'

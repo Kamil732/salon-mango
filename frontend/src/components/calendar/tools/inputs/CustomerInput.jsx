@@ -5,8 +5,8 @@ import { useId } from 'react-id-generator'
 
 import { loadCustomers } from '../../../../redux/actions/data'
 
-import FormGroup from '../../../../layout/forms/FormGroup'
-import FormControl from '../../../../layout/forms/FormControl'
+import { FormControl, FormGroup } from '../../../../layout/forms/Forms'
+import Label from '../../../../layout/forms/inputs/Label'
 import Button from '../../../../layout/buttons/Button'
 import Dropdown from '../../../../layout/buttons/dropdowns/Dropdown'
 
@@ -25,12 +25,9 @@ function CustomerInput({
 		<FormGroup>
 			<Dropdown.InputContainer>
 				<FormControl>
-					<FormControl.Label
-						htmlFor={id}
-						inputValue={value?.full_name}
-					>
+					<Label htmlFor={id} inputValue={value?.full_name}>
 						Klient
-					</FormControl.Label>
+					</Label>
 
 					<Dropdown
 						id={id}

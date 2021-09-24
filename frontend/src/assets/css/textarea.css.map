@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "AAEA,AAAA,uBAAuB,AAAD,CACrB,MAAM,CAAE,IAAI,CACZ",
+    "sources": [
+        "../scss/layout/form/textarea.scss",
+        "../scss/layout/form/_config.scss"
+    ],
+    "names": [],
+    "file": "textarea.css"
+}

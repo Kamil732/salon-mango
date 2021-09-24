@@ -2,6 +2,8 @@ import React, { useEffect, useState, lazy, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import 'react-calendar/dist/Calendar.css'
+import '../../../assets/css/tools-menu.css'
+import '../../../assets/css/calendar-picker.css'
 
 import moment from 'moment'
 import { loadEmployees } from '../../../redux/actions/data'

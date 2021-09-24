@@ -5,7 +5,7 @@ import { GrUserWorker, GrResources } from 'react-icons/gr'
 
 import ReactTooltip from 'react-tooltip'
 import Modal from '../../../../layout/Modal'
-import FormGroup from '../../../../layout/forms/FormGroup'
+import { FormGroup } from '../../../../layout/forms/Forms'
 import Dropdown from '../../../../layout/buttons/dropdowns/Dropdown'
 import Button from '../../../../layout/buttons/Button'
 import ErrorBoundary from '../../../ErrorBoundary'

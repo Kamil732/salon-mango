@@ -2,8 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ReactTooltip from 'react-tooltip'
 import { useId } from 'react-id-generator'
+import '../../../assets/css/dropdown.css'
 
-import FormControl from '../../forms/FormControl'
+import Input from '../../forms/inputs/Input'
 import Button from '../Button'
 
 import { ImCross } from 'react-icons/im'
@@ -296,7 +297,7 @@ class Dropdown extends Component {
 					)}
 
 				<div className="dropdown__input-container">
-					<FormControl.Input
+					<Input
 						required={required && !value}
 						onClick={() => this.setState({ isOpen: true })}
 						onInput={() => this.setState({ isOpen: true })}

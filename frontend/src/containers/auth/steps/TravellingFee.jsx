@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import FormControl from '../../../layout/forms/FormControl'
-import FormGroup from '../../../layout/forms/FormGroup'
+import { FormControl, FormGroup } from '../../../layout/forms/Forms'
+
+import Input from '../../../layout/forms/inputs/Input'
+import Label from '../../../layout/forms/inputs/Label'
+import Textarea from '../../../layout/forms/inputs/Textarea'
 import Dropdown from '../../../layout/buttons/dropdowns/Dropdown'
 
 import {
@@ -54,9 +57,9 @@ function TravellingFee({
 
 			<FormGroup>
 				<FormControl>
-					<FormControl.Label htmlFor="billing-type" inputValue>
+					<Label htmlFor="billing-type" inputValue>
 						Rodzaj ceny
-					</FormControl.Label>
+					</Label>
 					<Dropdown
 						id="billing-type"
 						value={billing_type}
@@ -82,15 +85,15 @@ function TravellingFee({
 					/>
 				</FormControl>
 				<FormControl>
-					<FormControl.Label
+					<Label
 						htmlFor="travel-fee"
 						inputValue={
 							travel_fee === null || travel_fee.toString()
 						}
 					>
 						Opłata za dojazd
-					</FormControl.Label>
-					<FormControl.Input
+					</Label>
+					<Input
 						id="travel-fee"
 						name="travel_fee"
 						type={travel_fee === null ? 'text' : 'number'}
@@ -106,9 +109,9 @@ function TravellingFee({
 				</FormControl>
 			</FormGroup>
 			<FormControl>
-				<FormControl.Label htmlFor="max-travel-distance" inputValue>
+				<Label htmlFor="max-travel-distance" inputValue>
 					Maks. odłegłość dojazdu
-				</FormControl.Label>
+				</Label>
 				<Dropdown
 					id="max-travel-distance"
 					value={max_travel_distance}
@@ -141,13 +144,10 @@ function TravellingFee({
 				</GoogleMap>
 			)}
 			<FormControl>
-				<FormControl.Label
-					htmlFor="travel-fee-rules"
-					inputValue={travel_fee_rules}
-				>
+				<Label htmlFor="travel-fee-rules" inputValue={travel_fee_rules}>
 					Zazady dojazdu i opłat (opcjonalne)
-				</FormControl.Label>
-				<FormControl.Textarea
+				</Label>
+				<Textarea
 					id="travel-fee-rules"
 					name="travel_fee_rules"
 					value={travel_fee_rules}

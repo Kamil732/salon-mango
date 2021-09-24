@@ -10,8 +10,10 @@ import {
 	phoneNumberValidationErrorMessage,
 } from '../../../helpers/validations'
 
-import FormControl from '../../../layout/forms/FormControl'
-import FormGroup from '../../../layout/forms/FormGroup'
+import { FormControl, FormGroup } from '../../../layout/forms/Forms'
+import Input from '../../../layout/forms/inputs/Input'
+import Label from '../../../layout/forms/inputs/Label'
+
 import Button from '../../../layout/buttons/Button'
 import ReactTooltip from 'react-tooltip'
 import { NotificationManager } from 'react-notifications'
@@ -96,13 +98,10 @@ class AddCustomerForm extends Component {
 			<form onSubmit={this.onSubmit}>
 				<FormGroup>
 					<FormControl>
-						<FormControl.Label
-							htmlFor="first_name"
-							inputValue={first_name}
-						>
+						<Label htmlFor="first_name" inputValue={first_name}>
 							Imię
-						</FormControl.Label>
-						<FormControl.Input
+						</Label>
+						<Input
 							required
 							id="first_name"
 							name="first_name"
@@ -129,13 +128,10 @@ class AddCustomerForm extends Component {
 					/>
 
 					<FormControl>
-						<FormControl.Label
-							htmlFor="last_name"
-							inputValue={last_name}
-						>
+						<Label htmlFor="last_name" inputValue={last_name}>
 							Nazwisko
-						</FormControl.Label>
-						<FormControl.Input
+						</Label>
+						<Input
 							required
 							id="last_name"
 							name="last_name"
@@ -146,13 +142,10 @@ class AddCustomerForm extends Component {
 				</FormGroup>
 				<FormGroup>
 					<FormControl>
-						<FormControl.Label
-							htmlFor="phone_number"
-							inputValue={phone_number}
-						>
+						<Label htmlFor="phone_number" inputValue={phone_number}>
 							Numer tel.
-						</FormControl.Label>
-						<FormControl.Input
+						</Label>
+						<Input
 							required
 							id="phone_number"
 							name="phone_number"
@@ -161,13 +154,10 @@ class AddCustomerForm extends Component {
 						/>
 					</FormControl>
 					<FormControl>
-						<FormControl.Label
-							htmlFor="fax_number"
-							inputValue={fax_number}
-						>
+						<Label htmlFor="fax_number" inputValue={fax_number}>
 							Drugi numer tel.
-						</FormControl.Label>
-						<FormControl.Input
+						</Label>
+						<Input
 							id="fax_number"
 							name="fax_number"
 							value={fax_number}

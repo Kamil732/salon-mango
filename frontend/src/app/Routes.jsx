@@ -5,6 +5,7 @@ import { Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 import CircleLoader from '../layout/loaders/CircleLoader'
 import PrivateRoute from '../common/PrivateRoute'
+import ErrorBoundary from '../components/ErrorBoundary'
 
 const NotFound = lazy(() => import('../containers/NotFound'))
 const Login = lazy(() => import('../containers/auth/Login'))
@@ -19,7 +20,7 @@ class Routes extends Component {
 		const { loadingSalon } = this.props
 
 		const loader = (
-			<div className="page-hero">
+			<div className="center-container fullscreen">
 				<CircleLoader />
 			</div>
 		)
@@ -27,21 +28,23 @@ class Routes extends Component {
 		if (loadingSalon) return loader
 
 		return (
-			<Suspense fallback={loader}>
-				<Switch>
-					<Route
-						exact
-						path={process.env.REACT_APP_LOGIN_URL}
-						component={Login}
-					/>
-					<PrivateRoute
-						path={process.env.REACT_APP_PANEL_URL}
-						component={Panel}
-					/>
+			<ErrorBoundary>
+				<Suspense fallback={loader}>
+					<Switch>
+						<Route
+							exact
+							path={process.env.REACT_APP_LOGIN_URL}
+							component={Login}
+						/>
+						<PrivateRoute
+							path={process.env.REACT_APP_PANEL_URL}
+							component={Panel}
+						/>
 
-					<Route path="*" component={NotFound} />
-				</Switch>
-			</Suspense>
+						<Route path="*" component={NotFound} />
+					</Switch>
+				</Suspense>
+			</ErrorBoundary>
 		)
 	}
 }

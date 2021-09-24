@@ -6,8 +6,11 @@ import setMeetingEndDate from '../../../helpers/setMeetingEndDate'
 import { options } from '../tools/inputs/RepeatEventInput'
 
 import CSRFToken from '../../CSRFToken'
-import FormControl from '../../../layout/forms/FormControl'
-import FormGroup from '../../../layout/forms/FormGroup'
+import { FormControl, FormGroup } from '../../../layout/forms/Forms'
+import CheckBox from '../../../layout/forms/inputs/CheckBox'
+import Label from '../../../layout/forms/inputs/Label'
+import Textarea from '../../../layout/forms/inputs/Textarea'
+
 import Button from '../../../layout/buttons/Button'
 import ButtonContainer from '../../../layout/buttons/ButtonContainer'
 import Modal from '../../../layout/Modal'
@@ -192,14 +195,14 @@ class AddMeetingAdminForm extends Component {
 
 							{!this.props.isBlocked && (
 								<>
-									<FormControl.CheckBoxLabel>
+									<CheckBox.Label>
 										Blokada
-										<FormControl.CheckBox
+										<CheckBox
 											name="blocked"
 											checked={blocked}
 											onChange={this.onChange}
 										/>
-									</FormControl.CheckBoxLabel>
+									</CheckBox.Label>
 
 									<div
 										style={{
@@ -272,15 +275,15 @@ class AddMeetingAdminForm extends Component {
 										</FormGroup>
 
 										<FormControl>
-											<FormControl.Label
+											<Label
 												htmlFor="customer_description"
 												inputValue={
 													customer_description
 												}
 											>
 												Wiadomość dla klienta
-											</FormControl.Label>
-											<FormControl.Textarea
+											</Label>
+											<Textarea
 												id="customer_description"
 												name="customer_description"
 												onChange={this.onChange}
@@ -346,15 +349,15 @@ class AddMeetingAdminForm extends Component {
 							)}
 
 							<FormControl>
-								<FormControl.Label
+								<Label
 									htmlFor="private_description"
 									inputValue={private_description}
 								>
 									{blocked
 										? 'Powód'
 										: 'Opis (widoczny dla personelu)'}
-								</FormControl.Label>
-								<FormControl.Textarea
+								</Label>
+								<Textarea
 									id="private_description"
 									name="private_description"
 									onChange={this.onChange}

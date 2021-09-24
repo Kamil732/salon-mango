@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import FormGroup from '../../../layout/forms/FormGroup'
-import FormControl from '../../../layout/forms/FormControl'
+import { FormControl, FormGroup } from '../../../layout/forms/Forms'
+import Input from '../../../layout/forms/inputs/Input'
+import Label from '../../../layout/forms/inputs/Label'
 import Dropdown from '../../../layout/buttons/dropdowns/Dropdown'
 
 const countries = require('../../../helpers/data/countries.json')
@@ -36,10 +37,10 @@ function SalonInformation({
 				<p>Dodaj informacje o sobie i swojej firmie</p>
 			</div>
 			<FormControl>
-				<FormControl.Label htmlFor="salon-name" inputValue={salon_name}>
+				<Label htmlFor="salon-name" inputValue={salon_name}>
 					Nazwa firmy
-				</FormControl.Label>
-				<FormControl.Input
+				</Label>
+				<Input
 					required
 					type="text"
 					id="salon-name"
@@ -50,13 +51,10 @@ function SalonInformation({
 			</FormControl>
 			<FormGroup>
 				<FormControl>
-					<FormControl.Label
-						htmlFor="first-name"
-						inputValue={first_name}
-					>
+					<Label htmlFor="first-name" inputValue={first_name}>
 						Imię
-					</FormControl.Label>
-					<FormControl.Input
+					</Label>
+					<Input
 						required
 						type="text"
 						id="first-name"
@@ -67,13 +65,10 @@ function SalonInformation({
 					/>
 				</FormControl>
 				<FormControl>
-					<FormControl.Label
-						htmlFor="last-name"
-						inputValue={last_name}
-					>
+					<Label htmlFor="last-name" inputValue={last_name}>
 						Nazwisko
-					</FormControl.Label>
-					<FormControl.Input
+					</Label>
+					<Input
 						required
 						type="text"
 						id="last-name"
@@ -86,12 +81,12 @@ function SalonInformation({
 			</FormGroup>
 			<FormGroup>
 				<FormControl style={{ width: '6.5rem' }}>
-					<FormControl.Label
+					<Label
 						htmlFor="phone-prefix"
 						inputValue={Object.keys(phone_prefix).length > 0}
 					>
 						Prefix
-					</FormControl.Label>
+					</Label>
 					<Dropdown
 						id="phone-prefix"
 						required
@@ -106,13 +101,10 @@ function SalonInformation({
 					/>
 				</FormControl>
 				<FormControl>
-					<FormControl.Label
-						htmlFor="phone-number"
-						inputValue={phone_number}
-					>
+					<Label htmlFor="phone-number" inputValue={phone_number}>
 						Numer telefonu
-					</FormControl.Label>
-					<FormControl.Input
+					</Label>
+					<Input
 						required
 						type="text"
 						id="phone-number"
