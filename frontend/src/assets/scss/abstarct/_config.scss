@@ -1,8 +1,8 @@
 @function set-text-color($color) {
 	@if (lightness($color) > 50) {
-		@return #2a2d32;
+		@return $black-color;
 	} @else {
-		@return #fdfbfb;
+		@return $secondary-color;
 	}
 }
 

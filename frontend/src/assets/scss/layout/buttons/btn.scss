@@ -4,7 +4,7 @@
 .btn {
 	@extend %flex-center;
 	outline: none;
-	border: 4px solid black;
+	border: 4px solid $black-color;
 	border-radius: 8px;
 	cursor: pointer;
 	width: fit-content;
@@ -93,7 +93,7 @@
 		&:hover,
 		&:focus {
 			border-color: transparent;
-			border-bottom-color: grey;
+			border-bottom-color: $black-color;
 			background-color: transparent;
 			border-radius: 0;
 		}
