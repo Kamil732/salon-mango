@@ -59,7 +59,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    # "django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -163,23 +163,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-# Development
-CORS_ORIGIN_ALLOW_ALL = True
-
-# Production
-# CORS_ORIGIN_ALLOW_ALL = False
-
-# CORS_ORIGIN_WHITELIST = (
-#     'http://192.168.0.227:3000',
-#     'http://127.0.0.1:3000',
-# )
-
-# CSRF_TRUSTED_ORIGINS = [
-#     'http://192.168.0.227:3000',
-#     'http://127.0.0.1:3000',
-# ]
-
 CORS_ALLOW_CREDENTIALS = True
+# change to https://app.example.com in production settings
+CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000']
+
+# change to app.example.com in production settings
+CSRF_TRUSTED_ORIGINS = ['127.0.0.1:3000']
 
 # RECAPTCHA_SECRET_KEY = env("RECAPTCHA_SECRET_KEY")
 
