@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import nextId from 'react-id-generator'
 import '../../../assets/css/table.css'
 
 import { AiOutlinePlus } from 'react-icons/ai'
 import { GrClose } from 'react-icons/gr'
+import { VscTrash } from 'react-icons/vsc'
 
 import { FormControl } from '../../../layout/forms/Forms'
 import CheckBox from '../../../layout/forms/inputs/CheckBox'
@@ -25,13 +26,20 @@ const initialData = {
 	price: null,
 	price_type: PRICE_TYPES[2],
 	time: 30,
-	isMobile: false,
+	is_mobile: false,
 }
 
-function AddService({ services, setServices }) {
-	const [isOpen, setIsOpen] = useState(false)
-	const [{ name, price, time, price_type, is_mobile }, setServiceData] =
-		useState(initialData)
+function AddService({ services, work_remotely, setServices }) {
+	const [modalData, setModalData] = useState({
+		isOpen: false,
+		editMode: false,
+	})
+	const [serviceData, setServiceData] = useState(initialData)
+
+	const getSelectedService = useCallback(
+		() => services.find((service) => service.id === serviceData.id),
+		[services, serviceData.id]
+	)
 
 	const onChange = (e) =>
 		setServiceData((prevData) => ({
@@ -42,10 +50,21 @@ function AddService({ services, setServices }) {
 					: e.target.value,
 		}))
 
+	const resetForm = () => {
+		setModalData({
+			...modalData,
+			isOpen: false,
+			editMode: false,
+		})
+		setServiceData(initialData)
+	}
+
 	const addService = (e) => {
 		e.preventDefault()
 
+		const { name, price, time, price_type, is_mobile } = serviceData
 		const id = nextId()
+
 		setServices([
 			...services,
 			{
@@ -58,20 +77,42 @@ function AddService({ services, setServices }) {
 			},
 		])
 
-		setIsOpen(false)
+		resetForm()
+	}
+
+	const deleteService = () => {
+		setServices(services.filter((service) => service.id !== serviceData.id))
+		setModalData({
+			...modalData,
+			isOpen: false,
+		})
+	}
+
+	const saveService = () => {
+		setServices(
+			services.map((service) =>
+				service.id === serviceData.id ? serviceData : service
+			)
+		)
+		setModalData({
+			...modalData,
+			isOpen: false,
+		})
+	}
+
+	const onSelectService = (service) => {
+		setServiceData(service)
+		setModalData({
+			...modalData,
+			isOpen: true,
+			editMode: true,
+		})
 	}
 
 	return (
 		<>
-			{isOpen && (
-				<Modal
-					closeModal={() => {
-						setIsOpen(false)
-						setServiceData(initialData)
-					}}
-					small
-					isChild
-				>
+			{modalData.isOpen && (
+				<Modal closeModal={resetForm} small isChild>
 					<Modal.Header>
 						<h3>Dodaj usługę</h3>
 					</Modal.Header>
@@ -82,13 +123,13 @@ function AddService({ services, setServices }) {
 						</p>
 
 						<FormControl>
-							<Label htmlFor="name" inputValue={name}>
+							<Label htmlFor="name" inputValue={serviceData.name}>
 								Nazwa usługi
 							</Label>
 							<Input
 								id="name"
 								name="name"
-								value={name}
+								value={serviceData.name}
 								onChange={onChange}
 							/>
 						</FormControl>
@@ -96,7 +137,7 @@ function AddService({ services, setServices }) {
 						<fieldset>
 							<legend>Czas trwania usługi</legend>
 							<DurationInput
-								value={time}
+								value={serviceData.time}
 								onChange={(time) =>
 									setServiceData((prevData) => ({
 										...prevData,
@@ -107,7 +148,10 @@ function AddService({ services, setServices }) {
 						</fieldset>
 
 						<FormControl>
-							<Label htmlFor="price" inputValue={price}>
+							<Label
+								htmlFor="price"
+								inputValue={serviceData.price}
+							>
 								Cena
 							</Label>
 							<Input
@@ -116,7 +160,7 @@ function AddService({ services, setServices }) {
 								step="0.01"
 								id="price"
 								name="price"
-								value={price}
+								value={serviceData.price}
 								onChange={onChange}
 							/>
 						</FormControl>
@@ -131,7 +175,7 @@ function AddService({ services, setServices }) {
 								getOptionLabel={(opt) => opt.label}
 								getOptionValue={(opt) => opt.value}
 								getValuesValue={(opt) => opt.value}
-								value={price_type}
+								value={serviceData.price_type}
 								onChange={(price_type) => {
 									setServiceData((prevData) => ({
 										...prevData,
@@ -141,32 +185,54 @@ function AddService({ services, setServices }) {
 							/>
 						</FormControl>
 
-						<FormControl>
-							<CheckBox.Label>
-								<CheckBox
-									name="is_mobile"
-									checked={is_mobile}
-									onChange={onChange}
-								/>
-								Usługa mobilna
-							</CheckBox.Label>
-						</FormControl>
+						{work_remotely && (
+							<FormControl>
+								<CheckBox.Label>
+									<CheckBox
+										name="is_mobile"
+										checked={serviceData.is_mobile}
+										onChange={onChange}
+									/>
+									Usługa mobilna
+								</CheckBox.Label>
+							</FormControl>
+						)}
 
-						<Button
-							type="submit"
-							primary
-							style={{ marginLeft: 'auto' }}
-							onClick={addService}
-						>
-							Dodaj
-						</Button>
+						{modalData.editMode ? (
+							<div className="space-between">
+								<Button
+									className="btn-picker"
+									onClick={deleteService}
+								>
+									<VscTrash size="30" color="#eb0043" />
+								</Button>
+								<Button
+									primary
+									onClick={saveService}
+									disabled={
+										JSON.stringify(serviceData) ===
+										JSON.stringify(getSelectedService())
+									}
+								>
+									Zapisz
+								</Button>
+							</div>
+						) : (
+							<Button
+								primary
+								style={{ marginLeft: 'auto' }}
+								onClick={addService}
+							>
+								Dodaj
+							</Button>
+						)}
 					</Modal.Body>
 				</Modal>
 			)}
 
-			<div className="title">
+			<div className="title-container">
 				<h2>Dodaj pierwsze usługi</h2>
-				<p>
+				<p className="description">
 					Dodaj co najmniej jedną usługę z Twojej oferty. Później
 					możesz dodać więcej usług, przypisać je do kategorii i
 					edytować szczegóły.
@@ -207,32 +273,41 @@ function AddService({ services, setServices }) {
 							</td>
 							<td>{service.time}min</td>
 							<td>
-								<div
-									className="inline-wrap"
-									style={{ justifyContent: 'flex-end' }}
+								<h4>{service.price} zł</h4>
+							</td>
+							<td style={{ width: '1px' }}>
+								<Button
+									rounded
+									onClick={() => onSelectService(service)}
 								>
-									<h4>{service.price} zł</h4>
 									<IoIosArrowForward size="20" />
-								</div>
+								</Button>
 							</td>
 						</tr>
 					))}
+					<tr>
+						<td colSpan="3">
+							<Button
+								small
+								rounded
+								className="icon-container"
+								onClick={() =>
+									setModalData({
+										...modalData,
+										isOpen: true,
+									})
+								}
+							>
+								<AiOutlinePlus
+									size="20"
+									className="icon-container__icon"
+								/>
+								Dodaj usługę
+							</Button>
+						</td>
+					</tr>
 				</tbody>
 			</table>
-
-			<hr />
-			<div style={{ margin: '1rem' }}>
-				<Button
-					small
-					secondary
-					className="icon-container"
-					onClick={() => setIsOpen(true)}
-				>
-					<AiOutlinePlus size="20" className="icon-container__icon" />
-					Dodaj usługę
-				</Button>
-			</div>
-			<hr />
 		</>
 	)
 }
@@ -248,6 +323,7 @@ AddService.prototype.propTypes = {
 			is_mobile: PropTypes.bool.isRequired,
 		}).isRequired
 	).isRequired,
+	work_remotely: PropTypes.bool,
 	setServices: PropTypes.func.isRequired,
 }
 
