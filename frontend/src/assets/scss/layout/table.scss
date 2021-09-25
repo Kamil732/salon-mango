@@ -65,16 +65,16 @@ table {
 	tr {
 		border-bottom: 1px solid $border-color;
 
-		&:last-child {
-			border-bottom: none;
-		}
-
 		& > td {
 			padding: 0.5rem 0;
-			height: 100%;
 
 			&:last-of-type {
 				padding-right: 0;
+			}
+
+			&.week-day {
+				white-space: nowrap;
+				width: 40%;
 			}
 		}
 	}

@@ -41,12 +41,7 @@ function SetWorkingHours({
 
 		return (
 			<tr>
-				<td
-					style={{
-						width: '1px',
-						whiteSpace: 'nowrap',
-					}}
-				>
+				<td className="week-day">
 					<CheckBox.Label>
 						<CheckBox
 							name={name}
@@ -57,9 +52,9 @@ function SetWorkingHours({
 					</CheckBox.Label>
 				</td>
 				<td
-					className={`space-between${
+					className={
 						start !== null && end !== null ? ' clickable' : ''
-					}`}
+					}
 					onClick={() => {
 						if (start === null || end === null) return
 						setSelected({
@@ -72,18 +67,20 @@ function SetWorkingHours({
 					data-tip="Kliknij by edytować"
 					data-for={tooltipId}
 				>
-					<span>
-						{start === null || end === null ? (
-							'Zamknięte'
-						) : (
-							<>
-								{start} - {end}
-							</>
+					<div className="space-between">
+						<span>
+							{start === null || end === null ? (
+								'Zamknięte'
+							) : (
+								<>
+									{start} - {end}
+								</>
+							)}
+						</span>
+						{start !== null && end !== null && (
+							<IoIosArrowForward size="20" />
 						)}
-					</span>
-					{start !== null && end !== null && (
-						<IoIosArrowForward size="20" />
-					)}
+					</div>
 				</td>
 				{start !== null && end !== null && (
 					<th style={{ width: '0' }}>
@@ -188,9 +185,11 @@ function SetWorkingHours({
 				</Modal>
 			)}
 
-			<div className="title">
+			<div className="title-container">
 				<h2>Godziny otwarcia</h2>
-				<p>W jakich godzinach przyjmujesz klientów?</p>
+				<p className="description">
+					W jakich godzinach przyjmujesz klientów?
+				</p>
 			</div>
 
 			<FormControl>
