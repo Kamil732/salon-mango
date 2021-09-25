@@ -42,7 +42,7 @@ function Login({ isAuthenticated, login }) {
 		setLoading(false)
 	}
 
-	if (isAuthenticated)
+	if (isAuthenticated && !loading)
 		return <Redirect to={process.env.REACT_APP_PANEL_URL} />
 
 	return (

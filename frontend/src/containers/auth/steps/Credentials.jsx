@@ -8,9 +8,9 @@ import Label from '../../../layout/forms/inputs/Label'
 function Credentials({ onChange, email, password, confirm_password }) {
 	return (
 		<>
-			<div className="title">
+			<div className="title-container">
 				<h1>Ustaw logowanie</h1>
-				<p>
+				<p className="description">
 					Ustaw email i hasło, za pomocą którego będziesz się logować
 				</p>
 			</div>

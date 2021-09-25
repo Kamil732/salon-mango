@@ -7,7 +7,7 @@ import CheckBox from '../../../layout/forms/inputs/CheckBox'
 function ChooseCategories({ categories, onChangeCategory }) {
 	return (
 		<>
-			<div className="title">
+			<div className="title-container">
 				<h1>Wybierz kategorię działalności</h1>
 			</div>
 			<FormControl>

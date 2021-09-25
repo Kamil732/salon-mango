@@ -32,9 +32,11 @@ function SalonInformation({
 
 	return (
 		<>
-			<div className="title">
+			<div className="title-container">
 				<h1>O Tobie</h1>
-				<p>Dodaj informacje o sobie i swojej firmie</p>
+				<p className="description">
+					Dodaj informacje o sobie i swojej firmie
+				</p>
 			</div>
 			<FormControl>
 				<Label htmlFor="salon-name" inputValue={salon_name}>

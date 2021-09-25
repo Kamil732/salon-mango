@@ -7,9 +7,9 @@ import CheckBox from '../../../layout/forms/inputs/CheckBox'
 function AcceptTerms({ onChange, accept_terms }) {
 	return (
 		<>
-			<div className="title">
+			<div className="title-container">
 				<h2>Ochrona Twoich danych</h2>
-				<p>
+				<p className="description">
 					Dzięki rozporządzeniu o ochronie danych osobowych (RODO), to
 					Ty zarządzasz swoimi danymi. Powiedz nam, w jakim zakresie
 					możemy przetwarzać Twoje dane.

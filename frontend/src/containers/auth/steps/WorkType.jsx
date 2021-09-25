@@ -7,9 +7,11 @@ import CheckBox from '../../../layout/forms/inputs/CheckBox'
 function WorkType({ work_stationary, work_remotely, onChange }) {
 	return (
 		<>
-			<div className="title">
+			<div className="title-container">
 				<h2>W jakim trybie pracujesz</h2>
-				<p>Pracujesz stacjonarnie czy dajesz usługi mobilne?</p>
+				<p className="description">
+					Pracujesz stacjonarnie czy dajesz usługi mobilne?
+				</p>
 			</div>
 
 			<FormControl>

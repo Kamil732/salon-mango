@@ -27,9 +27,9 @@ function FindAddress({
 
 	return (
 		<>
-			<div className="title">
+			<div className="title-container">
 				<h2>Lokalizacja na mapie</h2>
-				<p>
+				<p className="description">
 					Kliknij dokładnie w miejsce gdzie znajduję się twój lokal,
 					tak aby pojawiła się nad nim pinezka
 				</p>

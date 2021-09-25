@@ -50,9 +50,9 @@ function TravellingFee({
 
 	return (
 		<>
-			<div className="title">
+			<div className="title-container">
 				<h2>Ile wynosi Twoja opłata za dojazd?</h2>
-				<p>Podaj minimalną opłatę za dojazd</p>
+				<p className="description">Podaj minimalną opłatę za dojazd</p>
 			</div>
 
 			<FormGroup>

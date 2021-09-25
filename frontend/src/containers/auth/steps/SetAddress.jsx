@@ -49,9 +49,9 @@ function SetAddress({
 
 	return (
 		<>
-			<div className="title">
+			<div className="title-container">
 				<h2>Twój adres</h2>
-				<p>Gdzie można cię znaleźć?</p>
+				<p className="description">Gdzie można cię znaleźć?</p>
 			</div>
 
 			<FormControl>
