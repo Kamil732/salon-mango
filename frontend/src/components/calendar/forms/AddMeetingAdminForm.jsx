@@ -296,32 +296,34 @@ class AddMeetingAdminForm extends Component {
 
 							{blocked && (
 								<>
-									<Dropdown.InputContainer>
-										<EmployeeInput
-											required={resource == null}
-											value={employee}
-											onChange={(option) =>
-												this.setState({
-													employee: option,
-												})
-											}
-											extraOptions={[
-												{
-													full_name: 'Wszystkich',
-													id: null,
-												},
-											]}
-											disabled={resource != null}
-										/>
-										<Dropdown.ClearBtn
-											clear={() =>
-												this.setState({
-													employee: null,
-												})
-											}
-											value={employee}
-										/>
-									</Dropdown.InputContainer>
+									<FormGroup>
+										<Dropdown.InputContainer>
+											<EmployeeInput
+												required={resource == null}
+												value={employee}
+												onChange={(option) =>
+													this.setState({
+														employee: option,
+													})
+												}
+												extraOptions={[
+													{
+														full_name: 'Wszystkich',
+														id: null,
+													},
+												]}
+												disabled={resource != null}
+											/>
+											<Dropdown.ClearBtn
+												clear={() =>
+													this.setState({
+														employee: null,
+													})
+												}
+												value={employee}
+											/>
+										</Dropdown.InputContainer>
+									</FormGroup>
 
 									<FormGroup>
 										<Dropdown.InputContainer>
