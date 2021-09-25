@@ -24,61 +24,150 @@ const AddServices = lazy(() => import('./steps/AddServices'))
 
 const BILLING_TYPES = require('../../helpers/data/billing_types.json')
 const MAX_TRAVEL_DISTANCES = require('../../helpers/data/max_travel_distances.json')
-const STEPS_AMOUNT = 11
+const STEPS = [
+	(props) => (
+		<SalonInformation
+			onChange={props.onChange}
+			setData={(data) =>
+				props.setData((prevData) => ({
+					...prevData,
+					...data,
+				}))
+			}
+			salon_name={props.salon_name}
+			first_name={props.first_name}
+			last_name={props.last_name}
+			phone_prefix={props.phone_prefix}
+			phone_number={props.phone_number}
+			recomendation_code={props.recomendation_code}
+		/>
+	),
+	(props) => (
+		<Credentials
+			onChange={props.onChange}
+			email={props.email}
+			password={props.password}
+			confirm_password={props.confirm_password}
+		/>
+	),
+	(props) => (
+		<AcceptTerms
+			onChange={props.onChange}
+			accept_terms={props.accept_terms}
+		/>
+	),
+	(props) => (
+		<ChooseCategories
+			onChangeCategory={props.onChangeCategory}
+			categories={props.categories}
+		/>
+	),
+	(props) => (
+		<WorkType
+			work_stationary={props.work_stationary}
+			work_remotely={props.work_remotely}
+			onChange={props.onChange}
+		/>
+	),
+	(props) => (
+		<SetAddress
+			country={props.country}
+			address={props.address}
+			premises_number={props.premises_number}
+			city={props.city}
+			postal_code={props.postal_code}
+			share_premises={props.share_premises}
+			common_premises_name={props.common_premises_name}
+			common_premises_number={props.common_premises_number}
+			onChange={props.onChange}
+			setData={(data) =>
+				props.setData((prevData) => ({
+					...prevData,
+					...data,
+				}))
+			}
+		/>
+	),
+	(props) => (
+		<FindAddress
+			city={props.city.placeName}
+			address={props.address}
+			postal_code={props.postal_code}
+			latitude={props.latitude}
+			longitude={props.longitude}
+			setData={(data) =>
+				props.setData((prevData) => ({
+					...prevData,
+					...data,
+				}))
+			}
+		/>
+	),
+	(props) => (
+		<TravellingFee
+			onChange={props.onChange}
+			setData={(data) =>
+				props.setData((prevData) => ({
+					...prevData,
+					...data,
+				}))
+			}
+			billing_type={props.billing_type}
+			travel_fee={props.travel_fee}
+			max_travel_distance={props.max_travel_distance}
+			travel_fee_rules={props.travel_fee_rules}
+			latitude={props.latitude}
+			longitude={props.longitude}
+		/>
+	),
+	(props) => (
+		<SetWorkingHours
+			onChangeIsWorkingDay={props.onChangeIsWorkingDay}
+			setData={(data) =>
+				props.setData((prevData) => ({
+					...prevData,
+					...data,
+				}))
+			}
+			start_work_monday={props.start_work_monday}
+			end_work_monday={props.end_work_monday}
+			start_work_tuesday={props.start_work_tuesday}
+			end_work_tuesday={props.end_work_tuesday}
+			start_work_wednesday={props.start_work_wednesday}
+			end_work_wednesday={props.end_work_wednesday}
+			start_work_thursday={props.start_work_thursday}
+			end_work_thursday={props.end_work_thursday}
+			start_work_friday={props.start_work_friday}
+			end_work_friday={props.end_work_friday}
+			start_work_saturday={props.start_work_saturday}
+			end_work_saturday={props.end_work_saturday}
+			start_work_sunday={props.start_work_sunday}
+			end_work_sunday={props.end_work_sunday}
+		/>
+	),
+	(props) => (
+		<AddServices
+			setServices={(data) =>
+				props.setData((prevData) => ({
+					...prevData,
+					services: data,
+				}))
+			}
+			services={props.services}
+			work_remotely={props.work_remotely}
+		/>
+	),
+
+	// {
+	// 	component: (props) => (
+
+	// 	),
+	// },
+]
 
 function RegisterForm({ closeModal, register }) {
 	const [loading, setLoading] = useState(false)
-	const [
-		{
-			email,
-			password,
-			confirm_password,
-			salon_name,
-			first_name,
-			last_name,
-			phone_prefix,
-			phone_number,
-			recomendation_code,
-			accept_terms,
-			categories,
-			end_work_sunday,
-			start_work_sunday,
-			end_work_saturday,
-			start_work_saturday,
-			end_work_friday,
-			start_work_friday,
-			end_work_thursday,
-			start_work_thursday,
-			end_work_wednesday,
-			start_work_wednesday,
-			end_work_tuesday,
-			start_work_tuesday,
-			end_work_monday,
-			start_work_monday,
-
-			work_stationary,
-			work_remotely,
-
-			country,
-			address,
-			premises_number,
-			city,
-			postal_code,
-			share_premises,
-			common_premises_name,
-			common_premises_number,
-			latitude,
-			longitude,
-
-			billing_type,
-			travel_fee,
-			max_travel_distance,
-			travel_fee_rules,
-
-			services,
-		},
-		setData,
-	] = useState({
+	const [data, setData] = useState({
 		email: '',
 		password: '',
 		confirm_password: '',
@@ -211,7 +300,7 @@ function RegisterForm({ closeModal, register }) {
 
 		services: [],
 	})
-	const [step, setStep] = useState(1)
+	const [step, setStep] = useState(0)
 
 	useEffect(
 		() =>
@@ -219,14 +308,18 @@ function RegisterForm({ closeModal, register }) {
 				...prevData,
 				city: null,
 			})),
-		[postal_code]
+		[data.postal_code]
 	)
 
-	const nextStep = () => {
-		let num = 1
+	const changeStep = (previous = false) => {
+		const step = previous ? -1 : 1
 
-		if (step === 7 && !work_remotely) num = 2
-		setStep((prevStep) => prevStep + num)
+		setStep((prevStep) => {
+			if (prevStep + step < 0) closeModal()
+			if (prevStep + step > STEPS.length - 1) return 0
+
+			return prevStep + step
+		})
 	}
 
 	const onChange = (e) => {
@@ -274,174 +367,38 @@ function RegisterForm({ closeModal, register }) {
 
 	return (
 		<Card formCard className="center-item">
-			<Card.Title>
-				<Button
-					rounded
-					onClick={() =>
-						step > 1
-							? setStep((prevStep) => prevStep - 1)
-							: closeModal()
-					}
-				>
+			<Card.Header>
+				<Button rounded onClick={() => changeStep(true)}>
 					<HiOutlineArrowLeft size="25" />
 				</Button>
-				<Button rounded onClick={() => setStep(10)}>
-					Go to 10
+				<Button rounded onClick={() => setStep(9)}>
+					Go to 9
 				</Button>
-			</Card.Title>
+			</Card.Header>
 			<Card.Body>
 				<form onSubmit={onSubmit}>
 					<CSRFToken />
 
 					<ErrorBoundary>
 						<Suspense fallback={loader}>
-							{step === 1 ? (
-								<SalonInformation
-									onChange={onChange}
-									setData={(data) =>
-										setData((prevData) => ({
-											...prevData,
-											...data,
-										}))
-									}
-									salon_name={salon_name}
-									first_name={first_name}
-									last_name={last_name}
-									phone_prefix={phone_prefix}
-									phone_number={phone_number}
-									recomendation_code={recomendation_code}
-								/>
-							) : step === 2 ? (
-								<Credentials
-									onChange={onChange}
-									email={email}
-									password={password}
-									confirm_password={confirm_password}
-								/>
-							) : step === 3 ? (
-								<AcceptTerms
-									onChange={onChange}
-									accept_terms={accept_terms}
-								/>
-							) : step === 4 ? (
-								<ChooseCategories
-									onChangeCategory={onChangeCategory}
-									categories={categories}
-								/>
-							) : step === 5 ? (
-								<WorkType
-									work_stationary={work_stationary}
-									work_remotely={work_remotely}
-									onChange={onChange}
-								/>
-							) : step === 6 ? (
-								<SetAddress
-									country={country}
-									address={address}
-									premises_number={premises_number}
-									city={city}
-									postal_code={postal_code}
-									share_premises={share_premises}
-									common_premises_name={common_premises_name}
-									common_premises_number={
-										common_premises_number
-									}
-									onChange={onChange}
-									setData={(data) =>
-										setData((prevData) => ({
-											...prevData,
-											...data,
-										}))
-									}
-								/>
-							) : step === 7 ? (
-								<FindAddress
-									city={city.placeName}
-									address={address}
-									postal_code={postal_code}
-									latitude={latitude}
-									longitude={longitude}
-									setData={(data) =>
-										setData((prevData) => ({
-											...prevData,
-											...data,
-										}))
-									}
-								/>
-							) : step === 8 ? (
-								<TravellingFee
-									onChange={onChange}
-									setData={(data) =>
-										setData((prevData) => ({
-											...prevData,
-											...data,
-										}))
-									}
-									billing_type={billing_type}
-									travel_fee={travel_fee}
-									max_travel_distance={max_travel_distance}
-									travel_fee_rules={travel_fee_rules}
-									latitude={latitude}
-									longitude={longitude}
-								/>
-							) : step === 9 ? (
-								<SetWorkingHours
-									onChangeIsWorkingDay={onChangeIsWorkingDay}
-									setData={(data) =>
-										setData((prevData) => ({
-											...prevData,
-											...data,
-										}))
-									}
-									start_work_monday={start_work_monday}
-									end_work_monday={end_work_monday}
-									start_work_tuesday={start_work_tuesday}
-									end_work_tuesday={end_work_tuesday}
-									start_work_wednesday={start_work_wednesday}
-									end_work_wednesday={end_work_wednesday}
-									start_work_thursday={start_work_thursday}
-									end_work_thursday={end_work_thursday}
-									start_work_friday={start_work_friday}
-									end_work_friday={end_work_friday}
-									start_work_saturday={start_work_saturday}
-									end_work_saturday={end_work_saturday}
-									start_work_sunday={start_work_sunday}
-									end_work_sunday={end_work_sunday}
-								/>
-							) : step === 10 ? (
-								<AddServices
-									setServices={(data) =>
-										setData((prevData) => ({
-											...prevData,
-											services: data,
-										}))
-									}
-									services={services}
-								/>
-							) : null}
-
-							{step === STEPS_AMOUNT ? (
-								<Button
-									success
-									loading={loading}
-									loadingText="Zapisywanie danych"
-									type="submit"
-									style={{ width: '100%' }}
-								>
-									Zakończ
-								</Button>
-							) : (
-								<Button
-									primary
-									onClick={nextStep}
-									type="button"
-									style={{ width: '100%' }}
-								>
-									Dalej
-								</Button>
-							)}
+							{STEPS[step]({
+								...data,
+								setData,
+								onChange,
+								onChangeCategory,
+								onChangeIsWorkingDay,
+							})}
 						</Suspense>
 					</ErrorBoundary>
+
+					<Button
+						primary
+						onClick={() => changeStep()}
+						type="button"
+						className="form-card__btn"
+					>
+						Dalej
+					</Button>
 				</form>
 			</Card.Body>
 		</Card>
