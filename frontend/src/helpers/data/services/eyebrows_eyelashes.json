@@ -1,0 +1,192 @@
+[
+    {
+        "name": "Henna brwi",
+        "price": 30.00,
+        "price_type": {
+            "label": "Stała",
+            "value": 2
+        },
+        "time": 30,
+        "is_mobile": false
+    },
+    {
+        "name": "Regulacja brwi",
+        "price": 20.00,
+        "price_type": {
+            "label": "Stała",
+            "value": 2
+        },
+        "time": 25,
+        "is_mobile": false
+    },
+    {
+        "name": "Przedłużenie",
+        "price": 160.00,
+        "price_type": {
+            "label": "Stała",
+            "value": 2
+        },
+        "time": 120,
+        "is_mobile": false
+    },
+    {
+        "name": "Henna rzęs",
+        "price": 25.00,
+        "price_type": {
+            "label": "Stała",
+            "value": 2
+        },
+        "time": 30,
+        "is_mobile": false
+    },
+    {
+        "name": "Rzęsy 2 1",
+        "price": 120.00,
+        "price_type": {
+            "label": "Stała",
+            "value": 2
+        },
+        "time": 90,
+        "is_mobile": false
+    },
+    {
+        "name": "Rzęsy",
+        "price": 120.00,
+        "price_type": {
+            "label": "Stała",
+            "value": 2
+        },
+        "time": 90,
+        "is_mobile": false
+    },
+    {
+        "name": "Makijaż permamentny brwi",
+        "price": 700.00,
+        "price_type": {
+            "label": "Stała",
+            "value": 2
+        },
+        "time": 150,
+        "is_mobile": false
+    },
+    {
+        "name": "Rzęsy 3d",
+        "price": 160.00,
+        "price_type": {
+            "label": "Stała",
+            "value": 2
+        },
+        "time": 120,
+        "is_mobile": false
+    },
+    {
+        "name": "Sztuczne rzęsy",
+        "price": 110.00,
+        "price_type": {
+            "label": "Stała",
+            "value": 2
+        },
+        "time": 45,
+        "is_mobile": false
+    },
+    {
+        "name": "Trwała na rzęsy",
+        "price": 120.00,
+        "price_type": {
+            "label": "Stała",
+            "value": 2
+        },
+        "time": 60,
+        "is_mobile": false
+    },
+    {
+        "name": "Zagęszczanie rzęs",
+        "price": 150.00,
+        "price_type": {
+            "label": "Stała",
+            "value": 2
+        },
+        "time": 120,
+        "is_mobile": false
+    },
+    {
+        "name": "Rzesy 1 1",
+        "price": 120.00,
+        "price_type": {
+            "label": "Stała",
+            "value": 2
+        },
+        "time": 90,
+        "is_mobile": false
+    },
+    {
+        "name": "Rzesy 8d",
+        "price": 170.00,
+        "price_type": {
+            "label": "Stała",
+            "value": 2
+        },
+        "time": 120,
+        "is_mobile": false
+    },
+    {
+        "name": "Rzęsy 2d",
+        "price": 130.00,
+        "price_type": {
+            "label": "Stała",
+            "value": 2
+        },
+        "time": 120,
+        "is_mobile": false
+    },
+    {
+        "name": "Stylizacja brwi",
+        "price": 70.00,
+        "price_type": {
+            "label": "Stała",
+            "value": 2
+        },
+        "time": 50,
+        "is_mobile": false
+    },
+    {
+        "name": "Brwi metoda piórkowa",
+        "price": 150.00,
+        "price_type": {
+            "label": "Stała",
+            "value": 2
+        },
+        "time": 60,
+        "is_mobile": false
+    },
+    {
+        "name": "Depilacja brwi",
+        "price": 20.00,
+        "price_type": {
+            "label": "Stała",
+            "value": 2
+        },
+        "time": 20,
+        "is_mobile": false
+    },
+    {
+        "name": "Przedłużanie brwi",
+        "price": 100.00,
+        "price_type": {
+            "label": "Stała",
+            "value": 2
+        },
+        "time": 60,
+        "is_mobile": false
+    },
+    {
+        "name": "Microblading",
+        "price": 500.00,
+        "price_type": {
+            "label": "Stała",
+            "value": 2
+        },
+        "time": 105,
+        "is_mobile": false
+    }
+]

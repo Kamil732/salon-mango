@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import nextId from 'react-id-generator'
 import '../../../assets/css/table.css'
@@ -6,18 +6,17 @@ import '../../../assets/css/table.css'
 import { AiOutlinePlus } from 'react-icons/ai'
 import { GrClose } from 'react-icons/gr'
 import { VscTrash } from 'react-icons/vsc'
+import { IoIosArrowForward } from 'react-icons/io'
 
+import ReactTooltip from 'react-tooltip'
 import { FormControl } from '../../../layout/forms/Forms'
 import CheckBox from '../../../layout/forms/inputs/CheckBox'
 import DurationInput from '../../../layout/forms/inputs/DurationPicker'
 import Input from '../../../layout/forms/inputs/Input'
 import Label from '../../../layout/forms/inputs/Label'
-
 import Button from '../../../layout/buttons/Button'
 import Modal from '../../../layout/Modal'
 import Dropdown from '../../../layout/buttons/dropdowns/Dropdown'
-import ReactTooltip from 'react-tooltip'
-import { IoIosArrowForward } from 'react-icons/io'
 
 const PRICE_TYPES = require('../../../helpers/data/price_types.json')
 
@@ -29,17 +28,54 @@ const initialData = {
 	is_mobile: false,
 }
 
-function AddService({ services, work_remotely, setServices }) {
+var HINTS = []
+
+function AddService({
+	services,
+	work_remotely,
+	categories,
+	componentData,
+	changeComponentData,
+	setData,
+}) {
 	const [modalData, setModalData] = useState({
 		isOpen: false,
 		editMode: false,
 	})
 	const [serviceData, setServiceData] = useState(initialData)
+	const [serviceHints, setServiceHints] = useState([])
 
 	const getSelectedService = useCallback(
 		() => services.find((service) => service.id === serviceData.id),
 		[services, serviceData.id]
 	)
+
+	console.log(componentData)
+	useEffect(() => {
+		if (!componentData.loaded) {
+			for (let i = 0; i < categories.length; i++) {
+				import(
+					`../../../helpers/data/services/${categories[i]}.json`
+				).then((service_hints) => {
+					setData((prevData) => ({
+						...prevData,
+						services: [
+							...prevData.services,
+							{ id: nextId(), ...service_hints[0] },
+							{ id: nextId(), ...service_hints[1] },
+							{ id: nextId(), ...service_hints[2] },
+						],
+					}))
+
+					// HINTS = [...new Set([...HINTS, service_hints])]
+				})
+			}
+
+			changeComponentData({
+				loaded: true,
+			})
+		}
+	}, [])
 
 	const onChange = (e) =>
 		setServiceData((prevData) => ({
@@ -61,43 +97,31 @@ function AddService({ services, work_remotely, setServices }) {
 
 	const addService = (e) => {
 		e.preventDefault()
-
-		const { name, price, time, price_type, is_mobile } = serviceData
-		const id = nextId()
-
-		setServices([
-			...services,
-			{
-				id,
-				name,
-				price,
-				time,
-				price_type,
-				is_mobile,
-			},
-		])
-
+		setData((prevData) => ({
+			...prevData,
+			services: [...prevData.services, { id: nextId(), ...serviceData }],
+		}))
 		resetForm()
 	}
 
-	const deleteService = () => {
-		setServices(services.filter((service) => service.id !== serviceData.id))
-		setModalData({
-			...modalData,
-			isOpen: false,
-		})
+	const removeService = () => {
+		setData((prevData) => ({
+			...prevData,
+			services: prevData.services.filter(
+				(service) => service.id !== serviceData.id
+			),
+		}))
+		resetForm()
 	}
 
 	const saveService = () => {
-		setServices(
-			services.map((service) =>
+		setData((prevData) => ({
+			...prevData,
+			services: prevData.services.map((service) =>
 				service.id === serviceData.id ? serviceData : service
-			)
-		)
-		setModalData({
-			...modalData,
-			isOpen: false,
-		})
+			),
+		}))
+		resetForm()
 	}
 
 	const onSelectService = (service) => {
@@ -202,7 +226,7 @@ function AddService({ services, work_remotely, setServices }) {
 							<div className="space-between">
 								<Button
 									className="btn-picker"
-									onClick={deleteService}
+									onClick={removeService}
 								>
 									<VscTrash size="30" color="#eb0043" />
 								</Button>
@@ -256,13 +280,7 @@ function AddService({ services, work_remotely, setServices }) {
 
 								<Button
 									rounded
-									onClick={() =>
-										setServices(
-											services.filter(
-												({ id }) => id !== service.id
-											)
-										)
-									}
+									onClick={() => removeService(service.id)}
 									data-for={`tooltip-${service.id}`}
 									data-tip="Usuń usługę"
 								>
@@ -324,6 +342,10 @@ AddService.prototype.propTypes = {
 		}).isRequired
 	).isRequired,
 	work_remotely: PropTypes.bool,
+	categories: PropTypes.arrayOf([
+		PropTypes.string.isRequired,
+		PropTypes.string.isRequired,
+	]).isRequired,
 	setServices: PropTypes.func.isRequired,
 }
 

@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import { FormControl } from '../../../layout/forms/Forms'
 import CheckBox from '../../../layout/forms/inputs/CheckBox'
 
+const CATEGORIES = require('../../../helpers/data/salon_categories.json')
+
 function ChooseCategories({ categories, onChangeCategory }) {
 	return (
 		<>
@@ -11,15 +13,15 @@ function ChooseCategories({ categories, onChangeCategory }) {
 				<h1>Wybierz kategorię działalności</h1>
 			</div>
 			<FormControl>
-				{Object.keys(categories).map((key) => (
-					<div key={key}>
-						<CheckBox.Label key={key}>
+				{CATEGORIES.map(([value, name]) => (
+					<div key={value}>
+						<CheckBox.Label>
 							<CheckBox
-								name={key}
-								checked={categories[key].checked}
+								name={value}
+								checked={categories.includes(value)}
 								onChange={onChangeCategory}
 							/>
-							{categories[key].name}
+							{name}
 						</CheckBox.Label>
 
 						<hr className="seperator lg-space" />
