@@ -23,10 +23,19 @@ function SetAddress({
 	const [cities, setCities] = useState([])
 	const debouncedSearch = useDebounce(postal_code, 500)
 
+	useEffect(
+		() =>
+			setData({
+				city: null,
+			}),
+		[postal_code]
+	)
+
 	useEffect(() => {
-		if (postal_code.length !== 6 && cities.length !== 0) setCities([])
-		// if (!citiesLoading) setCitiesLoading(true)
-	}, [postal_code, cities, citiesLoading])
+		if (debouncedSearch.length !== 6 && cities.length !== 0) {
+			setCities([])
+		}
+	}, [debouncedSearch, cities, citiesLoading])
 
 	useEffect(() => {
 		if (debouncedSearch.length !== 6) return
