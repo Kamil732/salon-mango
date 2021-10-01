@@ -13,12 +13,10 @@
 }
 
 .card {
-	$border-radius: 6px;
-	@include bg-color($surface-color);
-	@extend %shadow-sm;
-
+	background-color: $surface-color;
 	width: 100%;
-	border-radius: $border-radius;
+	border-radius: 8px;
+	@extend %shadow-sm;
 
 	& > &__header {
 		border-bottom: 1px solid $border-color;

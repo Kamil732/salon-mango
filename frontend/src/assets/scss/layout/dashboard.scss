@@ -111,6 +111,8 @@ $nav-color: $primary-color;
 			position: static;
 			width: 220px;
 			border-radius: 0;
+			box-shadow: none;
+			border-right: 1px solid $border-color;
 
 			&-btn {
 				display: none;

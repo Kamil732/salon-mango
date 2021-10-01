@@ -30,7 +30,7 @@
 		overflow: auto;
 		min-width: 100%;
 		width: auto;
-		@extend %box-shadow;
+		@extend %shadow-md;
 
 		&__option {
 			padding: 0.6rem 1rem;

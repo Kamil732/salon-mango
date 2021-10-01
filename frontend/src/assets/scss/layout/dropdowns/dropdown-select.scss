@@ -15,7 +15,7 @@ $prefix: dropdown-select;
 	border: 1px solid rgba(0, 0, 0, 0.04);
 	white-space: normal;
 	border: 1px solid #ccc;
-	@extend %box-shadow;
+	@extend %shadow-md;
 
 	&__header {
 		@extend %flex-align-center;
