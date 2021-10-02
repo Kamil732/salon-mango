@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import nextId from 'react-id-generator'
 import '../../../assets/css/table.css'
@@ -28,8 +28,6 @@ const initialData = {
 	is_mobile: false,
 }
 
-var HINTS = []
-
 function AddService({
 	services,
 	work_remotely,
@@ -43,32 +41,40 @@ function AddService({
 		editMode: false,
 	})
 	const [serviceData, setServiceData] = useState(initialData)
-	const [serviceHints, setServiceHints] = useState([])
+	const [filteredHints, filterHints] = useState([])
+	const allowFilter = useRef(true)
+	const hints = useRef([])
 
 	const getSelectedService = useCallback(
 		() => services.find((service) => service.id === serviceData.id),
 		[services, serviceData.id]
 	)
 
-	console.log(componentData)
 	useEffect(() => {
 		if (!componentData.loaded) {
 			for (let i = 0; i < categories.length; i++) {
-				import(
-					`../../../helpers/data/services/${categories[i]}.json`
-				).then((service_hints) => {
-					setData((prevData) => ({
-						...prevData,
-						services: [
-							...prevData.services,
-							{ id: nextId(), ...service_hints[0] },
-							{ id: nextId(), ...service_hints[1] },
-							{ id: nextId(), ...service_hints[2] },
-						],
-					}))
+				import(`../../../helpers/data/services/${categories[i]}.json`)
+					.then((module) => module.default)
+					.then((data) => {
+						const newData = data.map((hint, idx) => ({
+							data: {
+								...hint,
+								id: nextId(),
+							},
+							sugest: idx > 2 ? true : false,
+						}))
+						hints.current = [...hints.current, ...newData]
 
-					// HINTS = [...new Set([...HINTS, service_hints])]
-				})
+						setData((prevData) => ({
+							...prevData,
+							services: [
+								...prevData.services,
+								{ ...newData[0].data },
+								{ ...newData[1].data },
+								{ ...newData[2].data },
+							],
+						}))
+					})
 			}
 
 			changeComponentData({
@@ -93,25 +99,38 @@ function AddService({
 			editMode: false,
 		})
 		setServiceData(initialData)
+		allowFilter.current = true
 	}
 
 	const addService = (e) => {
 		e.preventDefault()
 		setData((prevData) => ({
 			...prevData,
-			services: [...prevData.services, { id: nextId(), ...serviceData }],
+			services: [
+				...prevData.services,
+				{
+					id: serviceData.id ? serviceData.id : nextId(),
+					...serviceData,
+				},
+			],
 		}))
 		resetForm()
+
+		if (serviceData.id)
+			hints.current.find(
+				(hint) => hint.data.id === serviceData.id
+			).sugest = false
 	}
 
-	const removeService = () => {
+	const removeService = (id) => {
 		setData((prevData) => ({
 			...prevData,
-			services: prevData.services.filter(
-				(service) => service.id !== serviceData.id
-			),
+			services: prevData.services.filter((service) => service.id !== id),
 		}))
 		resetForm()
+
+		const hintData = hints.current.find((hint) => hint.data.id === id)
+		if (hintData) hintData.sugest = true
 	}
 
 	const saveService = () => {
@@ -154,9 +173,44 @@ function AddService({
 								id="name"
 								name="name"
 								value={serviceData.name}
-								onChange={onChange}
+								onChange={(e) => {
+									onChange(e)
+									if (allowFilter.current)
+										filterHints(
+											hints.current.filter(
+												(hint) =>
+													hint.sugest &&
+													hint.data.name
+														.toLowerCase()
+														.startsWith(
+															e.target.value.toLowerCase()
+														)
+											)
+										)
+								}}
 							/>
 						</FormControl>
+
+						{filteredHints.length > 0 && (
+							<fieldset>
+								<legend>Sugerowane usługę</legend>
+								<div className="inline-wrap">
+									{filteredHints.map((hint) => (
+										<Button
+											rounded
+											small
+											onClick={() => {
+												setServiceData(hint.data)
+												filterHints([])
+												allowFilter.current = false
+											}}
+										>
+											{hint.data.name}
+										</Button>
+									))}
+								</div>
+							</fieldset>
+						)}
 
 						<fieldset>
 							<legend>Czas trwania usługi</legend>
@@ -226,7 +280,9 @@ function AddService({
 							<div className="space-between">
 								<Button
 									className="btn-picker"
-									onClick={removeService}
+									onClick={() =>
+										removeService(serviceData.id)
+									}
 								>
 									<VscTrash size="30" color="#eb0043" />
 								</Button>
@@ -275,13 +331,13 @@ function AddService({
 									place="left"
 									effect="solid"
 									delayShow={250}
-									id={`tooltip-${service.id}`}
+									id={`delete-tooltip-${service.id}`}
 								/>
 
 								<Button
 									rounded
 									onClick={() => removeService(service.id)}
-									data-for={`tooltip-${service.id}`}
+									data-for={`delete-tooltip-${service.id}`}
 									data-tip="Usuń usługę"
 								>
 									<GrClose size="20" opacity="0.4" />
@@ -294,9 +350,17 @@ function AddService({
 								<h4>{service.price} zł</h4>
 							</td>
 							<td style={{ width: '1px' }}>
+								<ReactTooltip
+									place="right"
+									effect="solid"
+									delayShow={250}
+									id={`edit-tooltip-${service.id}`}
+								/>
 								<Button
 									rounded
 									onClick={() => onSelectService(service)}
+									data-for={`edit-tooltip-${service.id}`}
+									data-tip="Edytuj usługę"
 								>
 									<IoIosArrowForward size="20" />
 								</Button>
