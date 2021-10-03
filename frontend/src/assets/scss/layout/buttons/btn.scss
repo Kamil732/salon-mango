@@ -11,7 +11,6 @@
 	text-align: center;
 	transition: background-color 0.1s ease-in, border-color 0.1s ease-in,
 		border-radius 0.1s ease-in;
-	text-transform: uppercase;
 	font-size: 0.85em;
 	line-height: 1.15;
 	color: inherit;
@@ -23,7 +22,6 @@
 		font-size: 0.9em;
 		padding: 0.4rem;
 		border-width: 1px;
-		text-transform: initial;
 
 		&:hover,
 		&:focus {
@@ -73,6 +71,7 @@
 	&__danger,
 	&__secondary {
 		font-weight: 600;
+		text-transform: uppercase;
 	}
 
 	&__primary {
@@ -125,18 +124,6 @@
 		}
 	}
 
-	&__small {
-		padding: 0.25rem 0.75rem;
-		font-weight: 500;
-	}
-
-	&__extraSmall {
-		color: $active-element;
-		padding: 0;
-		border: none;
-		background-color: transparent;
-	}
-
 	&__rounded {
 		background-color: transparent;
 		padding: 0.5rem;
@@ -147,6 +134,18 @@
 		&:focus {
 			background-color: $shadow-color;
 		}
+	}
+
+	&__small {
+		padding: 0.25rem 0.75rem;
+		font-weight: 500;
+	}
+
+	&__extraSmall {
+		color: $active-element;
+		padding: 0;
+		border: none;
+		background-color: transparent;
 	}
 
 	&__loading {

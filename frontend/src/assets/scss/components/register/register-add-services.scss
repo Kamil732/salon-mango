@@ -1,0 +1,25 @@
+@import '../../abstarct/variables';
+@import '../../abstarct/config';
+
+.service-suggestion-btn {
+	$color: #ebebeb;
+	@include bg-color($color);
+	height: 1.5rem;
+	padding: 0 4px 0 0.5rem;
+	font-weight: 500;
+
+	&:hover {
+		@include bg-color(darken($color, 5%));
+	}
+
+	&__icon {
+		background-color: #fff;
+		border-radius: 50%;
+		width: 20px;
+		height: 20px;
+		margin-left: 0.5rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+}

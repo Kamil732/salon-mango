@@ -6,6 +6,7 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+	font-family: 'Roboto', sans-serif;
 }
 
 body {
@@ -33,13 +34,6 @@ body {
 	font-display: swap;
 }
 
-body,
-input,
-textarea,
-select {
-	font-family: 'Roboto', sans-serif;
-}
-
 a {
 	text-decoration: none;
 	color: $active-element;
@@ -55,6 +49,8 @@ fieldset {
 
 	& > legend {
 		font-weight: 500;
+		font-size: 1rem;
+		line-height: 1.5;
 		margin-bottom: 4px;
 	}
 }

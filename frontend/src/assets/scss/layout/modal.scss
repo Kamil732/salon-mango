@@ -1,20 +1,16 @@
 @import '../abstarct/variables';
 @import '../abstarct/config';
 
-$border-radius: 8px;
-
 .modal {
 	z-index: 999;
 	min-width: 90vw;
 	margin: 2rem;
-	border-radius: $border-radius;
-	background-color: $background-color;
+	border-radius: 8px;
+	background-color: $surface-color;
 	position: relative;
 
 	& > &__header {
-		border-radius: $border-radius $border-radius 0 0;
 		padding: 1rem;
-		@include bg-color($background-color);
 		border-bottom: 1px solid $border-color;
 		font-size: 1.3em;
 	}
@@ -23,7 +19,7 @@ $border-radius: 8px;
 		padding: 1rem;
 	}
 
-	animation: show 0.4s;
+	animation: show 0.25s ease-in-out;
 
 	&.fullscreen {
 		width: 100vw;
@@ -31,6 +27,7 @@ $border-radius: 8px;
 		margin: 0;
 		border: none;
 		border-radius: 0;
+		background-color: $background-color;
 
 		& > .modal__body {
 			height: 100vh;
@@ -42,7 +39,7 @@ $border-radius: 8px;
 @keyframes show {
 	from {
 		opacity: 0;
-		transform: translateY(-25%);
+		transform: translateY(-100%);
 	}
 	to {
 		opacity: 1;
