@@ -91,7 +91,7 @@ class Dropdown extends Component {
 
 	handleKeyDown = (e) => {
 		const { isMulti, value, setShowInput } = this.props
-		const { isOpen } = this.state
+		const { isOpen, filteredOptions, navigatedIndex } = this.state
 
 		// arrow up/down button should select next/previous list element
 		switch (e.keyCode) {
@@ -112,10 +112,16 @@ class Dropdown extends Component {
 							: 0,
 				}))
 				break
-			case 13: // Enter
 			case 32: // Spacebar
-				e.preventDefault()
 				if (!isOpen) this.setState({ isOpen: true })
+				break
+			case 13: // Enter
+				e.preventDefault()
+
+				if (isOpen && filteredOptions.length > 0) {
+					this.handleOnChange(filteredOptions[navigatedIndex])
+					this.setState({ navigatedIndex: 0 })
+				} else this.setState({ isOpen: true })
 
 				break
 			case 9: // TAB
