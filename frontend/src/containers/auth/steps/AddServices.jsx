@@ -2,11 +2,12 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import nextId from 'react-id-generator'
 import '../../../assets/css/table.css'
+import '../../../assets/css/register-add-services.css'
 
 import { AiOutlinePlus } from 'react-icons/ai'
 import { GrClose } from 'react-icons/gr'
 import { VscTrash } from 'react-icons/vsc'
-import { IoIosArrowForward } from 'react-icons/io'
+import { IoIosAdd, IoIosArrowForward } from 'react-icons/io'
 
 import ReactTooltip from 'react-tooltip'
 import { FormControl } from '../../../layout/forms/Forms'
@@ -41,7 +42,7 @@ function AddService({
 		editMode: false,
 	})
 	const [serviceData, setServiceData] = useState(initialData)
-	const [filteredHints, filterHints] = useState([])
+	const [suggestedHints, setSuggestedHints] = useState([])
 	const allowFilter = useRef(true)
 	const hints = useRef([])
 
@@ -83,6 +84,12 @@ function AddService({
 		}
 	}, [])
 
+	useEffect(() => {
+		if (modalData.isOpen && !modalData.editMode) {
+			filterHints()
+		}
+	}, [modalData])
+
 	const onChange = (e) =>
 		setServiceData((prevData) => ({
 			...prevData,
@@ -99,6 +106,7 @@ function AddService({
 			editMode: false,
 		})
 		setServiceData(initialData)
+		setSuggestedHints([])
 		allowFilter.current = true
 	}
 
@@ -145,11 +153,30 @@ function AddService({
 
 	const onSelectService = (service) => {
 		setServiceData(service)
+		allowFilter.current = false
 		setModalData({
 			...modalData,
 			isOpen: true,
 			editMode: true,
 		})
+	}
+
+	const filterHints = (value = '') => {
+		let filteredHints = []
+
+		for (let i = 0; i < hints.current.length; i++) {
+			if (
+				hints.current[i].sugest &&
+				hints.current[i].data.name
+					.toLowerCase()
+					.startsWith(value.toLowerCase())
+			)
+				filteredHints.push(hints.current[i])
+
+			if (filteredHints.length === 10) break
+		}
+
+		setSuggestedHints(filteredHints)
 	}
 
 	return (
@@ -176,41 +203,39 @@ function AddService({
 								onChange={(e) => {
 									onChange(e)
 									if (allowFilter.current)
-										filterHints(
-											hints.current.filter(
-												(hint) =>
-													hint.sugest &&
-													hint.data.name
-														.toLowerCase()
-														.startsWith(
-															e.target.value.toLowerCase()
-														)
-											)
-										)
+										filterHints(e.target.value)
 								}}
+								autoComplete="off"
 							/>
 						</FormControl>
 
-						{filteredHints.length > 0 && (
-							<fieldset>
-								<legend>Sugerowane usługę</legend>
-								<div className="inline-wrap">
-									{filteredHints.map((hint) => (
-										<Button
-											rounded
-											small
-											onClick={() => {
-												setServiceData(hint.data)
-												filterHints([])
-												allowFilter.current = false
-											}}
-										>
-											{hint.data.name}
-										</Button>
-									))}
-								</div>
-							</fieldset>
-						)}
+						<FormControl>
+							{suggestedHints.length > 0 && (
+								<fieldset>
+									<legend>Sugerowane usługę</legend>
+									<div className="inline-wrap wrap">
+										{suggestedHints.map((hint) => (
+											<Button
+												key={hint.data.id}
+												rounded
+												small
+												onClick={() => {
+													setServiceData(hint.data)
+													setSuggestedHints([])
+													allowFilter.current = false
+												}}
+												className="service-suggestion-btn"
+											>
+												{hint.data.name}
+												<span className="service-suggestion-btn__icon">
+													<IoIosAdd size="25" />
+												</span>
+											</Button>
+										))}
+									</div>
+								</fieldset>
+							)}
+						</FormControl>
 
 						<fieldset>
 							<legend>Czas trwania usługi</legend>
@@ -370,7 +395,6 @@ function AddService({
 					<tr>
 						<td colSpan="3">
 							<Button
-								small
 								rounded
 								className="icon-container"
 								onClick={() =>

@@ -32,9 +32,9 @@ function Button({
 				}${success ? ' btn__success' : ''}${
 					danger ? ' btn__danger' : ''
 				}${loading ? ' btn__loading' : ''}${
-					small ? ' btn__small' : ''
-				}${extraSmall ? ' btn__extraSmall slide-floor' : ''}${
 					rounded ? ' btn__rounded' : ''
+				}${small ? ' btn__small' : ''}${
+					extraSmall ? ' btn__extraSmall slide-floor' : ''
 				} ${className}`}
 				disabled={loading || disabled}
 				{...props}
@@ -50,9 +50,9 @@ function Button({
 				secondary ? ' btn__secondary' : ''
 			}${success ? ' btn__success' : ''}${danger ? ' btn__danger' : ''}${
 				loading ? ' btn__loading' : ''
-			}${link ? ' btn__link' : ''}${small ? ' btn__small' : ''}${
-				extraSmall ? ' btn__extraSmall slide-floor' : ''
-			}${rounded ? ' btn__rounded' : ''} ${className}`}
+			}${link ? ' btn__link' : ''}${rounded ? ' btn__rounded' : ''}${
+				small ? ' btn__small' : ''
+			}${extraSmall ? ' btn__extraSmall slide-floor' : ''} ${className}`}
 			disabled={loading || disabled}
 			{...props}
 		>
