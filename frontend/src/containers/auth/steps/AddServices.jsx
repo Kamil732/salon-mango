@@ -212,7 +212,7 @@ function AddService({
 						<FormControl>
 							{suggestedHints.length > 0 && (
 								<fieldset>
-									<legend>Sugerowane usługę</legend>
+									<legend>Sugerowane usługi</legend>
 									<div className="inline-wrap wrap">
 										{suggestedHints.map((hint) => (
 											<Button

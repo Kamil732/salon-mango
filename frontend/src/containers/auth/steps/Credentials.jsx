@@ -33,7 +33,7 @@ function Credentials({ onChange, email, password, confirm_password }) {
 				</Label>
 				<Input
 					required
-					type="text"
+					type="password"
 					id="password"
 					name="password"
 					onChange={onChange}
@@ -47,7 +47,7 @@ function Credentials({ onChange, email, password, confirm_password }) {
 				</Label>
 				<Input
 					required
-					type="text"
+					type="password"
 					id="confirm_password"
 					name="confirm_password"
 					onChange={onChange}
