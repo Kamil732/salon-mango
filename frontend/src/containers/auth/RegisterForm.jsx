@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState } from 'react'
+import React, { lazy, Suspense, useEffect, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import nextId from 'react-id-generator'
@@ -178,7 +178,6 @@ const INITIAL_STEPS_DATA = [
 		loaded: false,
 	},
 ]
-let STEPS = INITIAL_STEPS_DATA
 
 function RegisterForm({ closeModal, register }) {
 	const [loading, setLoading] = useState(false)
@@ -231,10 +230,11 @@ function RegisterForm({ closeModal, register }) {
 		services: [],
 	})
 	const [step, setStep] = useState(0)
+	const STEPS = useRef([...INITIAL_STEPS_DATA])
 
 	// Reset data
 	useEffect(() => {
-		return () => (STEPS = INITIAL_STEPS_DATA)
+		return () => (STEPS.current = [...INITIAL_STEPS_DATA])
 	}, [])
 
 	const changeStep = (previous = false) => {
@@ -242,7 +242,7 @@ function RegisterForm({ closeModal, register }) {
 
 		setStep((prevStep) => {
 			if (prevStep + step < 0) closeModal()
-			if (prevStep + step > STEPS.length - 1) return 0
+			if (prevStep + step > STEPS.current.length - 1) return 0
 
 			return prevStep + step
 		})
@@ -305,12 +305,12 @@ function RegisterForm({ closeModal, register }) {
 
 					<ErrorBoundary>
 						<Suspense fallback={loader}>
-							{STEPS[step].component({
+							{STEPS.current[step].component({
 								...data,
-								componentData: STEPS[step],
+								componentData: STEPS.current[step],
 								changeComponentData: (newData) =>
-									(STEPS[step] = {
-										...STEPS[step],
+									(STEPS.current[step] = {
+										...STEPS.current[step],
 										...newData,
 									}),
 								setData,
