@@ -18,14 +18,25 @@ function FormControlInline({ children, ...props }) {
 	)
 }
 
-function FormGroup({ wrap, ...props }) {
-	return <div className={`form-group${wrap ? ' wrap' : ''}`} {...props} />
+function FormGroup({ wrap, className, ...props }) {
+	className = className ? className : ''
+	return (
+		<div
+			className={`form-group${wrap ? ' wrap' : ''} ${className}`}
+			{...props}
+		/>
+	)
 }
 
 FormGroup.prototype.propTypes = {
 	wrap: PropTypes.bool,
 }
 
+function Prefix(props) {
+	return <div className="form-control__prefix" {...props} />
+}
+
 FormControl.Inline = FormControlInline
+FormControl.Prefix = Prefix
 
 export { FormControl, FormGroup }

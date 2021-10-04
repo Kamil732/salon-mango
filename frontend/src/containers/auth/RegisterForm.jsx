@@ -214,7 +214,7 @@ function RegisterForm({ closeModal, register }) {
 		country: 'PL',
 		address: '',
 		premises_number: '',
-		city: null,
+		city: {},
 		postal_code: '',
 		share_premises: '',
 		common_premises_name: '',

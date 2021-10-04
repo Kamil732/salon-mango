@@ -98,19 +98,20 @@ function SetWorkingHours({
 	}
 
 	const formatEndWorkTimeLabel = ({ value, label }) => {
-		const diff = moment(value, 'HH:mm').diff(
+		const duration = moment(value, 'HH:mm').diff(
 			moment(selected.start, 'HH:mm'),
 			'minutes'
 		)
-		const hours = Math.floor(diff / 60)
-		const minutes = Math.round((diff / 60 - hours) * 60)
+		const h = Math.floor(duration / 60)
+		const m = Math.round(duration % 60)
 
 		return (
 			<>
 				<span>{label}</span>
 				<br />
 				<small className="text-broken">
-					{hours}h {minutes}min
+					{h > 0 && `${h}h `}
+					{m > 0 && `${m}m`}
 				</small>
 			</>
 		)

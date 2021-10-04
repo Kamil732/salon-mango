@@ -10,7 +10,8 @@ import { VscTrash } from 'react-icons/vsc'
 import { IoIosAdd, IoIosArrowForward } from 'react-icons/io'
 
 import ReactTooltip from 'react-tooltip'
-import { FormControl } from '../../../layout/forms/Forms'
+import Truncate from 'react-truncate'
+import { FormControl, FormGroup } from '../../../layout/forms/Forms'
 import CheckBox from '../../../layout/forms/inputs/CheckBox'
 import DurationInput from '../../../layout/forms/inputs/DurationPicker'
 import Input from '../../../layout/forms/inputs/Input'
@@ -21,7 +22,7 @@ import Dropdown from '../../../layout/buttons/dropdowns/Dropdown'
 
 const PRICE_TYPES = require('../../../helpers/data/price_types.json')
 
-const initialData = {
+const initialServiceData = {
 	name: '',
 	price: null,
 	price_type: PRICE_TYPES[2],
@@ -41,7 +42,7 @@ function AddService({
 		isOpen: false,
 		editMode: false,
 	})
-	const [serviceData, setServiceData] = useState(initialData)
+	const [serviceData, setServiceData] = useState(initialServiceData)
 	const [suggestedHints, setSuggestedHints] = useState([])
 	const allowFilter = useRef(true)
 	const hints = useRef([])
@@ -59,6 +60,7 @@ function AddService({
 					.then((data) => {
 						const newData = data.map((hint, idx) => ({
 							data: {
+								...initialServiceData,
 								...hint,
 								id: nextId(),
 							},
@@ -105,7 +107,7 @@ function AddService({
 			isOpen: false,
 			editMode: false,
 		})
-		setServiceData(initialData)
+		setServiceData(initialServiceData)
 		setSuggestedHints([])
 		allowFilter.current = true
 	}
@@ -169,7 +171,7 @@ function AddService({
 				hints.current[i].sugest &&
 				hints.current[i].data.name
 					.toLowerCase()
-					.startsWith(value.toLowerCase())
+					.includes(value.toLowerCase())
 			)
 				filteredHints.push(hints.current[i])
 
@@ -250,23 +252,26 @@ function AddService({
 							/>
 						</fieldset>
 
-						<FormControl>
-							<Label
-								htmlFor="price"
-								inputValue={serviceData.price}
-							>
-								Cena
-							</Label>
-							<Input
-								type="number"
-								min="0"
-								step="0.01"
-								id="price"
-								name="price"
-								value={serviceData.price}
-								onChange={onChange}
-							/>
-						</FormControl>
+						<FormGroup className="space-between">
+							<FormControl.Prefix>zł</FormControl.Prefix>
+							<FormControl>
+								<Label
+									htmlFor="price"
+									inputValue={serviceData.price}
+								>
+									Cena
+								</Label>
+								<Input
+									type="number"
+									min="0"
+									step="0.01"
+									id="price"
+									name="price"
+									value={serviceData.price}
+									onChange={onChange}
+								/>
+							</FormControl>
+						</FormGroup>
 
 						<FormControl>
 							<Label htmlFor="price-type" inputValue>
@@ -346,52 +351,72 @@ function AddService({
 
 			<table className="step-table">
 				<tbody>
-					{services.map((service) => (
-						<tr key={service.id}>
-							<td
-								className="inline-wrap"
-								style={{ justifyContent: 'flex-start' }}
-							>
-								<ReactTooltip
-									place="left"
-									effect="solid"
-									delayShow={250}
-									id={`delete-tooltip-${service.id}`}
-								/>
+					{services.map((service) => {
+						const h = Math.floor(service.time / 60)
+						const m = Math.round(service.time % 60)
 
-								<Button
-									rounded
-									onClick={() => removeService(service.id)}
-									data-for={`delete-tooltip-${service.id}`}
-									data-tip="Usuń usługę"
+						return (
+							<tr key={service.id}>
+								<td
+									className="inline-wrap"
+									style={{ justifyContent: 'flex-start' }}
 								>
-									<GrClose size="20" opacity="0.4" />
-								</Button>
+									<ReactTooltip
+										place="left"
+										effect="solid"
+										delayShow={250}
+										id={`delete-tooltip-${service.id}`}
+									/>
 
-								<span>{service.name}</span>
-							</td>
-							<td>{service.time}min</td>
-							<td>
-								<h4>{service.price} zł</h4>
-							</td>
-							<td style={{ width: '1px' }}>
-								<ReactTooltip
-									place="right"
-									effect="solid"
-									delayShow={250}
-									id={`edit-tooltip-${service.id}`}
-								/>
-								<Button
-									rounded
-									onClick={() => onSelectService(service)}
-									data-for={`edit-tooltip-${service.id}`}
-									data-tip="Edytuj usługę"
-								>
-									<IoIosArrowForward size="20" />
-								</Button>
-							</td>
-						</tr>
-					))}
+									<Button
+										rounded
+										onClick={() =>
+											removeService(service.id)
+										}
+										data-for={`delete-tooltip-${service.id}`}
+										data-tip="Usuń usługę"
+									>
+										<GrClose size="20" opacity="0.4" />
+									</Button>
+
+									<Truncate lines={1} trimWhitespace>
+										{service.name}
+									</Truncate>
+								</td>
+								<td className="text-broken">
+									{h > 0 && `${h}h `}
+									{m > 0 && `${m}m`}
+								</td>
+								<td style={{ textAlign: 'center' }}>
+									<h4>
+										{service.price_type.value === 0
+											? 'Darmowa'
+											: service.price_type.value === 1
+											? 'Cena zmienna'
+											: service.price_type.value === 3
+											? '--'
+											: `${service.price} zł`}
+									</h4>
+								</td>
+								<td style={{ width: '1px' }}>
+									<ReactTooltip
+										place="right"
+										effect="solid"
+										delayShow={250}
+										id={`edit-tooltip-${service.id}`}
+									/>
+									<Button
+										rounded
+										onClick={() => onSelectService(service)}
+										data-for={`edit-tooltip-${service.id}`}
+										data-tip="Edytuj usługę"
+									>
+										<IoIosArrowForward size="20" />
+									</Button>
+								</td>
+							</tr>
+						)
+					})}
 					<tr>
 						<td colSpan="3">
 							<Button
