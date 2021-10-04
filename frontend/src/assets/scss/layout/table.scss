@@ -62,6 +62,8 @@ table {
 }
 
 .step-table {
+	word-break: break-all;
+
 	tr {
 		border-bottom: 1px solid $border-color;
 
@@ -81,11 +83,5 @@ table {
 
 	&.large tr > td {
 		padding: 1rem 0;
-	}
-}
-
-@media (max-width: 768px) {
-	.step-table {
-		word-break: break-all;
 	}
 }

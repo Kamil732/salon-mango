@@ -35,6 +35,10 @@ fieldset > .form-group {
 	align-items: center;
 }
 
+.#{$prefix}__prefix {
+	font-weight: 600;
+}
+
 @media screen and (max-width: 768px) {
 	.form-group.wrap {
 		display: block;
