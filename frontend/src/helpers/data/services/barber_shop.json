@@ -2,91 +2,48 @@
     {
         "name": "Strzyżenie brody",
         "price": 40.00,
-        "price_type": {
-            "label": "Stała",
-            "value": 2
-        },
-        "time": 30,
-        "is_mobile": false
+        "time": 30
     },
     {
         "name": "Odsiwianie",
         "price": 60.00,
-        "price_type": {
-            "label": "Stała",
-            "value": 2
-        },
-        "time": 30,
-        "is_mobile": false
+        "time": 30
     },
     {
         "name": "Pielęgnacja brody",
         "price": 50.00,
-        "price_type": {
-            "label": "Stała",
-            "value": 2
-        },
-        "time": 20,
-        "is_mobile": false
+        "time": 20
     },
     {
         "name": "Golenie",
         "price": 60.00,
-        "price_type": {
-            "label": "Stała",
-            "value": 2
-        },
-        "time": 45,
-        "is_mobile": false
+        "time": 45
     },
     {
         "name": "Farbowanie brody",
         "price": 80.00,
-        "price_type": {
-            "label": "Stała",
-            "value": 2
-        },
-        "time": 60,
-        "is_mobile": false
+        "time": 60
     },
     {
         "name": "Golenie brzytwą",
         "price": 60.00,
-        "price_type": {
-            "label": "Stała",
-            "value": 2
-        },
-        "time": 40,
-        "is_mobile": false
+        "time": 40
     },
     {
         "name": "Stylizacja brody",
         "price": 50.00,
-        "price_type": {
-            "label": "Stała",
-            "value": 2
-        },
-        "time": 30,
-        "is_mobile": false
+        "time": 30
+
     },
     {
         "name": "Golenie brody",
         "price": 60.00,
-        "price_type": {
-            "label": "Stała",
-            "value": 2
-        },
-        "time": 40,
-        "is_mobile": false
+        "time": 40
+
     },
     {
         "name": "Golenie głowy",
         "price": 60.00,
-        "price_type": {
-            "label": "Stała",
-            "value": 2
-        },
-        "time": 40,
-        "is_mobile": false
+        "time": 40
     }
 ]
