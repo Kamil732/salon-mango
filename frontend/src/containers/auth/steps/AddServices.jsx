@@ -87,9 +87,7 @@ function AddService({
 	}, [])
 
 	useEffect(() => {
-		if (modalData.isOpen && !modalData.editMode) {
-			filterHints()
-		}
+		if (modalData.isOpen && !modalData.editMode) filterHints()
 	}, [modalData])
 
 	const onChange = (e) =>
@@ -114,6 +112,10 @@ function AddService({
 
 	const addService = (e) => {
 		e.preventDefault()
+
+		if (services.length === 0)
+			changeComponentData({ nextBtnDisabled: false })
+
 		setData((prevData) => ({
 			...prevData,
 			services: [
@@ -126,6 +128,7 @@ function AddService({
 		}))
 		resetForm()
 
+		// Try to remove hint from hints
 		if (serviceData.id)
 			hints.current.find(
 				(hint) => hint.data.id === serviceData.id
@@ -139,6 +142,10 @@ function AddService({
 		}))
 		resetForm()
 
+		if (services.length === 1)
+			changeComponentData({ nextBtnDisabled: true })
+
+		// Try to add hint from hints
 		const hintData = hints.current.find((hint) => hint.data.id === id)
 		if (hintData) hintData.sugest = true
 	}
@@ -194,148 +201,160 @@ function AddService({
 							dla tej usługi później.
 						</p>
 
-						<FormControl>
-							<Label htmlFor="name" inputValue={serviceData.name}>
-								Nazwa usługi
-							</Label>
-							<Input
-								id="name"
-								name="name"
-								value={serviceData.name}
-								onChange={(e) => {
-									onChange(e)
-									if (allowFilter.current)
-										filterHints(e.target.value)
-								}}
-								autoComplete="off"
-							/>
-						</FormControl>
-
-						<FormControl>
-							{suggestedHints.length > 0 && (
-								<fieldset>
-									<legend>Sugerowane usługi</legend>
-									<div className="inline-wrap wrap">
-										{suggestedHints.map((hint) => (
-											<Button
-												key={hint.data.id}
-												rounded
-												small
-												onClick={() => {
-													setServiceData(hint.data)
-													setSuggestedHints([])
-													allowFilter.current = false
-												}}
-												className="service-suggestion-btn"
-											>
-												{hint.data.name}
-												<span className="service-suggestion-btn__icon">
-													<IoIosAdd size="25" />
-												</span>
-											</Button>
-										))}
-									</div>
-								</fieldset>
-							)}
-						</FormControl>
-
-						<fieldset>
-							<legend>Czas trwania usługi</legend>
-							<DurationInput
-								value={serviceData.time}
-								onChange={(time) =>
-									setServiceData((prevData) => ({
-										...prevData,
-										time,
-									}))
-								}
-							/>
-						</fieldset>
-
-						<FormGroup className="space-between">
-							<FormControl.Prefix>zł</FormControl.Prefix>
+						<form
+							onSubmit={
+								modalData.editMode ? saveService : addService
+							}
+						>
 							<FormControl>
 								<Label
-									htmlFor="price"
-									inputValue={serviceData.price}
+									htmlFor="name"
+									inputValue={serviceData.name}
 								>
-									Cena
+									Nazwa usługi
 								</Label>
 								<Input
-									type="number"
-									min="0"
-									step="0.01"
-									id="price"
-									name="price"
-									value={serviceData.price}
-									onChange={onChange}
+									id="name"
+									name="name"
+									value={serviceData.name}
+									onChange={(e) => {
+										onChange(e)
+										if (allowFilter.current)
+											filterHints(e.target.value)
+									}}
+									autoComplete="off"
 								/>
 							</FormControl>
-						</FormGroup>
 
-						<FormControl>
-							<Label htmlFor="price-type" inputValue>
-								Rodzaj ceny
-							</Label>
-							<Dropdown
-								id="price-type"
-								options={PRICE_TYPES}
-								getOptionLabel={(opt) => opt.label}
-								getOptionValue={(opt) => opt.value}
-								getValuesValue={(opt) => opt.value}
-								value={serviceData.price_type}
-								onChange={(price_type) => {
-									setServiceData((prevData) => ({
-										...prevData,
-										price_type,
-									}))
-								}}
-							/>
-						</FormControl>
-
-						{work_remotely && (
 							<FormControl>
-								<CheckBox.Label>
-									<CheckBox
-										name="is_mobile"
-										checked={serviceData.is_mobile}
+								{suggestedHints.length > 0 && (
+									<fieldset>
+										<legend>Sugerowane usługi</legend>
+										<div className="inline-wrap wrap">
+											{suggestedHints.map((hint) => (
+												<Button
+													key={hint.data.id}
+													rounded
+													small
+													onClick={() => {
+														setServiceData(
+															hint.data
+														)
+														setSuggestedHints([])
+														allowFilter.current = false
+													}}
+													className="service-suggestion-btn"
+												>
+													{hint.data.name}
+													<span className="service-suggestion-btn__icon">
+														<IoIosAdd size="25" />
+													</span>
+												</Button>
+											))}
+										</div>
+									</fieldset>
+								)}
+							</FormControl>
+
+							<fieldset>
+								<legend>Czas trwania usługi</legend>
+								<DurationInput
+									value={serviceData.time}
+									onChange={(time) =>
+										setServiceData((prevData) => ({
+											...prevData,
+											time,
+										}))
+									}
+								/>
+							</fieldset>
+
+							<FormGroup className="space-between">
+								<FormControl.Prefix>zł</FormControl.Prefix>
+								<FormControl>
+									<Label
+										htmlFor="price"
+										inputValue={serviceData.price}
+									>
+										Cena
+									</Label>
+									<Input
+										type="number"
+										min="0"
+										step="0.01"
+										id="price"
+										name="price"
+										value={serviceData.price}
 										onChange={onChange}
 									/>
-									Usługa mobilna
-								</CheckBox.Label>
-							</FormControl>
-						)}
+								</FormControl>
+							</FormGroup>
 
-						{modalData.editMode ? (
-							<div className="space-between">
-								<Button
-									className="btn-picker"
-									onClick={() =>
-										removeService(serviceData.id)
-									}
-								>
-									<VscTrash size="30" color="#eb0043" />
-								</Button>
+							<FormControl>
+								<Label htmlFor="price-type" inputValue>
+									Rodzaj ceny
+								</Label>
+								<Dropdown
+									id="price-type"
+									options={PRICE_TYPES}
+									getOptionLabel={(opt) => opt.label}
+									getOptionValue={(opt) => opt.value}
+									getValuesValue={(opt) => opt.value}
+									value={serviceData.price_type}
+									onChange={(price_type) => {
+										setServiceData((prevData) => ({
+											...prevData,
+											price_type,
+										}))
+									}}
+								/>
+							</FormControl>
+
+							{work_remotely && (
+								<FormControl>
+									<CheckBox.Label>
+										<CheckBox
+											name="is_mobile"
+											checked={serviceData.is_mobile}
+											onChange={onChange}
+										/>
+										Usługa mobilna
+									</CheckBox.Label>
+								</FormControl>
+							)}
+
+							{modalData.editMode ? (
+								<div className="space-between">
+									<Button
+										className="btn-picker"
+										onClick={() =>
+											removeService(serviceData.id)
+										}
+										type="button"
+									>
+										<VscTrash size="30" color="#eb0043" />
+									</Button>
+									<Button
+										primary
+										disabled={
+											JSON.stringify(serviceData) ===
+											JSON.stringify(getSelectedService())
+										}
+										type="submit"
+									>
+										Zapisz
+									</Button>
+								</div>
+							) : (
 								<Button
 									primary
-									onClick={saveService}
-									disabled={
-										JSON.stringify(serviceData) ===
-										JSON.stringify(getSelectedService())
-									}
+									style={{ marginLeft: 'auto' }}
+									type="submit"
 								>
-									Zapisz
+									Dodaj
 								</Button>
-							</div>
-						) : (
-							<Button
-								primary
-								style={{ marginLeft: 'auto' }}
-								onClick={addService}
-							>
-								Dodaj
-							</Button>
-						)}
+							)}
+						</form>
 					</Modal.Body>
 				</Modal>
 			)}

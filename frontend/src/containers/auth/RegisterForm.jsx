@@ -1,12 +1,10 @@
-import React, { lazy, Suspense, useEffect, useState, useRef } from 'react'
+import React, { lazy, Suspense, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import nextId from 'react-id-generator'
 
 // import { register } from '../../redux/actions/auth'
 import { HiOutlineArrowLeft } from 'react-icons/hi'
 
-import CSRFToken from '../../components/CSRFToken'
 import Card from '../../layout/Card'
 import ErrorBoundary from '../../components/ErrorBoundary'
 import CircleLoader from '../../layout/loaders/CircleLoader'
@@ -42,8 +40,11 @@ const INITIAL_STEPS_DATA = [
 				phone_prefix={props.phone_prefix}
 				phone_number={props.phone_number}
 				recomendation_code={props.recomendation_code}
+				componentData={props.componentData}
+				changeComponentData={props.changeComponentData}
 			/>
 		),
+		nextBtnDisabled: true,
 	},
 	{
 		component: (props) => (
@@ -52,24 +53,32 @@ const INITIAL_STEPS_DATA = [
 				email={props.email}
 				password={props.password}
 				confirm_password={props.confirm_password}
+				componentData={props.componentData}
+				changeComponentData={props.changeComponentData}
 			/>
 		),
+		nextBtnDisabled: true,
 	},
 	{
 		component: (props) => (
 			<AcceptTerms
 				onChange={props.onChange}
 				accept_terms={props.accept_terms}
+				changeComponentData={props.changeComponentData}
 			/>
 		),
+		nextBtnDisabled: true,
 	},
 	{
 		component: (props) => (
 			<ChooseCategories
 				onChangeCategory={props.onChangeCategory}
 				categories={props.categories}
+				componentData={props.componentData}
+				changeComponentData={props.changeComponentData}
 			/>
 		),
+		nextBtnDisabled: true,
 	},
 	{
 		component: (props) => (
@@ -77,8 +86,11 @@ const INITIAL_STEPS_DATA = [
 				work_stationary={props.work_stationary}
 				work_remotely={props.work_remotely}
 				onChange={props.onChange}
+				componentData={props.componentData}
+				changeComponentData={props.changeComponentData}
 			/>
 		),
+		nextBtnDisabled: false,
 	},
 	{
 		component: (props) => (
@@ -98,8 +110,11 @@ const INITIAL_STEPS_DATA = [
 						...data,
 					}))
 				}
+				componentData={props.componentData}
+				changeComponentData={props.changeComponentData}
 			/>
 		),
+		nextBtnDisabled: true,
 	},
 	{
 		component: (props) => (
@@ -117,6 +132,7 @@ const INITIAL_STEPS_DATA = [
 				}
 			/>
 		),
+		nextBtnDisabled: false,
 	},
 	{
 		component: (props) => (
@@ -136,6 +152,7 @@ const INITIAL_STEPS_DATA = [
 				longitude={props.longitude}
 			/>
 		),
+		nextBtnDisabled: false,
 	},
 	{
 		component: (props) => (
@@ -163,6 +180,7 @@ const INITIAL_STEPS_DATA = [
 				end_work_sunday={props.end_work_sunday}
 			/>
 		),
+		nextBtnDisabled: false,
 	},
 	{
 		component: (props) => (
@@ -175,12 +193,12 @@ const INITIAL_STEPS_DATA = [
 				setData={props.setData}
 			/>
 		),
+		nextBtnDisabled: false,
 		loaded: false,
 	},
 ]
 
 function RegisterForm({ closeModal, register }) {
-	const [loading, setLoading] = useState(false)
 	const [data, setData] = useState({
 		email: '',
 		password: '',
@@ -209,7 +227,7 @@ function RegisterForm({ closeModal, register }) {
 		start_work_monday: '10:00',
 
 		work_stationary: true,
-		work_remotely: true, // false
+		work_remotely: false,
 
 		country: 'PL',
 		address: '',
@@ -230,11 +248,11 @@ function RegisterForm({ closeModal, register }) {
 		services: [],
 	})
 	const [step, setStep] = useState(0)
-	const STEPS = useRef([...INITIAL_STEPS_DATA])
+	const [STEPS, setSTEPS] = useState([...INITIAL_STEPS_DATA])
 
 	// Reset data
 	useEffect(() => {
-		return () => (STEPS.current = [...INITIAL_STEPS_DATA])
+		return () => setSTEPS([...INITIAL_STEPS_DATA])
 	}, [])
 
 	const changeStep = (previous = false) => {
@@ -242,7 +260,7 @@ function RegisterForm({ closeModal, register }) {
 
 		setStep((prevStep) => {
 			if (prevStep + step < 0) closeModal()
-			if (prevStep + step > STEPS.current.length - 1) return 0
+			if (prevStep + step > STEPS.length - 1) return 0
 
 			return prevStep + step
 		})
@@ -275,14 +293,6 @@ function RegisterForm({ closeModal, register }) {
 			[`end_work_${e.target.name}`]: e.target.checked ? '19:00' : null,
 		}))
 
-	const onSubmit = async (e) => {
-		e.preventDefault()
-
-		setLoading(true)
-		// await register('xd', email, password)
-		setLoading(false)
-	}
-
 	const loader = (
 		<div className="center-container">
 			<CircleLoader />
@@ -295,41 +305,60 @@ function RegisterForm({ closeModal, register }) {
 				<Button rounded onClick={() => changeStep(true)}>
 					<HiOutlineArrowLeft size="25" />
 				</Button>
-				<Button rounded onClick={() => setStep(9)}>
+				<Button rounded onClick={() => setStep(STEPS.length - 1)}>
 					Go to 9
+				</Button>
+				<Button rounded onClick={() => setStep(3)}>
+					Go to 2
 				</Button>
 			</Card.Header>
 			<Card.Body>
-				<form onSubmit={onSubmit}>
-					<CSRFToken />
+				<ErrorBoundary>
+					<Suspense fallback={loader}>
+						{STEPS[step].component({
+							...data,
+							componentData: STEPS[step],
+							changeComponentData: (newData) =>
+								setSTEPS((prevSTEPS) =>
+									prevSTEPS.map((_step, idx) =>
+										idx === step
+											? {
+													..._step,
+													...newData,
+											  }
+											: _step
+									)
+								),
+							// (STEPS[step] = {
+							// 	...STEPS[step],
+							// 	...newData,
+							// }),
+							setData,
+							onChange,
+							onChangeCategory,
+							onChangeIsWorkingDay,
+						})}
+					</Suspense>
+				</ErrorBoundary>
 
-					<ErrorBoundary>
-						<Suspense fallback={loader}>
-							{STEPS.current[step].component({
-								...data,
-								componentData: STEPS.current[step],
-								changeComponentData: (newData) =>
-									(STEPS.current[step] = {
-										...STEPS.current[step],
-										...newData,
-									}),
-								setData,
-								onChange,
-								onChangeCategory,
-								onChangeIsWorkingDay,
-							})}
-						</Suspense>
-					</ErrorBoundary>
+				<Button
+					primary
+					onClick={async () => {
+						const currentStep = STEPS[step]
+						if (currentStep.validateStep == null) {
+							changeStep()
+							return
+						}
 
-					<Button
-						primary
-						onClick={() => changeStep()}
-						type="button"
-						className="form-card__btn"
-					>
-						Dalej
-					</Button>
-				</form>
+						const isValid = await currentStep.validateStep()
+						if (isValid) changeStep()
+					}}
+					type="button"
+					className="form-card__btn"
+					disabled={STEPS[step].nextBtnDisabled}
+				>
+					Dalej
+				</Button>
 			</Card.Body>
 		</Card>
 	)

@@ -1,10 +1,35 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import { FormControl } from '../../../layout/forms/Forms'
 import CheckBox from '../../../layout/forms/inputs/CheckBox'
 
-function WorkType({ work_stationary, work_remotely, onChange }) {
+function WorkType({
+	work_stationary,
+	work_remotely,
+	onChange,
+	componentData,
+	changeComponentData,
+}) {
+	useEffect(() => {
+		if (
+			!componentData.nextBtnDisabled &&
+			!work_stationary &&
+			!work_remotely
+		)
+			changeComponentData({ nextBtnDisabled: true })
+		else if (
+			componentData.nextBtnDisabled &&
+			(work_stationary || work_remotely)
+		)
+			changeComponentData({ nextBtnDisabled: false })
+	}, [
+		work_remotely,
+		work_stationary,
+		componentData.nextBtnDisabled,
+		changeComponentData,
+	])
+
 	return (
 		<>
 			<div className="title-container">
@@ -71,6 +96,8 @@ WorkType.prototype.propTypes = {
 	work_stationary: PropTypes.bool,
 	work_remotely: PropTypes.bool,
 	onChange: PropTypes.func.isRequired,
+	componentData: PropTypes.object.isRequired,
+	changeComponentData: PropTypes.func.isRequired,
 }
 
 export default WorkType

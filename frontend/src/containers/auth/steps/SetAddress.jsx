@@ -18,18 +18,42 @@ function SetAddress({
 	common_premises_number,
 	onChange,
 	setData,
+	componentData,
+	changeComponentData,
 }) {
 	const [citiesLoading, setCitiesLoading] = useState(false)
 	const [cities, setCities] = useState([])
 	const debouncedSearch = useDebounce(postal_code, 500)
 
-	useEffect(
-		() =>
+	useEffect(() => {
+		if (
+			componentData.nextBtnDisabled &&
+			address &&
+			postal_code &&
+			Object.keys(city).length > 0
+		)
+			changeComponentData({ nextBtnDisabled: false })
+		else if (
+			!componentData.nextBtnDisabled &&
+			(address.length === 0 ||
+				postal_code.length === 0 ||
+				Object.keys(city).length === 0)
+		)
+			changeComponentData({ nextBtnDisabled: true })
+	}, [
+		address,
+		postal_code,
+		city,
+		componentData.nextBtnDisabled,
+		changeComponentData,
+	])
+
+	useEffect(() => {
+		if (Object.keys(city).length > 0)
 			setData({
-				city: null,
-			}),
-		[postal_code]
-	)
+				city: {},
+			})
+	}, [postal_code])
 
 	useEffect(() => {
 		if (debouncedSearch.length !== 6 && cities.length !== 0) {
@@ -106,7 +130,10 @@ function SetAddress({
 					/>
 				</FormControl>
 				<FormControl>
-					<Label htmlFor="city" inputValue={city}>
+					<Label
+						htmlFor="city"
+						inputValue={Object.keys(city).length > 0}
+					>
 						Miejscowość
 					</Label>
 
@@ -144,6 +171,8 @@ SetAddress.prototype.propTypes = {
 	common_premises_number: PropTypes.string,
 	onChange: PropTypes.func.isRequired,
 	setData: PropTypes.func.isRequired,
+	componentData: PropTypes.object.isRequired,
+	changeComponentData: PropTypes.func.isRequired,
 }
 
 export default SetAddress

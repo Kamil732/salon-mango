@@ -1,11 +1,41 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import { FormControl } from '../../../layout/forms/Forms'
 import Input from '../../../layout/forms/inputs/Input'
 import Label from '../../../layout/forms/inputs/Label'
 
-function Credentials({ onChange, email, password, confirm_password }) {
+function Credentials({
+	onChange,
+	email,
+	password,
+	confirm_password,
+	componentData,
+	changeComponentData,
+}) {
+	useEffect(() => {
+		if (
+			componentData.nextBtnDisabled &&
+			email &&
+			password &&
+			confirm_password
+		)
+			changeComponentData({ nextBtnDisabled: false })
+		else if (
+			!componentData.nextBtnDisabled &&
+			(email.length === 0 ||
+				password.length === 0 ||
+				confirm_password.length === 0)
+		)
+			changeComponentData({ nextBtnDisabled: true })
+	}, [
+		email,
+		password,
+		confirm_password,
+		componentData.nextBtnDisabled,
+		changeComponentData,
+	])
+
 	return (
 		<>
 			<div className="title-container">
@@ -64,6 +94,8 @@ Credentials.prototype.propTypes = {
 	email: PropTypes.string,
 	password: PropTypes.string,
 	confirm_password: PropTypes.string,
+	componentData: PropTypes.object.isRequired,
+	changeComponentData: PropTypes.func.isRequired,
 }
 
 export default Credentials

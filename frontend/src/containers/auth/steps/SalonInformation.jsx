@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import { FormControl, FormGroup } from '../../../layout/forms/Forms'
@@ -16,7 +16,39 @@ function SalonInformation({
 	last_name,
 	phone_prefix,
 	phone_number,
+	componentData,
+	changeComponentData,
 }) {
+	// If valid form than changeComponentData({ nextBtnDisabled: false })
+	useEffect(() => {
+		if (
+			componentData.nextBtnDisabled &&
+			salon_name &&
+			first_name &&
+			last_name &&
+			Object.keys(phone_prefix).length > 0 &&
+			phone_number
+		)
+			changeComponentData({ nextBtnDisabled: false })
+		else if (
+			!componentData.nextBtnDisabled &&
+			(salon_name.length === 0 ||
+				first_name.length === 0 ||
+				last_name.length === 0 ||
+				Object.keys(phone_prefix).length === 0 ||
+				phone_number.length === 0)
+		)
+			changeComponentData({ nextBtnDisabled: true })
+	}, [
+		salon_name,
+		first_name,
+		last_name,
+		phone_prefix,
+		phone_number,
+		componentData.nextBtnDisabled,
+		changeComponentData,
+	])
+
 	const formatOptionLabel = ({ dialCode, name }) => (
 		<div className="inline-wrap">
 			<span>{dialCode}</span> | <span>{name}</span>
@@ -128,6 +160,8 @@ SalonInformation.prototype.propTypes = {
 	last_name: PropTypes.string,
 	phone_prefix: PropTypes.string,
 	phone_number: PropTypes.string,
+	componentData: PropTypes.object.isRequired,
+	changeComponentData: PropTypes.func.isRequired,
 }
 
 export default SalonInformation

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { FormControl } from '../../../layout/forms/Forms'
 import CheckBox from '../../../layout/forms/inputs/CheckBox'
 
-function AcceptTerms({ onChange, accept_terms }) {
+function AcceptTerms({ onChange, accept_terms, changeComponentData }) {
 	return (
 		<>
 			<div className="title-container">
@@ -21,7 +21,12 @@ function AcceptTerms({ onChange, accept_terms }) {
 					<CheckBox
 						name="accept_terms"
 						checked={accept_terms}
-						onChange={onChange}
+						onChange={(e) => {
+							onChange(e)
+							changeComponentData({
+								nextBtnDisabled: !e.target.checked,
+							})
+						}}
 					/>
 				</CheckBox.Label>
 			</FormControl>
@@ -32,6 +37,7 @@ function AcceptTerms({ onChange, accept_terms }) {
 AcceptTerms.prototype.propTypes = {
 	onChange: PropTypes.func.isRequired,
 	accept_terms: PropTypes.bool,
+	changeComponentData: PropTypes.func.isRequired,
 }
 
 export default AcceptTerms
