@@ -67,6 +67,10 @@ table {
 	tr {
 		border-bottom: 1px solid $border-color;
 
+		&:last-child {
+			border-bottom: none;
+		}
+
 		& > td {
 			padding: 0.5rem 0;
 
