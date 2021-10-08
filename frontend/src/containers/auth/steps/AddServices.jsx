@@ -54,6 +54,7 @@ function AddService({
 
 	useEffect(() => {
 		if (!componentData.loaded) {
+			console.log('xd')
 			for (let i = 0; i < categories.length; i++) {
 				import(`../../../helpers/data/services/${categories[i]}.json`)
 					.then((module) => module.default)
@@ -84,7 +85,7 @@ function AddService({
 				loaded: true,
 			})
 		}
-	}, [])
+	}, [categories, changeComponentData, componentData.loaded, setData])
 
 	useEffect(() => {
 		if (modalData.isOpen && !modalData.editMode) filterHints()

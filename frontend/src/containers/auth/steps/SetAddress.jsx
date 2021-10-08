@@ -17,7 +17,7 @@ function SetAddress({
 	common_premises_name,
 	common_premises_number,
 	onChange,
-	setData,
+	updateData,
 	componentData,
 	changeComponentData,
 }) {
@@ -48,15 +48,16 @@ function SetAddress({
 		changeComponentData,
 	])
 
-	useEffect(() => {
-		if (Object.keys(city).length > 0)
-			setData({
+	useEffect(
+		() =>
+			updateData({
 				city: {},
-			})
-	}, [postal_code])
+			}),
+		[postal_code, updateData]
+	)
 
 	useEffect(() => {
-		if (debouncedSearch.length !== 6 && cities.length !== 0) {
+		if (debouncedSearch.length !== 6 && cities.length > 0) {
 			setCities([])
 		}
 	}, [debouncedSearch, cities, citiesLoading])
@@ -144,7 +145,7 @@ function SetAddress({
 						getOptionValue={(opt) => opt.placeName}
 						getValuesValue={(opt) => opt.placeName}
 						onChange={(val) => {
-							setData({
+							updateData({
 								city: val,
 								latitude: parseFloat(val.lat),
 								longitude: parseFloat(val.lng),
@@ -170,7 +171,7 @@ SetAddress.prototype.propTypes = {
 	common_premises_name: PropTypes.string,
 	common_premises_number: PropTypes.string,
 	onChange: PropTypes.func.isRequired,
-	setData: PropTypes.func.isRequired,
+	updateData: PropTypes.func.isRequired,
 	componentData: PropTypes.object.isRequired,
 	changeComponentData: PropTypes.func.isRequired,
 }
