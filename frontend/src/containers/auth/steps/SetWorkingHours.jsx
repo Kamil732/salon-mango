@@ -17,7 +17,7 @@ import ReactTooltip from 'react-tooltip'
 
 function SetWorkingHours({
 	onChangeIsWorkingDay,
-	setData,
+	updateData,
 
 	start_work_monday,
 	end_work_monday,
@@ -170,7 +170,7 @@ function SetWorkingHours({
 							<Button
 								primary
 								onClick={() => {
-									setData({
+									updateData({
 										[`start_work_${selected.name}`]:
 											selected.start,
 										[`end_work_${selected.name}`]:
@@ -247,7 +247,7 @@ function SetWorkingHours({
 
 SetWorkingHours.prototype.propTypes = {
 	onChangeIsWorkingDay: PropTypes.func.isRequired,
-	setData: PropTypes.func.isRequired,
+	updateData: PropTypes.func.isRequired,
 	start_work_monday: PropTypes.oneOfType([
 		PropTypes.string,
 		PropTypes.instanceOf(null),

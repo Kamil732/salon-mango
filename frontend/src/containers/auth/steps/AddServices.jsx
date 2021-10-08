@@ -226,8 +226,8 @@ function AddService({
 								/>
 							</FormControl>
 
-							<FormControl>
-								{suggestedHints.length > 0 && (
+							{suggestedHints.length > 0 && (
+								<FormControl>
 									<fieldset>
 										<legend>Sugerowane usługi</legend>
 										<div className="inline-wrap wrap">
@@ -253,8 +253,8 @@ function AddService({
 											))}
 										</div>
 									</fieldset>
-								)}
-							</FormControl>
+								</FormControl>
+							)}
 
 							<fieldset>
 								<legend>Czas trwania usługi</legend>
@@ -456,6 +456,13 @@ function AddService({
 							</Button>
 						</td>
 					</tr>
+					{services.length === 0 && (
+						<tr>
+							<td colSpan="3" className="text-broken text-center">
+								Dodaj conajmniej jedną usługę, aby przejść dalej
+							</td>
+						</tr>
+					)}
 				</tbody>
 			</table>
 		</>

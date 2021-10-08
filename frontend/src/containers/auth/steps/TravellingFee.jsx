@@ -24,7 +24,7 @@ function TravellingFee({
 	travel_fee_rules,
 	latitude,
 	longitude,
-	setData,
+	updateData,
 	onChange,
 }) {
 	const getOptionValue = (opt) => opt.value
@@ -68,7 +68,7 @@ function TravellingFee({
 						getOptionValue={getOptionValue}
 						getValuesValue={getOptionValue}
 						onChange={(val) =>
-							setData({
+							updateData({
 								billing_type: val,
 								travel_fee:
 									getOptionValue(val) ===
@@ -120,7 +120,7 @@ function TravellingFee({
 					getOptionValue={getOptionValue}
 					getValuesValue={getOptionValue}
 					onChange={(val) => {
-						setData({ max_travel_distance: val })
+						updateData({ max_travel_distance: val })
 						setZoom(val.zoom)
 					}}
 				/>
@@ -171,7 +171,7 @@ TravellingFee.prototype.propTypes = {
 			.isRequired,
 	}).isRequired,
 	travel_fee_rules: PropTypes.string,
-	setData: PropTypes.func.isRequired,
+	updateData: PropTypes.func.isRequired,
 	onChange: PropTypes.func.isRequired,
 }
 

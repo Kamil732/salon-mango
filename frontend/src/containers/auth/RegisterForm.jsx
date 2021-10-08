@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useState } from 'react'
+import React, { lazy, Suspense, useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
@@ -28,12 +28,7 @@ const INITIAL_STEPS_DATA = [
 		component: (props) => (
 			<SalonInformation
 				onChange={props.onChange}
-				setData={(data) =>
-					props.setData((prevData) => ({
-						...prevData,
-						...data,
-					}))
-				}
+				updateData={props.updateData}
 				salon_name={props.salon_name}
 				first_name={props.first_name}
 				last_name={props.last_name}
@@ -104,12 +99,7 @@ const INITIAL_STEPS_DATA = [
 				common_premises_name={props.common_premises_name}
 				common_premises_number={props.common_premises_number}
 				onChange={props.onChange}
-				setData={(data) =>
-					props.setData((prevData) => ({
-						...prevData,
-						...data,
-					}))
-				}
+				updateData={props.updateData}
 				componentData={props.componentData}
 				changeComponentData={props.changeComponentData}
 			/>
@@ -124,12 +114,7 @@ const INITIAL_STEPS_DATA = [
 				postal_code={props.postal_code}
 				latitude={props.latitude}
 				longitude={props.longitude}
-				setData={(data) =>
-					props.setData((prevData) => ({
-						...prevData,
-						...data,
-					}))
-				}
+				updateData={props.updateData}
 			/>
 		),
 		nextBtnDisabled: false,
@@ -138,12 +123,7 @@ const INITIAL_STEPS_DATA = [
 		component: (props) => (
 			<TravellingFee
 				onChange={props.onChange}
-				setData={(data) =>
-					props.setData((prevData) => ({
-						...prevData,
-						...data,
-					}))
-				}
+				updateData={props.updateData}
 				billing_type={props.billing_type}
 				travel_fee={props.travel_fee}
 				max_travel_distance={props.max_travel_distance}
@@ -158,12 +138,7 @@ const INITIAL_STEPS_DATA = [
 		component: (props) => (
 			<SetWorkingHours
 				onChangeIsWorkingDay={props.onChangeIsWorkingDay}
-				setData={(data) =>
-					props.setData((prevData) => ({
-						...prevData,
-						...data,
-					}))
-				}
+				updateData={props.updateData}
 				start_work_monday={props.start_work_monday}
 				end_work_monday={props.end_work_monday}
 				start_work_tuesday={props.start_work_tuesday}
@@ -255,6 +230,30 @@ function RegisterForm({ closeModal, register }) {
 		return () => setSTEPS([...INITIAL_STEPS_DATA])
 	}, [])
 
+	const updateData = useCallback(
+		(data) =>
+			setData((prevData) => ({
+				...prevData,
+				...data,
+			})),
+		[]
+	)
+
+	const changeComponentData = useCallback(
+		(newData) =>
+			setSTEPS((prevSTEPS) =>
+				prevSTEPS.map((_step, idx) =>
+					idx === step
+						? {
+								..._step,
+								...newData,
+						  }
+						: _step
+				)
+			),
+		[step]
+	)
+
 	const changeStep = (previous = false) => {
 		const step = previous ? -1 : 1
 
@@ -318,21 +317,8 @@ function RegisterForm({ closeModal, register }) {
 						{STEPS[step].component({
 							...data,
 							componentData: STEPS[step],
-							changeComponentData: (newData) =>
-								setSTEPS((prevSTEPS) =>
-									prevSTEPS.map((_step, idx) =>
-										idx === step
-											? {
-													..._step,
-													...newData,
-											  }
-											: _step
-									)
-								),
-							// (STEPS[step] = {
-							// 	...STEPS[step],
-							// 	...newData,
-							// }),
+							changeComponentData,
+							updateData,
 							setData,
 							onChange,
 							onChangeCategory,

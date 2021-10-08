@@ -30,6 +30,16 @@ function AcceptTerms({ onChange, accept_terms, changeComponentData }) {
 					/>
 				</CheckBox.Label>
 			</FormControl>
+			{!accept_terms && (
+				<>
+					<hr className="seperator" />
+					<div className="center-container">
+						<small className="text-broken">
+							Musisz zakceptować regulamin, aby przejść dalej
+						</small>
+					</div>
+				</>
+			)}
 		</>
 	)
 }

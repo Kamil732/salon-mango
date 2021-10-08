@@ -14,7 +14,7 @@ function FindAddress({
 	postal_code,
 	latitude,
 	longitude,
-	setData,
+	updateData,
 }) {
 	const { isLoaded } = useJsApiLoader({
 		googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
@@ -72,7 +72,7 @@ function FindAddress({
 								controls: ['Point'],
 								drawingMode: 'Point',
 								featureFactory: ({ g: { lat, lng } }) =>
-									setData({
+									updateData({
 										latitude: lat(),
 										longitude: lng(),
 									}),
@@ -95,7 +95,7 @@ FindAddress.prototype.propTypes = {
 	postal_code: PropTypes.string.isRequired,
 	latitude: PropTypes.number,
 	longitude: PropTypes.number,
-	setData: PropTypes.func.isRequired,
+	updateData: PropTypes.func.isRequired,
 }
 
 export default React.memo(FindAddress)
