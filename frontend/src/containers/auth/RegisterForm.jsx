@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useCallback, useEffect, useState } from 'react'
+import React, { lazy, Suspense, useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
@@ -224,11 +224,6 @@ function RegisterForm({ closeModal, register }) {
 	})
 	const [step, setStep] = useState(0)
 	const [STEPS, setSTEPS] = useState([...INITIAL_STEPS_DATA])
-
-	// Reset data
-	useEffect(() => {
-		return () => setSTEPS([...INITIAL_STEPS_DATA])
-	}, [])
 
 	const updateData = useCallback(
 		(data) =>

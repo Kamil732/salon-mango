@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import nextId from 'react-id-generator'
 import '../../../assets/css/table.css'
@@ -30,44 +30,67 @@ const initialServiceData = {
 	is_mobile: false,
 }
 
-function AddService({
-	services,
-	work_remotely,
-	categories,
-	componentData,
-	changeComponentData,
-	setData,
-}) {
-	const [modalData, setModalData] = useState({
-		isOpen: false,
-		editMode: false,
-	})
-	const [serviceData, setServiceData] = useState(initialServiceData)
-	const [suggestedHints, setSuggestedHints] = useState([])
-	const allowFilter = useRef(true)
-	const hints = useRef([])
+class AddService extends Component {
+	static propTypes = {
+		services: PropTypes.arrayOf(
+			PropTypes.shape({
+				id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+					.isRequired,
+				name: PropTypes.string.isRequired,
+				time: PropTypes.number.isRequired,
+				price: PropTypes.number.isRequired,
+				price_type: PropTypes.object.isRequired,
+				is_mobile: PropTypes.bool.isRequired,
+			}).isRequired
+		).isRequired,
+		work_remotely: PropTypes.bool,
+		categories: PropTypes.arrayOf(PropTypes.string).isRequired,
+		setData: PropTypes.func.isRequired,
+		changeComponentData: PropTypes.func.isRequired,
+		componentData: PropTypes.object.isRequired,
+	}
 
-	const getSelectedService = useCallback(
-		() => services.find((service) => service.id === serviceData.id),
-		[services, serviceData.id]
-	)
+	constructor(props) {
+		super(props)
 
-	useEffect(() => {
-		if (!componentData.loaded) {
-			console.log('xd')
-			for (let i = 0; i < categories.length; i++) {
-				import(`../../../helpers/data/services/${categories[i]}.json`)
-					.then((module) => module.default)
-					.then((data) => {
+		this.allowFilter = true
+		this.hints = []
+		this.selectedDefaultServiceData = {}
+
+		this.state = {
+			modalData: {
+				isOpen: false,
+				editMode: false,
+			},
+			serviceData: initialServiceData,
+			suggestedHints: [],
+		}
+	}
+
+	componentDidMount() {
+		const {
+			changeComponentData,
+			componentData,
+			categories,
+			services,
+			setData,
+		} = this.props
+
+		for (let i = 0; i < categories.length; i++) {
+			import(`../../../helpers/data/services/${categories[i]}.json`)
+				.then((module) => module.default)
+				.then((data) => {
+					if (!componentData.loaded) {
 						const newData = data.map((hint, idx) => ({
 							data: {
 								...initialServiceData,
 								...hint,
+								// price: parseFloat(hint.price),
 								id: nextId(),
 							},
 							sugest: idx > 2 ? true : false,
 						}))
-						hints.current = [...hints.current, ...newData]
+						this.hints = [...this.hints, ...newData]
 
 						setData((prevData) => ({
 							...prevData,
@@ -78,40 +101,96 @@ function AddService({
 								{ ...newData[2].data },
 							],
 						}))
-					})
-			}
+					} else {
+						let newData = []
+						for (let i = 0; i < data.length; i++) {
+							const serviceFromHint = services.find(
+								(service) => service.name === data[i].name
+							)
+							const id = serviceFromHint?.id
+								? serviceFromHint.id
+								: nextId()
 
+							newData.push({
+								data: {
+									...initialServiceData,
+									...data[i],
+									// price: parseFloat(data[i].price),
+									id,
+								},
+								sugest: serviceFromHint?.id ? false : true,
+							})
+						}
+
+						this.hints = [...this.hints, ...newData]
+					}
+				})
+		}
+
+		if (!componentData.loaded)
 			changeComponentData({
 				loaded: true,
 			})
-		}
-	}, [categories, changeComponentData, componentData.loaded, setData])
-
-	useEffect(() => {
-		if (modalData.isOpen && !modalData.editMode) filterHints()
-	}, [modalData])
-
-	const onChange = (e) =>
-		setServiceData((prevData) => ({
-			...prevData,
-			[e.target.name]:
-				e.target.type === 'checkbox'
-					? e.target.checked
-					: e.target.value,
-		}))
-
-	const resetForm = () => {
-		setModalData({
-			...modalData,
-			isOpen: false,
-			editMode: false,
-		})
-		setServiceData(initialServiceData)
-		setSuggestedHints([])
-		allowFilter.current = true
 	}
 
-	const addService = (e) => {
+	componentDidUpdate(_, prevState) {
+		if (
+			prevState.modalData.isOpen !== this.state.modalData.isOpen &&
+			this.state.modalData.isOpen &&
+			this.allowFilter
+		) {
+			this.filterHints()
+		}
+	}
+
+	filterHints = (value = '') => {
+		let suggestedHints = []
+
+		for (let i = 0; i < this.hints.length; i++) {
+			if (
+				this.hints[i].sugest &&
+				this.hints[i].data.name
+					.toLowerCase()
+					.includes(value.toLowerCase())
+			)
+				suggestedHints.push(this.hints[i])
+
+			if (suggestedHints.length === 10) break
+		}
+
+		this.setState({ suggestedHints })
+	}
+
+	onChange = (e) =>
+		this.setState((prevState) => ({
+			...prevState,
+			serviceData: {
+				...prevState.serviceData,
+				[e.target.name]:
+					e.target.type === 'checkbox'
+						? e.target.checked
+						: e.target.type === 'number'
+						? parseFloat(e.target.value, 2)
+						: e.target.value,
+			},
+		}))
+
+	resetForm = () => {
+		this.allowFilter = true
+
+		this.setState({
+			modalData: {
+				isOpen: false,
+				editMode: false,
+			},
+			serviceData: initialServiceData,
+			suggestedHints: [],
+		})
+	}
+
+	addService = (e) => {
+		const { changeComponentData, services, setData } = this.props
+		const { serviceData } = this.state
 		e.preventDefault()
 
 		if (services.length === 0)
@@ -127,366 +206,380 @@ function AddService({
 				},
 			],
 		}))
-		resetForm()
+		this.resetForm()
 
 		// Try to remove hint from hints
 		if (serviceData.id)
-			hints.current.find(
+			this.hints.find(
 				(hint) => hint.data.id === serviceData.id
 			).sugest = false
 	}
 
-	const removeService = (id) => {
+	removeService = (id) => {
+		const { changeComponentData, services, setData } = this.props
+
 		setData((prevData) => ({
 			...prevData,
 			services: prevData.services.filter((service) => service.id !== id),
 		}))
-		resetForm()
+		this.resetForm()
 
 		if (services.length === 1)
 			changeComponentData({ nextBtnDisabled: true })
 
 		// Try to add hint from hints
-		const hintData = hints.current.find((hint) => hint.data.id === id)
+		const hintData = this.hints.find((hint) => hint.data.id === id)
 		if (hintData) hintData.sugest = true
 	}
 
-	const saveService = () => {
+	saveService = () => {
+		const { setData } = this.props
+		const { serviceData } = this.state
+
 		setData((prevData) => ({
 			...prevData,
 			services: prevData.services.map((service) =>
 				service.id === serviceData.id ? serviceData : service
 			),
 		}))
-		resetForm()
+		this.resetForm()
 	}
 
-	const onSelectService = (service) => {
-		setServiceData(service)
-		allowFilter.current = false
-		setModalData({
-			...modalData,
-			isOpen: true,
-			editMode: true,
-		})
+	onSelectService = (service) => {
+		this.allowFilter = false
+		this.selectedDefaultServiceData = service
+
+		setTimeout(
+			() =>
+				this.setState({
+					modalData: {
+						isOpen: true,
+						editMode: true,
+					},
+					serviceData: service,
+				}),
+			0
+		)
 	}
 
-	const filterHints = (value = '') => {
-		let filteredHints = []
+	render() {
+		const { services, work_remotely } = this.props
+		const { modalData, serviceData, suggestedHints } = this.state
 
-		for (let i = 0; i < hints.current.length; i++) {
-			if (
-				hints.current[i].sugest &&
-				hints.current[i].data.name
-					.toLowerCase()
-					.includes(value.toLowerCase())
-			)
-				filteredHints.push(hints.current[i])
+		return (
+			<>
+				{modalData.isOpen && (
+					<Modal closeModal={this.resetForm} small isChild>
+						<Modal.Header>
+							<h3>Dodaj usługę</h3>
+						</Modal.Header>
+						<Modal.Body>
+							<p className="text-broken">
+								Możesz dodać opis i zmienić ustawienia
+								zaawansowane dla tej usługi później.
+							</p>
 
-			if (filteredHints.length === 10) break
-		}
-
-		setSuggestedHints(filteredHints)
-	}
-
-	return (
-		<>
-			{modalData.isOpen && (
-				<Modal closeModal={resetForm} small isChild>
-					<Modal.Header>
-						<h3>Dodaj usługę</h3>
-					</Modal.Header>
-					<Modal.Body>
-						<p className="text-broken">
-							Możesz dodać opis i zmienić ustawienia zaawansowane
-							dla tej usługi później.
-						</p>
-
-						<form
-							onSubmit={
-								modalData.editMode ? saveService : addService
-							}
-						>
-							<FormControl>
-								<Label
-									htmlFor="name"
-									inputValue={serviceData.name}
-								>
-									Nazwa usługi
-								</Label>
-								<Input
-									id="name"
-									name="name"
-									value={serviceData.name}
-									onChange={(e) => {
-										onChange(e)
-										if (allowFilter.current)
-											filterHints(e.target.value)
-									}}
-									autoComplete="off"
-								/>
-							</FormControl>
-
-							{suggestedHints.length > 0 && (
-								<FormControl>
-									<fieldset>
-										<legend>Sugerowane usługi</legend>
-										<div className="inline-wrap wrap">
-											{suggestedHints.map((hint) => (
-												<Button
-													key={hint.data.id}
-													rounded
-													small
-													onClick={() => {
-														setServiceData(
-															hint.data
-														)
-														setSuggestedHints([])
-														allowFilter.current = false
-													}}
-													className="service-suggestion-btn"
-												>
-													{hint.data.name}
-													<span className="service-suggestion-btn__icon">
-														<IoIosAdd size="25" />
-													</span>
-												</Button>
-											))}
-										</div>
-									</fieldset>
-								</FormControl>
-							)}
-
-							<fieldset>
-								<legend>Czas trwania usługi</legend>
-								<DurationInput
-									value={serviceData.time}
-									onChange={(time) =>
-										setServiceData((prevData) => ({
-											...prevData,
-											time,
-										}))
-									}
-								/>
-							</fieldset>
-
-							<FormGroup className="space-between">
-								<FormControl.Prefix>zł</FormControl.Prefix>
-								<FormControl>
-									<Label
-										htmlFor="price"
-										inputValue={serviceData.price}
-									>
-										Cena
-									</Label>
-									<Input
-										type="number"
-										min="0"
-										step="0.01"
-										id="price"
-										name="price"
-										value={serviceData.price}
-										onChange={onChange}
-									/>
-								</FormControl>
-							</FormGroup>
-
-							<FormControl>
-								<Label htmlFor="price-type" inputValue>
-									Rodzaj ceny
-								</Label>
-								<Dropdown
-									id="price-type"
-									options={PRICE_TYPES}
-									getOptionLabel={(opt) => opt.label}
-									getOptionValue={(opt) => opt.value}
-									getValuesValue={(opt) => opt.value}
-									value={serviceData.price_type}
-									onChange={(price_type) => {
-										setServiceData((prevData) => ({
-											...prevData,
-											price_type,
-										}))
-									}}
-								/>
-							</FormControl>
-
-							{work_remotely && (
-								<FormControl>
-									<CheckBox.Label>
-										<CheckBox
-											name="is_mobile"
-											checked={serviceData.is_mobile}
-											onChange={onChange}
-										/>
-										Usługa mobilna
-									</CheckBox.Label>
-								</FormControl>
-							)}
-
-							{modalData.editMode ? (
-								<div className="space-between">
-									<Button
-										className="btn-picker"
-										onClick={() =>
-											removeService(serviceData.id)
-										}
-										type="button"
-									>
-										<VscTrash size="30" color="#eb0043" />
-									</Button>
-									<Button
-										primary
-										disabled={
-											JSON.stringify(serviceData) ===
-											JSON.stringify(getSelectedService())
-										}
-										type="submit"
-									>
-										Zapisz
-									</Button>
-								</div>
-							) : (
-								<Button
-									primary
-									style={{ marginLeft: 'auto' }}
-									type="submit"
-								>
-									Dodaj
-								</Button>
-							)}
-						</form>
-					</Modal.Body>
-				</Modal>
-			)}
-
-			<div className="title-container">
-				<h2>Dodaj pierwsze usługi</h2>
-				<p className="description">
-					Dodaj co najmniej jedną usługę z Twojej oferty. Później
-					możesz dodać więcej usług, przypisać je do kategorii i
-					edytować szczegóły.
-				</p>
-			</div>
-
-			<table className="step-table">
-				<tbody>
-					{services.map((service) => {
-						const h = Math.floor(service.time / 60)
-						const m = Math.round(service.time % 60)
-
-						return (
-							<tr key={service.id}>
-								<td
-									className="inline-wrap"
-									style={{ justifyContent: 'flex-start' }}
-								>
-									<ReactTooltip
-										place="left"
-										effect="solid"
-										delayShow={250}
-										id={`delete-tooltip-${service.id}`}
-									/>
-
-									<Button
-										rounded
-										onClick={() =>
-											removeService(service.id)
-										}
-										data-for={`delete-tooltip-${service.id}`}
-										data-tip="Usuń usługę"
-									>
-										<GrClose size="20" opacity="0.4" />
-									</Button>
-
-									<Truncate lines={1} trimWhitespace>
-										{service.name}
-									</Truncate>
-								</td>
-								<td className="text-broken">
-									{h > 0 && `${h}h `}
-									{m > 0 && `${m}m`}
-								</td>
-								<td style={{ textAlign: 'center' }}>
-									<h4>
-										{service.price_type.value === 0
-											? 'Darmowa'
-											: service.price_type.value === 1
-											? 'Cena zmienna'
-											: service.price_type.value === 3
-											? '--'
-											: `${service.price} zł`}
-									</h4>
-								</td>
-								<td style={{ width: '1px' }}>
-									<ReactTooltip
-										place="right"
-										effect="solid"
-										delayShow={250}
-										id={`edit-tooltip-${service.id}`}
-									/>
-									<Button
-										rounded
-										onClick={() => onSelectService(service)}
-										data-for={`edit-tooltip-${service.id}`}
-										data-tip="Edytuj usługę"
-									>
-										<IoIosArrowForward size="20" />
-									</Button>
-								</td>
-							</tr>
-						)
-					})}
-					<tr>
-						<td colSpan="3">
-							<Button
-								rounded
-								className="icon-container"
-								onClick={() =>
-									setModalData({
-										...modalData,
-										isOpen: true,
-									})
+							<form
+								onSubmit={
+									modalData.editMode
+										? this.saveService
+										: this.addService
 								}
 							>
-								<AiOutlinePlus
-									size="20"
-									className="icon-container__icon"
-								/>
-								Dodaj usługę
-							</Button>
-						</td>
-					</tr>
-					{services.length === 0 && (
+								<FormControl>
+									<Label
+										htmlFor="name"
+										inputValue={serviceData.name}
+									>
+										Nazwa usługi
+									</Label>
+									<Input
+										id="name"
+										name="name"
+										value={serviceData.name}
+										onChange={(e) => {
+											this.onChange(e)
+											if (this.allowFilter)
+												this.filterHints(e.target.value)
+										}}
+										autoComplete="off"
+									/>
+								</FormControl>
+
+								{suggestedHints.length > 0 && (
+									<FormControl>
+										<fieldset>
+											<legend>Sugerowane usługi</legend>
+											<div className="inline-wrap wrap">
+												{suggestedHints.map((hint) => (
+													<Button
+														key={hint.data.id}
+														rounded
+														small
+														onClick={() => {
+															this.setState({
+																serviceData:
+																	hint.data,
+																suggestedHints:
+																	[],
+															})
+
+															this.allowFilter = false
+														}}
+														className="service-suggestion-btn"
+													>
+														{hint.data.name}
+														<span className="service-suggestion-btn__icon">
+															<IoIosAdd size="25" />
+														</span>
+													</Button>
+												))}
+											</div>
+										</fieldset>
+									</FormControl>
+								)}
+
+								<fieldset>
+									<legend>Czas trwania usługi</legend>
+									<DurationInput
+										value={serviceData.time}
+										onChange={(time) =>
+											this.setState((prevState) => ({
+												...prevState,
+												serviceData: {
+													...prevState.serviceData,
+													time,
+												},
+											}))
+										}
+									/>
+								</fieldset>
+
+								<FormGroup className="space-between">
+									<FormControl.Prefix>zł</FormControl.Prefix>
+									<FormControl>
+										<Label
+											htmlFor="price"
+											inputValue={serviceData.price}
+										>
+											Cena
+										</Label>
+
+										<Input
+											type="number"
+											min="0"
+											step="0.01"
+											id="price"
+											name="price"
+											value={serviceData.price}
+											onInput={this.onChange}
+											disabled={
+												serviceData.price_type.value !==
+													2 &&
+												serviceData.price_type.value !==
+													4
+											}
+										/>
+									</FormControl>
+								</FormGroup>
+
+								<FormControl>
+									<Label htmlFor="price-type" inputValue>
+										Rodzaj ceny
+									</Label>
+									<Dropdown
+										id="price-type"
+										options={PRICE_TYPES}
+										getOptionLabel={(opt) => opt.label}
+										getOptionValue={(opt) => opt.value}
+										getValuesValue={(opt) => opt.value}
+										value={serviceData.price_type}
+										onChange={(price_type) => {
+											this.setState((prevState) => ({
+												...prevState,
+												serviceData: {
+													...prevState.serviceData,
+													price_type,
+												},
+											}))
+										}}
+									/>
+								</FormControl>
+
+								{work_remotely && (
+									<FormControl>
+										<CheckBox.Label>
+											<CheckBox
+												name="is_mobile"
+												checked={serviceData.is_mobile}
+												onChange={this.onChange}
+											/>
+											Usługa mobilna
+										</CheckBox.Label>
+									</FormControl>
+								)}
+
+								{modalData.editMode ? (
+									<div className="space-between">
+										<Button
+											className="btn-picker"
+											onClick={() =>
+												this.removeService(
+													serviceData.id
+												)
+											}
+											type="button"
+										>
+											<VscTrash
+												size="30"
+												color="#eb0043"
+											/>
+										</Button>
+										<Button
+											primary
+											disabled={
+												JSON.stringify(serviceData) ===
+												JSON.stringify(
+													this
+														.selectedDefaultServiceData
+												)
+											}
+											type="submit"
+										>
+											Zapisz
+										</Button>
+									</div>
+								) : (
+									<Button
+										primary
+										style={{ marginLeft: 'auto' }}
+										type="submit"
+									>
+										Dodaj
+									</Button>
+								)}
+							</form>
+						</Modal.Body>
+					</Modal>
+				)}
+
+				<div className="title-container">
+					<h2>Dodaj pierwsze usługi</h2>
+					<p className="description">
+						Dodaj co najmniej jedną usługę z Twojej oferty. Później
+						możesz dodać więcej usług, przypisać je do kategorii i
+						edytować szczegóły.
+					</p>
+				</div>
+
+				<table className="step-table">
+					<tbody>
+						{services.map((service) => {
+							const h = Math.floor(service.time / 60)
+							const m = Math.round(service.time % 60)
+
+							return (
+								<tr key={service.id}>
+									<td
+										className="inline-wrap"
+										style={{ justifyContent: 'flex-start' }}
+									>
+										<ReactTooltip
+											place="left"
+											effect="solid"
+											delayShow={250}
+											id={`delete-tooltip-${service.id}`}
+										/>
+
+										<Button
+											rounded
+											onClick={() =>
+												this.removeService(service.id)
+											}
+											data-for={`delete-tooltip-${service.id}`}
+											data-tip="Usuń usługę"
+										>
+											<GrClose size="20" opacity="0.4" />
+										</Button>
+
+										<Truncate lines={1} trimWhitespace>
+											{service.name}
+										</Truncate>
+									</td>
+									<td className="text-broken">
+										{h > 0 && `${h}h `}
+										{m > 0 && `${m}m`}
+									</td>
+									<td className="text-center">
+										<h4>
+											{service.price_type.value === 0
+												? 'Darmowa'
+												: service.price_type.value === 1
+												? 'Cena zmienna'
+												: service.price_type.value === 3
+												? '--'
+												: `${service.price} zł`}
+										</h4>
+									</td>
+									<td style={{ width: '1px' }}>
+										<ReactTooltip
+											place="right"
+											effect="solid"
+											delayShow={250}
+											id={`edit-tooltip-${service.id}`}
+										/>
+										<Button
+											rounded
+											onClick={() =>
+												this.onSelectService(service)
+											}
+											data-for={`edit-tooltip-${service.id}`}
+											data-tip="Edytuj usługę"
+										>
+											<IoIosArrowForward size="20" />
+										</Button>
+									</td>
+								</tr>
+							)
+						})}
 						<tr>
-							<td colSpan="3" className="text-broken text-center">
-								Dodaj conajmniej jedną usługę, aby przejść dalej
+							<td colSpan="3">
+								<Button
+									rounded
+									className="icon-container"
+									onClick={() =>
+										this.setState({
+											modalData: {
+												editMode: false,
+												isOpen: true,
+											},
+										})
+									}
+								>
+									<AiOutlinePlus
+										size="20"
+										className="icon-container__icon"
+									/>
+									Dodaj usługę
+								</Button>
 							</td>
 						</tr>
-					)}
-				</tbody>
-			</table>
-		</>
-	)
-}
-
-AddService.prototype.propTypes = {
-	services: PropTypes.arrayOf(
-		PropTypes.shape({
-			id: PropTypes.number.isRequired,
-			name: PropTypes.string.isRequired,
-			time: PropTypes.string.isRequired,
-			price: PropTypes.number.isRequired,
-			price_type: PropTypes.string.isRequired,
-			is_mobile: PropTypes.bool.isRequired,
-		}).isRequired
-	).isRequired,
-	work_remotely: PropTypes.bool,
-	categories: PropTypes.arrayOf([
-		PropTypes.string.isRequired,
-		PropTypes.string.isRequired,
-	]).isRequired,
-	setServices: PropTypes.func.isRequired,
+						{services.length === 0 && (
+							<tr>
+								<td
+									colSpan="3"
+									className="text-broken text-center"
+								>
+									Dodaj conajmniej jedną usługę, aby przejść
+									dalej
+								</td>
+							</tr>
+						)}
+					</tbody>
+				</table>
+			</>
+		)
+	}
 }
 
 export default AddService
