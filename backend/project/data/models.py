@@ -111,15 +111,11 @@ class Employee(Color):
     salon = models.ForeignKey(Salon,
                               on_delete=models.CASCADE,
                               related_name='employees')
-    first_name = models.CharField(verbose_name="Imię", max_length=20)
-    last_name = models.CharField(verbose_name="Nazwisko", max_length=20)
-    slug = AutoSlugField(populate_from="first_name", unique=True)
+    name = models.CharField(verbose_name="Imię", max_length=20)
+    slug = AutoSlugField(populate_from="name", unique=True)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
-
-    def get_full_name(self):
-        return f"{self.first_name} {self.last_name}"
+        return self.name
 
 
 class CustomerImage(models.Model):
