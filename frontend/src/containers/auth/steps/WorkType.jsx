@@ -30,6 +30,15 @@ function WorkType({
 		changeComponentData,
 	])
 
+	useEffect(() => {
+		changeComponentData(
+			{
+				skip: !work_remotely,
+			},
+			7
+		)
+	}, [work_remotely, changeComponentData])
+
 	return (
 		<>
 			<div className="title-container">

@@ -132,6 +132,7 @@ const INITIAL_STEPS_DATA = [
 				longitude={props.longitude}
 			/>
 		),
+		skip: false,
 		nextBtnDisabled: false,
 	},
 	{
@@ -235,26 +236,35 @@ function RegisterForm({ closeModal, register }) {
 	)
 
 	const changeComponentData = useCallback(
-		(newData) =>
+		(newData, stepIdx = step) =>
 			setSTEPS((prevSTEPS) =>
-				prevSTEPS.map((_step, idx) =>
-					idx === step
+				prevSTEPS.map((stepData, idx) =>
+					idx === stepIdx
 						? {
-								..._step,
+								...stepData,
 								...newData,
 						  }
-						: _step
+						: stepData
 				)
 			),
 		[step]
 	)
 
 	const changeStep = (previous = false) => {
-		const step = previous ? -1 : 1
+		let step = previous ? -1 : 1
 
 		setStep((prevStep) => {
 			if (prevStep + step < 0) closeModal()
-			if (prevStep + step > STEPS.length - 1) return 0
+
+			// change step to the closest that should NOT be skipped
+			for (let i = 0; i < STEPS.length; i++) {
+				i = previous ? -i : i
+				if (prevStep + step + i > STEPS.length - 1) return 0
+				if (!STEPS[prevStep + step + i].skip) {
+					step += i
+					break
+				}
+			}
 
 			return prevStep + step
 		})

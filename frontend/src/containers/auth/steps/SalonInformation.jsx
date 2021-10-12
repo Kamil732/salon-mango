@@ -114,7 +114,7 @@ function SalonInformation({
 				</FormControl>
 			</FormGroup>
 			<FormGroup>
-				<FormControl style={{ width: '6.5rem' }}>
+				<FormControl style={{ width: '7rem' }}>
 					<Label
 						htmlFor="phone-prefix"
 						inputValue={Object.keys(phone_prefix).length > 0}
