@@ -271,7 +271,9 @@ class AddService extends Component {
 				{modalData.isOpen && (
 					<Modal closeModal={this.resetForm} small isChild>
 						<Modal.Header>
-							<h3>Dodaj usługę</h3>
+							<h3>
+								{modalData.editMode ? 'Edytuj' : 'Dodaj'} usługę
+							</h3>
 						</Modal.Header>
 						<Modal.Body>
 							<p className="text-broken">
@@ -294,6 +296,7 @@ class AddService extends Component {
 										Nazwa usługi
 									</Label>
 									<Input
+										required
 										id="name"
 										name="name"
 										value={serviceData.name}
@@ -366,6 +369,7 @@ class AddService extends Component {
 										</Label>
 
 										<Input
+											required
 											type="number"
 											min="0"
 											step="0.01"

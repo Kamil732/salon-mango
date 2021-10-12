@@ -300,7 +300,11 @@ class Dropdown extends Component {
 
 				<div className="dropdown__input-container">
 					<Input
-						required={required && !value}
+						required={
+							required &&
+							((!isMulti && Object.keys(value).length === 0) ||
+								(isMulti && value.length === 0))
+						}
 						onClick={() => this.setState({ isOpen: true })}
 						onInput={() => this.setState({ isOpen: true })}
 						value={inputValue}
