@@ -20,6 +20,7 @@ const FindAddress = lazy(() => import('./steps/FindAddress'))
 const SetAddress = lazy(() => import('./steps/SetAddress'))
 const TravellingFee = lazy(() => import('./steps/TravellingFee'))
 const AddServices = lazy(() => import('./steps/AddServices'))
+const AddEmployees = lazy(() => import('./steps/AddEmployees'))
 
 const BILLING_TYPES = require('../../helpers/data/billing_types.json')
 const MAX_TRAVEL_DISTANCES = require('../../helpers/data/max_travel_distances.json')
@@ -30,8 +31,7 @@ const INITIAL_STEPS_DATA = [
 				onChange={props.onChange}
 				updateData={props.updateData}
 				salon_name={props.salon_name}
-				first_name={props.first_name}
-				last_name={props.last_name}
+				name={props.name}
 				phone_prefix={props.phone_prefix}
 				phone_number={props.phone_number}
 				recomendation_code={props.recomendation_code}
@@ -172,6 +172,12 @@ const INITIAL_STEPS_DATA = [
 		nextBtnDisabled: false,
 		loaded: false,
 	},
+	{
+		component: (props) => (
+			<AddEmployees employees={props.employees} name={props.name} />
+		),
+		nextBtnDisabled: false,
+	},
 ]
 
 function RegisterForm({ closeModal, register }) {
@@ -180,8 +186,7 @@ function RegisterForm({ closeModal, register }) {
 		password: '',
 		confirm_password: '',
 		salon_name: '',
-		first_name: '',
-		last_name: '',
+		name: '',
 		phone_prefix: {},
 		phone_number: '',
 		recomendation_code: '',
@@ -222,6 +227,7 @@ function RegisterForm({ closeModal, register }) {
 		travel_fee_rules: '',
 
 		services: [],
+		employees: [],
 	})
 	const [step, setStep] = useState(0)
 	const [STEPS, setSTEPS] = useState([...INITIAL_STEPS_DATA])
