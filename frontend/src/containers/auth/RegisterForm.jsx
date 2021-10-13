@@ -174,7 +174,12 @@ const INITIAL_STEPS_DATA = [
 	},
 	{
 		component: (props) => (
-			<AddEmployees employees={props.employees} name={props.name} />
+			<AddEmployees
+				employees={props.employees}
+				name={props.name}
+				phone_prefix={props.phone_prefix}
+				setData={props.setData}
+			/>
 		),
 		nextBtnDisabled: false,
 	},

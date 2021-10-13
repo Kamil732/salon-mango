@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
+import nextId from 'react-id-generator'
 import '../../../assets/css/table.css'
 
 import ReactTooltip from 'react-tooltip'
@@ -14,20 +15,23 @@ import Input from '../../../layout/forms/inputs/Input'
 import PhoneNumberInput from '../../../layout/forms/inputs/PhoneNumberInput'
 import Button from '../../../layout/buttons/Button'
 
-const initialEmployeeData = {
-	name: '',
-	email: '',
-	phone_prefix: {},
-	phone_number: '',
-	position: '',
-}
-
-function AddEmployees({ name, employees }) {
+function AddEmployees({ name, phone_prefix, employees, setData }) {
+	const initialEmployeeData = useMemo(
+		() => ({
+			name: '',
+			email: '',
+			phone_prefix: phone_prefix,
+			phone_number: '',
+			position: '',
+		}),
+		[phone_prefix]
+	)
 	const [modalData, setModalData] = useState({
 		isOpen: false,
 		editMode: false,
 	})
 	const [employeeData, setEmployeeData] = useState(initialEmployeeData)
+	const selectedDefaultEmployeeData = useRef({})
 
 	const resetForm = () => {
 		setModalData({
@@ -43,8 +47,51 @@ function AddEmployees({ name, employees }) {
 			[e.target.name]: e.target.value,
 		}))
 
-	const onSubmit = (e) => {
+	const addEmployee = (e) => {
 		e.preventDefault()
+
+		setData((prevData) => ({
+			...prevData,
+			employees: [
+				...prevData.employees,
+				{
+					id: nextId(),
+					...employeeData,
+				},
+			],
+		}))
+		resetForm()
+	}
+
+	const removeEmployee = () => {
+		setData((prevData) => ({
+			...prevData,
+			employees: prevData.employees.filter(
+				(employee) => employee.id !== employeeData.id
+			),
+		}))
+		resetForm()
+	}
+
+	const saveEmployee = (e) => {
+		e.preventDefault()
+
+		setData((prevData) => ({
+			...prevData,
+			employees: prevData.employees.map((employee) =>
+				employee.id === employeeData.id ? employeeData : employee
+			),
+		}))
+		resetForm()
+	}
+
+	const onSelectService = (employee) => {
+		selectedDefaultEmployeeData.current = employee
+		setModalData({
+			isOpen: true,
+			editMode: true,
+		})
+		setEmployeeData(employee)
 	}
 
 	return (
@@ -55,7 +102,11 @@ function AddEmployees({ name, employees }) {
 						{modalData.editMode ? 'Edytuj' : 'Dodaj'} pracownika
 					</Modal.Header>
 					<Modal.Body>
-						<form onSubmit={onSubmit}>
+						<form
+							onSubmit={
+								modalData.editMode ? saveEmployee : addEmployee
+							}
+						>
 							<FormControl>
 								<Label
 									htmlFor="name"
@@ -117,7 +168,7 @@ function AddEmployees({ name, employees }) {
 								<div className="space-between">
 									<Button
 										className="btn-picker"
-										onClick={() => {}}
+										onClick={removeEmployee}
 										type="button"
 									>
 										<VscTrash size="30" color="#eb0043" />
@@ -126,7 +177,9 @@ function AddEmployees({ name, employees }) {
 										primary
 										disabled={
 											JSON.stringify(employeeData) ===
-											JSON.stringify({})
+											JSON.stringify(
+												selectedDefaultEmployeeData.current
+											)
 										}
 										type="submit"
 									>
@@ -165,7 +218,9 @@ function AddEmployees({ name, employees }) {
 					{employees.map((employee) => (
 						<tr key={employee.id}>
 							<td>{employee.name}</td>
-							{employee.position && <td>{employee.position}</td>}
+
+							<td className="text-broken">{employee.position}</td>
+
 							<td style={{ width: '1px' }}>
 								<ReactTooltip
 									place="right"
@@ -175,9 +230,7 @@ function AddEmployees({ name, employees }) {
 								/>
 								<Button
 									rounded
-									onClick={() =>
-										this.onSelectService(employee)
-									}
+									onClick={() => onSelectService(employee)}
 									data-for={`edit-tooltip-${employee.id}`}
 									data-tip="Edytuj pracownika"
 								>
@@ -187,7 +240,7 @@ function AddEmployees({ name, employees }) {
 						</tr>
 					))}
 					<tr>
-						<td colSpan="2">
+						<td colSpan="3">
 							<Button
 								rounded
 								className="icon-container"
@@ -214,6 +267,7 @@ function AddEmployees({ name, employees }) {
 
 AddEmployees.prototype.propTypes = {
 	name: PropTypes.string.isRequired,
+	phone_prefix: PropTypes.object,
 	employees: PropTypes.arrayOf(
 		PropTypes.shape({
 			id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
@@ -222,6 +276,7 @@ AddEmployees.prototype.propTypes = {
 			position: PropTypes.string.isRequired,
 		}).isRequired
 	).isRequired,
+	setData: PropTypes.func.isRequired,
 }
 
 export default AddEmployees

@@ -232,9 +232,10 @@ class AddService extends Component {
 		if (hintData) hintData.sugest = true
 	}
 
-	saveService = () => {
+	saveService = (e) => {
 		const { setData } = this.props
 		const { serviceData } = this.state
+		e.preventDefault()
 
 		setData((prevData) => ({
 			...prevData,
