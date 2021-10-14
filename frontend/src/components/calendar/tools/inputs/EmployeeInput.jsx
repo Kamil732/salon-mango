@@ -26,7 +26,7 @@ function EmployeeInput({
 		if (employees.length === 0) loadEmployees()
 	}, [employees, loadEmployees])
 
-	const getOptionLabel = (option) => option.full_name
+	const getOptionLabel = (option) => option.name
 
 	const formatOptionLabel = (option) => {
 		const time = serviceId
@@ -41,7 +41,7 @@ function EmployeeInput({
 
 	return (
 		<FormControl>
-			<Label htmlFor={id} inputValue={value?.full_name}>
+			<Label htmlFor={id} inputValue={value?.name}>
 				Fryzjer
 			</Label>
 			<Dropdown

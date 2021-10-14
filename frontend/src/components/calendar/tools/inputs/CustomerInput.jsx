@@ -42,7 +42,7 @@ function CustomerInput({
 						{...props}
 					/>
 				</FormControl>
-				<Dropdown.ClearBtn clear={() => onChange(null)} value={value} />
+				<Dropdown.ClearBtn clear={() => onChange({})} value={value} />
 			</Dropdown.InputContainer>
 			{!value?.full_name && (
 				<Button type="button" small primary onClick={changeForm}>

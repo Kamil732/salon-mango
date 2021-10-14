@@ -24,9 +24,19 @@ function EmployeeAndResourceInputs({
 }) {
 	const [isOpen, setIsOpen] = useState(false)
 
+	const getEmployeeInitial = (name) => {
+		name = name.split(' ')
+		if (name.length > 1)
+			return `${name[0].charAt(0).toUpperCase()}.${name[1]
+				.charAt(0)
+				.toUpperCase()}.`
+
+		return `${name[0].charAt(0).toUpperCase()}.`
+	}
+
 	const employeeInput = (
 		<EmployeeInput
-			required={resource === null}
+			required={Object.keys(resource).length === 0}
 			value={employee}
 			onChange={(option) => updateEmployee(option)}
 		/>
@@ -35,7 +45,7 @@ function EmployeeAndResourceInputs({
 	const resourceInput =
 		resources.length > 0 ? (
 			<ResourceInput
-				required={employee === null}
+				required={Object.keys(employee).length === 0}
 				value={resource}
 				onChange={(option) => updateResource(option)}
 			/>
@@ -55,16 +65,14 @@ function EmployeeAndResourceInputs({
 									</div>
 								}
 							>
-								{resource === null ? (
+								{Object.keys(resource).length === 0 ? (
 									employeeInput
 								) : (
 									<FormGroup>
 										<Dropdown.InputContainer>
 											{employeeInput}
 											<Dropdown.ClearBtn
-												clear={() =>
-													updateEmployee(null)
-												}
+												clear={() => updateEmployee({})}
 												value={employee}
 											/>
 										</Dropdown.InputContainer>
@@ -72,7 +80,7 @@ function EmployeeAndResourceInputs({
 								)}
 
 								{resourceInput ? (
-									employee === null ? (
+									Object.keys(employee).length === 0 ? (
 										resourceInput
 									) : (
 										<FormGroup>
@@ -80,7 +88,7 @@ function EmployeeAndResourceInputs({
 												{resourceInput}
 												<Dropdown.ClearBtn
 													clear={() =>
-														updateResource(null)
+														updateResource({})
 													}
 													value={resource}
 												/>
@@ -102,7 +110,7 @@ function EmployeeAndResourceInputs({
 					className={`btn-picker ${employee ? employee.color : ''}`}
 					data-tip={
 						employee
-							? `pracownik: ${employee.full_name}`
+							? `pracownik: ${employee.name}`
 							: 'brak pracownika'
 					}
 					style={{
@@ -111,9 +119,7 @@ function EmployeeAndResourceInputs({
 					data-for="employeeBtnTip"
 				>
 					{employee ? (
-						`${employee?.first_name.charAt(
-							0
-						)}.${employee?.last_name.charAt(0)}.`
+						getEmployeeInitial(employee.name)
 					) : (
 						<GrUserWorker />
 					)}

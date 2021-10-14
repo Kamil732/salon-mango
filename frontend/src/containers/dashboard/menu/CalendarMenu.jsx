@@ -136,13 +136,13 @@ function CalendarMenu({
 														: 'radio'
 												}
 												data-id={`employee-${employee.id}`}
-												data-title={employee.full_name}
+												data-title={employee.name}
 												data-employee={employee.id}
 												checked={isChecked}
 												onChange={onChangeResource}
 											/>
 
-											<span>{employee.full_name}</span>
+											<span>{employee.name}</span>
 											<div
 												className={`box-color ${employee.color}`}
 											></div>

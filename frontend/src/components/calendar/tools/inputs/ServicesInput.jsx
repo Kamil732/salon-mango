@@ -52,7 +52,7 @@ function ServicesInput({
 
 	const getServiceEmployeeTime = useCallback(
 		(employee, id, returnDisplayTime = true) => {
-			if (employee === null) return null
+			if (Object.keys(employee).length === 0) return null
 
 			const serviceDate = employee.services_data.find(
 				({ service }) => service === id
@@ -221,7 +221,7 @@ function ServicesInput({
 
 														return {
 															...service,
-															employee: null,
+															employee: {},
 														}
 													})
 												)
@@ -376,13 +376,13 @@ function ServicesInput({
 														}`}
 														data-tip={
 															option.employee
-																? `pracownik: ${option.employee.full_name}`
+																? `pracownik: ${option.employee.name}`
 																: 'brak pracownika'
 														}
 														data-for={`employeeBtnTip-${option.value.id}`}
 													>
 														{option.employee
-															?.full_name || (
+															?.name || (
 															<GrUserWorker />
 														)}
 													</Button>
@@ -743,7 +743,7 @@ function ServicesInput({
 									.toDate(),
 								employee: defaultEmployee
 									? defaultEmployee
-									: null,
+									: {},
 								resources: defaultResource
 									? [defaultResource]
 									: [],

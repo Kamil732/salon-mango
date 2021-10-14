@@ -66,13 +66,13 @@ class AddMeetingAdminForm extends Component {
 				? props.employees.find(
 						({ id }) => id === selectedResourceMap.employeeId
 				  )
-				: null,
+				: {},
 			resource: selectedResourceMap?.resourceId
 				? props.resources.find(
 						({ id }) => id === selectedResourceMap.resourceId
 				  )
-				: null,
-			customer: null,
+				: {},
+			customer: {},
 			services: [],
 			private_description: '',
 			customer_description: '',
@@ -84,7 +84,7 @@ class AddMeetingAdminForm extends Component {
 
 	componentDidUpdate(_, prevState) {
 		if (prevState.blocked !== this.state.blocked && prevState.blocked)
-			this.setState({ employee: null })
+			this.setState({ employee: {} })
 
 		setMeetingEndDate(
 			prevState,
@@ -299,7 +299,10 @@ class AddMeetingAdminForm extends Component {
 									<FormGroup>
 										<Dropdown.InputContainer>
 											<EmployeeInput
-												required={resource == null}
+												required={
+													Object.keys(resource)
+														.length === 0
+												}
 												value={employee}
 												onChange={(option) =>
 													this.setState({
@@ -312,12 +315,15 @@ class AddMeetingAdminForm extends Component {
 														id: null,
 													},
 												]}
-												disabled={resource != null}
+												disabled={
+													Object.keys(resource)
+														.length > 0
+												}
 											/>
 											<Dropdown.ClearBtn
 												clear={() =>
 													this.setState({
-														employee: null,
+														employee: {},
 													})
 												}
 												value={employee}
@@ -328,19 +334,25 @@ class AddMeetingAdminForm extends Component {
 									<FormGroup>
 										<Dropdown.InputContainer>
 											<ResourceInput
-												required={employee == null}
+												required={
+													Object.keys(employee)
+														.length === 0
+												}
 												value={resource}
 												onChange={(option) =>
 													this.setState({
 														resource: option,
 													})
 												}
-												disabled={employee != null}
+												disabled={
+													Object.keys(employee)
+														.length > 0
+												}
 											/>
 											<Dropdown.ClearBtn
 												clear={() =>
 													this.setState({
-														resource: null,
+														resource: {},
 													})
 												}
 												value={resource}

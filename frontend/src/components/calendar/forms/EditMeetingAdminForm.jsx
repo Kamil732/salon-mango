@@ -59,12 +59,12 @@ class EditMeetingAdminForm extends Component {
 				? props.employees.find(
 						({ id }) => id === selectedResourceMap.employeeId
 				  )
-				: null,
+				: {},
 			resource: selectedResourceMap?.resourceId
 				? props.resources.find(
 						({ id }) => id === selectedResourceMap.resourceId
 				  )
-				: null,
+				: {},
 			services: props.selected.data.services.map((service) => ({
 				resources: service.resources.map((resourceId) =>
 					props.resources.find(
@@ -89,7 +89,7 @@ class EditMeetingAdminForm extends Component {
 	componentDidUpdate(prevProps, prevState) {
 		if (
 			prevProps.customers !== this.props.customers &&
-			this.state.customer == null
+			Object.keys(this.state.customer).keys === 0
 		)
 			this.setState({
 				customer: this.props.customers.find(
