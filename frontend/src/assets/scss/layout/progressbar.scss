@@ -1,0 +1,18 @@
+@import '../abstarct/variables';
+
+.progressbar {
+	height: 0.5rem;
+	position: relative;
+	background-color: $background-color;
+	border-radius: 8px;
+	width: 100%;
+
+	& > span {
+		display: block;
+		height: 100%;
+		border-radius: 8px;
+		background: $success-color;
+		position: relative;
+		overflow: hidden;
+	}
+}
