@@ -1,6 +1,7 @@
 import React, { lazy, Suspense, useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import '../../assets/css/progressbar.css'
 
 // import { register } from '../../redux/actions/auth'
 import { HiOutlineArrowLeft } from 'react-icons/hi'
@@ -317,15 +318,16 @@ function RegisterForm({ closeModal, register }) {
 	return (
 		<Card formCard className="center-item">
 			<Card.Header>
-				<Button rounded onClick={() => changeStep(true)}>
-					<HiOutlineArrowLeft size="25" />
-				</Button>
-				<Button rounded onClick={() => setStep(STEPS.length - 1)}>
-					Go to 9
-				</Button>
-				<Button rounded onClick={() => setStep(3)}>
-					Go to 2
-				</Button>
+				<div className="space-between">
+					<Button rounded onClick={() => changeStep(true)}>
+						<HiOutlineArrowLeft size="25" />
+					</Button>
+					<div className="progressbar">
+						<span
+							style={{ width: `${(step / STEPS.length) * 100}%` }}
+						></span>
+					</div>
+				</div>
 			</Card.Header>
 			<Card.Body>
 				<ErrorBoundary>
