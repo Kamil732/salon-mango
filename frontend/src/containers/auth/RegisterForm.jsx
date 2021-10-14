@@ -101,6 +101,7 @@ const INITIAL_STEPS_DATA = [
 				common_premises_number={props.common_premises_number}
 				onChange={props.onChange}
 				updateData={props.updateData}
+				setData={props.setData}
 				componentData={props.componentData}
 				changeComponentData={props.changeComponentData}
 			/>
