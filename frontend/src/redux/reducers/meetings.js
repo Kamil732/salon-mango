@@ -10,6 +10,10 @@ import {
 	UPDATE_MEETING,
 	UPDATE_CALENDAR_DATES,
 	UPDATE_RESOURCE_MAP,
+	AUTH_ERROR,
+	LOGIN_FAIL,
+	REGISTER_FAIL,
+	LOGOUT,
 } from '../actions/types'
 
 const initialState = {
@@ -118,11 +122,32 @@ export default function (state = initialState, action) {
 				},
 			}
 		case UPDATE_RESOURCE_MAP:
+			if (action.payload.name !== 'isMany')
+				localStorage.setItem(
+					`resource-map-${action.payload.name}`,
+					JSON.stringify(action.payload.value)
+				)
+
 			return {
 				...state,
 				resourceMap: {
 					...state.resourceMap,
 					[action.payload.name]: action.payload.value,
+				},
+			}
+		case AUTH_ERROR:
+		case REGISTER_FAIL:
+		case LOGIN_FAIL:
+		case LOGOUT:
+			localStorage.removeItem('resource-map-data')
+			localStorage.removeItem('resource-map-selected')
+
+			return {
+				...state,
+				resourceMap: {
+					isMany: null,
+					selected: {},
+					data: [],
 				},
 			}
 		default:

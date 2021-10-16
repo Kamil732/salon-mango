@@ -16,6 +16,7 @@ import { NotificationManager } from 'react-notifications'
 
 import getHeaders from '../../helpers/getHeaders'
 import axios from 'axios'
+import { updateResourceMap } from './meetings'
 
 export const getSalonData = (salonId) => async (dispatch) => {
 	try {
@@ -43,6 +44,22 @@ export const loadEmployees = () => async (dispatch, getState) => {
 				getState().data.salon.id
 			}/employees/`
 		)
+
+		const data = {
+			id: `employee-${res.data[0].id}`,
+			title: res.data[0].name,
+			employeeId: res.data[0].id,
+			resourceId: null,
+		}
+
+		dispatch(
+			updateResourceMap('data', [
+				...getState().meetings.resourceMap.data,
+				data,
+			])
+		)
+		if (Object.keys(getState().meetings.resourceMap.selected).length === 0)
+			dispatch(updateResourceMap('selected', data))
 
 		dispatch({
 			type: LOAD_EMPLOYEES,

@@ -97,9 +97,6 @@ export const updateCalendarDates = (data) => (dispatch) => {
 }
 
 export const updateResourceMap = (name, value) => (dispatch) => {
-	if (name !== 'isMany')
-		localStorage.setItem(`resource-map-${name}`, JSON.stringify(value))
-
 	dispatch({
 		type: UPDATE_RESOURCE_MAP,
 		payload: { name, value },
