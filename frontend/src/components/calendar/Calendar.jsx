@@ -21,7 +21,6 @@ import {
 	updateCalendarDates,
 	updateResourceMap,
 } from '../../redux/actions/meetings'
-import getWorkHours from '../../helpers/getWorkHours'
 
 import CircleLoader from '../../layout/loaders/CircleLoader'
 import ErrorBoundary from '../ErrorBoundary'
@@ -76,23 +75,10 @@ class Calendar extends Component {
 
 		serivces: PropTypes.array,
 		resourcesLength: PropTypes.number,
-		one_slot_max_meetings: PropTypes.number.isRequired,
 		calendar_step: PropTypes.number,
 		calendar_timeslots: PropTypes.number,
-		end_work_sunday: PropTypes.string,
-		start_work_sunday: PropTypes.string,
-		end_work_saturday: PropTypes.string,
-		start_work_saturday: PropTypes.string,
-		end_work_friday: PropTypes.string,
-		start_work_friday: PropTypes.string,
-		end_work_thursday: PropTypes.string,
-		start_work_thursday: PropTypes.string,
-		end_work_wednesday: PropTypes.string,
-		start_work_wednesday: PropTypes.string,
-		end_work_tuesday: PropTypes.string,
-		start_work_tuesday: PropTypes.string,
-		end_work_monday: PropTypes.string,
-		start_work_monday: PropTypes.string,
+		open_hours: PropTypes.array,
+		blocked_hours: PropTypes.array,
 	}
 
 	constructor(props) {
@@ -148,105 +134,97 @@ class Calendar extends Component {
 		this.setState({ windowWidth: window.innerWidth })
 
 	getIsDisabledSlot = (date) => {
-		const { one_slot_max_meetings, visibleMeetings } = this.props
-		const workingHours = getWorkHours(moment(date).isoWeekday())
-		let isDisabled = workingHours.isNonWorkingDay
+		const { open_hours, blocked_hours, visibleMeetings, calendar_step } =
+			this.props
+		const weekday = moment(date).day()
+		const workDay = open_hours.find(
+			(open_hour) => open_hour.weekday === weekday
+		)
 
-		// Check if on the slot can be added meeting for non admin
-		let eventsOnSlot = 0
+		// Check if it is a working day
+		if (workDay == null) return true
 
-		if (date < new Date()) isDisabled = true
-		else
-			for (let i = 0; i < visibleMeetings.length; i++) {
-				if (
-					visibleMeetings[i].start <= date &&
-					visibleMeetings[i].end > date
-				) {
-					if (
-						visibleMeetings[i].blocked ||
-						eventsOnSlot.length >= one_slot_max_meetings
-					) {
-						isDisabled = true
-						break
-					} else eventsOnSlot += 1
-				}
-			}
-
-		if (!isDisabled) {
-			const convertedDate = date.getHours() * 60 + date.getMinutes()
-			isDisabled =
-				convertedDate < workingHours.start ||
-				convertedDate > workingHours.end - this.props.calendar_step
+		// Check if it is a blocked period
+		for (let i = 0; i < visibleMeetings.length; i++) {
+			if (
+				visibleMeetings[i].start <= date &&
+				visibleMeetings[i].end > date &&
+				visibleMeetings[i].blocked
+			)
+				return true
 		}
 
-		return isDisabled
+		// Check if data is in range of blocked hours
+		const convertedDate = date.getHours() * 60 + date.getMinutes()
+		for (let i = 0; i < blocked_hours.length; i++) {
+			if (blocked_hours[i].weekday === weekday) {
+				const blocked_from_hour =
+					parseInt(blocked_hours[i].from_hour.split(':')[0]) * 60 +
+					parseInt(blocked_hours[i].from_hour.split(':')[1])
+				const blocked_to_hour =
+					parseInt(blocked_hours[i].to_hour.split(':')[0]) * 60 +
+					parseInt(blocked_hours[i].to_hour.split(':')[1])
+
+				if (
+					blocked_from_hour <= convertedDate &&
+					blocked_to_hour > convertedDate
+				)
+					return true
+			}
+		}
+
+		// Check if the date is in the range of open hours
+		const work_from_hour =
+			parseInt(workDay.from_hour.split(':')[0]) * 60 +
+			parseInt(workDay.from_hour.split(':')[1])
+		const work_to_hour =
+			parseInt(workDay.to_hour.split(':')[0]) * 60 +
+			parseInt(workDay.to_hour.split(':')[1])
+
+		return (
+			work_from_hour > convertedDate ||
+			work_to_hour - calendar_step < convertedDate
+		)
 	}
 
 	getCalendarMinAndMaxTime = () => {
+		let { open_hours } = this.props
 		const today = new Date()
+		const fromHours = []
+		const toHours = []
 
-		let workHours = [
-			{
-				end: this.props?.end_work_sunday || null,
-				start: this.props?.start_work_sunday || null,
-			},
-			{
-				end: this.props?.end_work_saturday || null,
-				start: this.props?.start_work_saturday || null,
-			},
-			{
-				end: this.props?.end_work_friday || null,
-				start: this.props?.start_work_friday || null,
-			},
-			{
-				end: this.props?.end_work_thursday || null,
-				start: this.props?.start_work_thursday || null,
-			},
-			{
-				end: this.props?.end_work_wednesday || null,
-				start: this.props?.start_work_wednesday || null,
-			},
-			{
-				end: this.props?.end_work_tuesday || null,
-				start: this.props?.start_work_tuesday || null,
-			},
-			{
-				end: this.props?.end_work_monday || null,
-				start: this.props?.start_work_monday || null,
-			},
-		].filter((workHour) => workHour.start !== null && workHour.end !== null)
+		if (open_hours.length === 0) {
+			fromHours.push('10:00')
+			toHours.push('19:00')
+		}
 
-		if (workHours.length === 0)
-			workHours = [
-				{
-					start: '8:00',
-					end: '17:00',
-				},
-			]
-
-		workHours = workHours.map((workHour) => ({
-			start: moment(
-				new Date(
-					today.getFullYear(),
-					today.getMonth(),
-					today.getDate(),
-					workHour.start.split(':')[0],
-					workHour.start.split(':')[1]
+		for (let i = 0; i < open_hours.length; i++) {
+			fromHours.push(
+				moment(
+					new Date(
+						today.getFullYear(),
+						today.getMonth(),
+						today.getDate(),
+						open_hours[i].from_hour.split(':')[0],
+						open_hours[i].from_hour.split(':')[1]
+					)
 				)
-			),
-			end: moment(
-				new Date(
-					today.getFullYear(),
-					today.getMonth(),
-					today.getDate(),
-					workHour.end.split(':')[0],
-					workHour.end.split(':')[1]
+			)
+			toHours.push(
+				moment(
+					new Date(
+						today.getFullYear(),
+						today.getMonth(),
+						today.getDate(),
+						open_hours[i].to_hour.split(':')[0],
+						open_hours[i].to_hour.split(':')[1]
+					)
 				)
-			),
-		}))
+			)
+		}
 
-		const minDate = moment.min(workHours.map((workHour) => workHour.start))
-		const maxDate = moment.max(workHours.map((workHour) => workHour.end))
+		const minDate = moment.min(fromHours)
+		const maxDate = moment.max(toHours)
 
 		return {
 			minDate: new Date(
@@ -319,6 +297,7 @@ class Calendar extends Component {
 
 	getCountOfFreeSlotsAndMyMeetings = () => {
 		const {
+			open_hours,
 			calendar_step,
 			calendarDates: {
 				startOfMonth,
@@ -344,33 +323,32 @@ class Calendar extends Component {
 				? endOf3days
 				: endOfWeek
 
-		// Get free slots count
 		let freeSlots = {}
-
 		let currentDate = start
-
 		while (currentDate <= end) {
-			const date = moment(currentDate).format('YYYY-MM-DD')
-			const workHours = getWorkHours(
-				moment(currentDate).isoWeekday(),
-				false
+			const convertedDate = moment(currentDate).format('YYYY-MM-DD')
+			// const workHours = getWorkHours(
+			// 	moment(currentDate).isoWeekday(),
+			// 	false
+			// )
+			const weekday = moment(currentDate).day()
+			const workDay = open_hours.find(
+				(open_hour) => open_hour.weekday === weekday
 			)
+			if (!(convertedDate in freeSlots)) freeSlots[convertedDate] = 0
 
-			if (!(date in freeSlots)) freeSlots[date] = 0
-
-			if (!workHours.isNonWorkingDay) {
-				let currentTime = moment(workHours.start, 'H:mm').toDate()
-				while (currentTime < moment(workHours.end, 'H:mm').toDate()) {
+			if (workDay != null) {
+				let currentTime = moment(workDay.from_hour, 'HH:mm').toDate()
+				const toHour = moment(workDay.to_hour, 'HH:mm').toDate()
+				while (currentTime < toHour) {
 					const isDisabled = this.getIsDisabledSlot(
-						false,
 						moment(currentDate)
 							.add(currentTime.getHours(), 'hours')
 							.add(currentTime.getMinutes(), 'minutes')
 							.toDate()
 					)
 
-					if (!isDisabled && !workHours.isNonWorkingDay)
-						freeSlots[date] += 1
+					if (!isDisabled) freeSlots[convertedDate] += 1
 
 					currentTime = moment(currentTime)
 						.add(calendar_step, 'minutes')
@@ -419,23 +397,7 @@ class Calendar extends Component {
 		window.removeEventListener('resize', this.updateWindowDimensions)
 
 	componentDidUpdate(prevProps, _) {
-		if (
-			this.props.end_work_sunday !== prevProps.end_work_sunday ||
-			this.props.start_work_sunday !== prevProps.start_work_sunday ||
-			this.props.end_work_saturday !== prevProps.end_work_saturday ||
-			this.props.start_work_saturday !== prevProps.start_work_saturday ||
-			this.props.end_work_friday !== prevProps.end_work_friday ||
-			this.props.start_work_friday !== prevProps.start_work_friday ||
-			this.props.end_work_thursday !== prevProps.end_work_thursday ||
-			this.props.start_work_thursday !== prevProps.start_work_thursday ||
-			this.props.end_work_wednesday !== prevProps.end_work_wednesday ||
-			this.props.start_work_wednesday !==
-				prevProps.start_work_wednesday ||
-			this.props.end_work_tuesday !== prevProps.end_work_tuesday ||
-			this.props.start_work_tuesday !== prevProps.start_work_tuesday ||
-			this.props.end_work_monday !== prevProps.end_work_monday ||
-			this.props.start_work_monday !== prevProps.start_work_monday
-		) {
+		if (this.props.open_hours !== prevProps.open_hours) {
 			const calendarDates = this.getCalendarMinAndMaxTime()
 
 			this.setState({
@@ -937,23 +899,10 @@ const mapStateToProps = (state) => ({
 	employees: state.data.employees,
 	resourcesLength: state.data.salon.resources.length,
 	services: state.data.salon.services,
-	one_slot_max_meetings: state.data.salon.one_slot_max_meetings,
 	calendar_step: state.data.salon.calendar_step,
 	calendar_timeslots: state.data.salon.calendar_timeslots,
-	end_work_sunday: state.data.salon.end_work_sunday || '',
-	start_work_sunday: state.data.salon.start_work_sunday || '',
-	end_work_saturday: state.data.salon.end_work_saturday || '',
-	start_work_saturday: state.data.salon.start_work_saturday || '',
-	end_work_friday: state.data.salon.end_work_friday || '',
-	start_work_friday: state.data.salon.start_work_friday || '',
-	end_work_thursday: state.data.salon.end_work_thursday || '',
-	start_work_thursday: state.data.salon.start_work_thursday || '',
-	end_work_wednesday: state.data.salon.end_work_wednesday || '',
-	start_work_wednesday: state.data.salon.start_work_wednesday || '',
-	end_work_tuesday: state.data.salon.end_work_tuesday || '',
-	start_work_tuesday: state.data.salon.start_work_tuesday || '',
-	end_work_monday: state.data.salon.end_work_monday || '',
-	start_work_monday: state.data.salon.start_work_monday || '',
+	open_hours: state.data.salon.open_hours,
+	blocked_hours: state.data.salon.blocked_hours,
 })
 
 const mapDispatchToProps = {
