@@ -1,11 +1,15 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin, TabularInline
+from django.db import models
 
 from .models import (
     Customer,
     CustomerImage,
     Employee,
     Salon,
+    SalonCategory,
+    OpenHours,
+    BlockedHours,
     Notification,
     Resource,
     ResourceGroup,
@@ -20,9 +24,25 @@ from .models import (
 )
 
 
+@admin.register(SalonCategory)
+class SalonCategoryAdmin(ModelAdmin):
+    readonly_fields = ("id", )
+
+class OpenHoursAdmin(TabularInline):
+    model = OpenHours
+    readonly_fields = ("id", )
+
+class BlockedHoursAdmin(TabularInline):
+    model = BlockedHours
+    readonly_fields = ("id", )
+
 @admin.register(Salon)
 class SalonAdmin(ModelAdmin):
     readonly_fields = ("id", )
+    inlines = (
+        OpenHoursAdmin,
+        BlockedHoursAdmin
+    )
 
 
 @admin.register(Employee)

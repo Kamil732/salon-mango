@@ -6,6 +6,54 @@ from server.abstract.models import Group, Color
 from accounts.models import Account
 from meetings.models import Meeting
 
+class SalonCategory(models.Model):
+    name = models.CharField(max_length=100)
+    slug = AutoSlugField(populate_from='name', unique=True)
+
+    def __str__(self):
+        return self.name
+
+class Hours(models.Model):
+    WEEKDAYS = (
+        (0, 'Sunday'),
+        (1, 'Monday'),
+        (2, 'Tuesday'),
+        (3, 'Wednesday'),
+        (4, 'Thursday'),
+        (5, 'Friday'),
+        (6, 'Saturday'),
+    )
+
+    weekday = models.PositiveSmallIntegerField(choices=WEEKDAYS)
+    from_hour = models.TimeField()
+    to_hour = models.TimeField()
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return f"{self.get_weekday_display()} {self.from_hour} - {self.to_hour}"
+
+class OpenHours(Hours):
+    salon = models.ForeignKey(
+        'Salon',
+        on_delete=models.CASCADE,
+        related_name='open_hours',
+    )
+
+    class Meta:
+        ordering = ('weekday', 'from_hour')
+        unique_together = ('weekday', 'salon')
+
+class BlockedHours(Hours):
+    salon = models.ForeignKey(
+        'Salon',
+        on_delete=models.CASCADE,
+        related_name='blocked_hours',
+    )
+
+    class Meta:
+        ordering = ('weekday', 'from_hour')
 
 class Salon(models.Model):
     LANGUAGE = (('pl', 'Polish'), )
@@ -23,6 +71,9 @@ class Salon(models.Model):
         (12, '12h'),
     )
 
+    privacy_policy_agreement = models.BooleanField(default=False)
+    active = models.BooleanField(default=False)
+    active_from = models.DateTimeField(null=True, blank=True)
     name = models.CharField(default='Twój salon', max_length=100)
     description = models.TextField(max_length=1000, blank=True)
     logo = models.ImageField(upload_to='salon_logos', blank=True)
@@ -40,7 +91,7 @@ class Salon(models.Model):
     common_premises_number = models.CharField(max_length=10, blank=True)
 
     language = models.CharField(max_length=2, choices=LANGUAGE, default='pl')
-    timezone = models.CharField(max_length=100)
+    timezone = models.CharField(max_length=100) # ex. '+0000', '+0200'
     currency = models.CharField(max_length=3, default='EUR')
     calling_code = models.CharField(max_length=3)
     date_format = models.CharField(max_length=10,
@@ -59,20 +110,7 @@ class Salon(models.Model):
     free_cancel_hours = models.PositiveSmallIntegerField(default=2)
     calendar_step = models.PositiveSmallIntegerField(default=15)
     calendar_timeslots = models.PositiveSmallIntegerField(default=4)
-    end_work_sunday = models.TimeField(null=True, blank=True)
-    start_work_sunday = models.TimeField(null=True, blank=True)
-    end_work_saturday = models.TimeField(null=True, blank=True)
-    start_work_saturday = models.TimeField(null=True, blank=True)
-    end_work_friday = models.TimeField(null=True, blank=True)
-    start_work_friday = models.TimeField(null=True, blank=True)
-    end_work_thursday = models.TimeField(null=True, blank=True)
-    start_work_thursday = models.TimeField(null=True, blank=True)
-    end_work_wednesday = models.TimeField(null=True, blank=True)
-    start_work_wednesday = models.TimeField(null=True, blank=True)
-    end_work_tuesday = models.TimeField(null=True, blank=True)
-    start_work_tuesday = models.TimeField(null=True, blank=True)
-    end_work_monday = models.TimeField(null=True, blank=True)
-    start_work_monday = models.TimeField(null=True, blank=True)
+    categories = models.ManyToManyField('SalonCategory')
 
     def __str__(self):
         return self.name
