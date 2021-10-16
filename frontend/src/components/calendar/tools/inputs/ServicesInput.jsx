@@ -741,12 +741,14 @@ function ServicesInput({
 										'minutes'
 									)
 									.toDate(),
-								employee: defaultEmployee
-									? defaultEmployee
-									: {},
-								resources: defaultResource
-									? [defaultResource]
-									: [],
+								employee:
+									Object.keys(defaultEmployee).length > 0
+										? defaultEmployee
+										: {},
+								resources:
+									Object.keys(defaultResource).length > 0
+										? [defaultResource]
+										: [],
 								products: [],
 								value: option,
 

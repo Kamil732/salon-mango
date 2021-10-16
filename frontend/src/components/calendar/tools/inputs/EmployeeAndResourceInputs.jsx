@@ -140,14 +140,16 @@ function EmployeeAndResourceInputs({
 							maxWidth: '100%',
 						}}
 						data-tip={
-							resource
+							Object.keys(resource).length > 0
 								? `zasób: ${resource.name}`
 								: 'brak zasobów'
 						}
 						data-for="resourcesBtnTip"
 					>
 						<FiLayers />
-						{resource && <div className="badge">1</div>}
+						{Object.keys(resource).length > 0 && (
+							<div className="badge">1</div>
+						)}
 					</Button>
 
 					<ReactTooltip

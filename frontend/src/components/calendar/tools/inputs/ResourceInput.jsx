@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { useId } from 'react-id-generator'
 
-import { loadEmployees } from '../../../../redux/actions/data'
-
 import Label from '../../../../layout/forms/inputs/Label'
 import { FormControl } from '../../../../layout/forms/Forms'
 import Dropdown from '../../../../layout/buttons/dropdowns/Dropdown'
@@ -41,8 +39,4 @@ const mapStateToProps = (state) => ({
 	resources: state.data.salon.resources,
 })
 
-const mapDispatchToProps = {
-	loadEmployees,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ResourceInput)
+export default connect(mapStateToProps, null)(ResourceInput)
