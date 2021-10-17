@@ -6,12 +6,14 @@ from server.abstract.models import Group, Color
 from accounts.models import Account
 from meetings.models import Meeting
 
+
 class SalonCategory(models.Model):
     name = models.CharField(max_length=100)
     slug = AutoSlugField(populate_from='name', unique=True)
 
     def __str__(self):
         return self.name
+
 
 class Hours(models.Model):
     WEEKDAYS = (
@@ -34,6 +36,7 @@ class Hours(models.Model):
     def __str__(self):
         return f"{self.get_weekday_display()} {self.from_hour} - {self.to_hour}"
 
+
 class OpenHours(Hours):
     salon = models.ForeignKey(
         'Salon',
@@ -45,6 +48,7 @@ class OpenHours(Hours):
         ordering = ('weekday', 'from_hour')
         unique_together = ('weekday', 'salon')
 
+
 class BlockedHours(Hours):
     salon = models.ForeignKey(
         'Salon',
@@ -54,6 +58,7 @@ class BlockedHours(Hours):
 
     class Meta:
         ordering = ('weekday', 'from_hour')
+
 
 class Salon(models.Model):
     LANGUAGE = (('pl', 'Polish'), )
@@ -91,7 +96,7 @@ class Salon(models.Model):
     common_premises_number = models.CharField(max_length=10, blank=True)
 
     language = models.CharField(max_length=2, choices=LANGUAGE, default='pl')
-    timezone = models.CharField(max_length=100) # ex. '+0000', '+0200'
+    timezone = models.CharField(max_length=100)  # ex. '+0000', '+0200'
     currency = models.CharField(max_length=3, default='EUR')
     calling_code = models.CharField(max_length=3)
     date_format = models.CharField(max_length=10,
@@ -110,7 +115,7 @@ class Salon(models.Model):
     free_cancel_hours = models.PositiveSmallIntegerField(default=2)
     calendar_step = models.PositiveSmallIntegerField(default=15)
     calendar_timeslots = models.PositiveSmallIntegerField(default=4)
-    categories = models.ManyToManyField('SalonCategory')
+    categories = models.ManyToManyField('SalonCategory', related_name='salons')
 
     def __str__(self):
         return self.name

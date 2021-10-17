@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from server.abstract.serializers import Subgroups
-from data.models import Salon, BlockedHours, OpenHours, Customer, CustomerImage, Employee, Service, ServiceGroup, ServiceEmployee, Notification, Resource, ResourceGroup, ServiceResources
+from data.models import Salon, SalonCategory, BlockedHours, OpenHours, Customer, CustomerImage, Employee, Service, ServiceGroup, ServiceEmployee, Notification, Resource, ResourceGroup, ServiceResources
 
 
 class ResourceGroupSerializer(Subgroups):
@@ -82,20 +82,41 @@ class ServiceGroupSerializer(Subgroups):
         model = ServiceGroup
 
 
+class SalonCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SalonCategory
+        fields = (
+            'name',
+            'slug',
+        )
+
+
 class OpenHoursSerializer(serializers.ModelSerializer):
     class Meta:
         model = OpenHours
-        exclude = ('id', 'salon',)
+        exclude = (
+            'id',
+            'salon',
+        )
+
 
 class BlockedHoursSerializer(serializers.ModelSerializer):
     class Meta:
         model = BlockedHours
-        exclude = ('id', 'salon',)
+        exclude = (
+            'id',
+            'salon',
+        )
 
 
 class SalonSerializer(serializers.ModelSerializer):
     open_hours = OpenHoursSerializer(many=True)
     blocked_hours = BlockedHoursSerializer(many=True)
+    categories = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field='slug',
+    )
     service_groups = serializers.SerializerMethodField('get_service_groups')
     services = serializers.SerializerMethodField('get_services')
     resource_groups = serializers.SerializerMethodField('get_resource_groups')
@@ -129,7 +150,6 @@ class SalonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Salon
         fields = "__all__"
-
 
 
 class CustomerSerializer(serializers.ModelSerializer):

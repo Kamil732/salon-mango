@@ -13,6 +13,9 @@ urlpatterns = [
                  views.CustomerImageDetailAPIView.as_view(),
                  name='gallery-detail'),
         ])),
+    path('salon-categories/',
+         views.SalonCategoryListAPIView.as_view(),
+         name='salon-category-list'),
     path(
         'salons/<int:salon_id>/',
         include([

@@ -3,6 +3,7 @@ from django.db.models import Value as V
 from django.db.models.functions import Concat
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.cache import cache_page
 
 from rest_framework import generics, mixins, status
 from rest_framework.views import APIView
@@ -10,7 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from server.permissions import IsAdminOrReadOnly, IsAdmin
-from data.models import Salon, Service, Notification, Employee, Customer, CustomerImage
+from data.models import Salon, SalonCategory, Service, Notification, Employee, Customer, CustomerImage
 from . import serializers
 from . import pagination
 
@@ -22,6 +23,12 @@ class SalonDetailAPIView(generics.RetrieveUpdateAPIView):
     queryset = Salon.objects.all()
     lookup_field = 'id'
     lookup_url_kwarg = 'salon_id'
+
+
+@method_decorator(cache_page(60 * 60 * 2), name='get')
+class SalonCategoryListAPIView(generics.ListAPIView):
+    serializer_class = serializers.SalonCategorySerializer
+    queryset = SalonCategory.objects.all()
 
 
 @method_decorator(csrf_protect, name='dispatch')
