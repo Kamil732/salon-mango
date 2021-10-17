@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import '../assets/css/main.css'
 import 'react-notifications/lib/notifications.css'
+import './i18n'
 
 import { BrowserRouter as Router, Switch } from 'react-router-dom'
 

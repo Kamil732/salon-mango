@@ -1,0 +1,9 @@
+{
+    "auth": {
+        "password": "Hasło",
+        "sign-in": "Zaloguj się",
+        "logging-in": "Logowanie",
+        "forgot-password": "Nie pamiętam hasła",
+        "no-account-text": "Nie masz jeszcze konta? Kliknij <1>tutaj</1> by je utworzyć"
+    }
+}

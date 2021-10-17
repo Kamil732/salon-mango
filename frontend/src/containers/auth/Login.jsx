@@ -1,9 +1,11 @@
 import React, { lazy, Suspense, useState } from 'react'
+import { useTranslation, Trans } from 'react-i18next'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import '../../assets/css/pageHero.css'
 
 import { login } from '../../redux/actions/auth'
+import { baseUrl } from '../../app/Routes'
 
 import { ReactComponent as AuthIllustration } from '../../assets/svgs/auth-illustration.svg'
 
@@ -21,6 +23,7 @@ import CircleLoader from '../../layout/loaders/CircleLoader'
 const RegisterForm = lazy(() => import('./RegisterForm'))
 
 function Login({ isAuthenticated, login }) {
+	const { t } = useTranslation()
 	const [loading, setLoading] = useState(false)
 	const [{ email, password }, setData] = useState({
 		email: '',
@@ -43,7 +46,7 @@ function Login({ isAuthenticated, login }) {
 	}
 
 	if (isAuthenticated && !loading)
-		return <Redirect to={process.env.REACT_APP_PANEL_URL} />
+		return <Redirect to={baseUrl + process.env.REACT_APP_PANEL_URL} />
 
 	return (
 		<>
@@ -71,20 +74,30 @@ function Login({ isAuthenticated, login }) {
 				<div className="page-hero__img-container">
 					<AuthIllustration className="page-hero__img" />
 					<p className="text-broken">
-						Nie masz jeszcze konta? Kliknij{' '}
-						<Button
-							link
-							className="slide-floor"
-							onClick={() => setIsRegisterForm(true)}
-						>
-							tutaj
-						</Button>{' '}
-						by je utworzyć
+						<Trans i18nKey="auth.no-account-text">
+							Nie masz jeszcze konta? Kliknij
+							<Button
+								link
+								className="slide-floor"
+								onClick={() => setIsRegisterForm(true)}
+							>
+								tutaj
+							</Button>
+							by je utworzyć
+						</Trans>
+
+						{/* {t('auth.no-account-text', {
+							button: (
+
+									tutaj
+								</Button>
+							),
+						})} */}
 					</p>
 				</div>
 
 				<div className="page-hero__content">
-					<div className="page-hero__title">Zaloguj się</div>
+					<div className="page-hero__title">{t('auth.sign-in')}</div>
 
 					<Card>
 						<Card.Body>
@@ -109,7 +122,7 @@ function Login({ isAuthenticated, login }) {
 										htmlFor="password"
 										inputValue={password}
 									>
-										Hasło
+										{t('auth.password')}
 									</Label>
 									<Input
 										required
@@ -126,12 +139,12 @@ function Login({ isAuthenticated, login }) {
 									<Button
 										primary
 										loading={loading}
-										loadingText="Logowanie"
+										loadingText={t('auth.logging-in')}
 									>
-										Zaloguj się
+										{t('auth.sign-in')}
 									</Button>
 									<Link to="/" className="slide-floor">
-										Nie pamiętasz hasła?
+										{t('auth.forgot-password')}
 									</Link>
 								</div>
 							</form>

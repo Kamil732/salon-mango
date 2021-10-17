@@ -21,6 +21,7 @@ import { GoMegaphone } from 'react-icons/go'
 import ErrorBoundary from '../components/ErrorBoundary'
 import CircleLoader from '../layout/loaders/CircleLoader'
 import Dashboard from '../layout/Dashboard'
+import { baseRouteUrl, baseUrl } from '../app/Routes'
 
 const DropdownSelect = lazy(() =>
 	import('../layout/buttons/dropdowns/DropdownSelect')
@@ -79,6 +80,7 @@ function Panel({
 							<Dashboard.NavHeader>
 								<Link
 									to={
+										baseUrl +
 										process.env.REACT_APP_PANEL_CALENDAR_URL
 									}
 								>
@@ -100,6 +102,7 @@ function Panel({
 							<Dashboard.NavBody>
 								<NavLink
 									to={
+										baseUrl +
 										process.env.REACT_APP_PANEL_CALENDAR_URL
 									}
 									className="dashboard__btn"
@@ -111,6 +114,7 @@ function Panel({
 								</NavLink>
 								<NavLink
 									to={
+										baseUrl +
 										process.env
 											.REACT_APP_PANEL_CUSTOMERS_URL
 									}
@@ -123,6 +127,7 @@ function Panel({
 								</NavLink>
 								<NavLink
 									to={
+										baseUrl +
 										process.env
 											.REACT_APP_PANEL_STATISTICS_URL
 									}
@@ -135,6 +140,7 @@ function Panel({
 								</NavLink>
 								<NavLink
 									to={
+										baseUrl +
 										process.env
 											.REACT_APP_PANEL_COMMUNICATION_URL
 									}
@@ -147,6 +153,7 @@ function Panel({
 								</NavLink>
 								<NavLink
 									to={
+										baseUrl +
 										process.env.REACT_APP_PANEL_SERVICES_URL
 									}
 									className="dashboard__btn"
@@ -158,6 +165,7 @@ function Panel({
 								</NavLink>
 								<NavLink
 									to={
+										baseUrl +
 										process.env.REACT_APP_PANEL_SETTINGS_URL
 									}
 									className="dashboard__btn"
@@ -218,6 +226,7 @@ function Panel({
 										<PrivateRoute
 											exact
 											path={
+												baseRouteUrl +
 												process.env
 													.REACT_APP_PANEL_CALENDAR_URL
 											}
@@ -226,6 +235,7 @@ function Panel({
 										<PrivateRoute
 											exact
 											path={
+												baseRouteUrl +
 												process.env
 													.REACT_APP_PANEL_SERVICES_URL
 											}
@@ -234,6 +244,7 @@ function Panel({
 										<PrivateRoute
 											exact
 											path={
+												baseRouteUrl +
 												process.env
 													.REACT_APP_PANEL_SETTINGS_URL
 											}
@@ -258,6 +269,7 @@ function Panel({
 									<PrivateRoute
 										exact
 										path={
+											baseRouteUrl +
 											process.env
 												.REACT_APP_PANEL_CALENDAR_URL
 										}
@@ -268,6 +280,7 @@ function Panel({
 									<PrivateRoute
 										exact
 										path={
+											baseRouteUrl +
 											process.env
 												.REACT_APP_PANEL_SERVICES_URL
 										}
@@ -276,6 +289,7 @@ function Panel({
 									<PrivateRoute
 										exact
 										path={
+											baseRouteUrl +
 											process.env
 												.REACT_APP_PANEL_SETTINGS_URL
 										}
@@ -284,6 +298,7 @@ function Panel({
 
 									<Redirect
 										to={
+											baseRouteUrl +
 											process.env
 												.REACT_APP_PANEL_CALENDAR_URL
 										}

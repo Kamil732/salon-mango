@@ -1,0 +1,9 @@
+{
+    "auth": {
+        "password": "Password",
+        "sign-in": "Sign in",
+        "logging-in": "Logging in",
+        "forgot-password": "Forgot password?",
+        "no-account-text": "You don't have an account yet? Click <1>here</1> to create one"
+    }
+}
