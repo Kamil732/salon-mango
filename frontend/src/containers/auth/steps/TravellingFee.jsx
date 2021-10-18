@@ -14,8 +14,8 @@ import {
 	useJsApiLoader,
 } from '@react-google-maps/api'
 
-const BILLING_TYPES = require('../../../helpers/data/billing_types.json')
-const MAX_TRAVEL_DISTANCES = require('../../../helpers/data/max_travel_distances.json')
+const BILLING_TYPES = require('../../../assets/data/billing_types.json')
+const MAX_TRAVEL_DISTANCES = require('../../../assets/data/max_travel_distances.json')
 
 function TravellingFee({
 	billing_type,

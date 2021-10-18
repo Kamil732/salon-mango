@@ -1,6 +1,8 @@
 import React, { lazy, useEffect, useRef, useState, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import { baseRouteUrl, baseUrl } from '../app/Routes'
 
 import {
 	connectNotificationWS,
@@ -12,16 +14,15 @@ import PrivateRoute from '../common/PrivateRoute'
 import { Link, NavLink, Redirect, Switch } from 'react-router-dom'
 
 import logo from '../assets/images/logo.png'
-import { FaCalendarAlt, FaChartPie, FaListAlt } from 'react-icons/fa'
-import { IoChatbubbles, IoSettingsSharp } from 'react-icons/io5'
-import { ImUsers } from 'react-icons/im'
-import { IoMdNotifications } from 'react-icons/io'
+import { BsCalendar, BsLightning, BsPeople } from 'react-icons/bs'
+import { CgList } from 'react-icons/cg'
+import { VscBell, VscGraph } from 'react-icons/vsc'
+import { IoSettingsOutline } from 'react-icons/io5'
 import { GoMegaphone } from 'react-icons/go'
 
 import ErrorBoundary from '../components/ErrorBoundary'
 import CircleLoader from '../layout/loaders/CircleLoader'
 import Dashboard from '../layout/Dashboard'
-import { baseRouteUrl, baseUrl } from '../app/Routes'
 
 const DropdownSelect = lazy(() =>
 	import('../layout/buttons/dropdowns/DropdownSelect')
@@ -44,6 +45,7 @@ function Panel({
 	getNotifications,
 	markNotificationAsRead,
 }) {
+	const { t } = useTranslation()
 	const [isMenuOpen, toggleMenu] = useState(false)
 	const navContainer = useRef(null)
 
@@ -108,9 +110,9 @@ function Panel({
 									className="dashboard__btn"
 								>
 									<span className="dashboard__btn__icon">
-										<FaCalendarAlt />
+										<BsCalendar />
 									</span>
-									kalendarz
+									{t('panel.calendar')}
 								</NavLink>
 								<NavLink
 									to={
@@ -121,9 +123,9 @@ function Panel({
 									className="dashboard__btn"
 								>
 									<span className="dashboard__btn__icon">
-										<ImUsers />
+										<BsPeople />
 									</span>
-									klienci
+									{t('panel.customers')}
 								</NavLink>
 								<NavLink
 									to={
@@ -134,9 +136,9 @@ function Panel({
 									className="dashboard__btn"
 								>
 									<span className="dashboard__btn__icon">
-										<FaChartPie />
+										<VscGraph />
 									</span>
-									statystki
+									{t('panel.statistics')}
 								</NavLink>
 								<NavLink
 									to={
@@ -147,9 +149,9 @@ function Panel({
 									className="dashboard__btn"
 								>
 									<span className="dashboard__btn__icon">
-										<IoChatbubbles />
+										<BsLightning />
 									</span>
-									łączność
+									{t('panel.marketing')}
 								</NavLink>
 								<NavLink
 									to={
@@ -159,9 +161,9 @@ function Panel({
 									className="dashboard__btn"
 								>
 									<span className="dashboard__btn__icon">
-										<FaListAlt />
+										<CgList />
 									</span>
-									usługi
+									{t('panel.services')}
 								</NavLink>
 								<NavLink
 									to={
@@ -171,18 +173,18 @@ function Panel({
 									className="dashboard__btn"
 								>
 									<span className="dashboard__btn__icon">
-										<IoSettingsSharp />
+										<IoSettingsOutline />
 									</span>
-									ustawienia
+									{t('panel.settings')}
 								</NavLink>
 							</Dashboard.NavBody>
 							<hr className="seperator" />
 							<Dashboard.NavFooter>
 								<DropdownSelect
-									btnContent={<IoMdNotifications size={25} />}
+									btnContent={<VscBell size={25} />}
 									rounded
-									aria-label="Powiadomienia"
-									title="Powiadomienia"
+									aria-label={t('panel.notifications')}
+									title={t('panel.notifications')}
 									loading={notificationLoading}
 									loaded={notificationLoaded}
 									loadItems={getNotifications}
@@ -201,7 +203,7 @@ function Panel({
 										>
 											<GoMegaphone fontSize="100" />
 											<h3 style={{ textAlign: 'center' }}>
-												Nie masz żadnych powiadomień
+												{t('panel.no_notifications')}
 											</h3>
 										</div>
 									}

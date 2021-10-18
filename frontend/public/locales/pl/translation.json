@@ -1,9 +1,19 @@
 {
     "auth": {
         "password": "Hasło",
-        "sign-in": "Zaloguj się",
-        "logging-in": "Logowanie",
-        "forgot-password": "Nie pamiętam hasła",
-        "no-account-text": "Nie masz jeszcze konta? Kliknij <1>tutaj</1> by je utworzyć"
+        "sign_in": "Zaloguj się",
+        "logging_in": "Logowanie",
+        "forgot_password": "Nie pamiętam hasła",
+        "no_account": "Nie masz jeszcze konta? Kliknij <1>tutaj</1> by je utworzyć"
+    },
+    "panel": {
+        "calendar": "kalendarz",
+        "customers": "klienci",
+        "statistics": "statystyki",
+        "marketing": "marketing",
+        "services": "usługi",
+        "settings": "ustawienia",
+        "notifications": "Powiadomienia",
+        "no_notifications": "Nie masz żadnych powiadomień"
     }
 }

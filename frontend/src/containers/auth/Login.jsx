@@ -74,7 +74,7 @@ function Login({ isAuthenticated, login }) {
 				<div className="page-hero__img-container">
 					<AuthIllustration className="page-hero__img" />
 					<p className="text-broken">
-						<Trans i18nKey="auth.no-account-text">
+						<Trans i18nKey="auth.no_account">
 							Nie masz jeszcze konta? Kliknij
 							<Button
 								link
@@ -85,19 +85,11 @@ function Login({ isAuthenticated, login }) {
 							</Button>
 							by je utworzyć
 						</Trans>
-
-						{/* {t('auth.no-account-text', {
-							button: (
-
-									tutaj
-								</Button>
-							),
-						})} */}
 					</p>
 				</div>
 
 				<div className="page-hero__content">
-					<div className="page-hero__title">{t('auth.sign-in')}</div>
+					<div className="page-hero__title">{t('auth.sign_in')}</div>
 
 					<Card>
 						<Card.Body>
@@ -139,12 +131,12 @@ function Login({ isAuthenticated, login }) {
 									<Button
 										primary
 										loading={loading}
-										loadingText={t('auth.logging-in')}
+										loadingText={t('auth.logging_in')}
 									>
-										{t('auth.sign-in')}
+										{t('auth.sign_in')}
 									</Button>
 									<Link to="/" className="slide-floor">
-										{t('auth.forgot-password')}
+										{t('auth.forgot_password')}
 									</Link>
 								</div>
 							</form>

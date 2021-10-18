@@ -6,7 +6,7 @@ import { FormControl, FormGroup } from '../Forms'
 import Input from './Input'
 import Label from './Label'
 
-const countries = require('../../../helpers/data/countries.json')
+const countries = require('../../../assets/data/countries.json')
 
 function PhoneNumberInput({
 	phone_prefix,

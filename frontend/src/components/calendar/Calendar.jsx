@@ -327,10 +327,6 @@ class Calendar extends Component {
 		let currentDate = start
 		while (currentDate <= end) {
 			const convertedDate = moment(currentDate).format('YYYY-MM-DD')
-			// const workHours = getWorkHours(
-			// 	moment(currentDate).isoWeekday(),
-			// 	false
-			// )
 			const weekday = moment(currentDate).day()
 			const workDay = open_hours.find(
 				(open_hour) => open_hour.weekday === weekday

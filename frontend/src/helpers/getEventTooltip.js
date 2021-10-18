@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 
-import { GrResources } from 'react-icons/gr'
+import { FiLayers } from 'react-icons/fi'
 
 export default function getEventTooltip(
 	{ id: eventServiceId, data: event },
@@ -50,8 +50,7 @@ export default function getEventTooltip(
 								}{' '}
 								{service.resources.length > 0 && (
 									<>
-										<GrResources />{' '}
-										{service.resources.length}
+										<FiLayers /> {service.resources.length}
 									</>
 								)}
 							</li>

@@ -28,8 +28,8 @@ function ChooseCategories({
 
 		axios
 			.get(
-				`${process.env.REACT_APP_API_URL}/data/salon-categories/`
-				// getHeaders()
+				`${process.env.REACT_APP_API_URL}/data/salon-categories/`,
+				getHeaders()
 			)
 			.then((categoriesData) =>
 				setCategoriesFetchData((prevData) => ({

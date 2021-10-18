@@ -23,8 +23,8 @@ const TravellingFee = lazy(() => import('./steps/TravellingFee'))
 const AddServices = lazy(() => import('./steps/AddServices'))
 const AddEmployees = lazy(() => import('./steps/AddEmployees'))
 
-const BILLING_TYPES = require('../../helpers/data/billing_types.json')
-const MAX_TRAVEL_DISTANCES = require('../../helpers/data/max_travel_distances.json')
+const BILLING_TYPES = require('../../assets/data/billing_types.json')
+const MAX_TRAVEL_DISTANCES = require('../../assets/data/max_travel_distances.json')
 const INITIAL_STEPS_DATA = [
 	{
 		component: (props) => (
@@ -41,6 +41,7 @@ const INITIAL_STEPS_DATA = [
 			/>
 		),
 		nextBtnDisabled: true,
+		validateStep: (data) => {},
 	},
 	{
 		component: (props) => (
@@ -188,6 +189,7 @@ const INITIAL_STEPS_DATA = [
 ]
 
 function RegisterForm({ closeModal, register }) {
+	const [loading, setLoading] = useState(false)
 	const [data, setData] = useState({
 		email: '',
 		password: '',
@@ -350,13 +352,20 @@ function RegisterForm({ closeModal, register }) {
 					primary
 					onClick={async () => {
 						const currentStep = STEPS[step]
-						if (currentStep.validateStep == null) {
+						if (!('validateStep' in currentStep)) {
 							changeStep()
 							return
 						}
 
-						const isValid = await currentStep.validateStep()
-						if (isValid) changeStep()
+						try {
+							setLoading(true)
+							await currentStep.validateStep(data)
+							changeStep()
+						} catch (err) {
+							console.log(err)
+						} finally {
+							setLoading(false)
+						}
 					}}
 					type="button"
 					className="form-card__btn"

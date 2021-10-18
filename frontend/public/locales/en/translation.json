@@ -1,9 +1,19 @@
 {
     "auth": {
         "password": "Password",
-        "sign-in": "Sign in",
-        "logging-in": "Logging in",
-        "forgot-password": "Forgot password?",
-        "no-account-text": "You don't have an account yet? Click <1>here</1> to create one"
+        "sign_in": "Sign in",
+        "logging_in": "Logging in",
+        "forgot_password": "Forgot password?",
+        "no_account": "You don't have an account yet? Click <1>here</1> to create one"
+    },
+    "panel": {
+        "calendar": "calendar",
+        "customers": "customers",
+        "statistics": "statistics",
+        "marketing": "marketing",
+        "services": "services",
+        "settings": "settings",
+        "notifications": "Notifications",
+        "no_notifications": "Nie masz żadnych powiadomień"
     }
 }

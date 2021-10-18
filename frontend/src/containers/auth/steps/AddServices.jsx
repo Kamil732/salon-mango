@@ -4,6 +4,11 @@ import nextId from 'react-id-generator'
 import '../../../assets/css/table.css'
 import '../../../assets/css/register-add-services.css'
 
+import axios from 'axios'
+import { NotificationManager } from 'react-notifications'
+import { withTranslation } from 'react-i18next'
+import getHeaders from '../../../helpers/getHeaders'
+
 import { AiOutlinePlus } from 'react-icons/ai'
 import { GrClose } from 'react-icons/gr'
 import { VscTrash } from 'react-icons/vsc'
@@ -20,7 +25,7 @@ import Button from '../../../layout/buttons/Button'
 import Modal from '../../../layout/Modal'
 import Dropdown from '../../../layout/buttons/dropdowns/Dropdown'
 
-const PRICE_TYPES = require('../../../helpers/data/price_types.json')
+const PRICE_TYPES = require('../../../assets/data/price_types.json')
 
 const initialServiceData = {
 	name: '',
@@ -48,6 +53,8 @@ class AddService extends Component {
 		setData: PropTypes.func.isRequired,
 		changeComponentData: PropTypes.func.isRequired,
 		componentData: PropTypes.object.isRequired,
+		t: PropTypes.func.isRequired,
+		i18n: PropTypes.object.isRequired,
 	}
 
 	constructor(props) {
@@ -74,10 +81,17 @@ class AddService extends Component {
 			categories,
 			services,
 			setData,
+			t,
 		} = this.props
 
 		for (let i = 0; i < categories.length; i++) {
-			import(`../../../helpers/data/services/${categories[i]}.json`)
+			axios
+				.get(
+					`${process.env.PUBLIC_URL}/data/services/${categories[
+						i
+					].replaceAll('-', '_')}.json`,
+					getHeaders()
+				)
 				.then((module) => module.default)
 				.then((data) => {
 					if (!componentData.loaded) {
@@ -124,6 +138,12 @@ class AddService extends Component {
 
 						this.hints = [...this.hints, ...newData]
 					}
+				})
+				.catch(() => {
+					NotificationManager.error(
+						t('Wystąpił nieoczekiwany błąd, przepraszamy'),
+						t('Błąd')
+					)
 				})
 		}
 
@@ -587,4 +607,4 @@ class AddService extends Component {
 	}
 }
 
-export default AddService
+export default withTranslation()(AddService)
