@@ -144,7 +144,7 @@ function Panel({
 									to={
 										baseUrl +
 										process.env
-											.REACT_APP_PANEL_COMMUNICATION_URL
+											.REACT_APP_PANEL_MARKETING_URL
 									}
 									className="dashboard__btn"
 								>

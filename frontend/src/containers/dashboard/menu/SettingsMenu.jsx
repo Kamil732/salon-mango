@@ -19,7 +19,7 @@ function CalendarMenu() {
 			<NavLink
 				to={
 					baseUrl +
-					process.env.REACT_APP_PANEL_SETTINGS_WORK_HOURS_URL
+					process.env.REACT_APP_PANEL_SETTINGS_WORK_SCHEDULE_URL
 				}
 				className="select-menu__item icon-container"
 			>
@@ -44,7 +44,9 @@ function CalendarMenu() {
 				Kalendarz
 			</NavLink>
 			<NavLink
-				to={baseUrl + process.env.REACT_APP_PANEL_SETTINGS_WORKERS_URL}
+				to={
+					baseUrl + process.env.REACT_APP_PANEL_SETTINGS_EMPLOYEES_URL
+				}
 				className="select-menu__item icon-container"
 			>
 				<FaIdCardAlt className="icon-container__icon" />
@@ -70,8 +72,7 @@ function CalendarMenu() {
 			</NavLink>
 			<NavLink
 				to={
-					baseUrl +
-					process.env.REACT_APP_PANEL_SETTINGS_COMMUNICATION_URL
+					baseUrl + process.env.REACT_APP_PANEL_SETTINGS_MARKETING_URL
 				}
 				className="select-menu__item icon-container"
 			>

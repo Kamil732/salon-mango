@@ -1,6 +1,7 @@
 import React, { Component, lazy, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import { Route, Switch, Redirect } from 'react-router-dom'
+import i18n, { SUPPORTED_LANGUAGES } from './i18n'
 
 import { connect } from 'react-redux'
 import CircleLoader from '../layout/loaders/CircleLoader'
@@ -11,12 +12,22 @@ const NotFound = lazy(() => import('../containers/NotFound'))
 const Login = lazy(() => import('../containers/auth/Login'))
 const Panel = lazy(() => import('../containers/Panel'))
 
-export const baseRouteUrl = '/:locale(en|pl)?'
-export const baseUrl =
-	'/' +
-	(localStorage.getItem('i18nextLng') ||
-		(navigator.language || navigator.userLanguage).split('-')[0] ||
-		'en')
+const usersLang = (navigator.language || navigator.userLanguage).split('-')[0]
+const baseRouteUrl = '/:locale(en|pl)'
+let baseUrl = '/'
+
+if (
+	localStorage.getItem('i18nextLng') &&
+	SUPPORTED_LANGUAGES.includes(localStorage.getItem('i18nextLng'))
+)
+	baseUrl += localStorage.getItem('i18nextLng')
+else if (usersLang && SUPPORTED_LANGUAGES.includes(usersLang))
+	baseUrl += (navigator.language || navigator.userLanguage).split('-')[0]
+else baseUrl += 'en'
+
+i18n.on('languageChanged', (lang) => {
+	if (SUPPORTED_LANGUAGES.includes(lang)) baseUrl = '/' + lang
+})
 
 class Routes extends Component {
 	static propTypes = {
@@ -57,8 +68,6 @@ class Routes extends Component {
 							component={Panel}
 						/>
 						<Route path="*" component={NotFound} />
-						{/* </Route>
-						<Redirect to={baseUrl} /> */}
 					</Switch>
 				</Suspense>
 			</ErrorBoundary>
@@ -72,4 +81,5 @@ const mapStateToProps = (state) => ({
 		Object.keys(state.data.salon).length === 0,
 })
 
+export { baseRouteUrl, baseUrl }
 export default connect(mapStateToProps, null)(Routes)
