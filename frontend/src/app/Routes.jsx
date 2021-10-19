@@ -5,12 +5,10 @@ import i18n, { SUPPORTED_LANGUAGES } from './i18n'
 
 import { connect } from 'react-redux'
 import CircleLoader from '../layout/loaders/CircleLoader'
-import PrivateRoute from '../common/PrivateRoute'
 import ErrorBoundary from '../components/ErrorBoundary'
 
 const NotFound = lazy(() => import('../containers/NotFound'))
-const Login = lazy(() => import('../containers/auth/Login'))
-const Panel = lazy(() => import('../containers/Panel'))
+const BusinessRoutes = lazy(() => import('../containers/business/Routes'))
 
 const usersLang = (navigator.language || navigator.userLanguage).split('-')[0]
 const baseRouteUrl = '/:locale(en|pl)'
@@ -55,17 +53,11 @@ class Routes extends Component {
 							render={() => <Redirect to={baseUrl} />}
 						/>
 						<Route
-							exact
 							path={
-								baseRouteUrl + process.env.REACT_APP_LOGIN_URL
+								baseRouteUrl +
+								process.env.REACT_APP_BUSINESS_URL
 							}
-							component={Login}
-						/>
-						<PrivateRoute
-							path={
-								baseRouteUrl + process.env.REACT_APP_PANEL_URL
-							}
-							component={Panel}
+							component={BusinessRoutes}
 						/>
 						<Route path="*" component={NotFound} />
 					</Switch>

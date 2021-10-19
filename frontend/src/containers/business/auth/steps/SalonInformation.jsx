@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { FormControl, FormGroup } from '../../../layout/forms/Forms'
-import Input from '../../../layout/forms/inputs/Input'
-import Label from '../../../layout/forms/inputs/Label'
-import PhoneNumberInput from '../../../layout/forms/inputs/PhoneNumberInput'
+import { FormControl, FormGroup } from '../../../../layout/forms/Forms'
+import Input from '../../../../layout/forms/inputs/Input'
+import Label from '../../../../layout/forms/inputs/Label'
+import PhoneNumberInput from '../../../../layout/forms/inputs/PhoneNumberInput'
 
 function SalonInformation({
 	onChange,

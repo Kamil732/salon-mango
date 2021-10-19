@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { FormControl } from '../../../layout/forms/Forms'
-import CheckBox from '../../../layout/forms/inputs/CheckBox'
+import { FormControl } from '../../../../layout/forms/Forms'
+import CheckBox from '../../../../layout/forms/inputs/CheckBox'
 
 function WorkType({
 	work_stationary,

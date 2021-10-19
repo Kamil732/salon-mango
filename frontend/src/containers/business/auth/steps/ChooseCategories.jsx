@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
 
-import getHeaders from '../../../helpers/getHeaders'
+import getHeaders from '../../../../helpers/getHeaders'
 
-import { FormControl } from '../../../layout/forms/Forms'
-import CheckBox from '../../../layout/forms/inputs/CheckBox'
-import CircleLoader from '../../../layout/loaders/CircleLoader'
+import { FormControl } from '../../../../layout/forms/Forms'
+import CheckBox from '../../../../layout/forms/inputs/CheckBox'
+import CircleLoader from '../../../../layout/loaders/CircleLoader'
 
 function ChooseCategories({
 	categories,

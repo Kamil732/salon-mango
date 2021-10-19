@@ -1,5 +1,5 @@
 import React from 'react'
-import '../../../assets/css/select-menu.css'
+import '../../../../assets/css/select-menu.css'
 
 import { RiBarChartHorizontalFill } from 'react-icons/ri'
 import {
@@ -11,7 +11,7 @@ import {
 import { ImUsers } from 'react-icons/im'
 import { IoChatbubbles, IoCard } from 'react-icons/io5'
 import { NavLink } from 'react-router-dom'
-import { baseUrl } from '../../../app/Routes'
+import { baseUrl } from '../../../../app/Routes'
 
 function CalendarMenu() {
 	return (

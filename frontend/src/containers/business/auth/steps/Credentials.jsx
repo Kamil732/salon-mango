@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { FormControl } from '../../../layout/forms/Forms'
-import Input from '../../../layout/forms/inputs/Input'
-import Label from '../../../layout/forms/inputs/Label'
+import { FormControl } from '../../../../layout/forms/Forms'
+import Input from '../../../../layout/forms/inputs/Input'
+import Label from '../../../../layout/forms/inputs/Label'
 
 function Credentials({
 	onChange,

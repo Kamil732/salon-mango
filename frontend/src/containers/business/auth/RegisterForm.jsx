@@ -1,15 +1,15 @@
 import React, { lazy, Suspense, useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import '../../assets/css/progressbar.css'
+import '../../../assets/css/progressbar.css'
 
 // import { register } from '../../redux/actions/auth'
 import { HiOutlineArrowLeft } from 'react-icons/hi'
 
-import Card from '../../layout/Card'
-import ErrorBoundary from '../../components/ErrorBoundary'
-import CircleLoader from '../../layout/loaders/CircleLoader'
-import Button from '../../layout/buttons/Button'
+import Card from '../../../layout/Card'
+import ErrorBoundary from '../../../components/ErrorBoundary'
+import CircleLoader from '../../../layout/loaders/CircleLoader'
+import Button from '../../../layout/buttons/Button'
 
 const SalonInformation = lazy(() => import('./steps/SalonInformation'))
 const Credentials = lazy(() => import('./steps/Credentials'))
@@ -23,8 +23,8 @@ const TravellingFee = lazy(() => import('./steps/TravellingFee'))
 const AddServices = lazy(() => import('./steps/AddServices'))
 const AddEmployees = lazy(() => import('./steps/AddEmployees'))
 
-const BILLING_TYPES = require('../../assets/data/billing_types.json')
-const MAX_TRAVEL_DISTANCES = require('../../assets/data/max_travel_distances.json')
+const BILLING_TYPES = require('../../../assets/data/billing_types.json')
+const MAX_TRAVEL_DISTANCES = require('../../../assets/data/max_travel_distances.json')
 const INITIAL_STEPS_DATA = [
 	{
 		component: (props) => (

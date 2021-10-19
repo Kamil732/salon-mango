@@ -3,7 +3,7 @@ import '../assets/css/main.css'
 import 'react-notifications/lib/notifications.css'
 import './i18n'
 
-import { BrowserRouter as Router, Switch } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 import Routes from './Routes'
 import { NotificationContainer } from 'react-notifications'
@@ -13,19 +13,13 @@ import store from '../redux/store'
 import { loadUser } from '../redux/actions/auth'
 
 function App() {
-	useEffect(() => {
-		store.dispatch(loadUser())
-
-		// return () => window.location.reload()
-	}, [])
+	useEffect(() => store.dispatch(loadUser()), [])
 
 	return (
 		<Provider store={store}>
 			<NotificationContainer />
 			<Router>
-				<Switch>
-					<Routes />
-				</Switch>
+				<Routes />
 			</Router>
 		</Provider>
 	)

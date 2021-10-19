@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import { BsCardChecklist } from 'react-icons/bs'
 
-import RootMenu from '../../../layout/menus/RootMenu'
+import RootMenu from '../../../../layout/menus/RootMenu'
 
 function ServicesMenu({ serviceGroups }) {
 	const [activeItem, setActiveItem] = useState(null)

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import SettingsIllustration from '../../assets/svgs/settings-illustration.svg'
+import SettingsIllustration from '../../../../assets/svgs/settings-illustration.svg'
 
 function Settings(props) {
 	return (

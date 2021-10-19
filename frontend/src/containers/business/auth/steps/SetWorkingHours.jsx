@@ -1,18 +1,18 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import nextId from 'react-id-generator'
-import '../../../assets/css/table.css'
+import '../../../../assets/css/table.css'
 
 import moment from 'moment'
 import { IoIosArrowForward } from 'react-icons/io'
 
-import { FormControl } from '../../../layout/forms/Forms'
-import CheckBox from '../../../layout/forms/inputs/CheckBox'
-import Label from '../../../layout/forms/inputs/Label'
-import TimePicker from '../../../layout/forms/inputs/TimePicker'
-import Modal from '../../../layout/Modal'
-import ButtonContainer from '../../../layout/buttons/ButtonContainer'
-import Button from '../../../layout/buttons/Button'
+import { FormControl } from '../../../../layout/forms/Forms'
+import CheckBox from '../../../../layout/forms/inputs/CheckBox'
+import Label from '../../../../layout/forms/inputs/Label'
+import TimePicker from '../../../../layout/forms/inputs/TimePicker'
+import Modal from '../../../../layout/Modal'
+import ButtonContainer from '../../../../layout/buttons/ButtonContainer'
+import Button from '../../../../layout/buttons/Button'
 import ReactTooltip from 'react-tooltip'
 
 function SetWorkingHours({

@@ -2,23 +2,23 @@ import React, { lazy, Suspense, useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import '../../assets/css/pageHero.css'
+import '../../../assets/css/pageHero.css'
 
-import { login } from '../../redux/actions/auth'
-import { baseUrl } from '../../app/Routes'
+import { login } from '../../../redux/actions/auth'
+import { baseUrl } from '../../../app/Routes'
 
-import { ReactComponent as AuthIllustration } from '../../assets/svgs/auth-illustration.svg'
+import { ReactComponent as AuthIllustration } from '../../../assets/svgs/auth-illustration.svg'
 
-import CSRFToken from '../../components/CSRFToken'
-import Card from '../../layout/Card'
-import { FormControl } from '../../layout/forms/Forms'
-import Input from '../../layout/forms/inputs/Input'
-import Label from '../../layout/forms/inputs/Label'
-import Button from '../../layout/buttons/Button'
+import CSRFToken from '../../../components/CSRFToken'
+import Card from '../../../layout/Card'
+import { FormControl } from '../../../layout/forms/Forms'
+import Input from '../../../layout/forms/inputs/Input'
+import Label from '../../../layout/forms/inputs/Label'
+import Button from '../../../layout/buttons/Button'
 import { Link, Redirect } from 'react-router-dom'
-import Modal from '../../layout/Modal'
-import ErrorBoundary from '../../components/ErrorBoundary'
-import CircleLoader from '../../layout/loaders/CircleLoader'
+import Modal from '../../../layout/Modal'
+import ErrorBoundary from '../../../components/ErrorBoundary'
+import CircleLoader from '../../../layout/loaders/CircleLoader'
 
 const RegisterForm = lazy(() => import('./RegisterForm'))
 
@@ -46,7 +46,9 @@ function Login({ isAuthenticated, login }) {
 	}
 
 	if (isAuthenticated && !loading)
-		return <Redirect to={baseUrl + process.env.REACT_APP_PANEL_URL} />
+		return (
+			<Redirect to={baseUrl + process.env.REACT_APP_PANEL_CALENDAR_URL} />
+		)
 
 	return (
 		<>

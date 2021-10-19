@@ -2,19 +2,19 @@ import React, { useEffect, useState, lazy, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import 'react-calendar/dist/Calendar.css'
-import '../../../assets/css/tools-menu.css'
-import '../../../assets/css/calendar-picker.css'
+import '../../../../assets/css/tools-menu.css'
+import '../../../../assets/css/calendar-picker.css'
 
 import moment from 'moment'
-import { loadEmployees } from '../../../redux/actions/data'
+import { loadEmployees } from '../../../../redux/actions/data'
 import {
 	updateCalendarDates,
 	updateResourceMap,
-} from '../../../redux/actions/meetings'
+} from '../../../../redux/actions/meetings'
 
-import Button from '../../../layout/buttons/Button'
-import ErorrBoundary from '../../../components/ErrorBoundary'
-import CircleLoader from '../../../layout/loaders/CircleLoader'
+import Button from '../../../../layout/buttons/Button'
+import ErorrBoundary from '../../../../components/ErrorBoundary'
+import CircleLoader from '../../../../layout/loaders/CircleLoader'
 import { NotificationManager } from 'react-notifications'
 
 const Calendar = lazy(() => import('react-calendar'))

@@ -2,38 +2,38 @@ import React, { lazy, useEffect, useRef, useState, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { baseRouteUrl, baseUrl } from '../app/Routes'
+import { baseRouteUrl, baseUrl } from '../../../app/Routes'
 
 import {
 	connectNotificationWS,
 	getNotifications,
 	getUnreadNotificationsAmount,
 	markNotificationAsRead,
-} from '../redux/actions/data'
-import PrivateRoute from '../common/PrivateRoute'
+} from '../../../redux/actions/data'
+import PrivateRoute from '../../../common/PrivateRoute'
 import { Link, NavLink, Redirect, Switch } from 'react-router-dom'
 
-import logo from '../assets/images/logo.png'
+import logo from '../../../assets/images/logo.png'
 import { BsCalendar, BsLightning, BsPeople } from 'react-icons/bs'
 import { CgList } from 'react-icons/cg'
 import { VscBell, VscGraph } from 'react-icons/vsc'
 import { IoSettingsOutline } from 'react-icons/io5'
 import { GoMegaphone } from 'react-icons/go'
 
-import ErrorBoundary from '../components/ErrorBoundary'
-import CircleLoader from '../layout/loaders/CircleLoader'
-import Dashboard from '../layout/Dashboard'
+import ErrorBoundary from '../../../components/ErrorBoundary'
+import CircleLoader from '../../../layout/loaders/CircleLoader'
+import Dashboard from '../../../layout/Dashboard'
 
 const DropdownSelect = lazy(() =>
-	import('../layout/buttons/dropdowns/DropdownSelect')
+	import('../../../layout/buttons/dropdowns/DropdownSelect')
 )
-const Calendar = lazy(() => import('../components/calendar/Calendar'))
-const Settings = lazy(() => import('./dashboard/Settings'))
-const Services = lazy(() => import('./dashboard/Services'))
+const Calendar = lazy(() => import('../../../components/business/Calendar'))
+const Settings = lazy(() => import('./content/Settings'))
+const Services = lazy(() => import('./content/Services'))
 
-const CalendarMenu = lazy(() => import('./dashboard/menu/CalendarMenu'))
-const SettingsMenu = lazy(() => import('./dashboard/menu/SettingsMenu'))
-const ServicesMenu = lazy(() => import('./dashboard/menu/ServicesMenu'))
+const CalendarMenu = lazy(() => import('./menu/CalendarMenu'))
+const SettingsMenu = lazy(() => import('./menu/SettingsMenu'))
+const ServicesMenu = lazy(() => import('./menu/ServicesMenu'))
 
 function Panel({
 	notificationLoading,
@@ -275,9 +275,7 @@ function Panel({
 											process.env
 												.REACT_APP_PANEL_CALENDAR_URL
 										}
-										component={() => (
-											<Calendar isAdminPanel />
-										)}
+										component={Calendar}
 									/>
 									<PrivateRoute
 										exact

@@ -1,19 +1,19 @@
 import React, { useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import nextId from 'react-id-generator'
-import '../../../assets/css/table.css'
+import '../../../../assets/css/table.css'
 
 import ReactTooltip from 'react-tooltip'
 import { IoIosArrowForward } from 'react-icons/io'
 import { AiOutlinePlus } from 'react-icons/ai'
 import { VscTrash } from 'react-icons/vsc'
 
-import Modal from '../../../layout/Modal'
-import { FormControl } from '../../../layout/forms/Forms'
-import Label from '../../../layout/forms/inputs/Label'
-import Input from '../../../layout/forms/inputs/Input'
-import PhoneNumberInput from '../../../layout/forms/inputs/PhoneNumberInput'
-import Button from '../../../layout/buttons/Button'
+import Modal from '../../../../layout/Modal'
+import { FormControl } from '../../../../layout/forms/Forms'
+import Label from '../../../../layout/forms/inputs/Label'
+import Input from '../../../../layout/forms/inputs/Input'
+import PhoneNumberInput from '../../../../layout/forms/inputs/PhoneNumberInput'
+import Button from '../../../../layout/buttons/Button'
 
 function AddEmployees({ name, phone_prefix, employees, setData }) {
 	const initialEmployeeData = useMemo(

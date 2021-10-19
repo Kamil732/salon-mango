@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { FormControl, FormGroup } from '../../../layout/forms/Forms'
+import { FormControl, FormGroup } from '../../../../layout/forms/Forms'
 
-import Input from '../../../layout/forms/inputs/Input'
-import Label from '../../../layout/forms/inputs/Label'
-import Textarea from '../../../layout/forms/inputs/Textarea'
-import Dropdown from '../../../layout/buttons/dropdowns/Dropdown'
+import Input from '../../../../layout/forms/inputs/Input'
+import Label from '../../../../layout/forms/inputs/Label'
+import Textarea from '../../../../layout/forms/inputs/Textarea'
+import Dropdown from '../../../../layout/buttons/dropdowns/Dropdown'
 
 import {
 	GoogleMap,
@@ -14,8 +14,8 @@ import {
 	useJsApiLoader,
 } from '@react-google-maps/api'
 
-const BILLING_TYPES = require('../../../assets/data/billing_types.json')
-const MAX_TRAVEL_DISTANCES = require('../../../assets/data/max_travel_distances.json')
+const BILLING_TYPES = require('../../../../assets/data/billing_types.json')
+const MAX_TRAVEL_DISTANCES = require('../../../../assets/data/max_travel_distances.json')
 
 function TravellingFee({
 	billing_type,
