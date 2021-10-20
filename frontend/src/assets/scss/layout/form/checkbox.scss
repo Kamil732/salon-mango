@@ -9,7 +9,6 @@ $checkbox-prefix: #{$prefix}__checkbox;
 	align-items: center;
 	position: relative;
 	cursor: pointer;
-	font-size: 1em;
 	font-weight: 500;
 	user-select: none;
 
@@ -34,8 +33,8 @@ $checkbox-prefix: #{$prefix}__checkbox;
 	& > .#{$checkbox-prefix}-checkmark {
 		$size: 24px;
 		position: relative;
-		height: $size;
-		width: $size;
+		min-height: $size;
+		min-width: $size;
 		transition: background-color 0.2s ease-in-out,
 			border-color 0.2s ease-in-out;
 		background-color: #fff;
