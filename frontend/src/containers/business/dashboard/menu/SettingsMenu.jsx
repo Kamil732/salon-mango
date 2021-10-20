@@ -19,7 +19,8 @@ function CalendarMenu() {
 			<NavLink
 				to={
 					baseUrl +
-					process.env.REACT_APP_PANEL_SETTINGS_WORK_SCHEDULE_URL
+					process.env
+						.REACT_APP_BUSINESS_PANEL_SETTINGS_WORK_SCHEDULE_URL
 				}
 				className="select-menu__item icon-container"
 			>
@@ -29,7 +30,7 @@ function CalendarMenu() {
 			<NavLink
 				to={
 					baseUrl +
-					process.env.REACT_APP_PANEL_SETTINGS_SALON_DATA_URL
+					process.env.REACT_APP_BUSINESS_PANEL_SETTINGS_SALON_DATA_URL
 				}
 				className="select-menu__item icon-container"
 			>
@@ -37,7 +38,10 @@ function CalendarMenu() {
 				Dane solonu
 			</NavLink>
 			<NavLink
-				to={baseUrl + process.env.REACT_APP_PANEL_SETTINGS_CALENDAR_URL}
+				to={
+					baseUrl +
+					process.env.REACT_APP_BUSINESS_PANEL_SETTINGS_CALENDAR_URL
+				}
 				className="select-menu__item icon-container"
 			>
 				<FaCalendarAlt className="icon-container__icon" />
@@ -45,7 +49,8 @@ function CalendarMenu() {
 			</NavLink>
 			<NavLink
 				to={
-					baseUrl + process.env.REACT_APP_PANEL_SETTINGS_EMPLOYEES_URL
+					baseUrl +
+					process.env.REACT_APP_BUSINESS_PANEL_SETTINGS_EMPLOYEES_URL
 				}
 				className="select-menu__item icon-container"
 			>
@@ -54,7 +59,8 @@ function CalendarMenu() {
 			</NavLink>
 			<NavLink
 				to={
-					baseUrl + process.env.REACT_APP_PANEL_SETTINGS_CUSTOMERS_URL
+					baseUrl +
+					process.env.REACT_APP_BUSINESS_PANEL_SETTINGS_CUSTOMERS_URL
 				}
 				className="select-menu__item icon-container"
 			>
@@ -63,7 +69,8 @@ function CalendarMenu() {
 			</NavLink>
 			<NavLink
 				to={
-					baseUrl + process.env.REACT_APP_PANEL_SETTINGS_RESOURCES_URL
+					baseUrl +
+					process.env.REACT_APP_BUSINESS_PANEL_SETTINGS_RESOURCES_URL
 				}
 				className="select-menu__item icon-container"
 			>
@@ -72,7 +79,8 @@ function CalendarMenu() {
 			</NavLink>
 			<NavLink
 				to={
-					baseUrl + process.env.REACT_APP_PANEL_SETTINGS_MARKETING_URL
+					baseUrl +
+					process.env.REACT_APP_BUSINESS_PANEL_SETTINGS_MARKETING_URL
 				}
 				className="select-menu__item icon-container"
 			>
@@ -80,7 +88,10 @@ function CalendarMenu() {
 				Komunikacja
 			</NavLink>
 			<NavLink
-				to={baseUrl + process.env.REACT_APP_PANEL_SETTINGS_PAYMENT_URL}
+				to={
+					baseUrl +
+					process.env.REACT_APP_BUSINESS_PANEL_SETTINGS_PAYMENT_URL
+				}
 				className="select-menu__item icon-container"
 			>
 				<IoCard className="icon-container__icon" />

@@ -8,6 +8,7 @@ import CircleLoader from '../layout/loaders/CircleLoader'
 import ErrorBoundary from '../components/ErrorBoundary'
 
 const NotFound = lazy(() => import('../containers/NotFound'))
+const LandingPageRoutes = lazy(() => import('../containers/landing/Routes'))
 const BusinessRoutes = lazy(() => import('../containers/business/Routes'))
 
 const usersLang = (navigator.language || navigator.userLanguage).split('-')[0]
@@ -58,6 +59,10 @@ class Routes extends Component {
 								process.env.REACT_APP_BUSINESS_URL
 							}
 							component={BusinessRoutes}
+						/>
+						<Route
+							path={baseRouteUrl}
+							component={LandingPageRoutes}
 						/>
 						<Route path="*" component={NotFound} />
 					</Switch>

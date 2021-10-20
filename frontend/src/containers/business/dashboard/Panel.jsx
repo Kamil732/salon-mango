@@ -83,7 +83,8 @@ function Panel({
 								<Link
 									to={
 										baseUrl +
-										process.env.REACT_APP_PANEL_CALENDAR_URL
+										process.env
+											.REACT_APP_BUSINESS_PANEL_CALENDAR_URL
 									}
 								>
 									<img
@@ -105,7 +106,8 @@ function Panel({
 								<NavLink
 									to={
 										baseUrl +
-										process.env.REACT_APP_PANEL_CALENDAR_URL
+										process.env
+											.REACT_APP_BUSINESS_PANEL_CALENDAR_URL
 									}
 									className="dashboard__btn"
 								>
@@ -118,7 +120,7 @@ function Panel({
 									to={
 										baseUrl +
 										process.env
-											.REACT_APP_PANEL_CUSTOMERS_URL
+											.REACT_APP_BUSINESS_PANEL_CUSTOMERS_URL
 									}
 									className="dashboard__btn"
 								>
@@ -131,7 +133,7 @@ function Panel({
 									to={
 										baseUrl +
 										process.env
-											.REACT_APP_PANEL_STATISTICS_URL
+											.REACT_APP_BUSINESS_PANEL_STATISTICS_URL
 									}
 									className="dashboard__btn"
 								>
@@ -144,7 +146,7 @@ function Panel({
 									to={
 										baseUrl +
 										process.env
-											.REACT_APP_PANEL_MARKETING_URL
+											.REACT_APP_BUSINESS_PANEL_MARKETING_URL
 									}
 									className="dashboard__btn"
 								>
@@ -156,7 +158,8 @@ function Panel({
 								<NavLink
 									to={
 										baseUrl +
-										process.env.REACT_APP_PANEL_SERVICES_URL
+										process.env
+											.REACT_APP_BUSINESS_PANEL_SERVICES_URL
 									}
 									className="dashboard__btn"
 								>
@@ -168,7 +171,8 @@ function Panel({
 								<NavLink
 									to={
 										baseUrl +
-										process.env.REACT_APP_PANEL_SETTINGS_URL
+										process.env
+											.REACT_APP_BUSINESS_PANEL_SETTINGS_URL
 									}
 									className="dashboard__btn"
 								>
@@ -230,7 +234,7 @@ function Panel({
 											path={
 												baseRouteUrl +
 												process.env
-													.REACT_APP_PANEL_CALENDAR_URL
+													.REACT_APP_BUSINESS_PANEL_CALENDAR_URL
 											}
 											component={CalendarMenu}
 										/>
@@ -239,7 +243,7 @@ function Panel({
 											path={
 												baseRouteUrl +
 												process.env
-													.REACT_APP_PANEL_SERVICES_URL
+													.REACT_APP_BUSINESS_PANEL_SERVICES_URL
 											}
 											component={ServicesMenu}
 										/>
@@ -248,7 +252,7 @@ function Panel({
 											path={
 												baseRouteUrl +
 												process.env
-													.REACT_APP_PANEL_SETTINGS_URL
+													.REACT_APP_BUSINESS_PANEL_SETTINGS_URL
 											}
 											component={SettingsMenu}
 										/>
@@ -273,7 +277,7 @@ function Panel({
 										path={
 											baseRouteUrl +
 											process.env
-												.REACT_APP_PANEL_CALENDAR_URL
+												.REACT_APP_BUSINESS_PANEL_CALENDAR_URL
 										}
 										component={Calendar}
 									/>
@@ -282,7 +286,7 @@ function Panel({
 										path={
 											baseRouteUrl +
 											process.env
-												.REACT_APP_PANEL_SERVICES_URL
+												.REACT_APP_BUSINESS_PANEL_SERVICES_URL
 										}
 										component={Services}
 									/>
@@ -291,7 +295,7 @@ function Panel({
 										path={
 											baseRouteUrl +
 											process.env
-												.REACT_APP_PANEL_SETTINGS_URL
+												.REACT_APP_BUSINESS_PANEL_SETTINGS_URL
 										}
 										component={Settings}
 									/>
@@ -300,7 +304,7 @@ function Panel({
 										to={
 											baseRouteUrl +
 											process.env
-												.REACT_APP_PANEL_CALENDAR_URL
+												.REACT_APP_BUSINESS_PANEL_CALENDAR_URL
 										}
 									/>
 								</Switch>

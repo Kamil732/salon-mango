@@ -201,7 +201,7 @@ function CalendarMenu({
 								primary
 								to={
 									process.env
-										.REACT_APP_PANEL_SETTINGS_RESOURCES_URL
+										.REACT_APP_BUSINESS_PANEL_SETTINGS_RESOURCES_URL
 								}
 								style={{
 									fontSize: '0.75em',

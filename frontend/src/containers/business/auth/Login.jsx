@@ -47,7 +47,9 @@ function Login({ isAuthenticated, login }) {
 
 	if (isAuthenticated && !loading)
 		return (
-			<Redirect to={baseUrl + process.env.REACT_APP_PANEL_CALENDAR_URL} />
+			<Redirect
+				to={baseUrl + process.env.REACT_APP_BUSINESS_PANEL_CALENDAR_URL}
+			/>
 		)
 
 	return (
