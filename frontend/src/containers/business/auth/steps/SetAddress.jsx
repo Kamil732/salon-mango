@@ -7,6 +7,7 @@ import { FormControl, FormGroup } from '../../../../layout/forms/Forms'
 import Input from '../../../../layout/forms/inputs/Input'
 import Label from '../../../../layout/forms/inputs/Label'
 import Dropdown from '../../../../layout/buttons/dropdowns/Dropdown'
+import { useTranslation } from 'react-i18next'
 
 function SetAddress({
 	country,
@@ -23,6 +24,7 @@ function SetAddress({
 	componentData,
 	changeComponentData,
 }) {
+	const { t } = useTranslation()
 	const [citiesLoading, setCitiesLoading] = useState(false)
 	const [cities, setCities] = useState([])
 	const debouncedSearch = useDebounce(postal_code, 500)
@@ -89,13 +91,15 @@ function SetAddress({
 	return (
 		<>
 			<div className="title-container">
-				<h2>Twój adres</h2>
-				<p className="description">Gdzie można cię znaleźć?</p>
+				<h2>{t('auth.register.set_address.title')}</h2>
+				<p className="description">
+					{t('auth.register.set_address.description')}
+				</p>
 			</div>
 
 			<FormControl>
 				<Label htmlFor="address" inputValue={address}>
-					Ulica i numer domu
+					{t('auth.register.set_address.address_label')}
 				</Label>
 				<Input
 					required
@@ -109,7 +113,7 @@ function SetAddress({
 			</FormControl>
 			<FormControl>
 				<Label htmlFor="premises-number" inputValue={premises_number}>
-					Numer lokalu (opcjonalne)
+					{t('auth.register.set_address.premises_number_label')}
 				</Label>
 				<Input
 					type="text"
@@ -122,7 +126,7 @@ function SetAddress({
 			<FormGroup>
 				<FormControl style={{ width: '12rem' }}>
 					<Label htmlFor="postal-code" inputValue={postal_code}>
-						Kod pocztowy
+						{t('auth.register.set_address.postal_code_label')}
 					</Label>
 					<Input
 						required
@@ -140,7 +144,7 @@ function SetAddress({
 						htmlFor="city"
 						inputValue={Object.keys(city).length > 0}
 					>
-						Miejscowość
+						{t('auth.register.set_address.city_label')}
 					</Label>
 
 					<Dropdown

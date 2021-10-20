@@ -1,19 +1,153 @@
 {
+    "prefix": "Prefix",
+    "phone_number": "Phone number",
+
+    "weekdays": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+    },
+    "actions": {
+        "next": "Next",
+        "cancel": "Cancel",
+        "save": "Save",
+        "edit": "Edit",
+        "add": "Add"
+    },
+    "data": {
+        "company_name": "Company name",
+        "name": "Name",
+        "price_type": {
+            "name": "Price type",
+            "free": "Free",
+            "fixed": "Fixed",
+            "varies": "Varies",
+            "starts_at": "Starts at",
+            "hidden": "Hidden"
+        }
+    },
     "auth": {
+        "email": "Email",
         "password": "Password",
+        "confirm_password": "Confirm password",
         "sign_in": "Sign in",
         "logging_in": "Logging in",
         "forgot_password": "Forgot password?",
-        "no_account": "You don't have an account yet? Click <1>here</1> to create one"
+        "no_account": "You don't have an account yet? Click <2>here</2> to create one",
+
+        "register": {
+            "salon_data": {
+                "title": "About you",
+                "description": "Tell us more about yourself and your business."
+            },
+            "credentials": {
+                "title": "Account Setup",
+                "description": "Enter the email and password for your business profile."
+            },
+            "accept_terms": {
+                "title": "Your data protection",
+                "description": "The General Data Protection Regulation (GDPR) puts you in charge of your personal data. Please select how your data can be used.",
+                "accept": "I accept the terms & conditions",
+                "warning": "You have to accept the terms & conditions, before continuing"
+            },
+            "choose_categories": {
+                "title": "Choose your business category",
+                "fetch_error": "Unexpected error occured while fetching data. Try again later."
+            },
+            "work_type": {
+                "title": "Where Do You Work?",
+                "description": "Do your clients come to you, do you go to them, or both?",
+                "types": {
+                    "stationary": {
+                        "name": "At my place",
+                        "help_text": "My clients come to me. I own the place or work in a salon/suite alongside other professionals."
+                    },
+                    "remotely": {
+                        "name": "At the client's location",
+                        "help_text": "I'm on the go. My services are performed at the client's location."
+                    }
+                },
+                "warning": "Please select at least one option to continue"
+            },
+            "set_address": {
+                "title": "Your Address",
+                "description": "Where can clients find you?",
+                "address_label": "Street address & number",
+                "premises_number_label": "Suite number (optional)",
+                "postal_code_label": "Zip code",
+                "city_label": "City"
+            },
+            "find_address": {
+                "title": "Map Location",
+                "description": "Move the map so that your location is directly under the pin."
+            },
+            "travelling_fee": {
+                "title": "What is your travel fee?",
+                "description": "Add your minimum travel fee.",
+                "price_type_label": "Price type",
+                "travel_fee_label": "Travel fee",
+                "max_travel_distance_label": "Maximum travel distance",
+                "travel_fee_rules_label": "Travel & Fee Policy (optional)"
+            },
+            "working_hours": {
+                "title": "Your Business Hours",
+                "description": "When can clients book with you?",
+                "edit": "Click to edit",
+                "closed": "Closed",
+                "modal": {
+                    "description": "Set your business hours here. Head to your calendar if you need to adjust hours for a single day.",
+                    "open_hours_label": "Opening hours"
+                }
+            },
+            "add_services": {
+                "title": "Start Adding Services",
+                "description": "Add at least one service now. Later you can add more, edit details, and group services into categories.",
+                "fetch_error": "Unexpected error occured",
+                "add": "Add service",
+                "delete": "Remove service",
+                "edit": "Edit service",
+                "modal": {
+                    "description": "You'll be able to add a description and adjust advanced settings for this service later on.",
+                    "service_name_label": "Service name",
+                    "service_suggested_services": "Suggested servicesi",
+                    "service_time_label": "Service duration",
+                    "service_price_label": "Service price",
+                    "service_is_remote": "Mobile Service"
+                },
+                "warning": "Dodaj conajmniej jedną usługę, aby przejść dalej"
+            },
+            "add_employees": {
+                "title": "Add More Staff Members?",
+                "description": "Add basic information about your team. You'll be able to complete their profiles, assign services, and adjust working hours later on.",
+                "add": "Add staff member",
+                "edit": "Edit staff member",
+                "position": "Position",
+                "owner": "Owner"
+            }
+        }
     },
     "panel": {
-        "calendar": "calendar",
-        "customers": "customers",
+        "calendar": "Calendar",
+        "customers": "Customers",
         "statistics": "statistics",
-        "marketing": "marketing",
+        "marketing": "Marketing",
         "services": "services",
         "settings": "settings",
         "notifications": "Notifications",
-        "no_notifications": "Nie masz żadnych powiadomień"
+        "no_notifications": "You don't have any notification",
+
+        "menu": {
+            "employees": "Employees",
+            "resources": "Resources",
+            "add_resource": "Add first resource",
+            "all_services": "All services",
+            "work_schedules": "Work schedules",
+            "salon_data": "Salon data",
+            "payment": "Payment"
+        }
     }
 }

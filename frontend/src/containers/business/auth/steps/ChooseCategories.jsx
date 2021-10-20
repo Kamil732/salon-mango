@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
 
+import { useTranslation } from 'react-i18next'
 import getHeaders from '../../../../helpers/getHeaders'
 
 import { FormControl } from '../../../../layout/forms/Forms'
@@ -14,6 +15,7 @@ function ChooseCategories({
 	componentData,
 	changeComponentData,
 }) {
+	const { t } = useTranslation()
 	const [categoriesFetchData, setCategoriesFetchData] = useState({
 		isLoading: true,
 		error: null,
@@ -58,7 +60,7 @@ function ChooseCategories({
 	return (
 		<>
 			<div className="title-container">
-				<h1>Wybierz kategorię działalności</h1>
+				<h1>{t('auth.register.choose_categories.title')}</h1>
 			</div>
 			{categoriesFetchData.isLoading ? (
 				<div className="center-container">
@@ -83,10 +85,7 @@ function ChooseCategories({
 				</FormControl>
 			) : (
 				<div className="center-container">
-					<h3>
-						Wystąpił błąd podczas pobierania danych. Spróbuj
-						ponownie później.
-					</h3>
+					<h3>{t('auth.register.choose_categories.fetch_error')}</h3>
 				</div>
 			)}
 		</>

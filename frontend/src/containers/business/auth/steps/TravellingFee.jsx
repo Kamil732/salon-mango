@@ -13,6 +13,7 @@ import {
 	Circle,
 	useJsApiLoader,
 } from '@react-google-maps/api'
+import { useTranslation } from 'react-i18next'
 
 const BILLING_TYPES = require('../../../../assets/data/billing_types.json')
 const MAX_TRAVEL_DISTANCES = require('../../../../assets/data/max_travel_distances.json')
@@ -27,6 +28,7 @@ function TravellingFee({
 	updateData,
 	onChange,
 }) {
+	const { t } = useTranslation()
 	const getOptionValue = (opt) => opt.value
 	const getOptionLabel = (opt) => opt.label
 	const { isLoaded } = useJsApiLoader({
@@ -51,14 +53,16 @@ function TravellingFee({
 	return (
 		<>
 			<div className="title-container">
-				<h2>Ile wynosi Twoja opłata za dojazd?</h2>
-				<p className="description">Podaj minimalną opłatę za dojazd</p>
+				<h2>{t('auth.register.travelling_fee.title')}</h2>
+				<p className="description">
+					{t('auth.register.travelling_fee.description')}
+				</p>
 			</div>
 
 			<FormGroup>
 				<FormControl>
 					<Label htmlFor="billing-type" inputValue>
-						Rodzaj ceny
+						{t('data.price_type.name')}
 					</Label>
 					<Dropdown
 						id="billing-type"
@@ -91,7 +95,7 @@ function TravellingFee({
 							travel_fee === null || travel_fee.toString()
 						}
 					>
-						Opłata za dojazd
+						{t('auth.register.travelling_fee.travel_fee_label')}
 					</Label>
 					<Input
 						id="travel-fee"
@@ -110,7 +114,9 @@ function TravellingFee({
 			</FormGroup>
 			<FormControl>
 				<Label htmlFor="max-travel-distance" inputValue>
-					Maks. odłegłość dojazdu
+					{t(
+						'auth.register.travelling_fee.max_travel_distance_label'
+					)}
 				</Label>
 				<Dropdown
 					id="max-travel-distance"
@@ -145,7 +151,7 @@ function TravellingFee({
 			)}
 			<FormControl>
 				<Label htmlFor="travel-fee-rules" inputValue={travel_fee_rules}>
-					Zazady dojazdu i opłat (opcjonalne)
+					{t('auth.register.travelling_fee.travel_fee_rules_label')}
 				</Label>
 				<Textarea
 					id="travel-fee-rules"

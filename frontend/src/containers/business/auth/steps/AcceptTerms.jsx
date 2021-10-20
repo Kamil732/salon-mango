@@ -1,23 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useTranslation } from 'react-i18next'
 
 import { FormControl } from '../../../../layout/forms/Forms'
 import CheckBox from '../../../../layout/forms/inputs/CheckBox'
 
 function AcceptTerms({ onChange, accept_terms, changeComponentData }) {
+	const { t } = useTranslation()
+
 	return (
 		<>
 			<div className="title-container">
-				<h2>Ochrona Twoich danych</h2>
+				<h2>{t('auth.register.accept_terms.title')}</h2>
 				<p className="description">
-					Dzięki rozporządzeniu o ochronie danych osobowych (RODO), to
-					Ty zarządzasz swoimi danymi. Powiedz nam, w jakim zakresie
-					możemy przetwarzać Twoje dane.
+					{t('auth.register.accept_terms.description')}
 				</p>
 			</div>
 			<FormControl>
 				<CheckBox.Label>
-					Akceptuje regulamin
+					{t('auth.register.accept_terms.accept')}
 					<CheckBox
 						name="accept_terms"
 						checked={accept_terms}
@@ -35,7 +36,7 @@ function AcceptTerms({ onChange, accept_terms, changeComponentData }) {
 					<hr className="seperator" />
 					<div className="center-container">
 						<small className="text-broken">
-							Musisz zakceptować regulamin, aby przejść dalej
+							{t('auth.register.accept_terms.warning')}
 						</small>
 					</div>
 				</>

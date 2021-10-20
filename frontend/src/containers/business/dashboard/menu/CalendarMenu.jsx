@@ -6,6 +6,7 @@ import '../../../../assets/css/tools-menu.css'
 import '../../../../assets/css/calendar-picker.css'
 
 import moment from 'moment'
+import { useTranslation } from 'react-i18next'
 import { loadEmployees } from '../../../../redux/actions/data'
 import {
 	updateCalendarDates,
@@ -28,6 +29,7 @@ function CalendarMenu({
 	updateCalendarDates,
 	updateResourceMap,
 }) {
+	const { t } = useTranslation()
 	const [activeDay, setActiveDay] = useState(currentDate)
 	const formatShortWeekday = (_, date) => moment(date).format('dd')
 
@@ -109,7 +111,7 @@ function CalendarMenu({
 					{employees.length > 0 && (
 						<div className="tools-menu__item">
 							<h4 className="tools-menu__item__title">
-								PRACOWNICY
+								{t('panel.menu.employees').toUpperCase()}
 							</h4>
 
 							{employees.map((employee) => {
@@ -154,7 +156,9 @@ function CalendarMenu({
 					)}
 
 					<div className="tools-menu__item">
-						<h4 className="tools-menu__item__title">ZASOBY</h4>
+						<h4 className="tools-menu__item__title">
+							{t('panel.menu.resources').toUpperCase()}
+						</h4>
 
 						{resources.length > 0 ? (
 							resources.map((resource) => {
@@ -208,7 +212,7 @@ function CalendarMenu({
 								}}
 								className="center-item"
 							>
-								Dodaj pierwszy zasób
+								{t('panel.menu.add_resource')}
 							</Button>
 						)}
 					</div>

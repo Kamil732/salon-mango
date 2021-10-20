@@ -1,5 +1,6 @@
 import React from 'react'
 import '../../../../assets/css/select-menu.css'
+import { useTranslation } from 'react-i18next'
 
 import { RiBarChartHorizontalFill } from 'react-icons/ri'
 import {
@@ -14,6 +15,7 @@ import { NavLink } from 'react-router-dom'
 import { baseUrl } from '../../../../app/Routes'
 
 function CalendarMenu() {
+	const { t } = useTranslation()
 	return (
 		<div className="select-menu">
 			<NavLink
@@ -25,7 +27,7 @@ function CalendarMenu() {
 				className="select-menu__item icon-container"
 			>
 				<RiBarChartHorizontalFill className="icon-container__icon" />
-				Grafiki pracy
+				{t('panel.menu.work_schedules')}
 			</NavLink>
 			<NavLink
 				to={
@@ -35,7 +37,7 @@ function CalendarMenu() {
 				className="select-menu__item icon-container"
 			>
 				<FaDatabase className="icon-container__icon" />
-				Dane solonu
+				{t('panel.menu.salon_data')}
 			</NavLink>
 			<NavLink
 				to={
@@ -45,7 +47,7 @@ function CalendarMenu() {
 				className="select-menu__item icon-container"
 			>
 				<FaCalendarAlt className="icon-container__icon" />
-				Kalendarz
+				{t('panel.calendar')}
 			</NavLink>
 			<NavLink
 				to={
@@ -55,7 +57,7 @@ function CalendarMenu() {
 				className="select-menu__item icon-container"
 			>
 				<FaIdCardAlt className="icon-container__icon" />
-				Pracownicy
+				{t('panel.menu.employees')}
 			</NavLink>
 			<NavLink
 				to={
@@ -65,7 +67,7 @@ function CalendarMenu() {
 				className="select-menu__item icon-container"
 			>
 				<ImUsers className="icon-container__icon" />
-				Klienci
+				{t('panel.customers')}
 			</NavLink>
 			<NavLink
 				to={
@@ -75,7 +77,7 @@ function CalendarMenu() {
 				className="select-menu__item icon-container"
 			>
 				<FaLayerGroup className="icon-container__icon" />
-				Zasoby
+				{t('panel.menu.resources')}
 			</NavLink>
 			<NavLink
 				to={
@@ -85,7 +87,7 @@ function CalendarMenu() {
 				className="select-menu__item icon-container"
 			>
 				<IoChatbubbles className="icon-container__icon" />
-				Komunikacja
+				{t('panel.marketing')}
 			</NavLink>
 			<NavLink
 				to={
@@ -95,7 +97,7 @@ function CalendarMenu() {
 				className="select-menu__item icon-container"
 			>
 				<IoCard className="icon-container__icon" />
-				Płatności
+				{t('panel.menu.payment')}
 			</NavLink>
 		</div>
 	)

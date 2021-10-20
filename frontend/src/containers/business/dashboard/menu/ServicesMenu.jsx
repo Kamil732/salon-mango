@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 
 import { BsCardChecklist } from 'react-icons/bs'
 
 import RootMenu from '../../../../layout/menus/RootMenu'
 
 function ServicesMenu({ serviceGroups }) {
+	const { t } = useTranslation()
 	const [activeItem, setActiveItem] = useState(null)
 
 	const getServiceGroup = (group) => (
@@ -33,7 +35,7 @@ function ServicesMenu({ serviceGroups }) {
 						size="18"
 						className="icon-container__icon"
 					/>
-					Wszystkie usługi
+					{t('panel.menu.all_services')}
 				</div>
 			}
 			value={null}

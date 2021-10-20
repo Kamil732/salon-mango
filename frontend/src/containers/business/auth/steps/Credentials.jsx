@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { FormControl } from '../../../../layout/forms/Forms'
 import Input from '../../../../layout/forms/inputs/Input'
 import Label from '../../../../layout/forms/inputs/Label'
+import { useTranslation } from 'react-i18next'
 
 function Credentials({
 	onChange,
@@ -13,6 +14,8 @@ function Credentials({
 	componentData,
 	changeComponentData,
 }) {
+	const { t } = useTranslation()
+
 	useEffect(() => {
 		if (
 			componentData.nextBtnDisabled &&
@@ -39,14 +42,14 @@ function Credentials({
 	return (
 		<>
 			<div className="title-container">
-				<h1>Ustaw logowanie</h1>
+				<h1>{t('auth.register.credentials.title')}</h1>
 				<p className="description">
-					Ustaw email i hasło, za pomocą którego będziesz się logować
+					{t('auth.register.credentials.description')}
 				</p>
 			</div>
 			<FormControl>
 				<Label htmlFor="email" inputValue={email}>
-					Email
+					{t('auth.email')}
 				</Label>
 				<Input
 					required
@@ -59,7 +62,7 @@ function Credentials({
 			</FormControl>
 			<FormControl>
 				<Label htmlFor="password" inputValue={password}>
-					Hasło
+					{t('auth.password')}
 				</Label>
 				<Input
 					required
@@ -73,7 +76,7 @@ function Credentials({
 			</FormControl>
 			<FormControl>
 				<Label htmlFor="confirm_password" inputValue={confirm_password}>
-					Potwierdź hasło
+					{t('auth.confirm_password')}
 				</Label>
 				<Input
 					required

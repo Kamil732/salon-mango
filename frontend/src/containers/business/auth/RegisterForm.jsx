@@ -10,8 +10,9 @@ import Card from '../../../layout/Card'
 import ErrorBoundary from '../../../components/ErrorBoundary'
 import CircleLoader from '../../../layout/loaders/CircleLoader'
 import Button from '../../../layout/buttons/Button'
+import { useTranslation } from 'react-i18next'
 
-const SalonInformation = lazy(() => import('./steps/SalonInformation'))
+const SalonData = lazy(() => import('./steps/SalonData'))
 const Credentials = lazy(() => import('./steps/Credentials'))
 const AcceptTerms = lazy(() => import('./steps/AcceptTerms'))
 const ChooseCategories = lazy(() => import('./steps/ChooseCategories'))
@@ -28,7 +29,7 @@ const MAX_TRAVEL_DISTANCES = require('../../../assets/data/max_travel_distances.
 const INITIAL_STEPS_DATA = [
 	{
 		component: (props) => (
-			<SalonInformation
+			<SalonData
 				onChange={props.onChange}
 				updateData={props.updateData}
 				salon_name={props.salon_name}
@@ -189,6 +190,7 @@ const INITIAL_STEPS_DATA = [
 ]
 
 function RegisterForm({ closeModal, register }) {
+	const { t } = useTranslation()
 	const [loading, setLoading] = useState(false)
 	const [data, setData] = useState({
 		email: '',
@@ -371,7 +373,7 @@ function RegisterForm({ closeModal, register }) {
 					className="form-card__btn"
 					disabled={STEPS[step].nextBtnDisabled}
 				>
-					Dalej
+					{t('actions.next')}
 				</Button>
 			</Card.Body>
 		</Card>

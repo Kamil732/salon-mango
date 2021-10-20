@@ -14,8 +14,10 @@ import Label from '../../../../layout/forms/inputs/Label'
 import Input from '../../../../layout/forms/inputs/Input'
 import PhoneNumberInput from '../../../../layout/forms/inputs/PhoneNumberInput'
 import Button from '../../../../layout/buttons/Button'
+import { useTranslation } from 'react-i18next'
 
 function AddEmployees({ name, phone_prefix, employees, setData }) {
+	const { t } = useTranslation()
 	const initialEmployeeData = useMemo(
 		() => ({
 			name: '',
@@ -99,7 +101,9 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 			{modalData.isOpen && (
 				<Modal closeModal={resetForm} small isChild>
 					<Modal.Header>
-						{modalData.editMode ? 'Edytuj' : 'Dodaj'} pracownika
+						{modalData.editMode
+							? t('auth.register.add_employees.edit')
+							: t('auth.register.add_employees.add')}
 					</Modal.Header>
 					<Modal.Body>
 						<form
@@ -112,7 +116,7 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 									htmlFor="name"
 									inputValue={employeeData.name}
 								>
-									Imię i nazwisko
+									{t('data.name')}
 								</Label>
 								<Input
 									required
@@ -127,7 +131,7 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 									htmlFor="email"
 									inputValue={employeeData.email}
 								>
-									Adres e-mail
+									{t('auth.email')}
 								</Label>
 								<Input
 									required
@@ -154,7 +158,7 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 									htmlFor="position"
 									inputValue={employeeData.position}
 								>
-									Stanowisko
+									{t('auth.register.add_employees.position')}
 								</Label>
 								<Input
 									id="position"
@@ -183,7 +187,7 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 										}
 										type="submit"
 									>
-										Zapisz
+										{t('actions.save')}
 									</Button>
 								</div>
 							) : (
@@ -192,7 +196,7 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 									style={{ marginLeft: 'auto' }}
 									type="submit"
 								>
-									Dodaj
+									{t('actions.add')}
 								</Button>
 							)}
 						</form>
@@ -201,11 +205,9 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 			)}
 
 			<div className="title-container">
-				<h2>Dodaj pracowników</h2>
+				<h2>{t('auth.register.add_employees.title')}</h2>
 				<p className="description">
-					Dodaj podstawowe informacje o swoim zespole. Do uzupełnienia
-					profili, przypisania usług i ustalenia grafików pracy możesz
-					wrócić później.
+					{t('auth.register.add_employees.description')}
 				</p>
 			</div>
 
@@ -213,7 +215,9 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 				<tbody>
 					<tr>
 						<td>{name}</td>
-						<td className="text-broken">Właściciel</td>
+						<td className="text-broken">
+							{t('auth.register.add_employees.owner')}
+						</td>
 					</tr>
 					{employees.map((employee) => (
 						<tr key={employee.id}>
@@ -255,7 +259,7 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 									size="20"
 									className="icon-container__icon"
 								/>
-								Dodaj pracownika
+								{t('auth.register.add_employees.add')}
 							</Button>
 						</td>
 					</tr>

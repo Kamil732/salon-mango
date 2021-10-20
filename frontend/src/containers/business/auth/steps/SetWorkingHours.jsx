@@ -14,6 +14,7 @@ import Modal from '../../../../layout/Modal'
 import ButtonContainer from '../../../../layout/buttons/ButtonContainer'
 import Button from '../../../../layout/buttons/Button'
 import ReactTooltip from 'react-tooltip'
+import { useTranslation } from 'react-i18next'
 
 function SetWorkingHours({
 	onChangeIsWorkingDay,
@@ -34,6 +35,7 @@ function SetWorkingHours({
 	start_work_sunday,
 	end_work_sunday,
 }) {
+	const { t } = useTranslation()
 	const [selected, setSelected] = useState(null)
 
 	const day = (start, end, name, displayName) => {
@@ -64,13 +66,13 @@ function SetWorkingHours({
 							displayName,
 						})
 					}}
-					data-tip="Kliknij by edytować"
+					data-tip={t('auth.register.working_hours.edit')}
 					data-for={tooltipId}
 				>
 					<div className="space-between">
 						<span>
 							{start === null || end === null ? (
-								'Zamknięte'
+								t('auth.register.working_hours.closed')
 							) : (
 								<>
 									{start} - {end}
@@ -126,12 +128,14 @@ function SetWorkingHours({
 					</Modal.Header>
 					<Modal.Body>
 						<p className="text-broken">
-							Ustaw godziny otwarcia Twojego biznesu. Jeśli chcesz
-							ustalić godziny dla poszczególnych dni, przejdź do
-							kalendarza.
+							{t('auth.register.working_hours.modal.description')}
 						</p>
 						<FormControl.Inline>
-							<Label id="open-hours">Godziny otwarcia</Label>
+							<Label id="open-hours">
+								{t(
+									'auth.register.working_hours.modal.open_hours_label'
+								)}
+							</Label>
 
 							<TimePicker
 								name={`start_work_${selected.name}`}
@@ -165,7 +169,7 @@ function SetWorkingHours({
 
 						<ButtonContainer style={{ justifyContent: 'right' }}>
 							<Button secondary onClick={() => setSelected(null)}>
-								Anuluj
+								{t('actions.cancel')}
 							</Button>
 							<Button
 								primary
@@ -179,7 +183,7 @@ function SetWorkingHours({
 									setSelected(null)
 								}}
 							>
-								Zapisz
+								{t('actions.save')}
 							</Button>
 						</ButtonContainer>
 					</Modal.Body>
@@ -187,9 +191,9 @@ function SetWorkingHours({
 			)}
 
 			<div className="title-container">
-				<h2>Godziny otwarcia</h2>
+				<h2>{t('auth.register.working_hours.title')}</h2>
 				<p className="description">
-					W jakich godzinach przyjmujesz klientów?
+					{t('auth.register.working_hours.description')}
 				</p>
 			</div>
 
@@ -200,43 +204,43 @@ function SetWorkingHours({
 							start_work_monday,
 							end_work_monday,
 							'monday',
-							'poniedziałek'
+							t('weekdays.monday')
 						)}
 						{day(
 							start_work_tuesday,
 							end_work_tuesday,
 							'tuesday',
-							'wtorek'
+							t('weekdays.tuesday')
 						)}
 						{day(
 							start_work_wednesday,
 							end_work_wednesday,
 							'wednesday',
-							'środa'
+							t('weekdays.wednesday')
 						)}
 						{day(
 							start_work_thursday,
 							end_work_thursday,
 							'thursday',
-							'czwartek'
+							t('weekdays.thursday')
 						)}
 						{day(
 							start_work_friday,
 							end_work_friday,
 							'friday',
-							'piątek'
+							t('weekdays.friday')
 						)}
 						{day(
 							start_work_saturday,
 							end_work_saturday,
 							'saturday',
-							'sobota'
+							t('weekdays.saturday')
 						)}
 						{day(
 							start_work_sunday,
 							end_work_sunday,
 							'sunday',
-							'niedziela'
+							t('weekdays.sunday')
 						)}
 					</tbody>
 				</table>

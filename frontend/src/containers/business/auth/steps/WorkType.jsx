@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { FormControl } from '../../../../layout/forms/Forms'
 import CheckBox from '../../../../layout/forms/inputs/CheckBox'
+import { useTranslation } from 'react-i18next'
 
 function WorkType({
 	work_stationary,
@@ -11,6 +12,7 @@ function WorkType({
 	componentData,
 	changeComponentData,
 }) {
+	const { t } = useTranslation()
 	useEffect(() => {
 		if (
 			!componentData.nextBtnDisabled &&
@@ -42,9 +44,9 @@ function WorkType({
 	return (
 		<>
 			<div className="title-container">
-				<h2>W jakim trybie pracujesz</h2>
+				<h2>{t('auth.register.work_type.title')}</h2>
 				<p className="description">
-					Pracujesz stacjonarnie czy dajesz usługi mobilne?
+					{t('auth.register.work_type.description')}
 				</p>
 			</div>
 
@@ -59,10 +61,12 @@ function WorkType({
 						}
 					/>
 					<p>
-						Pracuje stacjonarnie
+						{t('auth.register.work_type.types.stationary.name')}
 						<br />
 						<small className="text-broken">
-							Pracuję stacjonarnie. Prowadzę salon
+							{t(
+								'auth.register.work_type.types.stationary.help_text'
+							)}
 						</small>
 					</p>
 				</CheckBox.Label>
@@ -79,10 +83,12 @@ function WorkType({
 						}
 					/>
 					<p>
-						Świadczę usługi mobilne
+						{t('auth.register.work_type.types.remotely.name')}
 						<br />
 						<small className="text-broken">
-							Oferuję usługi z dojazdem do klienta
+							{t(
+								'auth.register.work_type.types.remotely.help_text'
+							)}
 						</small>
 					</p>
 				</CheckBox.Label>
@@ -92,7 +98,7 @@ function WorkType({
 				{work_remotely === false && work_stationary === false && (
 					<div className="center-container">
 						<small className="text-broken">
-							Wybierz conajmniej jedną opcję
+							{t('auth.register.work_type.warning')}
 						</small>
 					</div>
 				)}

@@ -5,8 +5,9 @@ import { FormControl, FormGroup } from '../../../../layout/forms/Forms'
 import Input from '../../../../layout/forms/inputs/Input'
 import Label from '../../../../layout/forms/inputs/Label'
 import PhoneNumberInput from '../../../../layout/forms/inputs/PhoneNumberInput'
+import { useTranslation } from 'react-i18next'
 
-function SalonInformation({
+function SalonData({
 	onChange,
 	updateData,
 	salon_name,
@@ -16,6 +17,8 @@ function SalonInformation({
 	componentData,
 	changeComponentData,
 }) {
+	const { t } = useTranslation()
+
 	// If valid form than changeComponentData({ nextBtnDisabled: false })
 	useEffect(() => {
 		if (
@@ -46,14 +49,14 @@ function SalonInformation({
 	return (
 		<>
 			<div className="title-container">
-				<h1>O Tobie</h1>
+				<h1>{t('auth.register.salon_data.title')}</h1>
 				<p className="description">
-					Dodaj informacje o sobie i swojej firmie
+					{t('auth.register.salon_data.description')}
 				</p>
 			</div>
 			<FormControl>
 				<Label htmlFor="salon-name" inputValue={salon_name}>
-					Nazwa firmy
+					{t('data.company_name')}
 				</Label>
 				<Input
 					required
@@ -67,7 +70,7 @@ function SalonInformation({
 			<FormGroup>
 				<FormControl>
 					<Label htmlFor="name" inputValue={name}>
-						Imię i nazwisko
+						{t('data.name')}
 					</Label>
 					<Input
 						required
@@ -90,7 +93,7 @@ function SalonInformation({
 	)
 }
 
-SalonInformation.prototype.propTypes = {
+SalonData.prototype.propTypes = {
 	onChange: PropTypes.func.isRequired,
 	updateData: PropTypes.func.isRequired,
 	salon_name: PropTypes.string,
@@ -101,4 +104,4 @@ SalonInformation.prototype.propTypes = {
 	changeComponentData: PropTypes.func.isRequired,
 }
 
-export default SalonInformation
+export default SalonData

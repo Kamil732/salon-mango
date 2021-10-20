@@ -7,6 +7,7 @@ import { FormControl } from '../../../../layout/forms/Forms'
 import { GoogleMap, useJsApiLoader, Marker, Data } from '@react-google-maps/api'
 import Card from '../../../../layout/Card'
 import CircleLoader from '../../../../layout/loaders/CircleLoader'
+import { useTranslation } from 'react-i18next'
 
 function FindAddress({
 	city,
@@ -16,6 +17,7 @@ function FindAddress({
 	longitude,
 	updateData,
 }) {
+	const { t } = useTranslation()
 	const { isLoaded } = useJsApiLoader({
 		googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
 	})
@@ -28,10 +30,9 @@ function FindAddress({
 	return (
 		<>
 			<div className="title-container">
-				<h2>Lokalizacja na mapie</h2>
+				<h2>{t('auth.register.find_address.title')}</h2>
 				<p className="description">
-					Kliknij dokładnie w miejsce gdzie znajduję się twój lokal,
-					tak aby pojawiła się nad nim pinezka
+					{t('auth.register.find_address.description')}
 				</p>
 			</div>
 

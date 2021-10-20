@@ -79,15 +79,15 @@ function Login({ isAuthenticated, login }) {
 					<AuthIllustration className="page-hero__img" />
 					<p className="text-broken">
 						<Trans i18nKey="auth.no_account">
-							Nie masz jeszcze konta? Kliknij
+							You don't have an account yet? Click{' '}
 							<Button
 								link
 								className="slide-floor"
 								onClick={() => setIsRegisterForm(true)}
 							>
-								tutaj
-							</Button>
-							by je utworzyć
+								here
+							</Button>{' '}
+							to create one
 						</Trans>
 					</p>
 				</div>
@@ -102,7 +102,7 @@ function Login({ isAuthenticated, login }) {
 
 								<FormControl>
 									<Label htmlFor="email" inputValue={email}>
-										Email
+										{t('auth.email')}
 									</Label>
 									<Input
 										required

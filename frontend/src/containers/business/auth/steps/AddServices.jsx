@@ -140,7 +140,7 @@ class AddService extends Component {
 				})
 				.catch(() => {
 					NotificationManager.error(
-						t('Wystąpił nieoczekiwany błąd, przepraszamy'),
+						t('auth.register.add_services.fetch_error'),
 						t('Błąd')
 					)
 				})
@@ -283,7 +283,7 @@ class AddService extends Component {
 	}
 
 	render() {
-		const { services, work_remotely } = this.props
+		const { services, work_remotely, t } = this.props
 		const { modalData, serviceData, suggestedHints } = this.state
 
 		return (
@@ -292,13 +292,16 @@ class AddService extends Component {
 					<Modal closeModal={this.resetForm} small isChild>
 						<Modal.Header>
 							<h3>
-								{modalData.editMode ? 'Edytuj' : 'Dodaj'} usługę
+								{modalData.editMode
+									? t('auth.register.add_services.edit')
+									: t('auth.register.add_services.add')}
 							</h3>
 						</Modal.Header>
 						<Modal.Body>
 							<p className="text-broken">
-								Możesz dodać opis i zmienić ustawienia
-								zaawansowane dla tej usługi później.
+								{t(
+									'auth.register.add_services.modal.description'
+								)}
 							</p>
 
 							<form
@@ -313,7 +316,9 @@ class AddService extends Component {
 										htmlFor="name"
 										inputValue={serviceData.name}
 									>
-										Nazwa usługi
+										{t(
+											'auth.register.add_services.modal.service_name_label'
+										)}
 									</Label>
 									<Input
 										required
@@ -332,7 +337,11 @@ class AddService extends Component {
 								{suggestedHints.length > 0 && (
 									<FormControl>
 										<fieldset>
-											<legend>Sugerowane usługi</legend>
+											<legend>
+												{t(
+													'auth.register.add_services.modal.service_suggested_services'
+												)}
+											</legend>
 											<div className="inline-wrap wrap">
 												{suggestedHints.map((hint) => (
 													<Button
@@ -363,7 +372,11 @@ class AddService extends Component {
 								)}
 
 								<fieldset>
-									<legend>Czas trwania usługi</legend>
+									<legend>
+										{t(
+											'auth.register.add_services.modal.service_time_label'
+										)}
+									</legend>
 									<DurationInput
 										value={serviceData.time}
 										onChange={(time) =>
@@ -385,7 +398,9 @@ class AddService extends Component {
 											htmlFor="price"
 											inputValue={serviceData.price}
 										>
-											Cena
+											{t(
+												'auth.register.add_services.modal.service_price_label'
+											)}
 										</Label>
 
 										<Input
@@ -409,7 +424,7 @@ class AddService extends Component {
 
 								<FormControl>
 									<Label htmlFor="price-type" inputValue>
-										Rodzaj ceny
+										{t('data.price_type.name')}
 									</Label>
 									<Dropdown
 										id="price-type"
@@ -438,7 +453,9 @@ class AddService extends Component {
 												checked={serviceData.is_mobile}
 												onChange={this.onChange}
 											/>
-											Usługa mobilna
+											{t(
+												'auth.register.add_services.modal.service_is_remote'
+											)}
 										</CheckBox.Label>
 									</FormControl>
 								)}
@@ -470,7 +487,7 @@ class AddService extends Component {
 											}
 											type="submit"
 										>
-											Zapisz
+											{t('actions.save')}
 										</Button>
 									</div>
 								) : (
@@ -479,7 +496,7 @@ class AddService extends Component {
 										style={{ marginLeft: 'auto' }}
 										type="submit"
 									>
-										Dodaj
+										{t('actions.add')}
 									</Button>
 								)}
 							</form>
@@ -488,11 +505,9 @@ class AddService extends Component {
 				)}
 
 				<div className="title-container">
-					<h2>Dodaj pierwsze usługi</h2>
+					<h2>{t('auth.register.add_services.title')}</h2>
 					<p className="description">
-						Dodaj co najmniej jedną usługę z Twojej oferty. Później
-						możesz dodać więcej usług, przypisać je do kategorii i
-						edytować szczegóły.
+						{t('auth.register.add_services.description')}
 					</p>
 				</div>
 
@@ -521,7 +536,9 @@ class AddService extends Component {
 												this.removeService(service.id)
 											}
 											data-for={`delete-tooltip-${service.id}`}
-											data-tip="Usuń usługę"
+											data-tip={t(
+												'auth.register.add_services.delete'
+											)}
 										>
 											<GrClose size="20" opacity="0.4" />
 										</Button>
@@ -537,9 +554,9 @@ class AddService extends Component {
 									<td className="text-center">
 										<h4>
 											{service.price_type.value === 0
-												? 'Darmowa'
+												? t('data.price_type.free')
 												: service.price_type.value === 1
-												? 'Cena zmienna'
+												? t('data.price_type.varies')
 												: service.price_type.value === 3
 												? '--'
 												: `${service.price} zł`}
@@ -558,7 +575,9 @@ class AddService extends Component {
 												this.onSelectService(service)
 											}
 											data-for={`edit-tooltip-${service.id}`}
-											data-tip="Edytuj usługę"
+											data-tip={t(
+												'auth.register.add_services.edit'
+											)}
 										>
 											<IoIosArrowForward size="20" />
 										</Button>
@@ -584,7 +603,7 @@ class AddService extends Component {
 										size="20"
 										className="icon-container__icon"
 									/>
-									Dodaj usługę
+									{t('auth.register.add_services.add')}
 								</Button>
 							</td>
 						</tr>
@@ -594,8 +613,7 @@ class AddService extends Component {
 									colSpan="3"
 									className="text-broken text-center"
 								>
-									Dodaj conajmniej jedną usługę, aby przejść
-									dalej
+									{t('auth.register.add_services.warning')}
 								</td>
 							</tr>
 						)}

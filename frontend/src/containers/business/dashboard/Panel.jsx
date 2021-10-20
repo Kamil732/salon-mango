@@ -114,7 +114,7 @@ function Panel({
 									<span className="dashboard__btn__icon">
 										<BsCalendar />
 									</span>
-									{t('panel.calendar')}
+									{t('panel.calendar').toLowerCase()}
 								</NavLink>
 								<NavLink
 									to={
@@ -127,7 +127,7 @@ function Panel({
 									<span className="dashboard__btn__icon">
 										<BsPeople />
 									</span>
-									{t('panel.customers')}
+									{t('panel.customers').toLowerCase()}
 								</NavLink>
 								<NavLink
 									to={
@@ -153,7 +153,7 @@ function Panel({
 									<span className="dashboard__btn__icon">
 										<BsLightning />
 									</span>
-									{t('panel.marketing')}
+									{t('panel.marketing').toLowerCase()}
 								</NavLink>
 								<NavLink
 									to={

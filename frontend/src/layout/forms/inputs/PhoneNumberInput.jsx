@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useTranslation } from 'react-i18next'
 
 import Dropdown from '../../buttons/dropdowns/Dropdown'
 import { FormControl, FormGroup } from '../Forms'
@@ -15,6 +16,8 @@ function PhoneNumberInput({
 	onChangePrefix,
 	required,
 }) {
+	const { t } = useTranslation()
+
 	const formatOptionLabel = ({ dialCode, name }) => (
 		<div className="inline-wrap">
 			<span>{dialCode}</span> | <span>{name}</span>
@@ -35,7 +38,7 @@ function PhoneNumberInput({
 					htmlFor="phone-prefix"
 					inputValue={Object.keys(phone_prefix).length > 0}
 				>
-					Prefix
+					{t('prefix')}
 				</Label>
 				<Dropdown
 					id="phone-prefix"
@@ -52,7 +55,7 @@ function PhoneNumberInput({
 			</FormControl>
 			<FormControl>
 				<Label htmlFor="phone-number" inputValue={phone_number}>
-					Numer telefonu
+					{t('phone_number')}
 				</Label>
 				<Input
 					required={required}

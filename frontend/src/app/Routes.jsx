@@ -12,7 +12,7 @@ const LandingPageRoutes = lazy(() => import('../containers/landing/Routes'))
 const BusinessRoutes = lazy(() => import('../containers/business/Routes'))
 
 const usersLang = (navigator.language || navigator.userLanguage).split('-')[0]
-const baseRouteUrl = '/:locale(en|pl)'
+const baseRouteUrl = `/:locale(${SUPPORTED_LANGUAGES.join('|')})`
 let baseUrl = '/'
 
 if (
