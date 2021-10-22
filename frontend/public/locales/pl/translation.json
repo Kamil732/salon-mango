@@ -27,7 +27,19 @@
             "varies": "Cena zmienna",
             "starts_at": "Zaczyna się od",
             "hidden": "Cena ukryta"
-        }
+        },
+        "backwards": "Do tyłu",
+        "forwards": "Do przodu",
+        "today": "Dziś",
+        "month": "Miesiąc",
+        "week": "Tydzień",
+        "week_shortcut": "tydz.",
+        "day": "Dzień",
+        "reception": "Recepcja",
+        "date": "Data",
+        "event": "Spotkanie",
+        "threedays": "3 dni",
+        "more": "więcej"
     },
     "auth": {
         "email": "Email",

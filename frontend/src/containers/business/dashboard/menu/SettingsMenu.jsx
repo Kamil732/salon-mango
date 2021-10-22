@@ -12,7 +12,7 @@ import {
 import { ImUsers } from 'react-icons/im'
 import { IoChatbubbles, IoCard } from 'react-icons/io5'
 import { NavLink } from 'react-router-dom'
-import { baseUrl } from '../../../../app/Routes'
+import { baseUrl } from '../../../../app/location-params'
 
 function CalendarMenu() {
 	const { t } = useTranslation()

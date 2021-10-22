@@ -1,5 +1,5 @@
 import React from 'react'
-import { baseUrl } from '../../../app/Routes'
+import { baseUrl } from '../../../app/location-params'
 import Button from '../../../layout/buttons/Button'
 
 function Index() {

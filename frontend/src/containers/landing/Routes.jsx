@@ -1,6 +1,6 @@
 import React, { lazy } from 'react'
 import { Route, Switch } from 'react-router'
-import { baseRouteUrl } from '../../app/Routes'
+import { baseRouteUrl } from '../../app/location-params'
 
 import NotFound from '../NotFound'
 const Index = lazy(() => import('./Index'))

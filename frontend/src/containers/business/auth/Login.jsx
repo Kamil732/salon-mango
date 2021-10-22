@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import '../../../assets/css/pageHero.css'
 
 import { login } from '../../../redux/actions/auth'
-import { baseUrl } from '../../../app/Routes'
+import { baseUrl } from '../../../app/location-params'
 
 import { ReactComponent as AuthIllustration } from '../../../assets/svgs/auth-illustration.svg'
 

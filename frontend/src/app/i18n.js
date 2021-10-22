@@ -1,16 +1,14 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import LanguageDetector from 'i18next-browser-languagedetector'
 import Backend from 'i18next-http-backend'
-
-const SUPPORTED_LANGUAGES = ['en', 'pl']
+import { SUPPORTED_LANGUAGES } from './location-params'
 
 i18n.use(Backend)
-	.use(LanguageDetector)
 	.use(initReactI18next)
 	.init({
-		whitelist: SUPPORTED_LANGUAGES,
-		fallbackLng: SUPPORTED_LANGUAGES[0],
+		whitelist: SUPPORTED_LANGUAGES.map((l) => l.code),
+		fallbackLng: 'en',
+		lng: localStorage.getItem('lang'),
 		detection: {
 			order: ['path'],
 			lookupFromPathIndex: 0,
@@ -26,5 +24,4 @@ i18n.use(Backend)
 		},
 	})
 
-export { SUPPORTED_LANGUAGES }
 export default i18n

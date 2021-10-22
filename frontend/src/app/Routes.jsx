@@ -1,32 +1,15 @@
 import React, { Component, lazy, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import { Route, Switch, Redirect } from 'react-router-dom'
-import i18n, { SUPPORTED_LANGUAGES } from './i18n'
 
+import { baseRouteUrl, baseUrl } from './location-params'
 import { connect } from 'react-redux'
+
 import CircleLoader from '../layout/loaders/CircleLoader'
 import ErrorBoundary from '../components/ErrorBoundary'
 
-const NotFound = lazy(() => import('../containers/NotFound'))
 const LandingPageRoutes = lazy(() => import('../containers/landing/Routes'))
 const BusinessRoutes = lazy(() => import('../containers/business/Routes'))
-
-const usersLang = (navigator.language || navigator.userLanguage).split('-')[0]
-const baseRouteUrl = `/:locale(${SUPPORTED_LANGUAGES.join('|')})`
-let baseUrl = '/'
-
-if (
-	localStorage.getItem('i18nextLng') &&
-	SUPPORTED_LANGUAGES.includes(localStorage.getItem('i18nextLng'))
-)
-	baseUrl += localStorage.getItem('i18nextLng')
-else if (usersLang && SUPPORTED_LANGUAGES.includes(usersLang))
-	baseUrl += (navigator.language || navigator.userLanguage).split('-')[0]
-else baseUrl += 'en'
-
-i18n.on('languageChanged', (lang) => {
-	if (SUPPORTED_LANGUAGES.includes(lang)) baseUrl = '/' + lang
-})
 
 class Routes extends Component {
 	static propTypes = {
@@ -49,11 +32,6 @@ class Routes extends Component {
 				<Suspense fallback={loader}>
 					<Switch>
 						<Route
-							path="/"
-							exact
-							render={() => <Redirect to={baseUrl} />}
-						/>
-						<Route
 							path={
 								baseRouteUrl +
 								process.env.REACT_APP_BUSINESS_URL
@@ -64,7 +42,7 @@ class Routes extends Component {
 							path={baseRouteUrl}
 							component={LandingPageRoutes}
 						/>
-						<Route path="*" component={NotFound} />
+						<Redirect to={baseUrl} />
 					</Switch>
 				</Suspense>
 			</ErrorBoundary>
@@ -78,5 +56,4 @@ const mapStateToProps = (state) => ({
 		Object.keys(state.data.salon).length === 0,
 })
 
-export { baseRouteUrl, baseUrl }
 export default connect(mapStateToProps, null)(Routes)

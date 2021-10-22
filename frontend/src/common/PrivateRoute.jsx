@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Redirect, Route } from 'react-router-dom'
 
-import { baseUrl } from '../app/Routes'
+import { baseUrl } from '../app/location-params'
 
 class PrivateRoute extends Component {
 	static propTypes = {

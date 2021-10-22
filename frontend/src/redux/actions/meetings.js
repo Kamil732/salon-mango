@@ -123,7 +123,7 @@ export const loadMeetings =
 
 			try {
 				let data = []
-				let res = await axios.get(
+				const res = await axios.get(
 					`${process.env.REACT_APP_API_URL}/meetings/?from=${
 						dates[0]
 					}&to=${dates[dates.length - 1]}`
