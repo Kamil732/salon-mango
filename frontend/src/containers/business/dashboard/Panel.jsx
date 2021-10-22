@@ -302,7 +302,7 @@ function Panel({
 
 									<Redirect
 										to={
-											baseRouteUrl +
+											baseUrl +
 											process.env
 												.REACT_APP_BUSINESS_PANEL_CALENDAR_URL
 										}
