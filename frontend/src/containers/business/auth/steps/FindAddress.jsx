@@ -17,7 +17,7 @@ function FindAddress({
 	longitude,
 	updateData,
 }) {
-	const { t } = useTranslation()
+	const { t } = useTranslation('business_register')
 	const { isLoaded } = useJsApiLoader({
 		googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
 	})
@@ -30,10 +30,8 @@ function FindAddress({
 	return (
 		<>
 			<div className="title-container">
-				<h2>{t('auth.register.find_address.title')}</h2>
-				<p className="description">
-					{t('auth.register.find_address.description')}
-				</p>
+				<h2>{t('find_address.title')}</h2>
+				<p className="description">{t('find_address.description')}</p>
 			</div>
 
 			{isLoaded ? (

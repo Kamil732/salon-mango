@@ -15,7 +15,8 @@ import { NavLink } from 'react-router-dom'
 import { baseUrl } from '../../../../app/location-params'
 
 function CalendarMenu() {
-	const { t } = useTranslation()
+	const { t } = useTranslation('business_panel')
+
 	return (
 		<div className="select-menu">
 			<NavLink
@@ -27,7 +28,7 @@ function CalendarMenu() {
 				className="select-menu__item icon-container"
 			>
 				<RiBarChartHorizontalFill className="icon-container__icon" />
-				{t('panel.menu.work_schedules')}
+				{t('menu.work_schedules')}
 			</NavLink>
 			<NavLink
 				to={
@@ -37,7 +38,7 @@ function CalendarMenu() {
 				className="select-menu__item icon-container"
 			>
 				<FaDatabase className="icon-container__icon" />
-				{t('panel.menu.salon_data')}
+				{t('menu.salon_data')}
 			</NavLink>
 			<NavLink
 				to={
@@ -47,7 +48,7 @@ function CalendarMenu() {
 				className="select-menu__item icon-container"
 			>
 				<FaCalendarAlt className="icon-container__icon" />
-				{t('panel.calendar')}
+				{t('calendar')}
 			</NavLink>
 			<NavLink
 				to={
@@ -57,7 +58,7 @@ function CalendarMenu() {
 				className="select-menu__item icon-container"
 			>
 				<FaIdCardAlt className="icon-container__icon" />
-				{t('panel.menu.employees')}
+				{t('menu.employees')}
 			</NavLink>
 			<NavLink
 				to={
@@ -67,7 +68,7 @@ function CalendarMenu() {
 				className="select-menu__item icon-container"
 			>
 				<ImUsers className="icon-container__icon" />
-				{t('panel.customers')}
+				{t('customers')}
 			</NavLink>
 			<NavLink
 				to={
@@ -77,7 +78,7 @@ function CalendarMenu() {
 				className="select-menu__item icon-container"
 			>
 				<FaLayerGroup className="icon-container__icon" />
-				{t('panel.menu.resources')}
+				{t('menu.resources')}
 			</NavLink>
 			<NavLink
 				to={
@@ -87,7 +88,7 @@ function CalendarMenu() {
 				className="select-menu__item icon-container"
 			>
 				<IoChatbubbles className="icon-container__icon" />
-				{t('panel.marketing')}
+				{t('marketing')}
 			</NavLink>
 			<NavLink
 				to={
@@ -97,7 +98,7 @@ function CalendarMenu() {
 				className="select-menu__item icon-container"
 			>
 				<IoCard className="icon-container__icon" />
-				{t('panel.menu.payment')}
+				{t('menu.payment')}
 			</NavLink>
 		</div>
 	)

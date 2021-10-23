@@ -1,6 +1,7 @@
 import React, { Component, lazy, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { withTranslation } from 'react-i18next'
 import '../../assets/css/big-calendar.css'
 
 import moment from 'moment'
@@ -44,11 +45,12 @@ import getEventTooltip from '../../helpers/getEventTooltip'
 const AddMeetingAdminForm = lazy(() => import('./forms/AddMeetingAdminForm'))
 const EditMeetingAdminForm = lazy(() => import('./forms/EditMeetingAdminForm'))
 
-moment.locale('US')
 const localizer = momentLocalizer(moment)
 
 class Calendar extends Component {
 	static propTypes = {
+		t: PropTypes.func.isRequired,
+		i18n: PropTypes.object.isRequired,
 		userId: PropTypes.number,
 		ws: PropTypes.object,
 		loading: PropTypes.bool,
@@ -609,7 +611,6 @@ class Calendar extends Component {
 	render() {
 		const {
 			loading,
-
 			employees,
 			userId,
 			visibleMeetings,
@@ -627,6 +628,7 @@ class Calendar extends Component {
 			},
 			calendar_timeslots,
 			calendar_step,
+			t,
 		} = this.props
 		const { windowWidth, view, selected, minDate, maxDate, freeSlots } =
 			this.state
@@ -781,6 +783,7 @@ class Calendar extends Component {
 						onView={this.onView}
 						onRangeChange={this.onRangeChange}
 						localizer={localizer}
+						// culture="en-GB"
 						events={meetings}
 						step={calendar_step}
 						timeslots={calendar_timeslots}
@@ -822,7 +825,8 @@ class Calendar extends Component {
 							),
 							timeGutterHeader: (props) => (
 								<b style={{ margin: '0.5rem' }}>
-									tydz. {moment(currentDate).week()}
+									{t('week_shortcut')}{' '}
+									{moment(currentDate).week()}
 								</b>
 							),
 							week: {
@@ -865,14 +869,17 @@ class Calendar extends Component {
 							view === 'reception' ? resourceMap.data : null
 						}
 						messages={{
-							month: 'Miesiąc',
-							week: 'Tydzień',
-							day: 'Dzień',
-							reception: 'Recepcja',
-							date: 'Data',
-							event: 'Spotkanie',
-							threedays: '3 Dni',
-							showMore: (amount) => `+${amount} więcej`,
+							today: t('today'),
+							backwards: t('backwards'),
+							forwards: t('forwards'),
+							month: t('month'),
+							week: t('week'),
+							day: t('day'),
+							reception: t('reception'),
+							date: t('date'),
+							event: t('event'),
+							threedays: t('threedays'),
+							showMore: (amount) => `+${amount} ${t('more')}`,
 						}}
 					/>
 				</div>
@@ -909,4 +916,7 @@ const mapDispatchToProps = {
 	updateResourceMap,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Calendar)
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(withTranslation('business_common')(Calendar))

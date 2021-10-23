@@ -6,19 +6,17 @@ import { FormControl } from '../../../../layout/forms/Forms'
 import CheckBox from '../../../../layout/forms/inputs/CheckBox'
 
 function AcceptTerms({ onChange, accept_terms, changeComponentData }) {
-	const { t } = useTranslation()
+	const { t } = useTranslation('business_register')
 
 	return (
 		<>
 			<div className="title-container">
-				<h2>{t('auth.register.accept_terms.title')}</h2>
-				<p className="description">
-					{t('auth.register.accept_terms.description')}
-				</p>
+				<h2>{t('accept_terms.title')}</h2>
+				<p className="description">{t('accept_terms.description')}</p>
 			</div>
 			<FormControl>
 				<CheckBox.Label>
-					{t('auth.register.accept_terms.accept')}
+					{t('accept_terms.accept')}
 					<CheckBox
 						name="accept_terms"
 						checked={accept_terms}
@@ -36,7 +34,7 @@ function AcceptTerms({ onChange, accept_terms, changeComponentData }) {
 					<hr className="seperator" />
 					<div className="center-container">
 						<small className="text-broken">
-							{t('auth.register.accept_terms.warning')}
+							{t('accept_terms.warning')}
 						</small>
 					</div>
 				</>

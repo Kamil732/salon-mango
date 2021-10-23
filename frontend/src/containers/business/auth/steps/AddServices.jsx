@@ -140,7 +140,7 @@ class AddService extends Component {
 				})
 				.catch(() => {
 					NotificationManager.error(
-						t('auth.register.add_services.fetch_error'),
+						t('add_services.fetch_error'),
 						t('Błąd')
 					)
 				})
@@ -293,15 +293,13 @@ class AddService extends Component {
 						<Modal.Header>
 							<h3>
 								{modalData.editMode
-									? t('auth.register.add_services.edit')
-									: t('auth.register.add_services.add')}
+									? t('add_services.edit')
+									: t('add_services.add')}
 							</h3>
 						</Modal.Header>
 						<Modal.Body>
 							<p className="text-broken">
-								{t(
-									'auth.register.add_services.modal.description'
-								)}
+								{t('add_services.modal.description')}
 							</p>
 
 							<form
@@ -317,7 +315,7 @@ class AddService extends Component {
 										inputValue={serviceData.name}
 									>
 										{t(
-											'auth.register.add_services.modal.service_name_label'
+											'add_services.modal.service_name_label'
 										)}
 									</Label>
 									<Input
@@ -339,7 +337,7 @@ class AddService extends Component {
 										<fieldset>
 											<legend>
 												{t(
-													'auth.register.add_services.modal.service_suggested_services'
+													'add_services.modal.service_suggested_services'
 												)}
 											</legend>
 											<div className="inline-wrap wrap">
@@ -374,7 +372,7 @@ class AddService extends Component {
 								<fieldset>
 									<legend>
 										{t(
-											'auth.register.add_services.modal.service_time_label'
+											'add_services.modal.service_time_label'
 										)}
 									</legend>
 									<DurationInput
@@ -399,7 +397,7 @@ class AddService extends Component {
 											inputValue={serviceData.price}
 										>
 											{t(
-												'auth.register.add_services.modal.service_price_label'
+												'add_services.modal.service_price_label'
 											)}
 										</Label>
 
@@ -424,7 +422,9 @@ class AddService extends Component {
 
 								<FormControl>
 									<Label htmlFor="price-type" inputValue>
-										{t('data.price_type.name')}
+										{t('price_type.name', {
+											ns: 'business_common',
+										})}
 									</Label>
 									<Dropdown
 										id="price-type"
@@ -454,7 +454,7 @@ class AddService extends Component {
 												onChange={this.onChange}
 											/>
 											{t(
-												'auth.register.add_services.modal.service_is_remote'
+												'add_services.modal.service_is_remote'
 											)}
 										</CheckBox.Label>
 									</FormControl>
@@ -487,7 +487,9 @@ class AddService extends Component {
 											}
 											type="submit"
 										>
-											{t('actions.save')}
+											{t('actions.save', {
+												ns: 'common',
+											})}
 										</Button>
 									</div>
 								) : (
@@ -496,7 +498,7 @@ class AddService extends Component {
 										style={{ marginLeft: 'auto' }}
 										type="submit"
 									>
-										{t('actions.add')}
+										{t('actions.add', { ns: 'common' })}
 									</Button>
 								)}
 							</form>
@@ -505,9 +507,9 @@ class AddService extends Component {
 				)}
 
 				<div className="title-container">
-					<h2>{t('auth.register.add_services.title')}</h2>
+					<h2>{t('add_services.title')}</h2>
 					<p className="description">
-						{t('auth.register.add_services.description')}
+						{t('add_services.description')}
 					</p>
 				</div>
 
@@ -536,9 +538,7 @@ class AddService extends Component {
 												this.removeService(service.id)
 											}
 											data-for={`delete-tooltip-${service.id}`}
-											data-tip={t(
-												'auth.register.add_services.delete'
-											)}
+											data-tip={t('add_services.delete')}
 										>
 											<GrClose size="20" opacity="0.4" />
 										</Button>
@@ -554,9 +554,13 @@ class AddService extends Component {
 									<td className="text-center">
 										<h4>
 											{service.price_type.value === 0
-												? t('data.price_type.free')
+												? t('price_type.free', {
+														ns: 'business_common',
+												  })
 												: service.price_type.value === 1
-												? t('data.price_type.varies')
+												? t('price_type.varies', {
+														ns: 'business_common',
+												  })
 												: service.price_type.value === 3
 												? '--'
 												: `${service.price} zł`}
@@ -575,9 +579,7 @@ class AddService extends Component {
 												this.onSelectService(service)
 											}
 											data-for={`edit-tooltip-${service.id}`}
-											data-tip={t(
-												'auth.register.add_services.edit'
-											)}
+											data-tip={t('add_services.edit')}
 										>
 											<IoIosArrowForward size="20" />
 										</Button>
@@ -603,7 +605,7 @@ class AddService extends Component {
 										size="20"
 										className="icon-container__icon"
 									/>
-									{t('auth.register.add_services.add')}
+									{t('add_services.add')}
 								</Button>
 							</td>
 						</tr>
@@ -613,7 +615,7 @@ class AddService extends Component {
 									colSpan="3"
 									className="text-broken text-center"
 								>
-									{t('auth.register.add_services.warning')}
+									{t('add_services.warning')}
 								</td>
 							</tr>
 						)}
@@ -624,4 +626,6 @@ class AddService extends Component {
 	}
 }
 
-export default withTranslation()(AddService)
+export default withTranslation(['business_register', 'business_common'])(
+	AddService
+)

@@ -15,7 +15,7 @@ function ChooseCategories({
 	componentData,
 	changeComponentData,
 }) {
-	const { t } = useTranslation()
+	const { t } = useTranslation('business_register')
 	const [categoriesFetchData, setCategoriesFetchData] = useState({
 		isLoading: true,
 		error: null,
@@ -60,7 +60,7 @@ function ChooseCategories({
 	return (
 		<>
 			<div className="title-container">
-				<h1>{t('auth.register.choose_categories.title')}</h1>
+				<h1>{t('choose_categories.title')}</h1>
 			</div>
 			{categoriesFetchData.isLoading ? (
 				<div className="center-container">
@@ -85,7 +85,7 @@ function ChooseCategories({
 				</FormControl>
 			) : (
 				<div className="center-container">
-					<h3>{t('auth.register.choose_categories.fetch_error')}</h3>
+					<h3>{t('choose_categories.fetch_error')}</h3>
 				</div>
 			)}
 		</>

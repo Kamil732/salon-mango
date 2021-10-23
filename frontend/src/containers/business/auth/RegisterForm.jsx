@@ -190,7 +190,7 @@ const INITIAL_STEPS_DATA = [
 ]
 
 function RegisterForm({ closeModal, register }) {
-	const { t } = useTranslation()
+	const { t } = useTranslation('common')
 	const [loading, setLoading] = useState(false)
 	const [data, setData] = useState({
 		email: '',

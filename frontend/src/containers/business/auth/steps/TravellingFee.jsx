@@ -28,7 +28,7 @@ function TravellingFee({
 	updateData,
 	onChange,
 }) {
-	const { t } = useTranslation()
+	const { t } = useTranslation(['business_register', 'business_common'])
 	const getOptionValue = (opt) => opt.value
 	const getOptionLabel = (opt) => opt.label
 	const { isLoaded } = useJsApiLoader({
@@ -53,16 +53,14 @@ function TravellingFee({
 	return (
 		<>
 			<div className="title-container">
-				<h2>{t('auth.register.travelling_fee.title')}</h2>
-				<p className="description">
-					{t('auth.register.travelling_fee.description')}
-				</p>
+				<h2>{t('travelling_fee.title')}</h2>
+				<p className="description">{t('travelling_fee.description')}</p>
 			</div>
 
 			<FormGroup>
 				<FormControl>
 					<Label htmlFor="billing-type" inputValue>
-						{t('data.price_type.name')}
+						{t('price_type.name', { ns: 'business_common' })}
 					</Label>
 					<Dropdown
 						id="billing-type"
@@ -95,7 +93,7 @@ function TravellingFee({
 							travel_fee === null || travel_fee.toString()
 						}
 					>
-						{t('auth.register.travelling_fee.travel_fee_label')}
+						{t('travelling_fee.travel_fee_label')}
 					</Label>
 					<Input
 						id="travel-fee"
@@ -114,9 +112,7 @@ function TravellingFee({
 			</FormGroup>
 			<FormControl>
 				<Label htmlFor="max-travel-distance" inputValue>
-					{t(
-						'auth.register.travelling_fee.max_travel_distance_label'
-					)}
+					{t('travelling_fee.max_travel_distance_label')}
 				</Label>
 				<Dropdown
 					id="max-travel-distance"
@@ -151,7 +147,7 @@ function TravellingFee({
 			)}
 			<FormControl>
 				<Label htmlFor="travel-fee-rules" inputValue={travel_fee_rules}>
-					{t('auth.register.travelling_fee.travel_fee_rules_label')}
+					{t('travelling_fee.travel_fee_rules_label')}
 				</Label>
 				<Textarea
 					id="travel-fee-rules"

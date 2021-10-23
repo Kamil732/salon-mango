@@ -17,7 +17,7 @@ function SalonData({
 	componentData,
 	changeComponentData,
 }) {
-	const { t } = useTranslation()
+	const { t } = useTranslation(['business_register', 'business_common'])
 
 	// If valid form than changeComponentData({ nextBtnDisabled: false })
 	useEffect(() => {
@@ -49,14 +49,12 @@ function SalonData({
 	return (
 		<>
 			<div className="title-container">
-				<h1>{t('auth.register.salon_data.title')}</h1>
-				<p className="description">
-					{t('auth.register.salon_data.description')}
-				</p>
+				<h1>{t('salon_data.title')}</h1>
+				<p className="description">{t('salon_data.description')}</p>
 			</div>
 			<FormControl>
 				<Label htmlFor="salon-name" inputValue={salon_name}>
-					{t('data.company_name')}
+					{t('company_name', { ns: 'business_common' })}
 				</Label>
 				<Input
 					required
@@ -70,12 +68,12 @@ function SalonData({
 			<FormGroup>
 				<FormControl>
 					<Label htmlFor="name" inputValue={name}>
-						{t('data.name')}
+						{t('name', { ns: 'business_common' })}
 					</Label>
 					<Input
 						required
 						type="text"
-						id="first-name"
+						id="name"
 						name="name"
 						onChange={onChange}
 						value={name}

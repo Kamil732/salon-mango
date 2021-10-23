@@ -16,7 +16,7 @@ function PhoneNumberInput({
 	onChangePrefix,
 	required,
 }) {
-	const { t } = useTranslation()
+	const { t } = useTranslation('business_common')
 
 	const formatOptionLabel = ({ dialCode, name }) => (
 		<div className="inline-wrap">

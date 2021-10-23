@@ -8,7 +8,7 @@ import { BsCardChecklist } from 'react-icons/bs'
 import RootMenu from '../../../../layout/menus/RootMenu'
 
 function ServicesMenu({ serviceGroups }) {
-	const { t } = useTranslation()
+	const { t } = useTranslation('business_panel')
 	const [activeItem, setActiveItem] = useState(null)
 
 	const getServiceGroup = (group) => (
@@ -35,7 +35,7 @@ function ServicesMenu({ serviceGroups }) {
 						size="18"
 						className="icon-container__icon"
 					/>
-					{t('panel.menu.all_services')}
+					{t('menu.all_services')}
 				</div>
 			}
 			value={null}

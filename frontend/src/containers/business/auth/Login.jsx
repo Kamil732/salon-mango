@@ -23,7 +23,7 @@ import CircleLoader from '../../../layout/loaders/CircleLoader'
 const RegisterForm = lazy(() => import('./RegisterForm'))
 
 function Login({ isAuthenticated, login }) {
-	const { t } = useTranslation()
+	const { t } = useTranslation('auth')
 	const [loading, setLoading] = useState(false)
 	const [{ email, password }, setData] = useState({
 		email: '',
@@ -78,7 +78,7 @@ function Login({ isAuthenticated, login }) {
 				<div className="page-hero__img-container">
 					<AuthIllustration className="page-hero__img" />
 					<p className="text-broken">
-						<Trans i18nKey="auth.no_account">
+						<Trans i18nKey="no_account" ns="auth">
 							You don't have an account yet? Click{' '}
 							<Button
 								link
@@ -93,7 +93,7 @@ function Login({ isAuthenticated, login }) {
 				</div>
 
 				<div className="page-hero__content">
-					<div className="page-hero__title">{t('auth.sign_in')}</div>
+					<div className="page-hero__title">{t('sign_in')}</div>
 
 					<Card>
 						<Card.Body>
@@ -102,7 +102,7 @@ function Login({ isAuthenticated, login }) {
 
 								<FormControl>
 									<Label htmlFor="email" inputValue={email}>
-										{t('auth.email')}
+										{t('email')}
 									</Label>
 									<Input
 										required
@@ -118,7 +118,7 @@ function Login({ isAuthenticated, login }) {
 										htmlFor="password"
 										inputValue={password}
 									>
-										{t('auth.password')}
+										{t('password')}
 									</Label>
 									<Input
 										required
@@ -135,12 +135,12 @@ function Login({ isAuthenticated, login }) {
 									<Button
 										primary
 										loading={loading}
-										loadingText={t('auth.logging_in')}
+										loadingText={t('logging_in')}
 									>
-										{t('auth.sign_in')}
+										{t('sign_in')}
 									</Button>
 									<Link to="/" className="slide-floor">
-										{t('auth.forgot_password')}
+										{t('forgot_password')}
 									</Link>
 								</div>
 							</form>

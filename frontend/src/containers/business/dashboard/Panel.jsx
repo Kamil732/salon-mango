@@ -45,7 +45,7 @@ function Panel({
 	getNotifications,
 	markNotificationAsRead,
 }) {
-	const { t } = useTranslation()
+	const { t } = useTranslation('business_panel')
 	const [isMenuOpen, toggleMenu] = useState(false)
 	const navContainer = useRef(null)
 
@@ -114,7 +114,7 @@ function Panel({
 									<span className="dashboard__btn__icon">
 										<BsCalendar />
 									</span>
-									{t('panel.calendar').toLowerCase()}
+									{t('calendar').toLowerCase()}
 								</NavLink>
 								<NavLink
 									to={
@@ -127,7 +127,7 @@ function Panel({
 									<span className="dashboard__btn__icon">
 										<BsPeople />
 									</span>
-									{t('panel.customers').toLowerCase()}
+									{t('customers').toLowerCase()}
 								</NavLink>
 								<NavLink
 									to={
@@ -140,7 +140,7 @@ function Panel({
 									<span className="dashboard__btn__icon">
 										<VscGraph />
 									</span>
-									{t('panel.statistics')}
+									{t('statistics')}
 								</NavLink>
 								<NavLink
 									to={
@@ -153,7 +153,7 @@ function Panel({
 									<span className="dashboard__btn__icon">
 										<BsLightning />
 									</span>
-									{t('panel.marketing').toLowerCase()}
+									{t('marketing').toLowerCase()}
 								</NavLink>
 								<NavLink
 									to={
@@ -166,7 +166,7 @@ function Panel({
 									<span className="dashboard__btn__icon">
 										<CgList />
 									</span>
-									{t('panel.services')}
+									{t('services')}
 								</NavLink>
 								<NavLink
 									to={
@@ -179,7 +179,7 @@ function Panel({
 									<span className="dashboard__btn__icon">
 										<IoSettingsOutline />
 									</span>
-									{t('panel.settings')}
+									{t('settings')}
 								</NavLink>
 							</Dashboard.NavBody>
 							<hr className="seperator" />
@@ -187,8 +187,8 @@ function Panel({
 								<DropdownSelect
 									btnContent={<VscBell size={25} />}
 									rounded
-									aria-label={t('panel.notifications')}
-									title={t('panel.notifications')}
+									aria-label={t('notifications')}
+									title={t('notifications')}
 									loading={notificationLoading}
 									loaded={notificationLoaded}
 									loadItems={getNotifications}
@@ -207,7 +207,7 @@ function Panel({
 										>
 											<GoMegaphone fontSize="100" />
 											<h3 style={{ textAlign: 'center' }}>
-												{t('panel.no_notifications')}
+												{t('no_notifications')}
 											</h3>
 										</div>
 									}

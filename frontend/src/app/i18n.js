@@ -9,6 +9,7 @@ i18n.use(Backend)
 		whitelist: SUPPORTED_LANGUAGES,
 		lng: localStorage.getItem('lang'),
 		supportedLngs: SUPPORTED_LANGUAGES,
+
 		interpolation: {
 			escapeValue: false,
 		},

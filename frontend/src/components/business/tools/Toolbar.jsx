@@ -47,7 +47,7 @@ const Toolbar = ({
 						primary
 						small
 						onClick={goToBack}
-						aria-label="Do tyłu"
+						aria-label={localizer.messages.backwards}
 					>
 						<IoIosArrowBack />
 					</Button>
@@ -56,13 +56,13 @@ const Toolbar = ({
 						primary
 						small
 						onClick={goToNext}
-						aria-label="Do przodu"
+						aria-label={localizer.messages.forwards}
 					>
 						<IoIosArrowForward />
 					</Button>
 				</ButtonContainer.Group>
 				<Button primary small onClick={goToCurrent}>
-					Dzisiaj
+					{localizer.messages.today}
 				</Button>
 			</ButtonContainer>
 

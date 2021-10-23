@@ -29,7 +29,7 @@ function CalendarMenu({
 	updateCalendarDates,
 	updateResourceMap,
 }) {
-	const { t } = useTranslation()
+	const { t } = useTranslation('business_panel')
 	const [activeDay, setActiveDay] = useState(currentDate)
 	const formatShortWeekday = (_, date) => moment(date).format('dd')
 
@@ -111,7 +111,7 @@ function CalendarMenu({
 					{employees.length > 0 && (
 						<div className="tools-menu__item">
 							<h4 className="tools-menu__item__title">
-								{t('panel.menu.employees').toUpperCase()}
+								{t('menu.employees').toUpperCase()}
 							</h4>
 
 							{employees.map((employee) => {
@@ -157,7 +157,7 @@ function CalendarMenu({
 
 					<div className="tools-menu__item">
 						<h4 className="tools-menu__item__title">
-							{t('panel.menu.resources').toUpperCase()}
+							{t('menu.resources').toUpperCase()}
 						</h4>
 
 						{resources.length > 0 ? (
@@ -212,7 +212,7 @@ function CalendarMenu({
 								}}
 								className="center-item"
 							>
-								{t('panel.menu.add_resource')}
+								{t('menu.add_resource')}
 							</Button>
 						)}
 					</div>

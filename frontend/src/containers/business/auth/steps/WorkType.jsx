@@ -12,7 +12,7 @@ function WorkType({
 	componentData,
 	changeComponentData,
 }) {
-	const { t } = useTranslation()
+	const { t } = useTranslation('business_register')
 	useEffect(() => {
 		if (
 			!componentData.nextBtnDisabled &&
@@ -44,10 +44,8 @@ function WorkType({
 	return (
 		<>
 			<div className="title-container">
-				<h2>{t('auth.register.work_type.title')}</h2>
-				<p className="description">
-					{t('auth.register.work_type.description')}
-				</p>
+				<h2>{t('work_type.title')}</h2>
+				<p className="description">{t('work_type.description')}</p>
 			</div>
 
 			<FormControl>
@@ -61,12 +59,10 @@ function WorkType({
 						}
 					/>
 					<p>
-						{t('auth.register.work_type.types.stationary.name')}
+						{t('work_type.types.stationary.name')}
 						<br />
 						<small className="text-broken">
-							{t(
-								'auth.register.work_type.types.stationary.help_text'
-							)}
+							{t('work_type.types.stationary.help_text')}
 						</small>
 					</p>
 				</CheckBox.Label>
@@ -83,12 +79,10 @@ function WorkType({
 						}
 					/>
 					<p>
-						{t('auth.register.work_type.types.remotely.name')}
+						{t('work_type.types.remotely.name')}
 						<br />
 						<small className="text-broken">
-							{t(
-								'auth.register.work_type.types.remotely.help_text'
-							)}
+							{t('work_type.types.remotely.help_text')}
 						</small>
 					</p>
 				</CheckBox.Label>
@@ -98,7 +92,7 @@ function WorkType({
 				{work_remotely === false && work_stationary === false && (
 					<div className="center-container">
 						<small className="text-broken">
-							{t('auth.register.work_type.warning')}
+							{t('work_type.warning')}
 						</small>
 					</div>
 				)}

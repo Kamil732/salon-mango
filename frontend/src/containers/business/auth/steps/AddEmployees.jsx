@@ -17,7 +17,7 @@ import Button from '../../../../layout/buttons/Button'
 import { useTranslation } from 'react-i18next'
 
 function AddEmployees({ name, phone_prefix, employees, setData }) {
-	const { t } = useTranslation()
+	const { t } = useTranslation(['business_register', 'common'])
 	const initialEmployeeData = useMemo(
 		() => ({
 			name: '',
@@ -102,8 +102,8 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 				<Modal closeModal={resetForm} small isChild>
 					<Modal.Header>
 						{modalData.editMode
-							? t('auth.register.add_employees.edit')
-							: t('auth.register.add_employees.add')}
+							? t('add_employees.edit')
+							: t('add_employees.add')}
 					</Modal.Header>
 					<Modal.Body>
 						<form
@@ -158,7 +158,7 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 									htmlFor="position"
 									inputValue={employeeData.position}
 								>
-									{t('auth.register.add_employees.position')}
+									{t('add_employees.position')}
 								</Label>
 								<Input
 									id="position"
@@ -187,7 +187,7 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 										}
 										type="submit"
 									>
-										{t('actions.save')}
+										{t('actions.save', { ns: 'common' })}
 									</Button>
 								</div>
 							) : (
@@ -196,7 +196,7 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 									style={{ marginLeft: 'auto' }}
 									type="submit"
 								>
-									{t('actions.add')}
+									{t('actions.add', { ns: 'common' })}
 								</Button>
 							)}
 						</form>
@@ -205,10 +205,8 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 			)}
 
 			<div className="title-container">
-				<h2>{t('auth.register.add_employees.title')}</h2>
-				<p className="description">
-					{t('auth.register.add_employees.description')}
-				</p>
+				<h2>{t('add_employees.title')}</h2>
+				<p className="description">{t('add_employees.description')}</p>
 			</div>
 
 			<table className="step-table">
@@ -216,7 +214,7 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 					<tr>
 						<td>{name}</td>
 						<td className="text-broken">
-							{t('auth.register.add_employees.owner')}
+							{t('add_employees.owner')}
 						</td>
 					</tr>
 					{employees.map((employee) => (
@@ -259,7 +257,7 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 									size="20"
 									className="icon-container__icon"
 								/>
-								{t('auth.register.add_employees.add')}
+								{t('add_employees.add')}
 							</Button>
 						</td>
 					</tr>

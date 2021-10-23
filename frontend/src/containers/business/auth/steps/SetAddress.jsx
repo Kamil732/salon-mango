@@ -24,7 +24,7 @@ function SetAddress({
 	componentData,
 	changeComponentData,
 }) {
-	const { t } = useTranslation()
+	const { t } = useTranslation('business_register')
 	const [citiesLoading, setCitiesLoading] = useState(false)
 	const [cities, setCities] = useState([])
 	const debouncedSearch = useDebounce(postal_code, 500)
@@ -91,15 +91,13 @@ function SetAddress({
 	return (
 		<>
 			<div className="title-container">
-				<h2>{t('auth.register.set_address.title')}</h2>
-				<p className="description">
-					{t('auth.register.set_address.description')}
-				</p>
+				<h2>{t('set_address.title')}</h2>
+				<p className="description">{t('set_address.description')}</p>
 			</div>
 
 			<FormControl>
 				<Label htmlFor="address" inputValue={address}>
-					{t('auth.register.set_address.address_label')}
+					{t('set_address.address_label')}
 				</Label>
 				<Input
 					required
@@ -113,7 +111,7 @@ function SetAddress({
 			</FormControl>
 			<FormControl>
 				<Label htmlFor="premises-number" inputValue={premises_number}>
-					{t('auth.register.set_address.premises_number_label')}
+					{t('set_address.premises_number_label')}
 				</Label>
 				<Input
 					type="text"
@@ -126,7 +124,7 @@ function SetAddress({
 			<FormGroup>
 				<FormControl style={{ width: '12rem' }}>
 					<Label htmlFor="postal-code" inputValue={postal_code}>
-						{t('auth.register.set_address.postal_code_label')}
+						{t('set_address.postal_code_label')}
 					</Label>
 					<Input
 						required
@@ -144,7 +142,7 @@ function SetAddress({
 						htmlFor="city"
 						inputValue={Object.keys(city).length > 0}
 					>
-						{t('auth.register.set_address.city_label')}
+						{t('set_address.city_label')}
 					</Label>
 
 					<Dropdown

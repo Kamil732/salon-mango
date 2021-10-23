@@ -1,0 +1,20 @@
+{
+    "calendar": "Calendar",
+    "customers": "Customers",
+    "statistics": "statistics",
+    "marketing": "Marketing",
+    "services": "services",
+    "settings": "settings",
+    "notifications": "Notifications",
+    "no_notifications": "You don't have any notification",
+
+    "menu": {
+        "employees": "Employees",
+        "resources": "Resources",
+        "add_resource": "Add first resource",
+        "all_services": "All services",
+        "work_schedules": "Work schedules",
+        "salon_data": "Salon data",
+        "payment": "Payment"
+    }
+}

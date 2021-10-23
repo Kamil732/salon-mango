@@ -14,7 +14,7 @@ function Credentials({
 	componentData,
 	changeComponentData,
 }) {
-	const { t } = useTranslation()
+	const { t } = useTranslation(['business_register', 'auth'])
 
 	useEffect(() => {
 		if (
@@ -42,14 +42,12 @@ function Credentials({
 	return (
 		<>
 			<div className="title-container">
-				<h1>{t('auth.register.credentials.title')}</h1>
-				<p className="description">
-					{t('auth.register.credentials.description')}
-				</p>
+				<h1>{t('credentials.title')}</h1>
+				<p className="description">{t('credentials.description')}</p>
 			</div>
 			<FormControl>
 				<Label htmlFor="email" inputValue={email}>
-					{t('auth.email')}
+					{t('email', { ns: 'auth' })}
 				</Label>
 				<Input
 					required
@@ -62,7 +60,7 @@ function Credentials({
 			</FormControl>
 			<FormControl>
 				<Label htmlFor="password" inputValue={password}>
-					{t('auth.password')}
+					{t('password', { ns: 'auth' })}
 				</Label>
 				<Input
 					required
@@ -76,7 +74,7 @@ function Credentials({
 			</FormControl>
 			<FormControl>
 				<Label htmlFor="confirm_password" inputValue={confirm_password}>
-					{t('auth.confirm_password')}
+					{t('confirm_password', { ns: 'auth' })}
 				</Label>
 				<Input
 					required

@@ -1,0 +1,26 @@
+{
+    "prefix": "Prefix",
+    "phone_number": "Phone number",
+    "company_name": "Company name",
+    "name": "Name",
+    "price_type": {
+        "name": "Price type",
+        "free": "Free",
+        "fixed": "Fixed",
+        "varies": "Varies",
+        "starts_at": "Starts at",
+        "hidden": "Hidden"
+    },
+    "backwards": "Backwards",
+    "forwards": "Forwards",
+    "today": "Today",
+    "month": "Month",
+    "week": "Week",
+    "week_shortcut": "week",
+    "day": "Day",
+    "reception": "Reception",
+    "date": "Date",
+    "event": "Event",
+    "threedays": "3 days",
+    "more": "more"
+}

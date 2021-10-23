@@ -35,7 +35,7 @@ function SetWorkingHours({
 	start_work_sunday,
 	end_work_sunday,
 }) {
-	const { t } = useTranslation()
+	const { t } = useTranslation(['business_register', 'common'])
 	const [selected, setSelected] = useState(null)
 
 	const day = (start, end, name, displayName) => {
@@ -66,13 +66,13 @@ function SetWorkingHours({
 							displayName,
 						})
 					}}
-					data-tip={t('auth.register.working_hours.edit')}
+					data-tip={t('working_hours.edit')}
 					data-for={tooltipId}
 				>
 					<div className="space-between">
 						<span>
 							{start === null || end === null ? (
-								t('auth.register.working_hours.closed')
+								t('working_hours.closed')
 							) : (
 								<>
 									{start} - {end}
@@ -128,13 +128,11 @@ function SetWorkingHours({
 					</Modal.Header>
 					<Modal.Body>
 						<p className="text-broken">
-							{t('auth.register.working_hours.modal.description')}
+							{t('working_hours.modal.description')}
 						</p>
 						<FormControl.Inline>
 							<Label id="open-hours">
-								{t(
-									'auth.register.working_hours.modal.open_hours_label'
-								)}
+								{t('working_hours.modal.open_hours_label')}
 							</Label>
 
 							<TimePicker
@@ -169,7 +167,7 @@ function SetWorkingHours({
 
 						<ButtonContainer style={{ justifyContent: 'right' }}>
 							<Button secondary onClick={() => setSelected(null)}>
-								{t('actions.cancel')}
+								{t('actions.cancel', { ns: 'common' })}
 							</Button>
 							<Button
 								primary
@@ -183,7 +181,7 @@ function SetWorkingHours({
 									setSelected(null)
 								}}
 							>
-								{t('actions.save')}
+								{t('actions.save', { ns: 'common' })}
 							</Button>
 						</ButtonContainer>
 					</Modal.Body>
@@ -191,10 +189,8 @@ function SetWorkingHours({
 			)}
 
 			<div className="title-container">
-				<h2>{t('auth.register.working_hours.title')}</h2>
-				<p className="description">
-					{t('auth.register.working_hours.description')}
-				</p>
+				<h2>{t('working_hours.title')}</h2>
+				<p className="description">{t('working_hours.description')}</p>
 			</div>
 
 			<FormControl>
@@ -204,43 +200,43 @@ function SetWorkingHours({
 							start_work_monday,
 							end_work_monday,
 							'monday',
-							t('weekdays.monday')
+							t('weekdays.monday', { ns: 'common' })
 						)}
 						{day(
 							start_work_tuesday,
 							end_work_tuesday,
 							'tuesday',
-							t('weekdays.tuesday')
+							t('weekdays.tuesday', { ns: 'common' })
 						)}
 						{day(
 							start_work_wednesday,
 							end_work_wednesday,
 							'wednesday',
-							t('weekdays.wednesday')
+							t('weekdays.wednesday', { ns: 'common' })
 						)}
 						{day(
 							start_work_thursday,
 							end_work_thursday,
 							'thursday',
-							t('weekdays.thursday')
+							t('weekdays.thursday', { ns: 'common' })
 						)}
 						{day(
 							start_work_friday,
 							end_work_friday,
 							'friday',
-							t('weekdays.friday')
+							t('weekdays.friday', { ns: 'common' })
 						)}
 						{day(
 							start_work_saturday,
 							end_work_saturday,
 							'saturday',
-							t('weekdays.saturday')
+							t('weekdays.saturday', { ns: 'common' })
 						)}
 						{day(
 							start_work_sunday,
 							end_work_sunday,
 							'sunday',
-							t('weekdays.sunday')
+							t('weekdays.sunday', { ns: 'common' })
 						)}
 					</tbody>
 				</table>

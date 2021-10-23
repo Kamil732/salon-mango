@@ -1,0 +1,20 @@
+{
+    "calendar": "Kalendarz",
+    "customers": "Klienci",
+    "statistics": "statystyki",
+    "marketing": "Marketing",
+    "services": "usługi",
+    "settings": "ustawienia",
+    "notifications": "Powiadomienia",
+    "no_notifications": "Nie masz żadnych powiadomień",
+
+    "menu": {
+        "employees": "Pracownicy",
+        "resources": "Zasoby",
+        "add_resource": "Dodaj pierwszy zasób",
+        "all_services": "Wszystkie usługi",
+        "work_schedules": "Grafiki pracy",
+        "salon_data": "Dane solonu",
+        "payment": "Płatność"
+    }
+}
