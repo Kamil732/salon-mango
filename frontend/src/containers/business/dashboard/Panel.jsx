@@ -2,7 +2,7 @@ import React, { lazy, useEffect, useRef, useState, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { baseRouteUrl, baseUrl } from '../../../app/location-params'
+import { baseRouteUrl, baseUrl } from '../../../app/locale/location-params'
 
 import {
 	connectNotificationWS,

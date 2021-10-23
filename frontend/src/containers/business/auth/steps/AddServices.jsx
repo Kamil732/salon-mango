@@ -25,12 +25,13 @@ import Button from '../../../../layout/buttons/Button'
 import Modal from '../../../../layout/Modal'
 import Dropdown from '../../../../layout/buttons/dropdowns/Dropdown'
 
-const PRICE_TYPES = require('../../../../assets/data/price_types.json')
+import { PRICE_TYPES, PRICE_TYPES_DATA } from '../../../../helpers/consts'
+import { getCurrencySymbol } from '../../../../helpers/countryData'
 
 const initialServiceData = {
 	name: '',
 	price: null,
-	price_type: PRICE_TYPES[2],
+	price_type: PRICE_TYPES.FIXED,
 	time: 30,
 	is_mobile: false,
 }
@@ -390,7 +391,9 @@ class AddService extends Component {
 								</fieldset>
 
 								<FormGroup className="space-between">
-									<FormControl.Prefix>zł</FormControl.Prefix>
+									<FormControl.Prefix>
+										{getCurrencySymbol()}
+									</FormControl.Prefix>
 									<FormControl>
 										<Label
 											htmlFor="price"
@@ -428,7 +431,7 @@ class AddService extends Component {
 									</Label>
 									<Dropdown
 										id="price-type"
-										options={PRICE_TYPES}
+										options={PRICE_TYPES_DATA}
 										getOptionLabel={(opt) => opt.label}
 										getOptionValue={(opt) => opt.value}
 										getValuesValue={(opt) => opt.value}

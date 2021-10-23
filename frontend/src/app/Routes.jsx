@@ -2,7 +2,7 @@ import React, { Component, lazy, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
-import { baseRouteUrl, baseUrl } from './location-params'
+import { baseRouteUrl, baseUrl } from './locale/location-params'
 import { connect } from 'react-redux'
 
 import CircleLoader from '../layout/loaders/CircleLoader'

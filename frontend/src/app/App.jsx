@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import '../assets/css/main.css'
 import 'react-notifications/lib/notifications.css'
-import './i18n'
+import './locale/i18n'
 
 import { BrowserRouter as Router } from 'react-router-dom'
 

@@ -3,13 +3,13 @@
     "phone_number": "Numer telefonu",
     "company_name": "Nazwa firmy",
     "name": "Imię i nazwisko",
-    "price_type": {
+    "price_types": {
         "name": "Rodzaj ceny",
         "free": "Darmowa",
         "fixed": "Stała",
         "varies": "Cena zmienna",
         "starts_at": "Zaczyna się od",
-        "hidden": "Cena ukryta"
+        "dont_show": "Cena ukryta"
     },
     "backwards": "Do tyłu",
     "forwards": "Do przodu",

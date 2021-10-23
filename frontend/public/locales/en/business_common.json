@@ -3,12 +3,12 @@
     "phone_number": "Phone number",
     "company_name": "Company name",
     "name": "Name",
-    "price_type": {
+    "price_types": {
         "name": "Price type",
         "free": "Free",
         "fixed": "Fixed",
         "varies": "Varies",
-        "starts_at": "Starts at",
+        "dont_show": "Starts at",
         "hidden": "Hidden"
     },
     "backwards": "Backwards",

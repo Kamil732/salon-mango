@@ -15,8 +15,11 @@ import {
 } from '@react-google-maps/api'
 import { useTranslation } from 'react-i18next'
 
-const BILLING_TYPES = require('../../../../assets/data/billing_types.json')
-const MAX_TRAVEL_DISTANCES = require('../../../../assets/data/max_travel_distances.json')
+import {
+	PRICE_TYPES,
+	TRAVEL_FEE_PRICE_TYPES_DATA,
+	MAX_TRAVEL_DISTANCES,
+} from '../../../../helpers/consts'
 
 function TravellingFee({
 	billing_type,
@@ -47,7 +50,7 @@ function TravellingFee({
 		strokeWeight: 2,
 		fillColor: '$000',
 		fillOpacity: 0.15,
-		radius: getOptionValue(max_travel_distance) * 1000,
+		radius: getOptionValue(max_travel_distance),
 	}
 
 	return (
@@ -60,12 +63,12 @@ function TravellingFee({
 			<FormGroup>
 				<FormControl>
 					<Label htmlFor="billing-type" inputValue>
-						{t('price_type.name', { ns: 'business_common' })}
+						{t('price_types.name', { ns: 'business_common' })}
 					</Label>
 					<Dropdown
 						id="billing-type"
 						value={billing_type}
-						options={BILLING_TYPES}
+						options={TRAVEL_FEE_PRICE_TYPES_DATA}
 						getOptionLabel={getOptionLabel}
 						getOptionValue={getOptionValue}
 						getValuesValue={getOptionValue}
@@ -74,10 +77,10 @@ function TravellingFee({
 								billing_type: val,
 								travel_fee:
 									getOptionValue(val) ===
-									getOptionValue(BILLING_TYPES[0])
+									getOptionValue(PRICE_TYPES.FREE)
 										? 0
 										: getOptionValue(val) ===
-										  getOptionValue(BILLING_TYPES[1])
+										  getOptionValue(PRICE_TYPES.VARIES)
 										? null
 										: travel_fee === null
 										? 0
@@ -103,9 +106,9 @@ function TravellingFee({
 						onChange={onChange}
 						disabled={
 							getOptionValue(billing_type) ===
-								getOptionValue(BILLING_TYPES[0]) ||
+								getOptionValue(PRICE_TYPES.FREE) ||
 							getOptionValue(billing_type) ===
-								getOptionValue(BILLING_TYPES[1])
+								getOptionValue(PRICE_TYPES.VARIES)
 						}
 					/>
 				</FormControl>

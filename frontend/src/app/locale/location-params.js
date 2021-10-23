@@ -1,24 +1,5 @@
 import moment from 'moment'
-
-export const COUNTRY_NAMES = Object.freeze({
-	pl: 'Polska',
-	us: 'United states of America',
-	gb: 'United Kingdom',
-	au: 'Australia',
-	ca: 'Canada',
-	ie: 'Ireland',
-	nz: 'New Zealand',
-	za: 'South Africa',
-	zw: 'Zimbabwe',
-	my: 'Malaysia',
-})
-export const SUPPORTED_COUNTRIES = Object.freeze(Object.keys(COUNTRY_NAMES))
-
-export const LANGUAGE_NAMES = Object.freeze({
-	pl: 'Polski',
-	en: 'English (United States)',
-})
-export const SUPPORTED_LANGUAGES = Object.freeze(Object.keys(LANGUAGE_NAMES))
+import { SUPPORTED_COUNTRIES, SUPPORTED_LANGUAGES } from './consts'
 
 export const baseRouteUrl = `/:locale([a-z]{2}-[a-z]{2})*(/+)` // /language-country/
 

@@ -3,6 +3,9 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import '../../../assets/css/progressbar.css'
 
+import { useTranslation } from 'react-i18next'
+import { PRICE_TYPES, MAX_TRAVEL_DISTANCES } from '../../../helpers/consts'
+import { country } from '../../../app/locale/location-params'
 // import { register } from '../../redux/actions/auth'
 import { HiOutlineArrowLeft } from 'react-icons/hi'
 
@@ -10,7 +13,6 @@ import Card from '../../../layout/Card'
 import ErrorBoundary from '../../../components/ErrorBoundary'
 import CircleLoader from '../../../layout/loaders/CircleLoader'
 import Button from '../../../layout/buttons/Button'
-import { useTranslation } from 'react-i18next'
 
 const SalonData = lazy(() => import('./steps/SalonData'))
 const Credentials = lazy(() => import('./steps/Credentials'))
@@ -24,8 +26,6 @@ const TravellingFee = lazy(() => import('./steps/TravellingFee'))
 const AddServices = lazy(() => import('./steps/AddServices'))
 const AddEmployees = lazy(() => import('./steps/AddEmployees'))
 
-const BILLING_TYPES = require('../../../assets/data/billing_types.json')
-const MAX_TRAVEL_DISTANCES = require('../../../assets/data/max_travel_distances.json')
 const INITIAL_STEPS_DATA = [
 	{
 		component: (props) => (
@@ -65,6 +65,7 @@ const INITIAL_STEPS_DATA = [
 				changeComponentData={props.changeComponentData}
 			/>
 		),
+		// skip: country,
 		nextBtnDisabled: true,
 	},
 	{
@@ -221,7 +222,7 @@ function RegisterForm({ closeModal, register }) {
 		work_stationary: true,
 		work_remotely: false,
 
-		country: 'PL',
+		country: 'pl',
 		address: '',
 		premises_number: '',
 		city: {},
@@ -232,7 +233,7 @@ function RegisterForm({ closeModal, register }) {
 		latitude: null,
 		longitude: null,
 
-		billing_type: BILLING_TYPES[0],
+		billing_type: PRICE_TYPES.FREE,
 		travel_fee: 0,
 		max_travel_distance: MAX_TRAVEL_DISTANCES[3],
 		travel_fee_rules: '',
@@ -327,6 +328,7 @@ function RegisterForm({ closeModal, register }) {
 					<Button rounded onClick={() => changeStep(true)}>
 						<HiOutlineArrowLeft size="25" />
 					</Button>
+
 					<div className="progressbar">
 						<span
 							style={{ width: `${(step / STEPS.length) * 100}%` }}

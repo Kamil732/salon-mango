@@ -1,6 +1,6 @@
 import React, { lazy } from 'react'
 import { Route, Switch } from 'react-router'
-import { baseRouteUrl } from '../../app/location-params'
+import { baseRouteUrl } from '../../app/locale/location-params'
 
 import PrivateRoute from '../../common/PrivateRoute'
 import NotFound from '../NotFound'
