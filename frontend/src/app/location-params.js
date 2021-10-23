@@ -20,7 +20,7 @@ export const LANGUAGE_NAMES = Object.freeze({
 })
 export const SUPPORTED_LANGUAGES = Object.freeze(Object.keys(LANGUAGE_NAMES))
 
-export const baseRouteUrl = `/:locale([a-z]{2}-[a-z]{2})*(/+)` // language-country
+export const baseRouteUrl = `/:locale([a-z]{2}-[a-z]{2})*(/+)` // /language-country/
 
 const re = new RegExp(`^(/([a-z]{2})-([a-z]{2}))/`)
 const matches = window.location.pathname.match(re)

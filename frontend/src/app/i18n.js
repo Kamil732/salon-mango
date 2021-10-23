@@ -6,19 +6,17 @@ import { SUPPORTED_LANGUAGES } from './location-params'
 i18n.use(Backend)
 	.use(initReactI18next)
 	.init({
-		whitelist: SUPPORTED_LANGUAGES.map((l) => l.code),
-		fallbackLng: 'en',
+		whitelist: SUPPORTED_LANGUAGES,
 		lng: localStorage.getItem('lang'),
-		detection: {
-			order: ['path'],
-			lookupFromPathIndex: 0,
-			checkWhitelist: true,
-		},
+		supportedLngs: SUPPORTED_LANGUAGES,
 		interpolation: {
 			escapeValue: false,
-			formatSeparator: '.',
 		},
-
+		cache: {
+			enabled: true,
+			prefix: 'i18n-',
+			expirationTime: 7 * 60 * 60 * 24 * 1000,
+		},
 		backend: {
 			loadPath: `${process.env.PUBLIC_URL}/locales/{{lng}}/{{ns}}.json`,
 		},
