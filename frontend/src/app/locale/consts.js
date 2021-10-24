@@ -2,6 +2,7 @@ export const COUNTRIES_DATA = Object.freeze({
 	pl: {
 		gdpr: true,
 		name: 'Polska',
+		zipCodeLength: 6,
 		currency: {
 			name: 'złoty',
 			symbol: 'zł',
@@ -13,6 +14,7 @@ export const COUNTRIES_DATA = Object.freeze({
 	us: {
 		gdpr: false,
 		name: 'United States of America',
+		zipCodeLength: 5,
 		currency: {
 			name: 'dollar',
 			symbol: '$',
@@ -24,6 +26,7 @@ export const COUNTRIES_DATA = Object.freeze({
 	gb: {
 		gdpr: true,
 		name: 'United Kingdom',
+		zipCodeLength: 5,
 		currency: {
 			name: 'pound',
 			symbol: '£',
@@ -35,6 +38,7 @@ export const COUNTRIES_DATA = Object.freeze({
 	au: {
 		gdpr: false,
 		name: 'Australia',
+		zipCodeLength: 4,
 		currency: {
 			name: 'dollar',
 			symbol: '$',
@@ -46,6 +50,7 @@ export const COUNTRIES_DATA = Object.freeze({
 	ca: {
 		gdpr: false,
 		name: 'Canada',
+		zipCodeLength: 6,
 		currency: {
 			name: 'dollar',
 			symbol: '$',
@@ -57,6 +62,7 @@ export const COUNTRIES_DATA = Object.freeze({
 	ie: {
 		gdpr: true,
 		name: 'Ireland',
+		zipCodeLength: 4,
 		currency: {
 			name: 'dollar',
 			symbol: '$',
@@ -68,6 +74,7 @@ export const COUNTRIES_DATA = Object.freeze({
 	nz: {
 		gdpr: false,
 		name: 'New Zealand',
+		zipCodeLength: 4,
 		currency: {
 			name: 'dollar',
 			symbol: '$',
@@ -79,6 +86,7 @@ export const COUNTRIES_DATA = Object.freeze({
 	za: {
 		gdpr: false,
 		name: 'South Africa',
+		zipCodeLength: 4,
 		currency: {
 			name: 'rand',
 			symbol: 'R',
@@ -90,6 +98,7 @@ export const COUNTRIES_DATA = Object.freeze({
 	zw: {
 		gdpr: true,
 		name: 'Zimbabwe',
+		zipCodeLength: 4,
 		currency: {
 			name: 'dollar',
 			symbol: '$',
@@ -101,6 +110,7 @@ export const COUNTRIES_DATA = Object.freeze({
 	my: {
 		gdpr: false,
 		name: 'Malaysia',
+		zipCodeLength: 5,
 		currency: {
 			name: 'ringgit',
 			symbol: 'RM',

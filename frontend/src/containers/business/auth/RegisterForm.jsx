@@ -223,7 +223,7 @@ function RegisterForm({ closeModal, register }) {
 		work_stationary: true,
 		work_remotely: false,
 
-		country: 'pl',
+		country,
 		address: '',
 		premises_number: '',
 		city: {},

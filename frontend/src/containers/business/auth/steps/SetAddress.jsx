@@ -8,6 +8,7 @@ import Input from '../../../../layout/forms/inputs/Input'
 import Label from '../../../../layout/forms/inputs/Label'
 import Dropdown from '../../../../layout/buttons/dropdowns/Dropdown'
 import { useTranslation } from 'react-i18next'
+import { COUNTRIES_DATA } from '../../../../app/locale/consts'
 
 function SetAddress({
 	country,
@@ -57,20 +58,25 @@ function SetAddress({
 			...prevData,
 			city:
 				Object.keys(prevData.city).length > 0 &&
-				prevData.postal_code.length === 6
+				prevData.postal_code.length ===
+					COUNTRIES_DATA[country].zipCodeLength
 					? prevData.city
 					: {},
 		}))
-	}, [postal_code, setData])
+	}, [postal_code, setData, country])
 
 	useEffect(() => {
-		if (debouncedSearch.length !== 6 && cities.length > 0) {
+		if (
+			debouncedSearch.length !== COUNTRIES_DATA[country].zipCodeLength &&
+			cities.length > 0
+		) {
 			setCities([])
 		}
-	}, [debouncedSearch, cities, citiesLoading])
+	}, [debouncedSearch, cities, citiesLoading, country])
 
 	useEffect(() => {
-		if (debouncedSearch.length !== 6) return
+		if (debouncedSearch.length !== COUNTRIES_DATA[country].zipCodeLength)
+			return
 		setCitiesLoading(true)
 
 		axios
@@ -133,8 +139,8 @@ function SetAddress({
 						name="postal_code"
 						onChange={onChange}
 						value={postal_code}
-						min="6"
-						max="6"
+						min={COUNTRIES_DATA[country].zipCodeLength}
+						max={COUNTRIES_DATA[country].zipCodeLength}
 					/>
 				</FormControl>
 				<FormControl>
@@ -160,7 +166,10 @@ function SetAddress({
 						}}
 						options={cities}
 						isLoading={citiesLoading}
-						disabled={debouncedSearch.length !== 6}
+						disabled={
+							debouncedSearch.length !==
+							COUNTRIES_DATA[country].zipCodeLength
+						}
 					/>
 				</FormControl>
 			</FormGroup>
