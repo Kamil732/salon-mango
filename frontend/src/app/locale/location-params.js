@@ -8,20 +8,22 @@ const matches = window.location.pathname.match(re)
 let baseUrl, language, country
 
 function setLangAndCountry() {
-	const usersLang = (navigator.language || navigator.userLanguage).split('-')
+	const [usersLang, usersCountry] = (
+		navigator.language || navigator.userLanguage
+	).split('-')
 	language = localStorage.getItem('lang')
 	country = localStorage.getItem('country')
 
 	// Language
-	if (!language && SUPPORTED_LANGUAGES.includes(usersLang[0]))
-		language = usersLang[0]
+	if (!language && SUPPORTED_LANGUAGES.includes(usersLang))
+		language = usersLang
 	else if (!language) language = 'en'
 
 	// Country
-	if (!country && usersLang[1] && SUPPORTED_COUNTRIES.includes(usersLang[1]))
-		country = usersLang[1].toLowerCase()
-	else if (!country && SUPPORTED_COUNTRIES.includes(usersLang[0]))
-		country = usersLang[0]
+	if (!country && usersCountry && SUPPORTED_COUNTRIES.includes(usersCountry))
+		country = usersCountry.toLowerCase()
+	else if (!country && SUPPORTED_COUNTRIES.includes(usersLang))
+		country = usersLang
 	else if (!country) country = 'us'
 
 	baseUrl = `/${language}-${country}/`

@@ -1,5 +1,6 @@
 export const COUNTRIES_DATA = Object.freeze({
 	pl: {
+		gdpr: true,
 		name: 'Polska',
 		currency: {
 			name: 'złoty',
@@ -10,6 +11,7 @@ export const COUNTRIES_DATA = Object.freeze({
 		distanceUnit: 'km',
 	},
 	us: {
+		gdpr: false,
 		name: 'United States of America',
 		currency: {
 			name: 'dollar',
@@ -20,6 +22,7 @@ export const COUNTRIES_DATA = Object.freeze({
 		distanceUnit: 'mi',
 	},
 	gb: {
+		gdpr: true,
 		name: 'United Kingdom',
 		currency: {
 			name: 'pound',
@@ -30,6 +33,7 @@ export const COUNTRIES_DATA = Object.freeze({
 		distanceUnit: 'mi',
 	},
 	au: {
+		gdpr: false,
 		name: 'Australia',
 		currency: {
 			name: 'dollar',
@@ -40,6 +44,7 @@ export const COUNTRIES_DATA = Object.freeze({
 		distanceUnit: 'km',
 	},
 	ca: {
+		gdpr: false,
 		name: 'Canada',
 		currency: {
 			name: 'dollar',
@@ -50,6 +55,7 @@ export const COUNTRIES_DATA = Object.freeze({
 		distanceUnit: 'km',
 	},
 	ie: {
+		gdpr: true,
 		name: 'Ireland',
 		currency: {
 			name: 'dollar',
@@ -60,6 +66,7 @@ export const COUNTRIES_DATA = Object.freeze({
 		distanceUnit: 'km',
 	},
 	nz: {
+		gdpr: false,
 		name: 'New Zealand',
 		currency: {
 			name: 'dollar',
@@ -70,6 +77,7 @@ export const COUNTRIES_DATA = Object.freeze({
 		distanceUnit: 'km',
 	},
 	za: {
+		gdpr: false,
 		name: 'South Africa',
 		currency: {
 			name: 'rand',
@@ -80,6 +88,7 @@ export const COUNTRIES_DATA = Object.freeze({
 		distanceUnit: 'km',
 	},
 	zw: {
+		gdpr: true,
 		name: 'Zimbabwe',
 		currency: {
 			name: 'dollar',
@@ -90,6 +99,7 @@ export const COUNTRIES_DATA = Object.freeze({
 		distanceUnit: 'km',
 	},
 	my: {
+		gdpr: false,
 		name: 'Malaysia',
 		currency: {
 			name: 'ringgit',

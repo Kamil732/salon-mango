@@ -26,7 +26,8 @@ import Modal from '../../../../layout/Modal'
 import Dropdown from '../../../../layout/buttons/dropdowns/Dropdown'
 
 import { PRICE_TYPES, PRICE_TYPES_DATA } from '../../../../helpers/consts'
-import { getCurrencySymbol } from '../../../../helpers/countryData'
+import { COUNTRIES_DATA } from '../../../../app/locale/consts'
+import { country } from '../../../../app/locale/location-params'
 
 const initialServiceData = {
 	name: '',
@@ -392,7 +393,10 @@ class AddService extends Component {
 
 								<FormGroup className="space-between">
 									<FormControl.Prefix>
-										{getCurrencySymbol()}
+										{
+											COUNTRIES_DATA[country].currency
+												.symbol
+										}
 									</FormControl.Prefix>
 									<FormControl>
 										<Label

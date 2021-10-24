@@ -13,6 +13,7 @@ import Card from '../../../layout/Card'
 import ErrorBoundary from '../../../components/ErrorBoundary'
 import CircleLoader from '../../../layout/loaders/CircleLoader'
 import Button from '../../../layout/buttons/Button'
+import { COUNTRIES_DATA } from '../../../app/locale/consts'
 
 const SalonData = lazy(() => import('./steps/SalonData'))
 const Credentials = lazy(() => import('./steps/Credentials'))
@@ -65,7 +66,7 @@ const INITIAL_STEPS_DATA = [
 				changeComponentData={props.changeComponentData}
 			/>
 		),
-		// skip: country,
+		skip: !COUNTRIES_DATA[country].gdpr,
 		nextBtnDisabled: true,
 	},
 	{
