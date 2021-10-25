@@ -3,6 +3,7 @@ from django.db.models import Value as V
 from django.db.models.functions import Concat
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.vary import vary_on_headers
 from django.views.decorators.cache import cache_page
 
 from rest_framework import generics, mixins, status
@@ -26,6 +27,7 @@ class SalonDetailAPIView(generics.RetrieveUpdateAPIView):
 
 
 @method_decorator(cache_page(60 * 60 * 2), name='get')
+@method_decorator(vary_on_headers('Accept-Language'), name='get')
 class SalonCategoryListAPIView(generics.ListAPIView):
     serializer_class = serializers.SalonCategorySerializer
     queryset = SalonCategory.objects.all()
