@@ -17,12 +17,17 @@ import Button from '../../../../layout/buttons/Button'
 import { useTranslation } from 'react-i18next'
 
 function AddEmployees({ name, phone_prefix, employees, setData }) {
-	const { t } = useTranslation(['business_register', 'common'])
+	const { t } = useTranslation([
+		'business_register',
+		'business_common',
+		'common',
+		'auth',
+	])
 	const initialEmployeeData = useMemo(
 		() => ({
 			name: '',
 			email: '',
-			phone_prefix: phone_prefix,
+			phone_prefix,
 			phone_number: '',
 			position: '',
 		}),
@@ -116,7 +121,7 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 									htmlFor="name"
 									inputValue={employeeData.name}
 								>
-									{t('data.name')}
+									{t('name', { ns: 'business_common' })}
 								</Label>
 								<Input
 									required
@@ -131,7 +136,7 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 									htmlFor="email"
 									inputValue={employeeData.email}
 								>
-									{t('auth.email')}
+									{t('email', { ns: 'auth' })}
 								</Label>
 								<Input
 									required

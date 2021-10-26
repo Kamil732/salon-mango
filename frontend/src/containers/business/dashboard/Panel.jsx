@@ -46,7 +46,7 @@ function Panel({
 	markNotificationAsRead,
 }) {
 	const { t } = useTranslation('business_panel')
-	const [isMenuOpen, toggleMenu] = useState(false)
+	const [isMenuOpen, toggleMenu] = useState(window.innerWidth >= 1024)
 	const navContainer = useRef(null)
 
 	useEffect(() => {

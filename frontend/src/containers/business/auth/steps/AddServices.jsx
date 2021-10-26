@@ -429,7 +429,7 @@ class AddService extends Component {
 
 								<FormControl>
 									<Label htmlFor="price-type" inputValue>
-										{t('price_type.name', {
+										{t('price_types.name', {
 											ns: 'business_common',
 										})}
 									</Label>
@@ -561,11 +561,11 @@ class AddService extends Component {
 									<td className="text-center">
 										<h4>
 											{service.price_type.value === 0
-												? t('price_type.free', {
+												? t('price_types.free', {
 														ns: 'business_common',
 												  })
 												: service.price_type.value === 1
-												? t('price_type.varies', {
+												? t('price_types.varies', {
 														ns: 'business_common',
 												  })
 												: service.price_type.value === 3

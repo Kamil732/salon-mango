@@ -56,12 +56,7 @@ function SetAddress({
 	useEffect(() => {
 		setData((prevData) => ({
 			...prevData,
-			city:
-				Object.keys(prevData.city).length > 0 &&
-				prevData.postal_code.length ===
-					COUNTRIES_DATA[country].zipCodeLength
-					? prevData.city
-					: {},
+			city: {},
 		}))
 	}, [postal_code, setData, country])
 

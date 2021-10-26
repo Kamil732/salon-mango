@@ -20,7 +20,8 @@ function PhoneNumberInput({
 
 	const formatOptionLabel = ({ dialCode, name }) => (
 		<div className="inline-wrap">
-			<span>{dialCode}</span> | <span>{name}</span>
+			<span>{dialCode}</span> |{' '}
+			<span className="text-broken">{name}</span>
 		</div>
 	)
 

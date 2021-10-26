@@ -1,7 +1,7 @@
 import React from 'react'
 import '../assets/css/dashboard.css'
 
-import { RiMenuUnfoldFill } from 'react-icons/ri'
+import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri'
 import useClickOutside from '../helpers/hooks/clickOutside'
 
 function Dashboard(props) {
@@ -25,7 +25,9 @@ function NavFooter(props) {
 }
 
 function Menu({ navContainer, isOpen, toggleMenu, ...props }) {
-	useClickOutside(navContainer, () => toggleMenu(false))
+	useClickOutside(navContainer, () => {
+		if (window.innerWidth < 1024) toggleMenu(false)
+	})
 
 	return (
 		<div className={`dashboard__menu${isOpen ? ' open' : ''}`} {...props} />
@@ -39,13 +41,15 @@ function Body(props) {
 function MenuToggleBtn({ children, isOpen, toggleMenu, ...props }) {
 	return (
 		<div
-			className={`dashboard__btn dashboard__menu-btn${
-				isOpen ? ' active' : ''
-			}`}
+			className="dashboard__btn dashboard__menu-btn"
 			onClick={() => toggleMenu()}
 			{...props}
 		>
-			<RiMenuUnfoldFill className="dashboard__menu-btn__icon" />
+			{isOpen ? (
+				<RiMenuFoldLine className="dashboard__menu-btn__icon" />
+			) : (
+				<RiMenuUnfoldLine className="dashboard__menu-btn__icon" />
+			)}
 			{children}
 		</div>
 	)
