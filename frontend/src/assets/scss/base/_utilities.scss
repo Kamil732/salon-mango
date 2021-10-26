@@ -97,7 +97,7 @@
 @mixin box-color($color) {
 	color: set-text-color($color);
 	background-color: $color !important;
-	border-color: 1px solid darken($color, 10%) !important;
+	border: 1px solid darken($color, 10%) !important;
 	transition: background-color 0.25s ease-in-out;
 
 	&:hover {

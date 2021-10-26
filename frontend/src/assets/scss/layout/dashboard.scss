@@ -74,6 +74,7 @@ $nav-color: $primary-color;
 	}
 
 	&__nav {
+		user-select: none;
 		height: 100vh;
 		@include bg-color($nav-color);
 		@extend %flex-align-center;
@@ -106,7 +107,7 @@ $nav-color: $primary-color;
 @include media-tablet {
 	.dashboard {
 		&__menu {
-			display: flex;
+			display: none;
 			align-items: flex-start;
 			position: static;
 			width: 220px;
@@ -114,8 +115,8 @@ $nav-color: $primary-color;
 			box-shadow: none;
 			border-right: 1px solid $border-color;
 
-			&-btn {
-				display: none;
+			&.open {
+				display: flex;
 			}
 		}
 

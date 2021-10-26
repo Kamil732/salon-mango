@@ -25,6 +25,7 @@ $rbc-css-prefix: calendar;
 
 .rbc-time-view {
 	overflow-x: auto;
+	user-select: none;
 }
 
 .toolbar-container {
@@ -113,7 +114,12 @@ $rbc-css-prefix: calendar;
 	z-index: 1;
 	opacity: 0.7;
 	min-height: 25px;
-	border-color: #ccc !important;
+	border-top: 1px dashed $border-color !important;
+
+	&:first-of-type,
+	&.disabled {
+		border-top: none !important;
+	}
 
 	&:hover {
 		background-color: rgba(darken(#fff, 20%), 0.6);
@@ -130,6 +136,8 @@ $rbc-css-prefix: calendar;
 	.rbc-time-slot {
 		cursor: default;
 		background-color: inherit;
+		border: none !important;
+		opacity: 1;
 
 		&:hover {
 			background-color: inherit;
