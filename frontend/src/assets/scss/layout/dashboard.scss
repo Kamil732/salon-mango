@@ -52,14 +52,9 @@ $nav-color: $primary-color;
 		background-color: $surface-color;
 		z-index: 5;
 		border-radius: 0 10px 10px;
-		display: none;
 		max-height: 100%;
 		width: 100%;
 		@extend %shadow-sm;
-
-		&.open {
-			display: block;
-		}
 
 		&-btn {
 			margin-top: 0.5rem;
@@ -107,17 +102,13 @@ $nav-color: $primary-color;
 @include media-tablet {
 	.dashboard {
 		&__menu {
-			display: none;
+			display: flex;
 			align-items: flex-start;
 			position: static;
 			width: 220px;
 			border-radius: 0;
 			box-shadow: none;
 			border-right: 1px solid $border-color;
-
-			&.open {
-				display: flex;
-			}
 		}
 
 		& > &__body {
