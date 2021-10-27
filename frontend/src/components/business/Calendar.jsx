@@ -5,7 +5,6 @@ import { withTranslation } from 'react-i18next'
 import '../../assets/css/big-calendar.css'
 
 import moment from 'moment'
-import 'moment/locale/pl'
 import getHeaders from '../../helpers/getHeaders'
 import { NotificationManager } from 'react-notifications'
 
@@ -41,6 +40,17 @@ import MonthDateHeader from './tools/MonthDateHeader'
 import ThreeDaysView from './tools/views/ThreeDaysView'
 import EventWrapper from './tools/EventWrapper'
 import getEventTooltip from '../../helpers/getEventTooltip'
+import { country, language } from '../../app/locale/location-params'
+
+try {
+	require(`moment/locale/${language}-${country}`)
+} catch (err) {
+	try {
+		require(`moment/locale/${language}`)
+	} catch (err) {
+		require(`moment/locale/en-gb`)
+	}
+}
 
 const AddMeetingAdminForm = lazy(() => import('./forms/AddMeetingAdminForm'))
 const EditMeetingAdminForm = lazy(() => import('./forms/EditMeetingAdminForm'))
@@ -783,7 +793,7 @@ class Calendar extends Component {
 						onView={this.onView}
 						onRangeChange={this.onRangeChange}
 						localizer={localizer}
-						// culture="en-GB"
+						culture={`${language}-${country}`}
 						events={meetings}
 						step={calendar_step}
 						timeslots={calendar_timeslots}

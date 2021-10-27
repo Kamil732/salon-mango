@@ -29,9 +29,9 @@ function Menu({ navContainer, isOpen, toggleMenu, ...props }) {
 		if (window.innerWidth < 1024) toggleMenu(false)
 	})
 
-	return (
-		<div className={`dashboard__menu${isOpen ? ' open' : ''}`} {...props} />
-	)
+	if (!isOpen) return null
+
+	return <div className="dashboard__menu" {...props} />
 }
 
 function Body(props) {
