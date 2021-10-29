@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useCallback, useState } from 'react'
+import React, { lazy, Suspense, useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import '../../../assets/css/progressbar.css'
@@ -14,6 +14,9 @@ import ErrorBoundary from '../../../components/ErrorBoundary'
 import CircleLoader from '../../../layout/loaders/CircleLoader'
 import Button from '../../../layout/buttons/Button'
 import { COUNTRIES_DATA } from '../../../app/locale/consts'
+import axios from 'axios'
+import EmailCheck from './steps/EmailCheck'
+import getHeaders from '../../../helpers/getHeaders'
 
 const SalonData = lazy(() => import('./steps/SalonData'))
 const Credentials = lazy(() => import('./steps/Credentials'))
@@ -27,7 +30,37 @@ const TravellingFee = lazy(() => import('./steps/TravellingFee'))
 const AddServices = lazy(() => import('./steps/AddServices'))
 const AddEmployees = lazy(() => import('./steps/AddEmployees'))
 
+const countries = require('../../../assets/data/countries.json')
+
 const INITIAL_STEPS_DATA = [
+	{
+		component: (props) => (
+			<EmailCheck
+				email={props.email}
+				onChange={props.onChange}
+				componentData={props.componentData}
+				changeComponentData={props.changeComponentData}
+				errors={props.errors}
+			/>
+		),
+		nextBtnDisabled: true,
+		validateStep: async ({ email }, setErrors) => {
+			try {
+				const res = await axios.get(
+					`${process.env.REACT_APP_API_URL}/accounts/exists/?email=${email}`,
+					getHeaders()
+				)
+
+				if (res.data.exists) setErrors(res.data.errors)
+
+				return !res.data.exists
+			} catch (err) {
+				if (err.response) setErrors(err.response.data.errors)
+
+				return false
+			}
+		},
+	},
 	{
 		component: (props) => (
 			<SalonData
@@ -43,7 +76,6 @@ const INITIAL_STEPS_DATA = [
 			/>
 		),
 		nextBtnDisabled: true,
-		validateStep: (data) => {},
 	},
 	{
 		component: (props) => (
@@ -194,13 +226,16 @@ const INITIAL_STEPS_DATA = [
 function RegisterForm({ closeModal, register }) {
 	const { t } = useTranslation('common')
 	const [loading, setLoading] = useState(false)
+	const [errors, setErrors] = useState({})
 	const [data, setData] = useState({
 		email: '',
 		password: '',
 		confirm_password: '',
 		salon_name: '',
 		name: '',
-		phone_prefix: {},
+		phone_prefix: countries.find(
+			({ isoCode }) => isoCode.toLowerCase() === country
+		),
 		phone_number: '',
 		recomendation_code: '',
 		accept_terms: false,
@@ -269,15 +304,23 @@ function RegisterForm({ closeModal, register }) {
 		[step]
 	)
 
+	useEffect(() => {
+		setErrors({})
+	}, [step])
+
 	const changeStep = (previous = false) => {
 		let step = previous ? -1 : 1
+		let shouldCloseModal = false
 
 		setStep((prevStep) => {
-			if (prevStep + step < 0) closeModal()
-
 			// change step to the closest that should NOT be skipped
 			for (let i = 0; i < STEPS.length; i++) {
 				i = previous ? -i : i
+
+				if (prevStep + step + i < 0) {
+					shouldCloseModal = true
+					return 0
+				}
 				if (prevStep + step + i > STEPS.length - 1) return 0
 				if (!STEPS[prevStep + step + i].skip) {
 					step += i
@@ -287,6 +330,10 @@ function RegisterForm({ closeModal, register }) {
 
 			return prevStep + step
 		})
+
+		setTimeout(() => {
+			if (shouldCloseModal) closeModal()
+		}, 0)
 	}
 
 	const onChange = (e) => {
@@ -344,6 +391,7 @@ function RegisterForm({ closeModal, register }) {
 							...data,
 							componentData: STEPS[step],
 							changeComponentData,
+							errors,
 							updateData,
 							setData,
 							onChange,
@@ -364,8 +412,8 @@ function RegisterForm({ closeModal, register }) {
 
 						try {
 							setLoading(true)
-							await currentStep.validateStep(data)
-							changeStep()
+							if (await currentStep.validateStep(data, setErrors))
+								changeStep()
 						} catch (err) {
 							console.log(err)
 						} finally {

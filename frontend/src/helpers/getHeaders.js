@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie'
 import { language } from '../app/locale/location-params'
 
-const getHeader = (csrf = false) => {
+const getHeaders = (csrf = false) => {
 	const config = {
 		headers: {
 			Accept: 'application/json',
@@ -14,4 +14,4 @@ const getHeader = (csrf = false) => {
 	return config
 }
 
-export default getHeader
+export default getHeaders

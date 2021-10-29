@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next'
 
 function Credentials({
 	onChange,
-	email,
 	password,
 	confirm_password,
 	componentData,
@@ -17,22 +16,14 @@ function Credentials({
 	const { t } = useTranslation(['business_register', 'auth'])
 
 	useEffect(() => {
-		if (
-			componentData.nextBtnDisabled &&
-			email &&
-			password &&
-			confirm_password
-		)
+		if (componentData.nextBtnDisabled && password && confirm_password)
 			changeComponentData({ nextBtnDisabled: false })
 		else if (
 			!componentData.nextBtnDisabled &&
-			(email.length === 0 ||
-				password.length === 0 ||
-				confirm_password.length === 0)
+			(password.length === 0 || confirm_password.length === 0)
 		)
 			changeComponentData({ nextBtnDisabled: true })
 	}, [
-		email,
 		password,
 		confirm_password,
 		componentData.nextBtnDisabled,
@@ -45,19 +36,6 @@ function Credentials({
 				<h1>{t('credentials.title')}</h1>
 				<p className="description">{t('credentials.description')}</p>
 			</div>
-			<FormControl>
-				<Label htmlFor="email" inputValue={email}>
-					{t('email', { ns: 'auth' })}
-				</Label>
-				<Input
-					required
-					type="text"
-					id="email"
-					name="email"
-					onChange={onChange}
-					value={email}
-				/>
-			</FormControl>
 			<FormControl>
 				<Label htmlFor="password" inputValue={password}>
 					{t('password', { ns: 'auth' })}
