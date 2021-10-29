@@ -1,8 +1,18 @@
 from django.contrib.auth.models import User
+from django.utils.translation import gettext as _
+
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
 from accounts.models import Account
 from data.api.serializers import CustomerSerializer
+
+
+class UniqueEmailSerializer(serializers.Serializer):
+    email = serializers.EmailField(validators=[
+        UniqueValidator(queryset=Account.objects.all(),
+                        message=_('Given address email is already in use'))
+    ])
 
 
 class AccountSerializer(serializers.ModelSerializer):

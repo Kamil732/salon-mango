@@ -1,4 +1,3 @@
-from django.core.validators import validate_email
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
@@ -62,22 +61,7 @@ class AccountExistsAPIView(APIView):
     def get(self, request, format=None):
         email = request.query_params.get('email')
 
-        try:
-            validate_email(email)
-        except:
-            raise ValidationError(
-                {'errors': {
-                    'email': [_('Given address email is incorrect')]
-                }})
-
-        exists = Account.objects.filter(email=email).exists()
-
-        if exists:
-            return Response({
-                'exists': True,
-                'errors': {
-                    'email': [_('Given address email is already in use')]
-                }
-            })
+        serializer = serializers.UniqueEmailSerializer(data={'email': email})
+        serializer.is_valid(raise_exception=True)
 
         return Response({'exists': False})

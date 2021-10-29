@@ -8,7 +8,7 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('api-auth/', include('rest_framework.urls')),
+    path('api-auth/', include('rest_framework.urls')),
     path(
         'api/',
         include([
@@ -16,6 +16,13 @@ urlpatterns = [
             path('accounts/', include('accounts.api.urls')),
             path('meetings/', include('meetings.api.urls')),
             path('data/', include('data.api.urls')),
+            path(
+                'utils/',
+                include([
+                    path('validate_phone/',
+                         views.ValidatePhoneAPIView.as_view(),
+                         name="validate_phone")
+                ]))
         ])),
 ]
 
