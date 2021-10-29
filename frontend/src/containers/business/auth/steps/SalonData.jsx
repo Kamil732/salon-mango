@@ -14,6 +14,8 @@ function SalonData({
 	name,
 	phone_prefix,
 	phone_number,
+	errors,
+	setErrors,
 	componentData,
 	changeComponentData,
 }) {
@@ -63,6 +65,7 @@ function SalonData({
 					name="salon_name"
 					onChange={onChange}
 					value={salon_name}
+					errors={errors?.salon_name}
 				/>
 			</FormControl>
 			<FormGroup>
@@ -77,6 +80,7 @@ function SalonData({
 						name="name"
 						onChange={onChange}
 						value={name}
+						errors={errors?.name}
 						min="3"
 					/>
 				</FormControl>
@@ -86,6 +90,7 @@ function SalonData({
 				phone_number={phone_number}
 				onChange={onChange}
 				onChangePrefix={(val) => updateData({ phone_prefix: val })}
+				errors={errors?.phone_number}
 			/>
 		</>
 	)
@@ -98,6 +103,8 @@ SalonData.prototype.propTypes = {
 	name: PropTypes.string,
 	phone_prefix: PropTypes.string,
 	phone_number: PropTypes.string,
+	errors: PropTypes.object,
+	setErrors: PropTypes.func.isRequired,
 	componentData: PropTypes.object.isRequired,
 	changeComponentData: PropTypes.func.isRequired,
 }

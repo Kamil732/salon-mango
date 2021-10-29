@@ -45,17 +45,17 @@ const INITIAL_STEPS_DATA = [
 		),
 		nextBtnDisabled: true,
 		validateStep: async ({ email }, setErrors) => {
+			setErrors({})
+
 			try {
-				const res = await axios.get(
+				await axios.get(
 					`${process.env.REACT_APP_API_URL}/accounts/exists/?email=${email}`,
 					getHeaders()
 				)
 
-				if (res.data.exists) setErrors(res.data.errors)
-
-				return !res.data.exists
+				return true
 			} catch (err) {
-				if (err.response) setErrors(err.response.data.errors)
+				if (err.response) setErrors(err.response.data)
 
 				return false
 			}
@@ -71,11 +71,43 @@ const INITIAL_STEPS_DATA = [
 				phone_prefix={props.phone_prefix}
 				phone_number={props.phone_number}
 				recomendation_code={props.recomendation_code}
+				errors={props.errors}
 				componentData={props.componentData}
 				changeComponentData={props.changeComponentData}
 			/>
 		),
 		nextBtnDisabled: true,
+		validateStep: async (
+			{ phone_prefix: { dialCode: phone_prefix }, phone_number },
+			setErrors,
+			updateData
+		) => {
+			setErrors({})
+
+			try {
+				const body = JSON.stringify({
+					phone_number: phone_prefix + phone_number,
+				})
+
+				const res = await axios.post(
+					`${process.env.REACT_APP_API_URL}/utils/validate_phone/`,
+					body,
+					getHeaders(true)
+				)
+
+				updateData({
+					phone_number: res.data.phone_number.replace(
+						phone_prefix,
+						''
+					),
+				})
+				return true
+			} catch (err) {
+				if (err.response) setErrors(err.response.data)
+
+				return false
+			}
+		},
 	},
 	{
 		component: (props) => (
@@ -412,7 +444,14 @@ function RegisterForm({ closeModal, register }) {
 
 						try {
 							setLoading(true)
-							if (await currentStep.validateStep(data, setErrors))
+
+							if (
+								await currentStep.validateStep(
+									data,
+									setErrors,
+									updateData
+								)
+							)
 								changeStep()
 						} catch (err) {
 							console.log(err)
@@ -422,6 +461,7 @@ function RegisterForm({ closeModal, register }) {
 					}}
 					type="button"
 					className="form-card__btn"
+					loading={loading}
 					disabled={STEPS[step].nextBtnDisabled}
 				>
 					{t('actions.next')}
