@@ -9,4 +9,5 @@ urlpatterns = [
     path('current/',
          views.CurrentAccountAPIView.as_view(),
          name='current-account'),
+    path('exists/', views.AccountExistsAPIView.as_view(), name='exists'),
 ]

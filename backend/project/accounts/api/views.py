@@ -1,5 +1,7 @@
+from django.core.validators import validate_email
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
+from django.utils.translation import gettext as _
 from django.contrib import auth
 
 from rest_framework.views import APIView
@@ -7,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework import permissions, generics, status
 from rest_framework.exceptions import ValidationError
 
+from accounts.models import Account
 from . import serializers
 
 
@@ -38,11 +41,11 @@ class LoginAPIView(APIView):
 
             return Response(
                 {
-                    'message': 'Pomyślnie zalogowano',
+                    'message': _('Logged in successfully'),
                     'user': serializers.AccountSerializer(user).data,
                 },
                 status=status.HTTP_200_OK)
-        raise ValidationError({'detail': 'Email lub hasło jest niepoprawne'})
+        raise ValidationError({'detail': _('Email or password is incorrect')})
 
 
 @method_decorator(csrf_protect, name='dispatch')
@@ -52,4 +55,29 @@ class LogoutAPIView(APIView):
     def post(self, request, format=None):
         auth.logout(request)
 
-        return Response({'message': 'Pomyślnie wylogowano'})
+        return Response({'message': _('Logged out successfully')})
+
+
+class AccountExistsAPIView(APIView):
+    def get(self, request, format=None):
+        email = request.query_params.get('email')
+
+        try:
+            validate_email(email)
+        except:
+            raise ValidationError(
+                {'errors': {
+                    'email': [_('Given address email is incorrect')]
+                }})
+
+        exists = Account.objects.filter(email=email).exists()
+
+        if exists:
+            return Response({
+                'exists': True,
+                'errors': {
+                    'email': [_('Given address email is already in use')]
+                }
+            })
+
+        return Response({'exists': False})
