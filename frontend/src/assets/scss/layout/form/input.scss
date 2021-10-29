@@ -34,9 +34,8 @@
 	z-index: 2;
 	display: block;
 
-	&:invalid {
-		box-shadow: none;
-		border-color: $error-color;
+	&.invalid {
+		@extend %invalid;
 	}
 
 	&:required:valid {

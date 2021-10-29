@@ -1,2 +1,24 @@
 $prefix: form-control;
 $form-control-vertical-margin: 2rem;
+
+%invalid {
+	box-shadow: none;
+	border: 1px solid $error-color;
+	border-radius: 4px 4px 0 0;
+
+	&:focus {
+		border-color: $active-element;
+		outline: solid 1px $active-element;
+	}
+}
+
+.#{$prefix}__errors {
+	@include bg-color($error-color);
+	border-radius: 0 0 6px 6px;
+	padding: 0.2rem 0;
+	position: absolute;
+	left: 0;
+	right: 0;
+	font-size: 0.75em;
+	padding: 0.25rem 0.7rem;
+}
