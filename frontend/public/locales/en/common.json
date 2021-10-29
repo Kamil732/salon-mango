@@ -14,5 +14,6 @@
         "save": "Save",
         "edit": "Edit",
         "add": "Add"
-    }
+    },
+    "input_title": "Please fill out this field"
 }

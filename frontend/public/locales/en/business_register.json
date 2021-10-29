@@ -1,11 +1,14 @@
 {
+    "email_check": {
+        "title": "What's your email address?"
+    },
     "salon_data": {
         "title": "About you",
         "description": "Tell us more about yourself and your business."
     },
     "credentials": {
         "title": "Account Setup",
-        "description": "Enter the email and password for your business profile."
+        "description": "Enter the password for your business profile."
     },
     "accept_terms": {
         "title": "Your data protection",

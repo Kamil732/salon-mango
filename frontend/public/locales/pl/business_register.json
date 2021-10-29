@@ -1,11 +1,14 @@
 {
+    "email_check": {
+        "title": "Jaki jest Twój adres e-mail?"
+    },
     "salon_data": {
         "title": "O Tobie",
         "description": "Dodaj informacje o sobie i swojej firmie"
     },
     "credentials": {
         "title": "Ustaw logowanie",
-        "description": "Ustaw email i hasło, za pomocą którego będziesz się logować"
+        "description": "Ustaw hasło, za pomocą którego będziesz się logować"
     },
     "accept_terms": {
         "title": "Ochrona Twoich danych",
