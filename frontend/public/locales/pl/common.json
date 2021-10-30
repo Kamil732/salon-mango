@@ -15,5 +15,9 @@
         "edit": "Edytuj",
         "add": "Dodaj"
     },
-    "input_title": "Proszę wypełnij to pole"
+    "input_title": "Proszę wypełnij to pole",
+    "error": {
+        "title": "Błąd",
+        "description": "Wystąpił nieoczekiwany błąd"
+    }
 }
