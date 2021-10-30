@@ -6,9 +6,9 @@ from datetime import timedelta
 
 
 class Meeting(models.Model):
-    salon = models.ForeignKey('data.Salon',
-                              on_delete=models.CASCADE,
-                              related_name='meetings')
+    business = models.ForeignKey('data.Business',
+                                 on_delete=models.CASCADE,
+                                 related_name='meetings')
     employee = models.ForeignKey(
         verbose_name="Fryzjer",
         to="data.Employee",

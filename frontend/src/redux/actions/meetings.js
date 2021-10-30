@@ -41,7 +41,7 @@ const setMeeting = (data, getState) => {
 		for (let j = 0; j < data.services[i].resources.length; j++)
 			res.push({
 				...eventData,
-				color: getState().data.salon.resources.find(
+				color: getState().data.business.resources.find(
 					({ id }) => id === data.services[i].resources[j]
 				).color,
 				resourceId: `resource-${data.services[i].resources[j]}`,

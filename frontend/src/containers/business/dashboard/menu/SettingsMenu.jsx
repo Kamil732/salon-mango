@@ -33,12 +33,13 @@ function CalendarMenu() {
 			<NavLink
 				to={
 					baseUrl +
-					process.env.REACT_APP_BUSINESS_PANEL_SETTINGS_SALON_DATA_URL
+					process.env
+						.REACT_APP_BUSINESS_PANEL_SETTINGS_BUSINESS_DATA_URL
 				}
 				className="select-menu__item icon-container"
 			>
 				<FaDatabase className="icon-container__icon" />
-				{t('menu.salon_data')}
+				{t('menu.business_data')}
 			</NavLink>
 			<NavLink
 				to={

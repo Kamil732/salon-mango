@@ -9,7 +9,7 @@ import {
 	AUTH_LOADING,
 } from '../actions/types'
 
-import { getSalonData } from '../actions/data'
+import { getBusinessData } from '../actions/data'
 import store from '../store'
 
 const initialState = {
@@ -29,7 +29,7 @@ export default function (state = initialState, action) {
 		case AUTH_SUCCESS:
 		case LOGIN_SUCCESS:
 		case REGISTER_SUCCESS:
-			store.dispatch(getSalonData(action.payload.salons[0]))
+			store.dispatch(getBusinessData(action.payload.businesses[0]))
 
 			return {
 				...state,

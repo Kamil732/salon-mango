@@ -7,10 +7,10 @@ import Label from '../../../../layout/forms/inputs/Label'
 import PhoneNumberInput from '../../../../layout/forms/inputs/PhoneNumberInput'
 import { useTranslation } from 'react-i18next'
 
-function SalonData({
+function BusinessData({
 	onChange,
 	updateData,
-	salon_name,
+	business_name,
 	name,
 	phone_prefix,
 	phone_number,
@@ -25,7 +25,7 @@ function SalonData({
 	useEffect(() => {
 		if (
 			componentData.nextBtnDisabled &&
-			salon_name &&
+			business_name &&
 			name &&
 			Object.keys(phone_prefix).length > 0 &&
 			phone_number
@@ -33,14 +33,14 @@ function SalonData({
 			changeComponentData({ nextBtnDisabled: false })
 		else if (
 			!componentData.nextBtnDisabled &&
-			(salon_name.length === 0 ||
+			(business_name.length === 0 ||
 				name.length === 0 ||
 				Object.keys(phone_prefix).length === 0 ||
 				phone_number.length === 0)
 		)
 			changeComponentData({ nextBtnDisabled: true })
 	}, [
-		salon_name,
+		business_name,
 		name,
 		phone_prefix,
 		phone_number,
@@ -51,21 +51,21 @@ function SalonData({
 	return (
 		<>
 			<div className="title-container">
-				<h1>{t('salon_data.title')}</h1>
-				<p className="description">{t('salon_data.description')}</p>
+				<h1>{t('business_data.title')}</h1>
+				<p className="description">{t('business_data.description')}</p>
 			</div>
 			<FormControl>
-				<Label htmlFor="salon-name" inputValue={salon_name}>
+				<Label htmlFor="business-name" inputValue={business_name}>
 					{t('company_name', { ns: 'business_common' })}
 				</Label>
 				<Input
 					required
 					type="text"
-					id="salon-name"
-					name="salon_name"
+					id="business-name"
+					name="business_name"
 					onChange={onChange}
-					value={salon_name}
-					errors={errors?.salon_name}
+					value={business_name}
+					errors={errors?.business_name}
 					setErrors={setErrors}
 				/>
 			</FormControl>
@@ -99,10 +99,10 @@ function SalonData({
 	)
 }
 
-SalonData.prototype.propTypes = {
+BusinessData.prototype.propTypes = {
 	onChange: PropTypes.func.isRequired,
 	updateData: PropTypes.func.isRequired,
-	salon_name: PropTypes.string,
+	business_name: PropTypes.string,
 	name: PropTypes.string,
 	phone_prefix: PropTypes.string,
 	phone_number: PropTypes.string,
@@ -112,4 +112,4 @@ SalonData.prototype.propTypes = {
 	changeComponentData: PropTypes.func.isRequired,
 }
 
-export default SalonData
+export default BusinessData

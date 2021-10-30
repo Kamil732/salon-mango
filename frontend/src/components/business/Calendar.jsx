@@ -643,13 +643,6 @@ class Calendar extends Component {
 		const { windowWidth, view, selected, minDate, maxDate, freeSlots } =
 			this.state
 
-		if (services.length === 0)
-			return (
-				<h1>
-					Nie obsługujemy narazie żadnej wizyty zapraszamy w krótce :)
-				</h1>
-			)
-
 		// Filter meetings that should be displayed
 		let meetings = []
 
@@ -910,12 +903,12 @@ const mapStateToProps = (state) => ({
 	calendarDates: state.meetings.calendarDates,
 	resourceMap: state.meetings.resourceMap,
 	employees: state.data.employees,
-	resourcesLength: state.data.salon.resources.length,
-	services: state.data.salon.services,
-	calendar_step: state.data.salon.calendar_step,
-	calendar_timeslots: state.data.salon.calendar_timeslots,
-	open_hours: state.data.salon.open_hours,
-	blocked_hours: state.data.salon.blocked_hours,
+	resourcesLength: state.data.business.resources.length,
+	services: state.data.business.services,
+	calendar_step: state.data.business.calendar_step,
+	calendar_timeslots: state.data.business.calendar_timeslots,
+	open_hours: state.data.business.open_hours,
+	blocked_hours: state.data.business.blocked_hours,
 })
 
 const mapDispatchToProps = {

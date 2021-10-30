@@ -1,9 +1,7 @@
 from modeltranslation.translator import register, TranslationOptions
-from .models import SalonCategory
+from .models import BusinessCategory
 
-@register(SalonCategory)
-class SalonCategoryTransaltionOptions(TranslationOptions):
-    fields = (
-        'name',
-    )
 
+@register(BusinessCategory)
+class BusinessCategoryTransaltionOptions(TranslationOptions):
+    fields = ('name', )

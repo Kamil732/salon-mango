@@ -419,9 +419,10 @@ class AddService extends Component {
 											onInput={this.onChange}
 											disabled={
 												serviceData.price_type.value !==
-													2 &&
+													PRICE_TYPES.STARTS_AT
+														.value &&
 												serviceData.price_type.value !==
-													4
+													PRICE_TYPES.FIXED.value
 											}
 										/>
 									</FormControl>
@@ -560,15 +561,18 @@ class AddService extends Component {
 									</td>
 									<td className="text-center">
 										<h4>
-											{service.price_type.value === 0
+											{service.price_type.value ===
+											PRICE_TYPES.FREE.value
 												? t('price_types.free', {
 														ns: 'business_common',
 												  })
-												: service.price_type.value === 1
+												: service.price_type.value ===
+												  PRICE_TYPES.VARIES.value
 												? t('price_types.varies', {
 														ns: 'business_common',
 												  })
-												: service.price_type.value === 3
+												: service.price_type.value ===
+												  PRICE_TYPES.DONT_SHOW.value
 												? '--'
 												: `${service.price} zł`}
 										</h4>

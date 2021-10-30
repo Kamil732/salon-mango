@@ -6,8 +6,8 @@ from .models import (
     Customer,
     CustomerImage,
     Employee,
-    Salon,
-    SalonCategory,
+    Business,
+    BusinessCategory,
     OpenHours,
     BlockedHours,
     Notification,
@@ -24,25 +24,28 @@ from .models import (
 )
 
 
-@admin.register(SalonCategory)
-class SalonCategoryAdmin(ModelAdmin):
-    readonly_fields = ("id", )
+@admin.register(BusinessCategory)
+class BusinessCategoryAdmin(ModelAdmin):
+    readonly_fields = (
+        "id",
+        "slug",
+    )
+
 
 class OpenHoursAdmin(TabularInline):
     model = OpenHours
     readonly_fields = ("id", )
 
+
 class BlockedHoursAdmin(TabularInline):
     model = BlockedHours
     readonly_fields = ("id", )
 
-@admin.register(Salon)
-class SalonAdmin(ModelAdmin):
+
+@admin.register(Business)
+class BusinessAdmin(ModelAdmin):
     readonly_fields = ("id", )
-    inlines = (
-        OpenHoursAdmin,
-        BlockedHoursAdmin
-    )
+    inlines = (OpenHoursAdmin, BlockedHoursAdmin)
 
 
 @admin.register(Employee)

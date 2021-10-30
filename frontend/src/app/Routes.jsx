@@ -13,11 +13,11 @@ const BusinessRoutes = lazy(() => import('../containers/business/Routes'))
 
 class Routes extends Component {
 	static propTypes = {
-		loadingSalon: PropTypes.bool,
+		loadingBusiness: PropTypes.bool,
 	}
 
 	render() {
-		const { loadingSalon } = this.props
+		const { loadingBusiness } = this.props
 
 		const loader = (
 			<div className="center-container fullscreen">
@@ -25,7 +25,7 @@ class Routes extends Component {
 			</div>
 		)
 
-		if (loadingSalon) return loader
+		if (loadingBusiness) return loader
 
 		return (
 			<ErrorBoundary>
@@ -51,9 +51,9 @@ class Routes extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	loadingSalon:
+	loadingBusiness:
 		state.auth.isAuthenticated &&
-		Object.keys(state.data.salon).length === 0,
+		Object.keys(state.data.business).length === 0,
 })
 
 export default connect(mapStateToProps, null)(Routes)

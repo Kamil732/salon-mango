@@ -29,7 +29,7 @@ class AccountManager(BaseUserManager):
 
 
 class Account(AbstractBaseUser):
-    salons = models.ManyToManyField('data.Salon')
+    businesses = models.ManyToManyField('data.Business')
     email = models.EmailField(verbose_name="E-mail adres",
                               max_length=80,
                               unique=True)

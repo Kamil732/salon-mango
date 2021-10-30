@@ -20,7 +20,7 @@ import Button from '../../../layout/buttons/Button'
 import { COUNTRIES_DATA } from '../../../app/locale/consts'
 
 const EmailCheck = lazy(() => import('./steps/EmailCheck'))
-const SalonData = lazy(() => import('./steps/SalonData'))
+const BusinessData = lazy(() => import('./steps/BusinessData'))
 const Credentials = lazy(() => import('./steps/Credentials'))
 const AcceptTerms = lazy(() => import('./steps/AcceptTerms'))
 const ChooseCategories = lazy(() => import('./steps/ChooseCategories'))
@@ -71,10 +71,10 @@ const INITIAL_STEPS_DATA = [
 	},
 	{
 		component: (props) => (
-			<SalonData
+			<BusinessData
 				onChange={props.onChange}
 				updateData={props.updateData}
-				salon_name={props.salon_name}
+				business_name={props.business_name}
 				name={props.name}
 				phone_prefix={props.phone_prefix}
 				phone_number={props.phone_number}
@@ -127,7 +127,6 @@ const INITIAL_STEPS_DATA = [
 		component: (props) => (
 			<Credentials
 				onChange={props.onChange}
-				email={props.email}
 				password={props.password}
 				confirm_password={props.confirm_password}
 				componentData={props.componentData}
@@ -135,6 +134,50 @@ const INITIAL_STEPS_DATA = [
 				setErrors={props.setErrors}
 			/>
 		),
+		validateStep: async (
+			{
+				business_name,
+				name,
+				phone_prefix,
+				phone_number,
+				recomendation_code,
+				email,
+				password,
+			},
+			setErrors,
+			updateData
+		) => {
+			setErrors({})
+
+			try {
+				const body = JSON.stringify({
+					phone_number: phone_prefix + phone_number,
+				})
+
+				const res = await axios.post(
+					`${process.env.REACT_APP_API_URL}/data/create-business`,
+					body,
+					getHeaders(true)
+				)
+
+				updateData({
+					phone_number: res.data.phone_number.replace(
+						phone_prefix,
+						''
+					),
+				})
+				return true
+			} catch (err) {
+				if (err.response) setErrors(err.response.data)
+				else
+					NotificationManager.error(
+						i18next.t('error.description', { ns: 'common' }),
+						i18next.t('error.title', { ns: 'common' })
+					)
+
+				return false
+			}
+		},
 		nextBtnDisabled: true,
 	},
 	{
@@ -293,7 +336,7 @@ function RegisterForm({ closeModal, register }) {
 		email: '',
 		password: '',
 		confirm_password: '',
-		salon_name: '',
+		business_name: '',
 		name: '',
 		phone_prefix: countries.find(
 			({ isoCode }) => isoCode.toLowerCase() === country

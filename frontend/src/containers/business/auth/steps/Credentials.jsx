@@ -70,7 +70,6 @@ function Credentials({
 
 Credentials.prototype.propTypes = {
 	onChange: PropTypes.func.isRequired,
-	email: PropTypes.string,
 	password: PropTypes.string,
 	confirm_password: PropTypes.string,
 	componentData: PropTypes.object.isRequired,

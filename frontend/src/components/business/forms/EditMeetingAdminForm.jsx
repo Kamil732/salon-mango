@@ -341,8 +341,8 @@ class EditMeetingAdminForm extends Component {
 const mapStateToProps = (state) => ({
 	employees: state.data.employees,
 	customers: state.data.customers,
-	resources: state.data.salon.resources,
-	servicesData: state.data.salon.services,
+	resources: state.data.business.resources,
+	servicesData: state.data.business.services,
 	resourceMap: state.meetings.resourceMap,
 })
 

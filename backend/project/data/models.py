@@ -7,7 +7,7 @@ from accounts.models import Account
 from meetings.models import Meeting
 
 
-class SalonCategory(models.Model):
+class BusinessCategory(models.Model):
     name = models.CharField(max_length=100)
     slug = AutoSlugField(populate_from='name', unique=True)
 
@@ -38,20 +38,20 @@ class Hours(models.Model):
 
 
 class OpenHours(Hours):
-    salon = models.ForeignKey(
-        'Salon',
+    business = models.ForeignKey(
+        'Business',
         on_delete=models.CASCADE,
         related_name='open_hours',
     )
 
     class Meta:
         ordering = ('weekday', 'from_hour')
-        unique_together = ('weekday', 'salon')
+        unique_together = ('weekday', 'business')
 
 
 class BlockedHours(Hours):
-    salon = models.ForeignKey(
-        'Salon',
+    business = models.ForeignKey(
+        'Business',
         on_delete=models.CASCADE,
         related_name='blocked_hours',
     )
@@ -60,9 +60,7 @@ class BlockedHours(Hours):
         ordering = ('weekday', 'from_hour')
 
 
-class Salon(models.Model):
-    LANGUAGE = (('pl', 'Polish'), )
-
+class Business(models.Model):
     DATE_FORMAT = (
         ('DD/MM/YYYY', 'dd/mm/yyyy'),
         ('DD.MM.YYYY', 'dd.mm.yyyy'),
@@ -76,12 +74,11 @@ class Salon(models.Model):
         (12, '12h'),
     )
 
-    privacy_policy_agreement = models.BooleanField(default=False)
     active = models.BooleanField(default=False)
     active_from = models.DateTimeField(null=True, blank=True)
-    name = models.CharField(default='Twój salon', max_length=100)
+    name = models.CharField(default='Your business', max_length=100)
     description = models.TextField(max_length=1000, blank=True)
-    logo = models.ImageField(upload_to='salon_logos', blank=True)
+    logo = models.ImageField(upload_to='business_logos', blank=True)
     email = models.EmailField(max_length=100)
     phone_number = PhoneNumberField(blank=True)
     website = models.URLField(blank=True)
@@ -95,7 +92,6 @@ class Salon(models.Model):
     common_premises_name = models.CharField(max_length=100, blank=True)
     common_premises_number = models.CharField(max_length=10, blank=True)
 
-    language = models.CharField(max_length=2, choices=LANGUAGE, default='pl')
     timezone = models.CharField(max_length=100)  # ex. '+0000', '+0200'
     currency = models.CharField(max_length=3, default='EUR')
     calling_code = models.CharField(max_length=3)
@@ -115,16 +111,17 @@ class Salon(models.Model):
     free_cancel_hours = models.PositiveSmallIntegerField(default=2)
     calendar_step = models.PositiveSmallIntegerField(default=15)
     calendar_timeslots = models.PositiveSmallIntegerField(default=4)
-    categories = models.ManyToManyField('SalonCategory', related_name='salons')
+    categories = models.ManyToManyField('BusinessCategory',
+                                        related_name='businesses')
 
     def __str__(self):
         return self.name
 
 
 class Customer(models.Model):
-    salon = models.ForeignKey(Salon,
-                              on_delete=models.CASCADE,
-                              related_name='customers')
+    business = models.ForeignKey(Business,
+                                 on_delete=models.CASCADE,
+                                 related_name='customers')
     account = models.OneToOneField(
         'accounts.Account',
         on_delete=models.SET_NULL,
@@ -151,9 +148,9 @@ class Customer(models.Model):
 
 
 class Employee(Color):
-    salon = models.ForeignKey(Salon,
-                              on_delete=models.CASCADE,
-                              related_name='employees')
+    business = models.ForeignKey(Business,
+                                 on_delete=models.CASCADE,
+                                 related_name='employees')
     name = models.CharField(verbose_name="Imię", max_length=20)
     slug = AutoSlugField(populate_from="name", unique=True)
 
@@ -170,25 +167,25 @@ class CustomerImage(models.Model):
 
 
 class PaymentMethod(models.Model):
-    salon = models.ForeignKey(Salon,
-                              on_delete=models.CASCADE,
-                              related_name='payment_methods')
+    business = models.ForeignKey(Business,
+                                 on_delete=models.CASCADE,
+                                 related_name='payment_methods')
     name = models.CharField(max_length=50)
     firm_salary = models.BooleanField(default=True)
     employees_salary = models.BooleanField(default=True)
 
 
 class ServiceGroup(Group):
-    salon = models.ForeignKey(Salon,
-                              on_delete=models.CASCADE,
-                              related_name='service_groups')
+    business = models.ForeignKey(Business,
+                                 on_delete=models.CASCADE,
+                                 related_name='service_groups')
     employees = models.ManyToManyField(Employee, related_name="service_groups")
 
 
 class Service(models.Model):
-    salon = models.ForeignKey(Salon,
-                              on_delete=models.CASCADE,
-                              related_name='services')
+    business = models.ForeignKey(Business,
+                                 on_delete=models.CASCADE,
+                                 related_name='services')
     group = models.ForeignKey(
         ServiceGroup,
         on_delete=models.CASCADE,
@@ -239,15 +236,15 @@ class ServiceEmployee(models.Model):
 
 
 class ResourceGroup(Group):
-    salon = models.ForeignKey(Salon,
-                              on_delete=models.CASCADE,
-                              related_name='resource_groups')
+    business = models.ForeignKey(Business,
+                                 on_delete=models.CASCADE,
+                                 related_name='resource_groups')
 
 
 class Resource(Color):
-    salon = models.ForeignKey(Salon,
-                              on_delete=models.CASCADE,
-                              related_name='resources')
+    business = models.ForeignKey(Business,
+                                 on_delete=models.CASCADE,
+                                 related_name='resources')
     name = models.CharField(max_length=30)
     group = models.ForeignKey(
         ResourceGroup,
@@ -263,18 +260,18 @@ class Resource(Color):
 
 
 class ProductGroup(Group):
-    salon = models.ForeignKey(Salon,
-                              on_delete=models.CASCADE,
-                              related_name='product_groups')
+    business = models.ForeignKey(Business,
+                                 on_delete=models.CASCADE,
+                                 related_name='product_groups')
 
     def __str__(self):
         return self.name
 
 
 class Producer(models.Model):
-    salon = models.ForeignKey(Salon,
-                              on_delete=models.CASCADE,
-                              related_name='producers')
+    business = models.ForeignKey(Business,
+                                 on_delete=models.CASCADE,
+                                 related_name='producers')
     name = models.CharField(max_length=60)
 
     def __str__(self):
@@ -293,9 +290,9 @@ class Product(models.Model):
         (1, "Jednostki"),
     )
 
-    salon = models.ForeignKey(Salon,
-                              on_delete=models.CASCADE,
-                              related_name='products')
+    business = models.ForeignKey(Business,
+                                 on_delete=models.CASCADE,
+                                 related_name='products')
     name = models.CharField(max_length=200)
     is_ware = models.BooleanField(default=True,
                                   help_text="Produkt do odsprzedaży")

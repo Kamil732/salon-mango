@@ -12,25 +12,25 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from server.permissions import IsAdminOrReadOnly, IsAdmin
-from data.models import Salon, SalonCategory, Service, Notification, Employee, Customer, CustomerImage
+from data.models import Business, BusinessCategory, Service, Notification, Employee, Customer, CustomerImage
 from . import serializers
 from . import pagination
 
 
 @method_decorator(csrf_protect, name='patch')
-class SalonDetailAPIView(generics.RetrieveUpdateAPIView):
+class BusinessDetailAPIView(generics.RetrieveUpdateAPIView):
     # permission_classes = (IsAdminOrReadOnly, )
-    serializer_class = serializers.SalonSerializer
-    queryset = Salon.objects.all()
+    serializer_class = serializers.BusinessSerializer
+    queryset = Business.objects.all()
     lookup_field = 'id'
-    lookup_url_kwarg = 'salon_id'
+    lookup_url_kwarg = 'business_id'
 
 
 @method_decorator(cache_page(60 * 60 * 2), name='get')
 @method_decorator(vary_on_headers('Accept-Language'), name='get')
-class SalonCategoryListAPIView(generics.ListAPIView):
-    serializer_class = serializers.SalonCategorySerializer
-    queryset = SalonCategory.objects.all()
+class BusinessCategoryListAPIView(generics.ListAPIView):
+    serializer_class = serializers.BusinessCategorySerializer
+    queryset = BusinessCategory.objects.all()
 
 
 @method_decorator(csrf_protect, name='dispatch')
@@ -99,7 +99,7 @@ class CustomerListAPIView(generics.ListCreateAPIView):
 
         return Customer.objects.annotate(
             full_name=Concat('first_name', V(' '), 'last_name')).filter(
-                Q(salon_id=self.kwargs.get('salon_id'))
+                Q(business_id=self.kwargs.get('business_id'))
                 & (Q(full_name__istartswith=search_field)
                    | Q(first_name__istartswith=search_field)
                    | Q(last_name__istartswith=search_field)))[:10]
@@ -110,8 +110,8 @@ class EmployeeListAPIView(generics.ListCreateAPIView):
     serializer_class = serializers.EmployeeSerializer
 
     def get_queryset(self):
-        return Employee.objects.filter(salon_id=self.kwargs.get(
-            'salon_id')).prefetch_related('service_employee_data')
+        return Employee.objects.filter(business_id=self.kwargs.get(
+            'business_id')).prefetch_related('service_employee_data')
 
 
 @method_decorator(csrf_protect, name='dispatch')

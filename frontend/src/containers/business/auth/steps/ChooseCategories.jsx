@@ -30,7 +30,7 @@ function ChooseCategories({
 
 		axios
 			.get(
-				`${process.env.REACT_APP_API_URL}/data/salon-categories/`,
+				`${process.env.REACT_APP_API_URL}/data/business-categories/`,
 				getHeaders()
 			)
 			.then((categoriesData) =>

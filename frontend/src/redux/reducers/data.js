@@ -1,7 +1,7 @@
 import {
 	ADD_UNREAD_NOTIFICATIONS_AMOUNT,
 	CLEAR_NOTIFICATIONS,
-	GET_SALON_DATA,
+	GET_BUSINESS_DATA,
 	GET_NOTIFICATION,
 	GET_NOTIFICATIONS,
 	GET_NOTIFICATIONS_ERROR,
@@ -21,7 +21,7 @@ import {
 import notifySound from '../../assets/sounds/pristine-609.mp3'
 
 const initialState = {
-	salon: {},
+	business: {},
 	employees: [],
 	customers: [],
 	notifications: {
@@ -37,11 +37,11 @@ const initialState = {
 export default function (state = initialState, action) {
 	switch (action.type) {
 		case UPDATE_DATA:
-		case GET_SALON_DATA:
+		case GET_BUSINESS_DATA:
 			return {
 				...state,
-				salon: {
-					...state.salon,
+				business: {
+					...state.business,
 					...action.payload,
 				},
 			}
@@ -185,7 +185,7 @@ export default function (state = initialState, action) {
 		case LOGOUT:
 			return {
 				...state,
-				salon: initialState.salon,
+				business: initialState.business,
 				employees: initialState.employees,
 				customers: initialState.customers,
 			}

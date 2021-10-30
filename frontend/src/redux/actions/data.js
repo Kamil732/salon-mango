@@ -1,5 +1,5 @@
 import {
-	GET_SALON_DATA,
+	GET_BUSINESS_DATA,
 	GET_NOTIFICATIONS,
 	NOTIFICATIONS_LOADING,
 	GET_NOTIFICATIONS_ERROR,
@@ -18,14 +18,14 @@ import getHeaders from '../../helpers/getHeaders'
 import axios from 'axios'
 import { updateResourceMap } from './meetings'
 
-export const getSalonData = (salonId) => async (dispatch) => {
+export const getBusinessData = (businessId) => async (dispatch) => {
 	try {
 		const res = await axios.get(
-			`${process.env.REACT_APP_API_URL}/data/salons/${salonId}/`
+			`${process.env.REACT_APP_API_URL}/data/businesses/${businessId}/`
 		)
 
 		dispatch({
-			type: GET_SALON_DATA,
+			type: GET_BUSINESS_DATA,
 			payload: res.data,
 		})
 	} catch (err) {
@@ -40,8 +40,8 @@ export const getSalonData = (salonId) => async (dispatch) => {
 export const loadEmployees = () => async (dispatch, getState) => {
 	try {
 		const res = await axios.get(
-			`${process.env.REACT_APP_API_URL}/data/salons/${
-				getState().data.salon.id
+			`${process.env.REACT_APP_API_URL}/data/businesses/${
+				getState().data.business.id
 			}/employees/`
 		)
 
@@ -77,8 +77,8 @@ export const loadEmployees = () => async (dispatch, getState) => {
 export const loadCustomers = (value) => async (dispatch, getState) => {
 	try {
 		const res = await axios.get(
-			`${process.env.REACT_APP_API_URL}/data/salons/${
-				getState().data.salon.id
+			`${process.env.REACT_APP_API_URL}/data/businesses/${
+				getState().data.business.id
 			}/customers/?search=${value}`
 		)
 

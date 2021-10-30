@@ -829,9 +829,9 @@ ServicesInput.prototype.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-	calendar_step: state.data.salon.calendar_step,
-	services: state.data.salon.services,
-	resources: state.data.salon.resources,
+	calendar_step: state.data.business.calendar_step,
+	services: state.data.business.services,
+	resources: state.data.business.resources,
 })
 
 export default connect(mapStateToProps, null)(ServicesInput)
