@@ -8,6 +8,7 @@
 	border-radius: 8px;
 	background-color: $surface-color;
 	position: relative;
+	animation: show 0.25s ease-in-out;
 
 	& > &__header {
 		padding: 1rem;
@@ -19,9 +20,8 @@
 		padding: 1rem;
 	}
 
-	animation: show 0.25s ease-in-out;
-
 	&.fullscreen {
+		animation: none;
 		width: 100vw;
 		min-height: 100vh;
 		margin: 0;
