@@ -3,13 +3,13 @@
 
 %active-label {
 	font-size: 1.15em;
-	transform: translateY(-0.8em) scale(0.7);
+	transform: translateY(-1.1em) scale(0.7);
 }
 
 .#{$prefix} {
 	& &__label {
 		cursor: text;
-		bottom: 0.3em;
+		top: 0.25em;
 		position: absolute;
 		transform-origin: top left;
 		transition: transform 0.2s, font-size 0.2s;
