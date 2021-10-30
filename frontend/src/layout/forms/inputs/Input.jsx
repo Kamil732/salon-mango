@@ -3,8 +3,18 @@ import { useTranslation } from 'react-i18next'
 import PropTypes from 'prop-types'
 import '../../../assets/css/input.css'
 
-function Input({ errors, ...props }) {
+function Input({ errors, setErrors, ...props }) {
 	const { t } = useTranslation('common')
+
+	const onInvalid = (e) => {
+		e.preventDefault()
+
+		if (setErrors)
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[e.target.name || e.target.id]: [e.target.validationMessage],
+			}))
+	}
 
 	return (
 		<>
@@ -13,6 +23,7 @@ function Input({ errors, ...props }) {
 					errors?.length > 0 ? ' invalid' : ''
 				}`}
 				title={props.required ? t('input_title') : ''}
+				onInvalid={onInvalid}
 				{...props}
 			/>
 			{errors?.length > 0 ? (
@@ -30,6 +41,7 @@ function Input({ errors, ...props }) {
 
 Input.prototype.propTypes = {
 	errors: PropTypes.array,
+	setErrors: PropTypes.func,
 }
 
 export default Input

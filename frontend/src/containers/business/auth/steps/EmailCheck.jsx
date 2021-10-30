@@ -9,6 +9,7 @@ import Label from '../../../../layout/forms/inputs/Label'
 function EmailCheck({
 	email,
 	errors,
+	setErrors,
 	onChange,
 	componentData,
 	changeComponentData,
@@ -31,7 +32,7 @@ function EmailCheck({
 			<div className="title-container">
 				<h1>{t('email_check.title')}</h1>
 			</div>
-			<FormControl style={{ marginBottom: '5rem' }}>
+			<FormControl>
 				<Label htmlFor="email" inputValue={email}>
 					{t('email', { ns: 'auth' })}
 				</Label>
@@ -42,6 +43,7 @@ function EmailCheck({
 					value={email}
 					onChange={onChange}
 					errors={errors?.email}
+					setErrors={setErrors}
 				/>
 			</FormControl>
 		</>
@@ -51,6 +53,7 @@ function EmailCheck({
 EmailCheck.prototype.propTypes = {
 	email: PropTypes.string.isRequired,
 	errors: PropTypes.object.isRequired,
+	setErrors: PropTypes.func.isRequired,
 	onChange: PropTypes.func.isRequired,
 	componentData: PropTypes.object.isRequired,
 	changeComponentData: PropTypes.func.isRequired,

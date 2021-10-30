@@ -16,6 +16,7 @@ function PhoneNumberInput({
 	onChangePrefix,
 	required,
 	errors,
+	setErrors,
 }) {
 	const { t } = useTranslation('business_common')
 
@@ -61,12 +62,13 @@ function PhoneNumberInput({
 				</Label>
 				<Input
 					required={required}
-					type="text"
+					type="tel"
 					id="phone-number"
 					name="phone_number"
 					onChange={onChange}
 					value={phone_number}
 					errors={errors}
+					setErrors={setErrors}
 				/>
 			</FormControl>
 		</FormGroup>
@@ -80,6 +82,7 @@ PhoneNumberInput.prototype.propTypes = {
 	onChangePrefix: PropTypes.func.isRequired,
 	required: PropTypes.bool,
 	errors: PropTypes.array,
+	setErrors: PropTypes.func,
 }
 
 export default PhoneNumberInput

@@ -66,6 +66,7 @@ function SalonData({
 					onChange={onChange}
 					value={salon_name}
 					errors={errors?.salon_name}
+					setErrors={setErrors}
 				/>
 			</FormControl>
 			<FormGroup>
@@ -81,6 +82,7 @@ function SalonData({
 						onChange={onChange}
 						value={name}
 						errors={errors?.name}
+						setErrors={setErrors}
 						min="3"
 					/>
 				</FormControl>
@@ -91,6 +93,7 @@ function SalonData({
 				onChange={onChange}
 				onChangePrefix={(val) => updateData({ phone_prefix: val })}
 				errors={errors?.phone_number}
+				setErrors={setErrors}
 			/>
 		</>
 	)

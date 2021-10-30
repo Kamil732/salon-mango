@@ -1,8 +1,12 @@
 import React, { lazy, Suspense, useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import i18next from 'i18next'
 import '../../../assets/css/progressbar.css'
 
+import axios from 'axios'
+import getHeaders from '../../../helpers/getHeaders'
+import NotificationManager from 'react-notifications/lib/NotificationManager'
 import { useTranslation } from 'react-i18next'
 import { PRICE_TYPES, MAX_TRAVEL_DISTANCES } from '../../../helpers/consts'
 import { country } from '../../../app/locale/location-params'
@@ -14,10 +18,8 @@ import ErrorBoundary from '../../../components/ErrorBoundary'
 import CircleLoader from '../../../layout/loaders/CircleLoader'
 import Button from '../../../layout/buttons/Button'
 import { COUNTRIES_DATA } from '../../../app/locale/consts'
-import axios from 'axios'
-import EmailCheck from './steps/EmailCheck'
-import getHeaders from '../../../helpers/getHeaders'
 
+const EmailCheck = lazy(() => import('./steps/EmailCheck'))
 const SalonData = lazy(() => import('./steps/SalonData'))
 const Credentials = lazy(() => import('./steps/Credentials'))
 const AcceptTerms = lazy(() => import('./steps/AcceptTerms'))
@@ -41,6 +43,7 @@ const INITIAL_STEPS_DATA = [
 				componentData={props.componentData}
 				changeComponentData={props.changeComponentData}
 				errors={props.errors}
+				setErrors={props.setErrors}
 			/>
 		),
 		nextBtnDisabled: true,
@@ -56,6 +59,11 @@ const INITIAL_STEPS_DATA = [
 				return true
 			} catch (err) {
 				if (err.response) setErrors(err.response.data)
+				else
+					NotificationManager.error(
+						i18next.t('error.description', { ns: 'common' }),
+						i18next.t('error.title', { ns: 'common' })
+					)
 
 				return false
 			}
@@ -74,6 +82,7 @@ const INITIAL_STEPS_DATA = [
 				errors={props.errors}
 				componentData={props.componentData}
 				changeComponentData={props.changeComponentData}
+				setErrors={props.setErrors}
 			/>
 		),
 		nextBtnDisabled: true,
@@ -104,6 +113,11 @@ const INITIAL_STEPS_DATA = [
 				return true
 			} catch (err) {
 				if (err.response) setErrors(err.response.data)
+				else
+					NotificationManager.error(
+						i18next.t('error.description', { ns: 'common' }),
+						i18next.t('error.title', { ns: 'common' })
+					)
 
 				return false
 			}
@@ -118,6 +132,7 @@ const INITIAL_STEPS_DATA = [
 				confirm_password={props.confirm_password}
 				componentData={props.componentData}
 				changeComponentData={props.changeComponentData}
+				setErrors={props.setErrors}
 			/>
 		),
 		nextBtnDisabled: true,
@@ -128,10 +143,12 @@ const INITIAL_STEPS_DATA = [
 				onChange={props.onChange}
 				accept_terms={props.accept_terms}
 				changeComponentData={props.changeComponentData}
+				setErrors={props.setErrors}
 			/>
 		),
 		skip: !COUNTRIES_DATA[country].gdpr,
 		nextBtnDisabled: true,
+		noForm: true,
 	},
 	{
 		component: (props) => (
@@ -140,9 +157,11 @@ const INITIAL_STEPS_DATA = [
 				categories={props.categories}
 				componentData={props.componentData}
 				changeComponentData={props.changeComponentData}
+				setErrors={props.setErrors}
 			/>
 		),
 		nextBtnDisabled: true,
+		noForm: true,
 	},
 	{
 		component: (props) => (
@@ -152,9 +171,11 @@ const INITIAL_STEPS_DATA = [
 				onChange={props.onChange}
 				componentData={props.componentData}
 				changeComponentData={props.changeComponentData}
+				setErrors={props.setErrors}
 			/>
 		),
 		nextBtnDisabled: false,
+		noForm: true,
 	},
 	{
 		component: (props) => (
@@ -172,6 +193,7 @@ const INITIAL_STEPS_DATA = [
 				setData={props.setData}
 				componentData={props.componentData}
 				changeComponentData={props.changeComponentData}
+				setErrors={props.setErrors}
 			/>
 		),
 		nextBtnDisabled: true,
@@ -185,6 +207,7 @@ const INITIAL_STEPS_DATA = [
 				latitude={props.latitude}
 				longitude={props.longitude}
 				updateData={props.updateData}
+				setErrors={props.setErrors}
 			/>
 		),
 		nextBtnDisabled: false,
@@ -200,6 +223,7 @@ const INITIAL_STEPS_DATA = [
 				travel_fee_rules={props.travel_fee_rules}
 				latitude={props.latitude}
 				longitude={props.longitude}
+				setErrors={props.setErrors}
 			/>
 		),
 		skip: false,
@@ -224,9 +248,11 @@ const INITIAL_STEPS_DATA = [
 				end_work_saturday={props.end_work_saturday}
 				start_work_sunday={props.start_work_sunday}
 				end_work_sunday={props.end_work_sunday}
+				setErrors={props.setErrors}
 			/>
 		),
 		nextBtnDisabled: false,
+		noForm: true,
 	},
 	{
 		component: (props) => (
@@ -237,10 +263,12 @@ const INITIAL_STEPS_DATA = [
 				componentData={props.componentData}
 				changeComponentData={props.changeComponentData}
 				setData={props.setData}
+				setErrors={props.setErrors}
 			/>
 		),
 		nextBtnDisabled: false,
 		loaded: false,
+		noForm: true,
 	},
 	{
 		component: (props) => (
@@ -249,9 +277,11 @@ const INITIAL_STEPS_DATA = [
 				name={props.name}
 				phone_prefix={props.phone_prefix}
 				setData={props.setData}
+				setErrors={props.setErrors}
 			/>
 		),
 		nextBtnDisabled: false,
+		noForm: true,
 	},
 ]
 
@@ -368,6 +398,27 @@ function RegisterForm({ closeModal, register }) {
 		}, 0)
 	}
 
+	const onSubmit = async (e) => {
+		e.preventDefault()
+
+		const currentStep = STEPS[step]
+		if (!('validateStep' in currentStep)) {
+			changeStep()
+			return
+		}
+
+		try {
+			setLoading(true)
+
+			if (await currentStep.validateStep(data, setErrors, updateData))
+				changeStep()
+		} catch (err) {
+			console.log(err)
+		} finally {
+			setLoading(false)
+		}
+	}
+
 	const onChange = (e) => {
 		const value =
 			e.target.type === 'checkbox' ? e.target.checked : e.target.value
@@ -376,6 +427,12 @@ function RegisterForm({ closeModal, register }) {
 			...prevData,
 			[e.target.name]: value,
 		}))
+
+		if (e.target.name in errors)
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[e.target.name]: undefined,
+			}))
 	}
 
 	const onChangeCategory = (e) =>
@@ -401,6 +458,38 @@ function RegisterForm({ closeModal, register }) {
 		</div>
 	)
 
+	const content = (
+		<>
+			<ErrorBoundary>
+				<Suspense fallback={loader}>
+					{STEPS[step].component({
+						...data,
+						componentData: STEPS[step],
+						changeComponentData,
+						errors,
+						setErrors,
+						updateData,
+						setData,
+						onChange,
+						onChangeCategory,
+						onChangeIsWorkingDay,
+					})}
+				</Suspense>
+			</ErrorBoundary>
+
+			<Button
+				primary
+				type="submit"
+				onClick={STEPS[step].noForm ? onSubmit : undefined}
+				className="form-card__btn"
+				loading={loading}
+				disabled={STEPS[step].nextBtnDisabled}
+			>
+				{t('actions.next')}
+			</Button>
+		</>
+	)
+
 	return (
 		<Card formCard className="center-item">
 			<Card.Header>
@@ -417,55 +506,11 @@ function RegisterForm({ closeModal, register }) {
 				</div>
 			</Card.Header>
 			<Card.Body>
-				<ErrorBoundary>
-					<Suspense fallback={loader}>
-						{STEPS[step].component({
-							...data,
-							componentData: STEPS[step],
-							changeComponentData,
-							errors,
-							updateData,
-							setData,
-							onChange,
-							onChangeCategory,
-							onChangeIsWorkingDay,
-						})}
-					</Suspense>
-				</ErrorBoundary>
-
-				<Button
-					primary
-					onClick={async () => {
-						const currentStep = STEPS[step]
-						if (!('validateStep' in currentStep)) {
-							changeStep()
-							return
-						}
-
-						try {
-							setLoading(true)
-
-							if (
-								await currentStep.validateStep(
-									data,
-									setErrors,
-									updateData
-								)
-							)
-								changeStep()
-						} catch (err) {
-							console.log(err)
-						} finally {
-							setLoading(false)
-						}
-					}}
-					type="button"
-					className="form-card__btn"
-					loading={loading}
-					disabled={STEPS[step].nextBtnDisabled}
-				>
-					{t('actions.next')}
-				</Button>
+				{STEPS[step].noForm ? (
+					content
+				) : (
+					<form onSubmit={onSubmit}>{content}</form>
+				)}
 			</Card.Body>
 		</Card>
 	)
