@@ -79,7 +79,6 @@ class Business(models.Model):
     name = models.CharField(default='Your business', max_length=100)
     description = models.TextField(max_length=1000, blank=True)
     logo = models.ImageField(upload_to='business_logos', blank=True)
-    email = models.EmailField(max_length=100)
     phone_number = PhoneNumberField(blank=True)
     website = models.URLField(blank=True)
 
@@ -152,7 +151,13 @@ class Employee(Color):
                                  on_delete=models.CASCADE,
                                  related_name='employees')
     name = models.CharField(verbose_name="Imię", max_length=20)
+    email = models.EmailField(max_length=100, unique=True)
+    phone_number = PhoneNumberField()
+    position = models.CharField(max_length=100, blank=True)
     slug = AutoSlugField(populate_from="name", unique=True)
+
+    class Meta:
+        unique_together = ('business', 'name')
 
     def __str__(self):
         return self.name

@@ -1,10 +1,10 @@
-from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
 
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from accounts.models import Account
+from data.models import Business, Employee
 from data.api.serializers import CustomerSerializer
 
 
@@ -29,23 +29,16 @@ class AccountSerializer(serializers.ModelSerializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
-    password2 = serializers.CharField(write_only=True)
-
-    def validate(self, data):
-        if not (data['password'] == data['password2']):
-            raise serializers.ValidationError(
-                {'password': 'passwords are not the same'})
-
-        return data
+    password = serializers.CharField()
 
     class Meta:
-        model = User
-        fields = (
-            'email',
-            'password',
-            'password2',
-        )
+        model = Account
+        fields = ('email', 'password')
+        extra_kwargs = {
+            'password': {
+                'write_only': True
+            },
+        }
 
     def create(self, data):
         email = data['email']

@@ -7,7 +7,7 @@ class AccountManager(BaseUserManager):
         if not email:
             raise ValueError("Users must have an email")
 
-        user = self.model(email=self.normalize_email(email), )
+        user = self.model(email=self.normalize_email(email))
 
         user.set_password(password)
         user.save(using=self._db)
@@ -29,7 +29,7 @@ class AccountManager(BaseUserManager):
 
 
 class Account(AbstractBaseUser):
-    businesses = models.ManyToManyField('data.Business')
+    businesses = models.ManyToManyField('data.Business', blank=True)
     email = models.EmailField(verbose_name="E-mail adres",
                               max_length=80,
                               unique=True)

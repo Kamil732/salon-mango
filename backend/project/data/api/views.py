@@ -17,6 +17,33 @@ from . import serializers
 from . import pagination
 
 
+@method_decorator(cache_page(60 * 60 * 2), name='get')
+@method_decorator(vary_on_headers('Accept-Language'), name='get')
+class BusinessCategoryListAPIView(generics.ListAPIView):
+    serializer_class = serializers.BusinessCategorySerializer
+    queryset = BusinessCategory.objects.all()
+
+
+@method_decorator(csrf_protect, name='post')
+class BusinessCreateListAPIView(generics.ListCreateAPIView):
+    serializers = serializers.BusinessSerializer
+    queryset = Business.objects.all()
+    permission_classes = (IsAuthenticated, )
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+
+        # Add business to the user
+        request.user.businesses.add(serializer.data['id'])
+
+        return Response(serializer.data,
+                        status=status.HTTP_201_CREATED,
+                        headers=headers)
+
+
 @method_decorator(csrf_protect, name='patch')
 class BusinessDetailAPIView(generics.RetrieveUpdateAPIView):
     # permission_classes = (IsAdminOrReadOnly, )
@@ -24,13 +51,6 @@ class BusinessDetailAPIView(generics.RetrieveUpdateAPIView):
     queryset = Business.objects.all()
     lookup_field = 'id'
     lookup_url_kwarg = 'business_id'
-
-
-@method_decorator(cache_page(60 * 60 * 2), name='get')
-@method_decorator(vary_on_headers('Accept-Language'), name='get')
-class BusinessCategoryListAPIView(generics.ListAPIView):
-    serializer_class = serializers.BusinessCategorySerializer
-    queryset = BusinessCategory.objects.all()
 
 
 @method_decorator(csrf_protect, name='dispatch')

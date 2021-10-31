@@ -8,7 +8,6 @@ from rest_framework.response import Response
 from rest_framework import permissions, generics, status
 from rest_framework.exceptions import ValidationError
 
-from accounts.models import Account
 from . import serializers
 
 

@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from server.abstract.serializers import Subgroups
 from data.models import Business, BusinessCategory, BlockedHours, OpenHours, Customer, CustomerImage, Employee, Service, ServiceGroup, ServiceEmployee, Notification, Resource, ResourceGroup, ServiceResources
+from accounts.models import Account
 
 
 class ResourceGroupSerializer(Subgroups):
@@ -150,6 +151,11 @@ class BusinessSerializer(serializers.ModelSerializer):
     class Meta:
         model = Business
         fields = "__all__"
+        extra_kwargs = {
+            'owner': {
+                'write_only': True
+            },
+        }
 
 
 class CustomerSerializer(serializers.ModelSerializer):

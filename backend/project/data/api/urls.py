@@ -17,24 +17,31 @@ urlpatterns = [
          views.BusinessCategoryListAPIView.as_view(),
          name='business-category-list'),
     path(
-        'businesses/<int:business_id>/',
+        'businesses/',
         include([
             path('',
-                 views.BusinessDetailAPIView.as_view(),
-                 name='business-detail'),
-            path('customers/',
-                 views.CustomerListAPIView.as_view(),
-                 name='customer-list'),
+                 views.BusinessCreateListAPIView.as_view(),
+                 name='business-list'),
             path(
-                'employees/',
+                '<int:business_id>/',
                 include([
                     path('',
-                         views.EmployeeListAPIView.as_view(),
-                         name='employee-list'),
-                    path('<slug:employee_slug>/',
-                         views.UpdateEmployeeAPIView.as_view(),
-                         name='update-employee'),
-                ])),
+                         views.BusinessDetailAPIView.as_view(),
+                         name='business-detail'),
+                    path('customers/',
+                         views.CustomerListAPIView.as_view(),
+                         name='customer-list'),
+                    path(
+                        'employees/',
+                        include([
+                            path('',
+                                 views.EmployeeListAPIView.as_view(),
+                                 name='employee-list'),
+                            path('<slug:employee_slug>/',
+                                 views.UpdateEmployeeAPIView.as_view(),
+                                 name='update-employee'),
+                        ])),
+                ]))
         ])),
     path(
         'services/',
