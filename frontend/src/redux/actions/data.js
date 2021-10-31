@@ -10,6 +10,7 @@ import {
 	ADD_UNREAD_NOTIFICATIONS_AMOUNT,
 	LOAD_EMPLOYEES,
 	LOAD_CUSTOMERS,
+	LOADING_BUSINESS_DATA,
 } from './types'
 
 import { NotificationManager } from 'react-notifications'
@@ -19,6 +20,8 @@ import axios from 'axios'
 import { updateResourceMap } from './meetings'
 
 export const getBusinessData = (businessId) => async (dispatch) => {
+	dispatch({ type: LOADING_BUSINESS_DATA })
+
 	try {
 		const res = await axios.get(
 			`${process.env.REACT_APP_API_URL}/data/businesses/${businessId}/`
@@ -41,7 +44,7 @@ export const loadEmployees = () => async (dispatch, getState) => {
 	try {
 		const res = await axios.get(
 			`${process.env.REACT_APP_API_URL}/data/businesses/${
-				getState().data.business.id
+				getState().data.business.data.id
 			}/employees/`
 		)
 
@@ -78,7 +81,7 @@ export const loadCustomers = (value) => async (dispatch, getState) => {
 	try {
 		const res = await axios.get(
 			`${process.env.REACT_APP_API_URL}/data/businesses/${
-				getState().data.business.id
+				getState().data.business.data.id
 			}/customers/?search=${value}`
 		)
 

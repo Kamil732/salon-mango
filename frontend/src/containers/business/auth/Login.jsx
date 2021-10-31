@@ -22,7 +22,7 @@ import CircleLoader from '../../../layout/loaders/CircleLoader'
 
 const RegisterForm = lazy(() => import('./RegisterForm'))
 
-function Login({ isAuthenticated, login }) {
+function Login({ isAuthenticated, login, userBusinesses }) {
 	const { t } = useTranslation('auth')
 	const [loading, setLoading] = useState(false)
 	const [{ email, password }, setData] = useState({
@@ -41,11 +41,11 @@ function Login({ isAuthenticated, login }) {
 		e.preventDefault()
 
 		setLoading(true)
-		await login('xd', email, password)
+		await login(email, password)
 		setLoading(false)
 	}
 
-	if (isAuthenticated && !loading)
+	if (isAuthenticated && !loading && userBusinesses.length > 0)
 		return (
 			<Redirect
 				to={baseUrl + process.env.REACT_APP_BUSINESS_PANEL_CALENDAR_URL}
@@ -154,11 +154,13 @@ function Login({ isAuthenticated, login }) {
 
 Login.prototype.propTypes = {
 	isAuthenticated: PropTypes.bool,
+	userBusinesses: PropTypes.arrayOf(PropTypes.number),
 	login: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => ({
 	isAuthenticated: state.auth.isAuthenticated,
+	userBusinesses: state.auth.data.businesses,
 })
 
 const mapDispatchToProps = {

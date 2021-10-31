@@ -11,8 +11,6 @@ import {
 	UPDATE_CALENDAR_DATES,
 	UPDATE_RESOURCE_MAP,
 	AUTH_ERROR,
-	LOGIN_FAIL,
-	REGISTER_FAIL,
 	LOGOUT,
 } from '../actions/types'
 
@@ -136,8 +134,6 @@ export default function (state = initialState, action) {
 				},
 			}
 		case AUTH_ERROR:
-		case REGISTER_FAIL:
-		case LOGIN_FAIL:
 		case LOGOUT:
 			localStorage.removeItem('resource-map-data')
 			localStorage.removeItem('resource-map-selected')

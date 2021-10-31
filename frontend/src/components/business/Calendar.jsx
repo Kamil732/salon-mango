@@ -903,12 +903,12 @@ const mapStateToProps = (state) => ({
 	calendarDates: state.meetings.calendarDates,
 	resourceMap: state.meetings.resourceMap,
 	employees: state.data.employees,
-	resourcesLength: state.data.business.resources.length,
-	services: state.data.business.services,
-	calendar_step: state.data.business.calendar_step,
-	calendar_timeslots: state.data.business.calendar_timeslots,
-	open_hours: state.data.business.open_hours,
-	blocked_hours: state.data.business.blocked_hours,
+	resourcesLength: state.data.business.data.resources.length,
+	services: state.data.business.data.services,
+	calendar_step: state.data.business.data.calendar_step,
+	calendar_timeslots: state.data.business.data.calendar_timeslots,
+	open_hours: state.data.business.data.open_hours,
+	blocked_hours: state.data.business.data.blocked_hours,
 })
 
 const mapDispatchToProps = {

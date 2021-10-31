@@ -51,9 +51,7 @@ class Routes extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	loadingBusiness:
-		state.auth.isAuthenticated &&
-		Object.keys(state.data.business).length === 0,
+	loadingBusiness: state.data.business.loading,
 })
 
 export default connect(mapStateToProps, null)(Routes)

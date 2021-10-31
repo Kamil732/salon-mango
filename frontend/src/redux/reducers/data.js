@@ -13,15 +13,17 @@ import {
 	UPDATE_DATA,
 	UPDATE_NOTIFICATION,
 	LOGOUT,
-	LOGIN_FAIL,
-	REGISTER_FAIL,
 	AUTH_ERROR,
+	LOADING_BUSINESS_DATA,
 } from '../actions/types'
 
 import notifySound from '../../assets/sounds/pristine-609.mp3'
 
 const initialState = {
-	business: {},
+	business: {
+		loading: false,
+		data: {},
+	},
 	employees: [],
 	customers: [],
 	notifications: {
@@ -36,13 +38,22 @@ const initialState = {
 // eslint-disable-next-line
 export default function (state = initialState, action) {
 	switch (action.type) {
+		case LOADING_BUSINESS_DATA:
+			return {
+				...state,
+				business: {
+					loading: true,
+					data: {},
+				},
+			}
 		case UPDATE_DATA:
 		case GET_BUSINESS_DATA:
 			return {
 				...state,
 				business: {
 					...state.business,
-					...action.payload,
+					loading: false,
+					data: action.payload,
 				},
 			}
 		case LOAD_EMPLOYEES:
@@ -180,8 +191,6 @@ export default function (state = initialState, action) {
 				},
 			}
 		case AUTH_ERROR:
-		case REGISTER_FAIL:
-		case LOGIN_FAIL:
 		case LOGOUT:
 			return {
 				...state,

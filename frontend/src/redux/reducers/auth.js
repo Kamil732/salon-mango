@@ -1,16 +1,9 @@
 import {
-	REGISTER_SUCCESS,
-	REGISTER_FAIL,
-	LOGIN_SUCCESS,
-	LOGIN_FAIL,
 	LOGOUT,
 	AUTH_ERROR,
 	AUTH_SUCCESS,
 	AUTH_LOADING,
 } from '../actions/types'
-
-import { getBusinessData } from '../actions/data'
-import store from '../store'
 
 const initialState = {
 	isAuthenticated: null,
@@ -27,10 +20,6 @@ export default function (state = initialState, action) {
 				loading: true,
 			}
 		case AUTH_SUCCESS:
-		case LOGIN_SUCCESS:
-		case REGISTER_SUCCESS:
-			store.dispatch(getBusinessData(action.payload.businesses[0]))
-
 			return {
 				...state,
 				isAuthenticated: true,
@@ -38,8 +27,6 @@ export default function (state = initialState, action) {
 				data: action.payload,
 			}
 		case AUTH_ERROR:
-		case REGISTER_FAIL:
-		case LOGIN_FAIL:
 		case LOGOUT:
 			return {
 				...state,

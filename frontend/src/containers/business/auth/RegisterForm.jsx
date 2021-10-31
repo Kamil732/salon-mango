@@ -6,18 +6,18 @@ import '../../../assets/css/progressbar.css'
 
 import axios from 'axios'
 import getHeaders from '../../../helpers/getHeaders'
+import { register } from '../../../redux/actions/auth'
 import NotificationManager from 'react-notifications/lib/NotificationManager'
 import { useTranslation } from 'react-i18next'
-import { PRICE_TYPES, MAX_TRAVEL_DISTANCES } from '../../../helpers/consts'
-import { country } from '../../../app/locale/location-params'
-// import { register } from '../../redux/actions/auth'
 import { HiOutlineArrowLeft } from 'react-icons/hi'
+import { PRICE_TYPES, MAX_TRAVEL_DISTANCES } from '../../../helpers/consts'
+import { COUNTRIES_DATA } from '../../../app/locale/consts'
+import { country } from '../../../app/locale/location-params'
 
 import Card from '../../../layout/Card'
 import ErrorBoundary from '../../../components/ErrorBoundary'
 import CircleLoader from '../../../layout/loaders/CircleLoader'
 import Button from '../../../layout/buttons/Button'
-import { COUNTRIES_DATA } from '../../../app/locale/consts'
 
 const EmailCheck = lazy(() => import('./steps/EmailCheck'))
 const BusinessData = lazy(() => import('./steps/BusinessData'))
@@ -47,7 +47,7 @@ const INITIAL_STEPS_DATA = [
 			/>
 		),
 		nextBtnDisabled: true,
-		validateStep: async ({ email }, setErrors) => {
+		validateStep: async ({ email }, { setErrors }) => {
 			setErrors({})
 
 			try {
@@ -88,8 +88,7 @@ const INITIAL_STEPS_DATA = [
 		nextBtnDisabled: true,
 		validateStep: async (
 			{ phone_prefix: { dialCode: phone_prefix }, phone_number },
-			setErrors,
-			updateData
+			{ setErrors, updateData }
 		) => {
 			setErrors({})
 
@@ -138,34 +137,39 @@ const INITIAL_STEPS_DATA = [
 			{
 				business_name,
 				name,
-				phone_prefix,
+				phone_prefix: { dialCode: phone_prefix },
 				phone_number,
-				recomendation_code,
 				email,
 				password,
 			},
-			setErrors,
-			updateData
+			{ setErrors, register }
 		) => {
 			setErrors({})
 
 			try {
-				const body = JSON.stringify({
+				await register(email, password)
+
+				const business_body = JSON.stringify({
+					name: business_name,
 					phone_number: phone_prefix + phone_number,
+					employees: [
+						{
+							name,
+							email,
+							phone_number: phone_prefix + phone_number,
+							position: i18next.t('add_employees.owner', {
+								ns: 'business_register',
+							}),
+						},
+					],
 				})
 
-				const res = await axios.post(
-					`${process.env.REACT_APP_API_URL}/data/create-business`,
-					body,
+				await axios.post(
+					`${process.env.REACT_APP_API_URL}/data/businesses/`,
+					business_body,
 					getHeaders(true)
 				)
 
-				updateData({
-					phone_number: res.data.phone_number.replace(
-						phone_prefix,
-						''
-					),
-				})
 				return true
 			} catch (err) {
 				if (err.response) setErrors(err.response.data)
@@ -453,7 +457,13 @@ function RegisterForm({ closeModal, register }) {
 		try {
 			setLoading(true)
 
-			if (await currentStep.validateStep(data, setErrors, updateData))
+			if (
+				await currentStep.validateStep(data, {
+					setErrors,
+					updateData,
+					register,
+				})
+			)
 				changeStep()
 		} catch (err) {
 			console.log(err)
@@ -565,7 +575,7 @@ RegisterForm.prototype.propTypes = {
 }
 
 const mapDispatchToProps = {
-	// register,
+	register,
 }
 
 export default connect(null, mapDispatchToProps)(RegisterForm)

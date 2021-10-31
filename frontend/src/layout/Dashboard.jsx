@@ -26,7 +26,7 @@ function NavFooter(props) {
 
 function Menu({ navContainer, isOpen, toggleMenu, ...props }) {
 	useClickOutside(navContainer, () => {
-		if (window.innerWidth < 1024) toggleMenu(false)
+		if (window.innerWidth <= 758) toggleMenu(false)
 	})
 
 	if (!isOpen) return null

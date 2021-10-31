@@ -36,7 +36,7 @@ ResourceInput.prototype.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-	resources: state.data.business.resources,
+	resources: state.data.business.data.resources,
 })
 
 export default connect(mapStateToProps, null)(ResourceInput)

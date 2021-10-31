@@ -1,9 +1,5 @@
 import axios from 'axios'
 import {
-	REGISTER_SUCCESS,
-	REGISTER_FAIL,
-	LOGIN_SUCCESS,
-	LOGIN_FAIL,
 	LOGOUT,
 	AUTH_LOADING,
 	AUTH_SUCCESS,
@@ -15,6 +11,8 @@ import {
 import getHeaders from '../../helpers/getHeaders'
 
 import { NotificationManager } from 'react-notifications'
+import i18next from 'i18next'
+import { getBusinessData } from './data'
 
 export const loadUser = () => async (dispatch) => {
 	dispatch({ type: AUTH_LOADING })
@@ -29,6 +27,7 @@ export const loadUser = () => async (dispatch) => {
 			type: AUTH_SUCCESS,
 			payload: res.data,
 		})
+		dispatch(getBusinessData(res.data.businesses[0]))
 	} catch (err) {
 		dispatch({
 			type: AUTH_ERROR,
@@ -36,11 +35,11 @@ export const loadUser = () => async (dispatch) => {
 	}
 }
 
-export const login = (recaptchaToken, email, password) => async (dispatch) => {
+export const login = (email, password, setErrors) => async (dispatch) => {
 	const body = JSON.stringify({
 		email,
 		password,
-		'g-recaptcha-response': recaptchaToken,
+		// 'g-recaptcha-response': recaptchaToken,
 	})
 
 	try {
@@ -51,64 +50,67 @@ export const login = (recaptchaToken, email, password) => async (dispatch) => {
 		)
 
 		dispatch({
-			type: LOGIN_SUCCESS,
+			type: AUTH_SUCCESS,
 			payload: res.data.user,
 		})
-		NotificationManager.success(res.data.message, 'Zalogowano')
+
+		if (res.data.user.businesses.length > 0) {
+			NotificationManager.success(res.data.message, 'Zalogowano')
+			dispatch(getBusinessData(res.data.user.businesses[0]))
+		}
 
 		dispatch({ type: CLEAR_MEETINGS })
 		dispatch({ type: CLEAR_NOTIFICATIONS })
+	} catch (err) {
+		if (err.response && setErrors) setErrors(err.response.data)
+		else
+			NotificationManager.error(
+				i18next.t('error.description', { ns: 'common' }),
+				i18next.t('error.title', { ns: 'common' })
+			)
+
+		dispatch({
+			type: AUTH_ERROR,
+		})
+	}
+}
+
+export const register = (email, password) => async (dispatch) => {
+	const body = JSON.stringify({
+		email,
+		password,
+		// 'g-recaptcha-response': recaptchaToken,
+	})
+
+	try {
+		await axios.post(
+			`${process.env.REACT_APP_API_URL}/accounts/register/`,
+			body,
+			getHeaders(true)
+		)
+
+		await dispatch(login(email, password))
 	} catch (err) {
 		if (err.response)
 			for (const msg in err.response.data)
 				NotificationManager.error(
 					err.response.data[msg],
-					msg === 'detail' ? 'Błąd' : msg,
+					msg === 'detail'
+						? i18next.t('error.title', { ns: 'common' })
+						: msg,
 					5000
 				)
+		else
+			NotificationManager.error(
+				i18next.t('error.description', { ns: 'common' }),
+				i18next.t('error.title', { ns: 'common' })
+			)
 
 		dispatch({
-			type: LOGIN_FAIL,
+			type: AUTH_ERROR,
 		})
 	}
 }
-
-export const signUp =
-	(recaptchaToken, { email, password, password2 }) =>
-	async (dispatch) => {
-		const body = JSON.stringify({
-			email,
-			password,
-			password2,
-			'g-recaptcha-response': recaptchaToken,
-		})
-
-		try {
-			const res = await axios.post(
-				`${process.env.REACT_APP_API_URL}/accounts/signup/`,
-				body,
-				getHeaders(true)
-			)
-
-			dispatch({
-				type: REGISTER_SUCCESS,
-				payload: res.data,
-			})
-			dispatch(login(email, password))
-		} catch (err) {
-			if (err.response)
-				for (const msg in err.response.data)
-					NotificationManager.error(
-						err.response.data[msg],
-						msg === 'detail' ? 'Błąd' : msg,
-						5000
-					)
-
-			dispatch({
-				type: REGISTER_FAIL,
-			})
-		}
-	}
 
 export const logout = () => async (dispatch) => {
 	const body = JSON.stringify({
@@ -125,7 +127,7 @@ export const logout = () => async (dispatch) => {
 		dispatch({
 			type: LOGOUT,
 		})
-		NotificationManager.success(res.data.message, 'Wylogowano')
+		NotificationManager.success(res.data.message)
 
 		dispatch({ type: CLEAR_MEETINGS })
 		dispatch({ type: CLEAR_NOTIFICATIONS })
@@ -134,8 +136,15 @@ export const logout = () => async (dispatch) => {
 			for (const msg in err.response.data)
 				NotificationManager.error(
 					err.response.data[msg],
-					msg === 'detail' ? 'Błąd' : msg,
+					msg === 'detail'
+						? i18next.t('error.title', { ns: 'common' })
+						: msg,
 					5000
 				)
+		else
+			NotificationManager.error(
+				i18next.t('error.description', { ns: 'common' }),
+				i18next.t('error.title', { ns: 'common' })
+			)
 	}
 }
