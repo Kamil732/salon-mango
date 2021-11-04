@@ -152,18 +152,7 @@
 
 	&__loading {
 		padding: 0rem 0.3rem;
-
-		&::before {
-			content: '';
-			display: inline-block;
-			width: 2rem;
-			height: 2rem;
-			margin-right: 8px;
-			border-radius: 50%;
-			border: 4px solid #fff;
-			border-color: #000 transparent #000 transparent;
-			animation: lds-dual-ring 1.2s linear infinite;
-		}
+		@extend %loading-spinner;
 	}
 
 	&[disabled] {

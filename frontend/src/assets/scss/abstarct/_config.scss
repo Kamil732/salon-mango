@@ -51,6 +51,23 @@
 	}
 }
 
+%loading-spinner {
+	&::before {
+		content: '';
+		display: inline-block;
+		min-width: 1.5rem;
+		min-height: 1.5rem;
+		max-width: 2rem;
+		max-height: 2rem;
+		margin-right: 0.5rem;
+		border-radius: 50%;
+		border: 3px solid;
+		border-top-color: transparent;
+		border-right-color: transparent;
+		animation: lds-dual-ring 0.7s cubic-bezier(1, 0.8, 0.6, 0.4) infinite;
+	}
+}
+
 %flex-center {
 	display: flex;
 	justify-content: center;

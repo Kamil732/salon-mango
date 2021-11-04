@@ -11,20 +11,20 @@
 		box-sizing: border-box;
 		display: block;
 		position: absolute;
-		width: 64px;
-		height: 64px;
-		margin: 8px;
-		border: 8px solid $primary-color;
+		width: 4rem;
+		height: 4rem;
+		margin: 0.5rem;
+		border: 6px solid $primary-color;
 		border-radius: 50%;
-		animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+		animation: lds-ring 1.2s cubic-bezier(0.4, 0.15, 0.6, 0.8) infinite;
 		border-color: $primary-color transparent transparent transparent;
 
 		&:nth-child(2) {
-			animation-delay: -0.3s;
+			animation-delay: -0.25s;
 		}
 
 		&:nth-child(3) {
-			animation-delay: -0.15s;
+			animation-delay: -0.1s;
 		}
 	}
 }

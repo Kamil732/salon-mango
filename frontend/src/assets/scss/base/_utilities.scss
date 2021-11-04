@@ -13,6 +13,11 @@
 	margin: auto;
 }
 
+.loading-spinner {
+	@extend %loading-spinner;
+	@extend %flex-center;
+}
+
 .clickable {
 	cursor: pointer;
 }
