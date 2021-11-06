@@ -7,7 +7,10 @@ import { FiLayers } from 'react-icons/fi'
 import ReactTooltip from 'react-tooltip'
 import Modal from '../../../../layout/Modal'
 import { FormGroup } from '../../../../layout/forms/Forms'
-import Dropdown from '../../../../layout/buttons/dropdowns/Dropdown'
+import {
+	DropdownClearBtn,
+	DropdownInputContainer,
+} from '../../../../layout/buttons/dropdowns/Dropdown'
 import Button from '../../../../layout/buttons/Button'
 import ErrorBoundary from '../../../ErrorBoundary'
 import CircleLoader from '../../../../layout/loaders/CircleLoader'
@@ -69,13 +72,13 @@ function EmployeeAndResourceInputs({
 									employeeInput
 								) : (
 									<FormGroup>
-										<Dropdown.InputContainer>
+										<DropdownInputContainer>
 											{employeeInput}
-											<Dropdown.ClearBtn
+											<DropdownClearBtn
 												clear={() => updateEmployee({})}
 												value={employee}
 											/>
-										</Dropdown.InputContainer>
+										</DropdownInputContainer>
 									</FormGroup>
 								)}
 
@@ -84,15 +87,15 @@ function EmployeeAndResourceInputs({
 										resourceInput
 									) : (
 										<FormGroup>
-											<Dropdown.InputContainer>
+											<DropdownInputContainer>
 												{resourceInput}
-												<Dropdown.ClearBtn
+												<DropdownClearBtn
 													clear={() =>
 														updateResource({})
 													}
 													value={resource}
 												/>
-											</Dropdown.InputContainer>
+											</DropdownInputContainer>
 										</FormGroup>
 									)
 								) : null}

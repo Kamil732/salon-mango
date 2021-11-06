@@ -8,7 +8,10 @@ import { loadCustomers } from '../../../../redux/actions/data'
 import { FormControl, FormGroup } from '../../../../layout/forms/Forms'
 import Label from '../../../../layout/forms/inputs/Label'
 import Button from '../../../../layout/buttons/Button'
-import Dropdown from '../../../../layout/buttons/dropdowns/Dropdown'
+import Dropdown, {
+	DropdownClearBtn,
+	DropdownInputContainer,
+} from '../../../../layout/buttons/dropdowns/Dropdown'
 
 function CustomerInput({
 	value,
@@ -23,7 +26,7 @@ function CustomerInput({
 
 	return (
 		<FormGroup>
-			<Dropdown.InputContainer>
+			<DropdownInputContainer>
 				<FormControl>
 					<Label htmlFor={id} inputValue={value?.full_name}>
 						Klient
@@ -42,11 +45,11 @@ function CustomerInput({
 						{...props}
 					/>
 				</FormControl>
-				<Dropdown.ClearBtn
+				<DropdownClearBtn
 					clear={() => onChange({})}
 					value={Object.keys(value).length > 0}
 				/>
-			</Dropdown.InputContainer>
+			</DropdownInputContainer>
 			{!value?.full_name && (
 				<Button type="button" small primary onClick={changeForm}>
 					Nowy

@@ -9,6 +9,7 @@ import Button from '../Button'
 
 import { ImCross } from 'react-icons/im'
 import { Component } from 'react'
+import { withDebounce } from '../../../helpers/hooks/debounce'
 
 class Dropdown extends Component {
 	static propTypes = {
@@ -29,12 +30,15 @@ class Dropdown extends Component {
 		formatOptionLabel: PropTypes.func,
 		formatSelectedOptionValue: PropTypes.func,
 		setShowInput: PropTypes.func,
+		debouncedValue: PropTypes.string,
+		setDebouncedValue: PropTypes.func.isRequired,
 	}
 
 	constructor(props) {
 		super(props)
 
 		this.container = React.createRef()
+		this.savedSearchKeys = {}
 
 		this.state = {
 			isOpen: false,
@@ -138,38 +142,44 @@ class Dropdown extends Component {
 		try {
 			this.setState({ loading: true })
 
-			const filteredOptions = await this.props.loadOptions(
-				this.state.inputValue
+			let filteredOptions = await this.props.loadOptions(
+				this.props.debouncedValue
+			)
+			filteredOptions = filteredOptions.filter((option) =>
+				this.isNotSelected(option)
 			)
 
 			this.setState({
-				filteredOptions: filteredOptions.filter((option) =>
-					this.isNotSelected(option)
-				),
+				filteredOptions,
 			})
+
+			return filteredOptions
 		} finally {
 			this.setState({ loading: false })
 		}
 	}
 
-	componentDidMount = () => {
+	componentDidMount = () =>
 		document.addEventListener('mousedown', this.handleClickOutside)
-
-		if (this.props.searchAsync && this.props.options.length === 0) {
-			this.asyncLoadOptions()
-		} else {
-			this.setState({
-				filteredOptions: this.props.options.filter((option) =>
-					this.isNotSelected(option)
-				),
-			})
-		}
-	}
 
 	componentWillUnmount = () =>
 		document.removeEventListener('mousedown', this.handleClickOutside)
 
 	componentDidUpdate(prevProps, prevState) {
+		if (this.state.isOpen !== prevState.isOpen && this.state.isOpen) {
+			if (this.props.searchAsync && this.props.options.length === 0) {
+				this.asyncLoadOptions().then(
+					(filteredOptions) =>
+						(this.savedSearchKeys[this.props.debouncedValue] =
+							filteredOptions)
+				)
+			} else
+				this.setState({
+					filteredOptions: this.props.options.filter((option) =>
+						this.isNotSelected(option)
+					),
+				})
+		}
 		if (
 			this.props.isLoading === null &&
 			prevProps.options.length !== this.props.options.length
@@ -182,48 +192,61 @@ class Dropdown extends Component {
 		if (prevState.filteredOptions !== this.state.filteredOptions)
 			this.setState({ navigatedIndex: 0 })
 
-		if (prevState.inputValue !== this.state.inputValue) {
-			if (this.props.searchAsync) {
-				// Search Async
-				this.asyncLoadOptions()
-			}
-			// Search Sync
-			else
+		if (prevProps.debouncedValue !== this.props.debouncedValue) {
+			if (this.props.debouncedValue in this.savedSearchKeys) {
 				this.setState({
-					filteredOptions: this.props.options.filter(
-						(option) =>
-							this.isNotSelected(option) &&
-							((this.props.searchable == null &&
-								this.props
-									.getOptionLabel(option)
-									.toLowerCase()
-									.includes(
-										this.state.inputValue.toLowerCase()
-									)) ||
-								(this.props.searchable != null &&
-									this.props.searchable.some((key) =>
-										option[key]
-											.toLowerCase()
-											.includes(
-												this.state.inputValue.toLowerCase()
-											)
-									)))
-					),
+					filteredOptions:
+						this.savedSearchKeys[this.props.debouncedValue],
 				})
+			} else {
+				console.log(this.savedSearchKeys, this.props.debouncedValue)
+				if (this.props.searchAsync)
+					// Search Async
+					this.asyncLoadOptions().then(
+						(filteredOptions) =>
+							(this.savedSearchKeys[this.props.debouncedValue] =
+								filteredOptions)
+					)
+				// Search Sync
+				else
+					this.setState({
+						filteredOptions: this.props.options.filter(
+							(option) =>
+								this.isNotSelected(option) &&
+								((this.props.searchable == null &&
+									this.props
+										.getOptionLabel(option)
+										.toLowerCase()
+										.includes(
+											this.props.debouncedValue.toLowerCase()
+										)) ||
+									(this.props.searchable != null &&
+										this.props.searchable.some((key) =>
+											option[key]
+												.toLowerCase()
+												.includes(
+													this.props.debouncedValue.toLowerCase()
+												)
+										)))
+						),
+					})
 
-			if (
-				this.props.editable &&
-				((this.props.regexValidation &&
-					this.props.regexValidation.test(this.state.inputValue)) ||
-					this.props.regexValidation == null)
-			) {
-				const option = {
-					label: this.state.inputValue,
-					value: this.state.inputValue,
+				if (
+					this.props.editable &&
+					((this.props.regexValidation &&
+						this.props.regexValidation.test(
+							this.props.debouncedValue
+						)) ||
+						this.props.regexValidation == null)
+				) {
+					const option = {
+						label: this.props.debouncedValue,
+						value: this.props.debouncedValue,
+					}
+
+					if (this.props.regexValidation) this.handleOnChange(option)
+					else this.props.onChange(option)
 				}
-
-				if (this.props.regexValidation) this.handleOnChange(option)
-				else this.props.onChange(option)
 			}
 		}
 
@@ -268,6 +291,7 @@ class Dropdown extends Component {
 			setShowInput,
 			editable,
 			regexValidation,
+			setDebouncedValue,
 			...props
 		} = this.props
 		const { inputValue, isOpen, loading, filteredOptions, navigatedIndex } =
@@ -308,9 +332,10 @@ class Dropdown extends Component {
 						onClick={() => this.setState({ isOpen: true })}
 						onInput={() => this.setState({ isOpen: true })}
 						value={inputValue}
-						onChange={(e) =>
+						onChange={(e) => {
+							setDebouncedValue(e.target.value)
 							this.setState({ inputValue: e.target.value })
-						}
+						}}
 						autoComplete="off"
 						{...props}
 					/>
@@ -348,7 +373,7 @@ class Dropdown extends Component {
 								</div>
 							)
 						) : (
-							<div className="dropdown-options__text">
+							<div className="dropdown-options__text loading-spinner">
 								Ładowanie...
 							</div>
 						)}
@@ -399,7 +424,8 @@ function InputContainer({ children, ...props }) {
 	)
 }
 
-Dropdown.ClearBtn = ClearBtn
-Dropdown.InputContainer = InputContainer
-
-export default Dropdown
+export {
+	ClearBtn as DropdownClearBtn,
+	InputContainer as DropdownInputContainer,
+}
+export default withDebounce(Dropdown, 500)

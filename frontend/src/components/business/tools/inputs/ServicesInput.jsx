@@ -21,7 +21,10 @@ import Modal from '../../../../layout/Modal'
 import ErrorBoundary from '../../../ErrorBoundary'
 import CircleLoader from '../../../../layout/loaders/CircleLoader'
 import ReactTooltip from 'react-tooltip'
-import Dropdown from '../../../../layout/buttons/dropdowns/Dropdown'
+import Dropdown, {
+	DropdownInputContainer,
+	DropdownClearBtn,
+} from '../../../../layout/buttons/dropdowns/Dropdown'
 import ButtonContainer from '../../../../layout/buttons/ButtonContainer'
 
 const EmployeeInput = lazy(() => import('./EmployeeInput'))
@@ -206,9 +209,9 @@ function ServicesInput({
 								0 ? (
 									getEmployeeInput()
 								) : (
-									<Dropdown.InputContainer>
+									<DropdownInputContainer>
 										{getEmployeeInput()}
-										<Dropdown.ClearBtn
+										<DropdownClearBtn
 											clear={() =>
 												updateState(
 													value.map((service) => {
@@ -229,7 +232,7 @@ function ServicesInput({
 												findValueBySelectedId().employee
 											}
 										/>
-									</Dropdown.InputContainer>
+									</DropdownInputContainer>
 								)}
 
 								<ResourcesInput

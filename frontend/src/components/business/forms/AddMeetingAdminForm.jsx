@@ -16,7 +16,10 @@ import ButtonContainer from '../../../layout/buttons/ButtonContainer'
 import Modal from '../../../layout/Modal'
 import ErrorBoundary from '../../ErrorBoundary'
 import CircleLoader from '../../../layout/loaders/CircleLoader'
-import Dropdown from '../../../layout/buttons/dropdowns/Dropdown'
+import {
+	DropdownClearBtn,
+	DropdownInputContainer,
+} from '../../../layout/buttons/dropdowns/Dropdown'
 
 const AddCustomerForm = lazy(() => import('./AddCustomerForm'))
 const EmployeeInput = lazy(() => import('../tools/inputs/EmployeeInput'))
@@ -297,7 +300,7 @@ class AddMeetingAdminForm extends Component {
 							{blocked && (
 								<>
 									<FormGroup>
-										<Dropdown.InputContainer>
+										<DropdownInputContainer>
 											<EmployeeInput
 												required={
 													Object.keys(resource)
@@ -320,7 +323,7 @@ class AddMeetingAdminForm extends Component {
 														.length > 0
 												}
 											/>
-											<Dropdown.ClearBtn
+											<DropdownClearBtn
 												clear={() =>
 													this.setState({
 														employee: {},
@@ -328,11 +331,11 @@ class AddMeetingAdminForm extends Component {
 												}
 												value={employee}
 											/>
-										</Dropdown.InputContainer>
+										</DropdownInputContainer>
 									</FormGroup>
 
 									<FormGroup>
-										<Dropdown.InputContainer>
+										<DropdownInputContainer>
 											<ResourceInput
 												required={
 													Object.keys(employee)
@@ -349,7 +352,7 @@ class AddMeetingAdminForm extends Component {
 														.length > 0
 												}
 											/>
-											<Dropdown.ClearBtn
+											<DropdownClearBtn
 												clear={() =>
 													this.setState({
 														resource: {},
@@ -357,7 +360,7 @@ class AddMeetingAdminForm extends Component {
 												}
 												value={resource}
 											/>
-										</Dropdown.InputContainer>
+										</DropdownInputContainer>
 									</FormGroup>
 								</>
 							)}
