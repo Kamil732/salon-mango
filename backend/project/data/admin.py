@@ -13,7 +13,7 @@ from .models import (
     Notification,
     Resource,
     ResourceGroup,
-    ServiceResources,
+    ServiceRelatedData,
     Service,
     ServiceGroup,
     ServiceEmployee,
@@ -108,8 +108,8 @@ class ResourceAdmin(ModelAdmin):
     readonly_fields = ("id", )
 
 
-@admin.register(ServiceResources)
-class ServiceResourcesAdmin(ModelAdmin):
+@admin.register(ServiceRelatedData)
+class ServiceRelatedDataAdmin(ModelAdmin):
     readonly_fields = ("id", )
 
 

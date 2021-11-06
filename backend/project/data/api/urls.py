@@ -28,30 +28,24 @@ urlpatterns = [
                     path('',
                          views.BusinessDetailAPIView.as_view(),
                          name='business-detail'),
-                    path('customers/',
-                         views.CustomerListAPIView.as_view(),
-                         name='customer-list'),
+                    path(
+                        'customers/',
+                        include([
+                            path('',
+                                 views.CustomerListAPIView.as_view(),
+                                 name='customer-list'),
+                            path('<int:customer_id>/',
+                                 views.CustomerDetailAPIView.as_view(),
+                                 name="customer-detail")
+                        ])),
                     path(
                         'employees/',
                         include([
-                            path('',
-                                 views.EmployeeListAPIView.as_view(),
-                                 name='employee-list'),
                             path('<slug:employee_slug>/',
                                  views.UpdateEmployeeAPIView.as_view(),
                                  name='update-employee'),
                         ])),
                 ]))
-        ])),
-    path(
-        'services/',
-        include([
-            path('',
-                 views.ServiceCreateAPIView.as_view(),
-                 name='create-service'),
-            path('<int:service_id>/',
-                 views.ServiceDetailAPIView.as_view(),
-                 name='detail-service'),
         ])),
     path(
         'notifications/',

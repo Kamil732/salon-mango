@@ -79,27 +79,27 @@ class Business(models.Model):
     name = models.CharField(default='Your business', max_length=100)
     description = models.TextField(max_length=1000, blank=True)
     logo = models.ImageField(upload_to='business_logos', blank=True)
+    calling_code = models.CharField(max_length=3)
     phone_number = PhoneNumberField(blank=True)
     website = models.URLField(blank=True)
 
-    country = models.CharField(max_length=100)
-    address = models.CharField(max_length=100)
+    country = models.CharField(max_length=100, blank=True)
+    address = models.CharField(max_length=100, blank=True)
     premises_number = models.CharField(max_length=10, blank=True)
-    city = models.CharField(max_length=100)
-    postal_code = models.CharField(max_length=6)
+    city = models.CharField(max_length=100, blank=True)
+    zipcode = models.CharField(max_length=6, blank=True)
+    timezone = models.CharField(max_length=100,
+                                default='+0000')  # ex. '+0000', '+0200'
     share_premises = models.BooleanField(default=False)
     common_premises_name = models.CharField(max_length=100, blank=True)
     common_premises_number = models.CharField(max_length=10, blank=True)
 
-    timezone = models.CharField(max_length=100)  # ex. '+0000', '+0200'
     currency = models.CharField(max_length=3, default='EUR')
-    calling_code = models.CharField(max_length=3)
     date_format = models.CharField(max_length=10,
                                    choices=DATE_FORMAT,
                                    default=DATE_FORMAT[0][0])
     time_format = models.PositiveSmallIntegerField(choices=TIME_FORMAT,
                                                    default=24)
-    start_with_sunday = models.BooleanField(default=False)
 
     meeting_bail = models.DecimalField(decimal_places=2,
                                        default=10,
@@ -213,11 +213,12 @@ class Service(models.Model):
         return f"{self.name} - {self.price} zł"
 
 
-class ServiceResources(models.Model):
+class ServiceRelatedData(models.Model):
     service = models.ForeignKey(Service,
                                 on_delete=models.CASCADE,
-                                related_name="resources_data")
-    resources = models.ManyToManyField("Resource", related_name="service_data")
+                                related_name="related_data")
+    resources = models.ManyToManyField("Resource", related_name="related_data")
+    products = models.ManyToManyField("Product", related_name="related_data")
 
 
 class ServiceImage(models.Model):

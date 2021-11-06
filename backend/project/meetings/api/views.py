@@ -40,20 +40,6 @@ class MeetingListAPIView(generics.ListCreateAPIView):
                 'customer', 'employee',
                 'resource').prefetch_related('services')
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        user = request.user
-
-        data = self.get_serializer(queryset, many=True).data
-
-        if user.is_authenticated and not (user.is_admin):
-            for i in range(len(data)):
-                if data[i]['customer'] == user.profile.id:
-                    data[i] = serializers.AdminMeetingSerializer(
-                        Meeting.objects.get(id=data[i]['id']), many=False).data
-
-        return Response(data)
-
 
 @method_decorator(csrf_protect, name='update')
 @method_decorator(csrf_protect, name='destroy')

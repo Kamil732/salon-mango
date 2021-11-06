@@ -15,10 +15,11 @@ from data.models import Notification, Service, Customer
 class ServiceDataSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(source="service",
                                             queryset=Service.objects.all())
+    name = serializers.CharField(source="service.name")
 
     class Meta:
         model = ServiceData
-        fields = ("id", "start", "end", "employee", "resources")
+        fields = ("id", "name", "start", "end", "employee", "resources")
 
 
 class MeetingSerializer(serializers.ModelSerializer):

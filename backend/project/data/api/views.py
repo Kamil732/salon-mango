@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from server.permissions import IsAdminOrReadOnly, IsAdmin
-from data.models import Business, BusinessCategory, Service, Notification, Employee, Customer, CustomerImage
+from data.models import Business, BusinessCategory, Service, ServiceGroup, Resource, ResourceGroup, Notification, Employee, Customer, CustomerImage
 from . import serializers
 from . import pagination
 
@@ -26,7 +26,7 @@ class BusinessCategoryListAPIView(generics.ListAPIView):
 
 @method_decorator(csrf_protect, name='post')
 class BusinessCreateListAPIView(generics.ListCreateAPIView):
-    serializers = serializers.BusinessSerializer
+    serializer_class = serializers.BusinessSerializer
     queryset = Business.objects.all()
     permission_classes = (IsAuthenticated, )
 
@@ -51,6 +51,45 @@ class BusinessDetailAPIView(generics.RetrieveUpdateAPIView):
     queryset = Business.objects.all()
     lookup_field = 'id'
     lookup_url_kwarg = 'business_id'
+
+    def retrieve(self, request, *args, **kwargs):
+        business_id = self.kwargs.get(self.lookup_url_kwarg)
+        instance = self.get_object()
+        print('=' * 25)
+
+        business_serializer = self.get_serializer(instance)
+
+        employees_serializer = serializers.EmployeeSerializer(
+            Employee.objects.filter(business_id=business_id).prefetch_related(
+                'service_employee_data'),
+            many=True)
+
+        service_groups_serializer = serializers.ServiceGroupSerializer(
+            ServiceGroup.objects.filter(business_id=business_id,
+                                        parent=None).prefetch_related(
+                                            'employees', 'services'),
+            many=True)
+        services_serializer = serializers.ServiceSerializer(
+            Service.objects.filter(business_id=business_id).select_related(
+                'group').prefetch_related('employees', 'related_data'),
+            many=True)
+
+        resource_groups_serializer = serializers.ResourceGroupSerializer(
+            ResourceGroup.objects.filter(business_id=business_id, parent=None),
+            many=True)
+        resources_serializer = serializers.ResourceSerializer(
+            Resource.objects.filter(
+                business_id=business_id).select_related('group'),
+            many=True)
+
+        return Response({
+            'data': business_serializer.data,
+            'employees': employees_serializer.data,
+            'resource_groups': resource_groups_serializer.data,
+            'resources': resources_serializer.data,
+            'service_groups': service_groups_serializer.data,
+            'services': services_serializer.data,
+        })
 
 
 @method_decorator(csrf_protect, name='dispatch')
@@ -125,36 +164,15 @@ class CustomerListAPIView(generics.ListCreateAPIView):
                    | Q(last_name__istartswith=search_field)))[:10]
 
 
-class EmployeeListAPIView(generics.ListCreateAPIView):
-    # permission_classes = (IsAdminOrReadOnly,)
-    serializer_class = serializers.EmployeeSerializer
+class CustomerDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    # permission_classes = (IsAdmin,)
+    serializer_class = serializers.CustomerSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'customer_id'
 
     def get_queryset(self):
-        return Employee.objects.filter(business_id=self.kwargs.get(
-            'business_id')).prefetch_related('service_employee_data')
-
-
-@method_decorator(csrf_protect, name='dispatch')
-class ServiceDetailAPIView(mixins.UpdateModelMixin, mixins.DestroyModelMixin,
-                           generics.GenericAPIView):
-    permission_classes = (IsAdmin, )
-    queryset = Service.objects.all()
-    serializer_class = serializers.ServiceSerializer
-    lookup_field = 'id'
-    lookup_url_kwarg = 'service_id'
-
-    def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
-
-
-@method_decorator(csrf_protect, name='dispatch')
-class ServiceCreateAPIView(generics.CreateAPIView):
-    permission_classes = (IsAdmin, )
-    serializer_class = serializers.ServiceSerializer
-    queryset = Service.objects.all()
+        return Customer.objects.filter(
+            business_id=self.kwargs.get('business_id'))
 
 
 class NotificationsUnreadAmountAPIView(APIView):

@@ -1,8 +1,7 @@
 from rest_framework import serializers
 
 from server.abstract.serializers import Subgroups
-from data.models import Business, BusinessCategory, BlockedHours, OpenHours, Customer, CustomerImage, Employee, Service, ServiceGroup, ServiceEmployee, Notification, Resource, ResourceGroup, ServiceResources
-from accounts.models import Account
+from data.models import Business, BusinessCategory, BlockedHours, OpenHours, Customer, CustomerImage, Employee, Service, ServiceGroup, ServiceEmployee, Notification, Resource, ResourceGroup, ServiceRelatedData
 
 
 class ResourceGroupSerializer(Subgroups):
@@ -16,15 +15,13 @@ class ResourceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ServiceResourcesSerializer(serializers.ModelSerializer):
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-
-        return data['resources']
-
+class RelatedDataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ServiceResources
-        fields = ('resources', )
+        model = ServiceRelatedData
+        fields = (
+            'resources',
+            'products',
+        )
 
 
 class ServiceEmployeeSerializer(serializers.ModelSerializer):
@@ -49,7 +46,7 @@ class ServiceEmployeeSerializer(serializers.ModelSerializer):
 
 class ServiceSerializer(serializers.ModelSerializer):
     display_time = serializers.SerializerMethodField('get_display_time')
-    resources = ServiceResourcesSerializer(source='resources_data', many=True)
+    related_data = RelatedDataSerializer(many=True)
 
     def get_display_time(self, obj):
         hours = obj.time // 60
@@ -61,6 +58,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Service
+        fields = '__all__'
 
 
 class ServiceSerializerAdmin(ServiceSerializer):
@@ -111,42 +109,45 @@ class BlockedHoursSerializer(serializers.ModelSerializer):
 
 
 class BusinessSerializer(serializers.ModelSerializer):
-    open_hours = OpenHoursSerializer(many=True)
-    blocked_hours = BlockedHoursSerializer(many=True)
+    open_hours = OpenHoursSerializer(many=True, required=False)
+    blocked_hours = BlockedHoursSerializer(many=True, required=False)
     categories = serializers.SlugRelatedField(
         many=True,
         read_only=True,
         slug_field='slug',
     )
-    service_groups = serializers.SerializerMethodField('get_service_groups')
-    services = serializers.SerializerMethodField('get_services')
-    resource_groups = serializers.SerializerMethodField('get_resource_groups')
-    resources = serializers.SerializerMethodField('get_resources')
 
-    def get_services(self, obj):
-        user = self.context.get('request').user
-        serializer = ServiceSerializerAdmin if user.is_authenticated and user.is_admin else ServiceSerializerCustomer
+    # service_groups = serializers.SerializerMethodField('get_service_groups')
+    # services = serializers.SerializerMethodField('get_services')
+    # resource_groups = serializers.SerializerMethodField('get_resource_groups')
+    # resources = serializers.SerializerMethodField('get_resources')
 
-        return serializer(Service.objects.filter(
-            business_id=obj.id).select_related('group').prefetch_related(
-                'employees', 'resources_data'),
-                          many=True).data
+    # def get_services(self, obj):
+    #     user = self.context.get('request').user
+    #     serializer = ServiceSerializerAdmin if user.is_authenticated and user.is_admin else ServiceSerializerCustomer
 
-    def get_service_groups(self, obj):
-        return ServiceGroupSerializer(ServiceGroup.objects.filter(
-            business_id=obj.id,
-            parent=None).prefetch_related('employees', 'services'),
-                                      many=True).data
+    #     return serializer(Service.objects.filter(
+    #         business_id=obj.id).select_related('group').prefetch_related(
+    #             'employees', 'related_data'),
+    #                       many=True).data
 
-    def get_resources(self, obj):
-        return ResourceSerializer(Resource.objects.filter(
-            business_id=obj.id).select_related('group'),
-                                  many=True).data
+    # def get_service_groups(self, obj):
+    #     return ServiceGroupSerializer(ServiceGroup.objects.filter(
+    #         business_id=obj.id,
+    #         parent=None).prefetch_related('employees', 'services'),
+    #                                   many=True).data
 
-    def get_resource_groups(self, obj):
-        return ResourceGroupSerializer(ResourceGroup.objects.filter(
-            business_id=obj.id, parent=None),
-                                       many=True).data
+    # def get_resources(self, obj):
+    #     return ResourceSerializer(Resource.objects.filter(
+    #         business_id=obj.id).select_related('group'),
+    #                               many=True).data
+
+    # def get_resource_groups(self, obj):
+    #     return ResourceGroupSerializer(ResourceGroup.objects.filter(
+    #         business_id=obj.id, parent=None),
+    #                                    many=True).data
+
+    # def create(self, )
 
     class Meta:
         model = Business
