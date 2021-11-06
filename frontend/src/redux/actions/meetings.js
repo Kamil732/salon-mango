@@ -51,7 +51,7 @@ const setMeeting = (data, getState) => {
 		// TODO: Employees are not loaded yet
 		res.push({
 			...eventData,
-			color: getState().data.employees.find(
+			color: getState().data.business.employees.find(
 				({ id }) => id === data.services[i].employee
 			).color,
 			resourceId: `employee-${data.services[i].employee}`,
@@ -121,29 +121,29 @@ export const loadMeetings =
 		if (dates.length > 0) {
 			dispatch({ type: MEETINGS_LOADING })
 
-			try {
-				let data = []
-				const res = await axios.get(
-					`${process.env.REACT_APP_API_URL}/meetings/?from=${
-						dates[0]
-					}&to=${dates[dates.length - 1]}`
-				)
+			// try {
+			let data = []
+			const res = await axios.get(
+				`${process.env.REACT_APP_API_URL}/meetings/?from=${
+					dates[0]
+				}&to=${dates[dates.length - 1]}`
+			)
 
-				for (let i = 0; i < res.data.length; i++)
-					data.push(...setMeeting(res.data[i], getState))
+			for (let i = 0; i < res.data.length; i++)
+				data.push(...setMeeting(res.data[i], getState))
 
-				dispatch(addLoadedDates(dates))
-				dispatch({
-					type: LOAD_MEETINGS,
-					payload: data,
-				})
-			} catch (err) {
-				NotificationManager.error(
-					'Nie udało się załadować wizyt',
-					'Błąd'
-				)
-				console.error(`The error occurred: ${err}`)
-			}
+			dispatch(addLoadedDates(dates))
+			dispatch({
+				type: LOAD_MEETINGS,
+				payload: data,
+			})
+			// } catch (err) {
+			// 	NotificationManager.error(
+			// 		'Nie udało się załadować wizyt',
+			// 		'Błąd'
+			// 	)
+			// 	console.error(`The error occurred: ${err}`)
+			// }
 		}
 	}
 

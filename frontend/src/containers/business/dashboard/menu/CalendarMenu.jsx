@@ -7,7 +7,6 @@ import '../../../../assets/css/calendar-picker.css'
 
 import moment from 'moment'
 import { useTranslation } from 'react-i18next'
-import { loadEmployees } from '../../../../redux/actions/data'
 import {
 	updateCalendarDates,
 	updateResourceMap,
@@ -21,7 +20,6 @@ import { NotificationManager } from 'react-notifications'
 const Calendar = lazy(() => import('react-calendar'))
 
 function CalendarMenu({
-	loadEmployees,
 	employees,
 	resources,
 	resourceMap,
@@ -32,10 +30,6 @@ function CalendarMenu({
 	const { t } = useTranslation('business_panel')
 	const [activeDay, setActiveDay] = useState(currentDate)
 	const formatShortWeekday = (_, date) => moment(date).format('dd')
-
-	useEffect(() => {
-		if (employees.length === 0) loadEmployees()
-	}, [employees, loadEmployees])
 
 	useEffect(() => {
 		setActiveDay(currentDate)
@@ -233,8 +227,8 @@ CalendarMenu.prototype.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-	employees: state.data.employees,
-	resources: state.data.business.data.resources,
+	employees: state.data.business.employees,
+	resources: state.data.business.resources,
 	resourceMap: state.meetings.resourceMap,
 	currentDate: state.meetings.calendarDates.currentDate,
 })
@@ -242,7 +236,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
 	updateCalendarDates,
 	updateResourceMap,
-	loadEmployees,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CalendarMenu)

@@ -1,9 +1,7 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { useId } from 'react-id-generator'
-
-import { loadEmployees } from '../../../../redux/actions/data'
 
 import Label from '../../../../layout/forms/inputs/Label'
 import { FormControl } from '../../../../layout/forms/Forms'
@@ -16,15 +14,10 @@ function EmployeeInput({
 	serviceDisplayTime,
 	options,
 	employees,
-	loadEmployees,
 	onChange,
 	...props
 }) {
 	const [id] = useId(1, 'employee-')
-
-	useEffect(() => {
-		if (employees.length === 0) loadEmployees()
-	}, [employees, loadEmployees])
 
 	const getOptionLabel = (option) => option.name
 
@@ -70,16 +63,11 @@ EmployeeInput.prototype.propTypes = {
 	employees: PropTypes.array,
 	extraOptions: PropTypes.array,
 	options: PropTypes.array,
-	loadEmployees: PropTypes.func.isRequired,
 	onChange: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => ({
-	employees: state.data.employees,
+	employees: state.data.business.employees,
 })
 
-const mapDispatchToProps = {
-	loadEmployees,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(EmployeeInput)
+export default connect(mapStateToProps, null)(EmployeeInput)

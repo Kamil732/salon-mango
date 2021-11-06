@@ -5,7 +5,6 @@ import { FiLayers } from 'react-icons/fi'
 
 export default function getEventTooltip(
 	{ id: eventServiceId, data: event },
-	services,
 	showTime = true
 ) {
 	const start = moment(event.start)
@@ -44,10 +43,7 @@ export default function getEventTooltip(
 								}}
 							>
 								{index + 1}/{event.services.length}{' '}
-								{
-									services.find(({ id }) => id === service.id)
-										.name
-								}{' '}
+								{service.name}
 								{service.resources.length > 0 && (
 									<>
 										<FiLayers /> {service.resources.length}

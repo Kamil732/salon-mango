@@ -21,4 +21,12 @@ function useDebounce(value, delay) {
 	return debouncedValue
 }
 
+function withDebounce(WrappedComponent, delay) {
+	return function (props) {
+		const debouncedValue = useDebounce(props.value, delay)
+		return <WrappedComponent {...props} debouncedValue={debouncedValue} />
+	}
+}
+
+export { withDebounce }
 export default useDebounce

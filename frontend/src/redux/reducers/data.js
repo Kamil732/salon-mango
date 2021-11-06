@@ -6,7 +6,6 @@ import {
 	GET_NOTIFICATIONS,
 	GET_NOTIFICATIONS_ERROR,
 	GET_NOTIFICATIONS_UNREAD_AMOUNT,
-	LOAD_EMPLOYEES,
 	LOAD_CUSTOMERS,
 	NOTIFICATIONS_LOADING,
 	NOTIFICATION_CONNECT_WS,
@@ -15,17 +14,31 @@ import {
 	LOGOUT,
 	AUTH_ERROR,
 	LOADING_BUSINESS_DATA,
+	LOADING_CUSTOMERS,
+	LOADING_PRODUCTS,
+	LOAD_PRODUCTS,
 } from '../actions/types'
 
 import notifySound from '../../assets/sounds/pristine-609.mp3'
 
 const initialState = {
 	business: {
-		loading: false,
+		loading: null,
 		data: {},
+		employees: [],
+		services: [],
+		serviceGroups: [],
+		resources: [],
+		resourceGroups: [],
+		customers: {
+			loading: null,
+			data: [],
+		},
+		products: {
+			loading: null,
+			data: [],
+		},
 	},
-	employees: [],
-	customers: [],
 	notifications: {
 		loading: false,
 		ws: null,
@@ -42,8 +55,30 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				business: {
+					...initialState.business,
 					loading: true,
-					data: {},
+				},
+			}
+		case LOADING_CUSTOMERS:
+			return {
+				...state,
+				business: {
+					...state.business,
+					customers: {
+						...state.business.customers,
+						loading: true,
+					},
+				},
+			}
+		case LOADING_PRODUCTS:
+			return {
+				...state,
+				business: {
+					...state.business,
+					products: {
+						...state.business.products,
+						loading: true,
+					},
 				},
 			}
 		case UPDATE_DATA:
@@ -53,13 +88,13 @@ export default function (state = initialState, action) {
 				business: {
 					...state.business,
 					loading: false,
-					data: action.payload,
+					data: action.payload.data,
+					employees: action.payload.employees,
+					resources: action.payload.resources,
+					resourceGroups: action.payload.resource_groups,
+					services: action.payload.services,
+					serviceGroups: action.payload.service_groups,
 				},
-			}
-		case LOAD_EMPLOYEES:
-			return {
-				...state,
-				employees: action.payload,
 			}
 		case LOAD_CUSTOMERS:
 			let newCustomers = []
@@ -67,15 +102,41 @@ export default function (state = initialState, action) {
 			// Iterate over payload and check if payload[i] is in customers
 			// If it's not, then add it to state
 			for (let i = 0; i < action.payload.length; i++) {
-				const found = state.customers.some(
-					(item) => item.id === action.payload[i].id
-				)
+				const found =
+					state.business.customers.data.length > 0
+						? state.business.customers.data.some(
+								(item) => item.id === action.payload[i].id
+						  )
+						: false
 				if (!found) newCustomers.push(action.payload[i])
 			}
 
 			return {
 				...state,
-				customers: [...state.customers, ...newCustomers],
+				business: {
+					...state.business,
+					customers: {
+						...state.business.customers,
+						loading: false,
+						data: [
+							...state.business.customers.data,
+							...newCustomers,
+						],
+					},
+				},
+			}
+		case LOAD_PRODUCTS:
+			return {
+				...state,
+				business: {
+					...state.business,
+					products: {
+						...state.business.products,
+						loading: false,
+						groups: action.payload.product_groups,
+						data: action.payload.products,
+					},
+				},
 			}
 		case NOTIFICATION_CONNECT_WS:
 			return {
@@ -192,12 +253,7 @@ export default function (state = initialState, action) {
 			}
 		case AUTH_ERROR:
 		case LOGOUT:
-			return {
-				...state,
-				business: initialState.business,
-				employees: initialState.employees,
-				customers: initialState.customers,
-			}
+			return initialState
 		default:
 			return state
 	}

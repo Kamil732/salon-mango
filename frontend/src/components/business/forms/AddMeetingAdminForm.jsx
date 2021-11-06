@@ -415,8 +415,8 @@ class AddMeetingAdminForm extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	employees: state.data.employees,
-	resources: state.data.business.data.resources,
+	employees: state.data.business.employees,
+	resources: state.data.business.resources,
 	resourceMap: state.meetings.resourceMap,
 })
 

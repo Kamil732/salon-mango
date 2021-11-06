@@ -20,7 +20,7 @@ function EmployeeAndResourceInputs({
 	updateEmployee,
 	resource,
 	updateResource,
-	resources,
+	resourcesLength,
 }) {
 	const [isOpen, setIsOpen] = useState(false)
 
@@ -43,7 +43,7 @@ function EmployeeAndResourceInputs({
 	)
 
 	const resourceInput =
-		resources.length > 0 ? (
+		resourcesLength > 0 ? (
 			<ResourceInput
 				required={Object.keys(employee).length === 0}
 				value={resource}
@@ -109,7 +109,7 @@ function EmployeeAndResourceInputs({
 					onClick={() => setIsOpen(true)}
 					className={`btn-picker ${employee ? employee.color : ''}`}
 					data-tip={
-						employee
+						Object.keys(employee).length > 0
 							? `pracownik: ${employee.name}`
 							: 'brak pracownika'
 					}
@@ -118,7 +118,7 @@ function EmployeeAndResourceInputs({
 					}}
 					data-for="employeeBtnTip"
 				>
-					{employee ? (
+					{Object.keys(employee).length > 0 ? (
 						getEmployeeInitial(employee.name)
 					) : (
 						<GrUserWorker />
@@ -164,7 +164,7 @@ function EmployeeAndResourceInputs({
 }
 
 const mapStateToProps = (state) => ({
-	resources: state.data.business.data.resources,
+	resourcesLength: state.data.business.resources.length,
 })
 
 export default connect(mapStateToProps, null)(EmployeeAndResourceInputs)

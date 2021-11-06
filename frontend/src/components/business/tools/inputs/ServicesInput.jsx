@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { useId } from 'react-id-generator'
 import '../../../../assets/css/table.css'
 
+import moment from 'moment'
 import { FiMenu, FiTrash2, FiLayers } from 'react-icons/fi'
 import { GrUserWorker } from 'react-icons/gr'
 import { GiOfficeChair } from 'react-icons/gi'
@@ -22,11 +23,10 @@ import CircleLoader from '../../../../layout/loaders/CircleLoader'
 import ReactTooltip from 'react-tooltip'
 import Dropdown from '../../../../layout/buttons/dropdowns/Dropdown'
 import ButtonContainer from '../../../../layout/buttons/ButtonContainer'
-import moment from 'moment'
-import ConsumptionInput from './ConsumptionInput'
 
 const EmployeeInput = lazy(() => import('./EmployeeInput'))
 const ResourcesInput = lazy(() => import('./ResourcesInput'))
+const ConsumptionInput = lazy(() => import('./ConsumptionInput'))
 
 const CATEOGRIES = [0, 1, 2]
 
@@ -41,7 +41,6 @@ function ServicesInput({
 	calendar_step,
 	showMoreOptions,
 	eventStartDate,
-	dispatch,
 	...props
 }) {
 	const [selected, setSelected] = useState({})
@@ -830,8 +829,8 @@ ServicesInput.prototype.propTypes = {
 
 const mapStateToProps = (state) => ({
 	calendar_step: state.data.business.data.calendar_step,
-	services: state.data.business.data.services,
-	resources: state.data.business.data.resources,
+	services: state.data.business.services,
+	resources: state.data.business.resources,
 })
 
 export default connect(mapStateToProps, null)(ServicesInput)

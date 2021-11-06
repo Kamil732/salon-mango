@@ -151,7 +151,9 @@ const INITIAL_STEPS_DATA = [
 
 				const business_body = JSON.stringify({
 					name: business_name,
+					calling_code: phone_prefix,
 					phone_number: phone_prefix + phone_number,
+					country,
 					employees: [
 						{
 							name,

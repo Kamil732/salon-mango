@@ -8,9 +8,11 @@ import {
 	GET_NOTIFICATION,
 	NOTIFICATION_CONNECT_WS,
 	ADD_UNREAD_NOTIFICATIONS_AMOUNT,
-	LOAD_EMPLOYEES,
 	LOAD_CUSTOMERS,
 	LOADING_BUSINESS_DATA,
+	LOADING_CUSTOMERS,
+	LOAD_PRODUCTS,
+	LOADING_PRODUCTS,
 } from './types'
 
 import { NotificationManager } from 'react-notifications'
@@ -19,13 +21,41 @@ import getHeaders from '../../helpers/getHeaders'
 import axios from 'axios'
 import { updateResourceMap } from './meetings'
 
-export const getBusinessData = (businessId) => async (dispatch) => {
+export const getBusinessData = (businessId) => async (dispatch, getState) => {
 	dispatch({ type: LOADING_BUSINESS_DATA })
 
 	try {
 		const res = await axios.get(
 			`${process.env.REACT_APP_API_URL}/data/businesses/${businessId}/`
 		)
+
+		const employeeResourceData = {
+			id: `employee-${res.data.employees[0].id}`,
+			title: res.data.employees[0].name,
+			employeeId: res.data.employees[0].id,
+			resourceId: null,
+		}
+
+		dispatch(
+			updateResourceMap('data', [
+				...getState().meetings.resourceMap.data,
+				employeeResourceData,
+			])
+		)
+		dispatch(updateResourceMap('selected', employeeResourceData))
+
+		if (res.data.resources.length > 0)
+			dispatch(
+				updateResourceMap('data', [
+					...getState().meetings.resourceMap.data,
+					{
+						id: `resource-${res.data.resources[0].id}`,
+						title: res.data.resources[0].name,
+						employeeId: null,
+						resourceId: res.data.resources[0].id,
+					},
+				])
+			)
 
 		dispatch({
 			type: GET_BUSINESS_DATA,
@@ -40,44 +70,9 @@ export const getBusinessData = (businessId) => async (dispatch) => {
 	}
 }
 
-export const loadEmployees = () => async (dispatch, getState) => {
-	try {
-		const res = await axios.get(
-			`${process.env.REACT_APP_API_URL}/data/businesses/${
-				getState().data.business.data.id
-			}/employees/`
-		)
-
-		const data = {
-			id: `employee-${res.data[0].id}`,
-			title: res.data[0].name,
-			employeeId: res.data[0].id,
-			resourceId: null,
-		}
-
-		dispatch(
-			updateResourceMap('data', [
-				...getState().meetings.resourceMap.data,
-				data,
-			])
-		)
-		if (Object.keys(getState().meetings.resourceMap.selected).length === 0)
-			dispatch(updateResourceMap('selected', data))
-
-		dispatch({
-			type: LOAD_EMPLOYEES,
-			payload: res.data,
-		})
-	} catch (err) {
-		NotificationManager.error(
-			'Nie udało się załadować listy fryzjerów',
-			'Błąd',
-			4000
-		)
-	}
-}
-
 export const loadCustomers = (value) => async (dispatch, getState) => {
+	dispatch({ type: LOADING_CUSTOMERS })
+
 	try {
 		const res = await axios.get(
 			`${process.env.REACT_APP_API_URL}/data/businesses/${
@@ -92,7 +87,7 @@ export const loadCustomers = (value) => async (dispatch, getState) => {
 
 		value = value.toLowerCase()
 
-		return getState().data.customers.filter(
+		return getState().data.business.customers.data.filter(
 			(customer) =>
 				customer.full_name.toLowerCase().startsWith(value) ||
 				customer.first_name.toLowerCase().startsWith(value) ||
@@ -101,9 +96,10 @@ export const loadCustomers = (value) => async (dispatch, getState) => {
 	} catch (err) {
 		NotificationManager.error(
 			'Nie udało się załadować listy klientów',
-			'Błąd',
-			4000
+			'Błąd'
 		)
+
+		return []
 	}
 }
 
@@ -112,6 +108,28 @@ export const addCustomer = (data) => async (dispatch) => {
 		type: LOAD_CUSTOMERS,
 		payload: [data],
 	})
+}
+
+export const loadProducts = () => async (dispatch, getState) => {
+	dispatch({ type: LOADING_PRODUCTS })
+
+	try {
+		const res = await axios.get(
+			`${process.env.REACT_APP_API_URL}/data/businesses/${
+				getState().data.business.data.id
+			}/products/`
+		)
+
+		dispatch({
+			type: LOAD_PRODUCTS,
+			payload: res.data,
+		})
+	} catch (err) {
+		NotificationManager.error(
+			'Nie udało się załadować listy produktów',
+			'Błąd'
+		)
+	}
 }
 
 export const getUnreadNotificationsAmount = () => async (dispatch) => {

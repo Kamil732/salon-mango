@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import '../../../../assets/css/table.css'
 
+import { loadProducts } from '../../../../redux/actions/data'
+
 import { FiTrash2 } from 'react-icons/fi'
 import { useId } from 'react-id-generator'
 import Dropdown from '../../../../layout/buttons/dropdowns/Dropdown'
@@ -13,12 +15,15 @@ function ConsumptionInput(
 	updateValue,
 	options,
 	products,
-	dispatch,
+	loadProducts,
 	...props
 ) {
-	products = []
 	const [showInput, setShowInput] = useState(false)
 	const [dropdownId] = useId(1, 'consumption-')
+
+	useEffect(() => {
+		if (products.loading === null) loadProducts()
+	}, [loadProducts, products.loading])
 
 	useEffect(() => {
 		if (value.length === 0 && !showInput) setShowInput(true)
@@ -31,7 +36,8 @@ function ConsumptionInput(
 			getOptionLabel={(option) => option.name}
 			getOptionValue={(option) => option.id}
 			getValuesValue={(option) => option.id}
-			options={options?.length > 0 ? options : products}
+			options={options?.length > 0 ? options : products.data}
+			isLoading={products.loading}
 			isMulti
 			autoFocus
 			onChange={(option) => updateValue([...value, option])}
@@ -103,12 +109,17 @@ function ConsumptionInput(
 ConsumptionInput.prototype.propTypes = {
 	value: PropTypes.array,
 	options: PropTypes.array,
-	products: PropTypes.array,
+	products: PropTypes.object.isRequired,
 	updateValue: PropTypes.func.isRequired,
+	loadProducts: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => ({
-	products: state.data.business.data.products,
+	products: state.data.business.products,
 })
 
-export default connect(mapStateToProps, null)(ConsumptionInput)
+const mapDispatchToProps = {
+	loadProducts,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ConsumptionInput)

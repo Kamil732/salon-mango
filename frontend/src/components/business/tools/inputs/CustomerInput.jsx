@@ -42,7 +42,10 @@ function CustomerInput({
 						{...props}
 					/>
 				</FormControl>
-				<Dropdown.ClearBtn clear={() => onChange({})} value={value} />
+				<Dropdown.ClearBtn
+					clear={() => onChange({})}
+					value={Object.keys(value).length > 0}
+				/>
 			</Dropdown.InputContainer>
 			{!value?.full_name && (
 				<Button type="button" small primary onClick={changeForm}>
@@ -63,7 +66,7 @@ CustomerInput.prototype.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-	customers: state.data.customers,
+	customers: state.data.business.customers.data,
 })
 
 const mapDispatchToProps = {

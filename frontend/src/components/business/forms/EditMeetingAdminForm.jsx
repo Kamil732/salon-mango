@@ -2,6 +2,7 @@ import React, { Component, lazy, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
+import { addCustomer } from '../../../redux/actions/data'
 import setMeetingEndDate from '../../../helpers/setMeetingEndDate'
 
 import CSRFToken from '../../CSRFToken'
@@ -13,6 +14,8 @@ import Textarea from '../../../layout/forms/inputs/Textarea'
 import ErrorBoundary from '../../ErrorBoundary'
 import CircleLoader from '../../../layout/loaders/CircleLoader'
 import Modal from '../../../layout/Modal'
+import axios from 'axios'
+import getHeaders from '../../../helpers/getHeaders'
 
 const AddCustomerForm = lazy(() => import('./AddCustomerForm'))
 const EmployeeInput = lazy(() => import('../tools/inputs/EmployeeInput'))
@@ -26,15 +29,16 @@ class EditMeetingAdminForm extends Component {
 	static propTypes = {
 		selected: PropTypes.object.isRequired,
 		saveMeeting: PropTypes.func.isRequired,
+		businessId: PropTypes.number.isRequired,
 		employees: PropTypes.array,
 		customers: PropTypes.array,
 		resources: PropTypes.array,
 		servicesData: PropTypes.array.isRequired,
-		loadCustomers: PropTypes.func.isRequired,
 		startDate: PropTypes.instanceOf(Date),
 		calendarStep: PropTypes.number,
 		resourceMap: PropTypes.object.isRequired,
 		changeEndDate: PropTypes.func.isRequired,
+		addCustomer: PropTypes.func.isRequired,
 	}
 
 	constructor(props) {
@@ -52,9 +56,10 @@ class EditMeetingAdminForm extends Component {
 			deleteLoading: false,
 			isAddCustomerForm: false,
 
-			customer: props.customers.find(
-				(customer) => customer.id === props.selected.data.customer
-			),
+			customer:
+				props.customers.data.find(
+					(customer) => customer.id === props.selected.data.customer
+				) || {},
 			employee: selectedResourceMap?.employeeId
 				? props.employees.find(
 						({ id }) => id === selectedResourceMap.employeeId
@@ -86,17 +91,27 @@ class EditMeetingAdminForm extends Component {
 		this.onSubmit = this.onSubmit.bind(this)
 	}
 
-	componentDidUpdate(prevProps, prevState) {
-		if (
-			prevProps.customers !== this.props.customers &&
-			Object.keys(this.state.customer).keys === 0
-		)
-			this.setState({
-				customer: this.props.customers.find(
-					(customer) => customer.id === this.props.selected.customer
-				),
-			})
+	async componentDidMount() {
+		const { businessId, addCustomer, selected } = this.props
 
+		if (Object.keys(this.state.customer).length === 0) {
+			try {
+				const res = await axios.get(
+					`${process.env.REACT_APP_API_URL}/data/businesses/${businessId}/customers/${selected.data.customer}/`,
+					getHeaders(true)
+				)
+
+				addCustomer(res.data)
+				this.setState({
+					customer: res.data,
+				})
+			} catch (error) {
+				console.log(error)
+			}
+		}
+	}
+
+	componentDidUpdate(_, prevState) {
 		setMeetingEndDate(
 			prevState,
 			this.state,
@@ -199,9 +214,9 @@ class EditMeetingAdminForm extends Component {
 						<form onSubmit={this.onSubmit}>
 							<CSRFToken />
 
-							{selected.blocked ? (
+							{selected.data.blocked ? (
 								<EmployeeInput
-									required={selected.blocked}
+									required={selected.data.blocked}
 									value={employee}
 									onChange={(option) =>
 										this.setState({ employee: option })
@@ -216,7 +231,7 @@ class EditMeetingAdminForm extends Component {
 							) : (
 								<>
 									<CustomerInput
-										required={!selected.blocked}
+										required={!selected.data.blocked}
 										value={customer}
 										onChange={(option) =>
 											this.setState({ customer: option })
@@ -231,7 +246,7 @@ class EditMeetingAdminForm extends Component {
 									<FormGroup>
 										<ServicesInput
 											isAdminPanel
-											required={!selected.blocked}
+											required={!selected.data.blocked}
 											value={services}
 											updateState={(state) =>
 												this.setState({
@@ -282,7 +297,7 @@ class EditMeetingAdminForm extends Component {
 									htmlFor="private_description"
 									inputValue={private_description}
 								>
-									{selected.blocked
+									{selected.data.blocked
 										? 'Powód'
 										: 'Opis (widoczny dla personelu)'}
 								</Label>
@@ -312,7 +327,8 @@ class EditMeetingAdminForm extends Component {
 									loadingText="Usuwanie"
 									disabled={saveLoading}
 								>
-									Usuń {selected.blocked ? 'urlop' : 'wizytę'}
+									Usuń{' '}
+									{selected.data.blocked ? 'urlop' : 'wizytę'}
 								</Button>
 								<Button
 									type="submit"
@@ -322,9 +338,10 @@ class EditMeetingAdminForm extends Component {
 									loadingText="Zapisywanie"
 									disabled={
 										deleteLoading ||
-										(employee === selected.employee &&
-											customer === selected.customer &&
-											services === selected.services)
+										(employee === selected.data.employee &&
+											customer ===
+												selected.data.customer &&
+											services === selected.data.services)
 									}
 								>
 									Zapisz
@@ -339,11 +356,19 @@ class EditMeetingAdminForm extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	employees: state.data.employees,
-	customers: state.data.customers,
-	resources: state.data.business.data.resources,
-	servicesData: state.data.business.data.services,
+	businessId: state.data.business.data.id,
+	employees: state.data.business.employees,
+	customers: state.data.business.customers,
+	resources: state.data.business.resources,
+	servicesData: state.data.business.services,
 	resourceMap: state.meetings.resourceMap,
 })
 
-export default connect(mapStateToProps, null)(EditMeetingAdminForm)
+const mapDispatchToProps = {
+	addCustomer,
+}
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(EditMeetingAdminForm)
