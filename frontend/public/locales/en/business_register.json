@@ -2,7 +2,7 @@
     "email_check": {
         "title": "What's your email address?"
     },
-    "salon_data": {
+    "business_data": {
         "title": "About you",
         "description": "Tell us more about yourself and your business."
     },
