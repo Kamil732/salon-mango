@@ -182,6 +182,12 @@ class Dropdown extends Component {
 					),
 				})
 		}
+
+		if (this.state.inputValue !== prevState.inputValue)
+			this.setState({
+				loading: this.state.inputValue !== this.props.debouncedValue,
+			})
+
 		if (
 			this.props.isLoading === null &&
 			prevProps.options.length !== this.props.options.length
@@ -192,10 +198,9 @@ class Dropdown extends Component {
 			this.setState({ loading: this.props.isLoading })
 
 		if (prevState.filteredOptions !== this.state.filteredOptions)
-			this.setState({ navigatedIndex: 0 })
+			this.setState({ navigatedIndex: 0, loading: false })
 
 		if (prevProps.debouncedValue !== this.props.debouncedValue) {
-			console.log(this.cachedSearchKeys, this.props.debouncedValue)
 			if (this.props.debouncedValue in this.cachedSearchKeys) {
 				this.setState({
 					filteredOptions:
