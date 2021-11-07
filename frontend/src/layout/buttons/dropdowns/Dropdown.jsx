@@ -38,7 +38,7 @@ class Dropdown extends Component {
 		super(props)
 
 		this.container = React.createRef()
-		this.savedSearchKeys = {}
+		this.cachedSearchKeys = {}
 
 		this.state = {
 			isOpen: false,
@@ -74,7 +74,7 @@ class Dropdown extends Component {
 	}
 
 	handleClickOutside = (e) => {
-		const { isMulti, value, setShowInput } = this.props
+		const { isMulti, value, setShowInput, setDebouncedValue } = this.props
 
 		if (
 			this.container.current &&
@@ -82,6 +82,7 @@ class Dropdown extends Component {
 			e.offsetX <= e.target.clientWidth - 1 &&
 			e.offsetY <= e.target.clientHeight - 1
 		) {
+			setDebouncedValue('')
 			this.setState({ isOpen: false, inputValue: '' })
 
 			if (isMulti && value.length > 0) setShowInput(false)
@@ -90,6 +91,7 @@ class Dropdown extends Component {
 
 	handleOnChange = (option) => {
 		this.props.onChange(option)
+		this.props.setDebouncedValue('')
 		this.setState({ isOpen: false, inputValue: '' })
 	}
 
@@ -170,7 +172,7 @@ class Dropdown extends Component {
 			if (this.props.searchAsync && this.props.options.length === 0) {
 				this.asyncLoadOptions().then(
 					(filteredOptions) =>
-						(this.savedSearchKeys[this.props.debouncedValue] =
+						(this.cachedSearchKeys[this.props.debouncedValue] =
 							filteredOptions)
 				)
 			} else
@@ -193,18 +195,18 @@ class Dropdown extends Component {
 			this.setState({ navigatedIndex: 0 })
 
 		if (prevProps.debouncedValue !== this.props.debouncedValue) {
-			if (this.props.debouncedValue in this.savedSearchKeys) {
+			console.log(this.cachedSearchKeys, this.props.debouncedValue)
+			if (this.props.debouncedValue in this.cachedSearchKeys) {
 				this.setState({
 					filteredOptions:
-						this.savedSearchKeys[this.props.debouncedValue],
+						this.cachedSearchKeys[this.props.debouncedValue],
 				})
 			} else {
-				console.log(this.savedSearchKeys, this.props.debouncedValue)
 				if (this.props.searchAsync)
 					// Search Async
 					this.asyncLoadOptions().then(
 						(filteredOptions) =>
-							(this.savedSearchKeys[this.props.debouncedValue] =
+							(this.cachedSearchKeys[this.props.debouncedValue] =
 								filteredOptions)
 					)
 				// Search Sync
@@ -265,12 +267,16 @@ class Dropdown extends Component {
 					JSON.stringify(this.props.value)) ||
 			(this.props.isMulti &&
 				prevProps.value.length !== this.props.value.length)
-		)
+		) {
+			// Reset cached search keys
+			this.cachedSearchKeys = {}
+
 			this.setState({
 				filteredOptions: this.props.options.filter((option) =>
 					this.isNotSelected(option)
 				),
 			})
+		}
 	}
 
 	render() {
