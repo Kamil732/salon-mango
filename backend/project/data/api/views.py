@@ -101,54 +101,6 @@ class UpdateEmployeeAPIView(generics.UpdateAPIView):
     lookup_url_kwarg = 'employee_slug'
 
 
-@method_decorator(csrf_protect, name='create')
-class CustomerImageListAPIView(generics.ListCreateAPIView):
-    permission_classes = (IsAdminOrReadOnly, )
-    queryset = CustomerImage.objects.order_by('-id')
-    serializer_class = serializers.CustomerImageSerializer
-    pagination_class = pagination.CustomerImagesPagination
-
-    def create(self, request, *args, **kwargs):
-        data = []
-        field_ids = []
-
-        for (key, value) in request.data.items():
-            field = key.split('-')[0]
-            field_id = int(key.split('-')[1])
-
-            if field_id in field_ids:
-                data[field_id][field] = value
-            else:
-                field_ids.append(field_id)
-                data.append({
-                    field: value,
-                })
-
-        serializer = self.get_serializer(data=data, many=True)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data,
-                        status=status.HTTP_201_CREATED,
-                        headers=headers)
-
-
-@method_decorator(csrf_protect, name='dispatch')
-class CustomerImageDetailAPIView(mixins.UpdateModelMixin,
-                                 mixins.DestroyModelMixin,
-                                 generics.GenericAPIView):
-    permission_classes = (IsAdmin, )
-    queryset = CustomerImage.objects.all()
-    lookup_field = 'id'
-    lookup_url_kwarg = 'customer_image_id'
-
-    def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
-
-
 class CustomerListAPIView(generics.ListCreateAPIView):
     # permission_classes = (IsAdmin,)
     serializer_class = serializers.CustomerSerializer

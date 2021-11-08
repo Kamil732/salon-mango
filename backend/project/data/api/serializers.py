@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from server.abstract.serializers import Subgroups
-from data.models import Business, BusinessCategory, BlockedHours, OpenHours, Customer, CustomerImage, Employee, Service, ServiceGroup, ServiceEmployee, Notification, Resource, ResourceGroup, ServiceRelatedData
+from data.models import Business, BusinessCategory, BlockedHours, OpenHours, Customer, Employee, Service, ServiceGroup, ServiceEmployee, Notification, Resource, ResourceGroup, ServiceRelatedData
 
 
 class ResourceGroupSerializer(Subgroups):
@@ -177,16 +177,6 @@ class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
         fields = '__all__'
-
-
-class CustomerImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomerImage
-        fields = (
-            'image',
-            'title',
-            'id',
-        )
 
 
 class NotificationSerializer(serializers.ModelSerializer):

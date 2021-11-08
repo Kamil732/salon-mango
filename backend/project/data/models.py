@@ -163,14 +163,6 @@ class Employee(Color):
         return self.name
 
 
-class CustomerImage(models.Model):
-    image = models.ImageField(upload_to="customer_images/%Y/%m/%d/")
-    title = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.title
-
-
 class PaymentMethod(models.Model):
     business = models.ForeignKey(Business,
                                  on_delete=models.CASCADE,
