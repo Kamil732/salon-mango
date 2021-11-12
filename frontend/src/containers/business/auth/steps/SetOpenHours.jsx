@@ -6,9 +6,9 @@ import '../../../../assets/css/table.css'
 import moment from 'moment'
 import { AiOutlinePlus } from 'react-icons/ai'
 import { IoIosArrowForward } from 'react-icons/io'
-import { IoTrashOutline } from 'react-icons/io5'
+import { FiTrash2 } from 'react-icons/fi'
 
-import { FormControl } from '../../../../layout/forms/Forms'
+import { FormControl, FormGroup } from '../../../../layout/forms/Forms'
 import CheckBox from '../../../../layout/forms/inputs/CheckBox'
 import Label from '../../../../layout/forms/inputs/Label'
 import TimePicker from '../../../../layout/forms/inputs/TimePicker'
@@ -28,7 +28,7 @@ function SetOpenHours({ setData, open_hours, blocked_hours }) {
 				blocked_hour.start,
 				blocked_hour.end,
 			]) || null,
-		[selected]
+		[selected?.data.blocked_hours]
 	)
 
 	const toggleWorkDay = (e, weekday) => {
@@ -133,8 +133,8 @@ function SetOpenHours({ setData, open_hours, blocked_hours }) {
 			...prevData,
 			data: {
 				...prevData.data,
-				blocked_hours: prevData.data.blocked_hours.map(
-					(_blocked_hour) => {
+				blocked_hours: prevData.data.blocked_hours
+					.map((_blocked_hour) => {
 						if (_blocked_hour.id === id)
 							return {
 								..._blocked_hour,
@@ -163,8 +163,14 @@ function SetOpenHours({ setData, open_hours, blocked_hours }) {
 							}
 
 						return _blocked_hour
-					}
-				),
+					})
+					.sort((a, b) =>
+						moment(b.start, 'HH:mm').isBefore(
+							moment(a.start, 'HH:mm')
+						)
+							? 1
+							: -1
+					),
 			},
 		}))
 
@@ -180,9 +186,9 @@ function SetOpenHours({ setData, open_hours, blocked_hours }) {
 		}))
 	}
 
-	const formatEndWorkTimeLabel = ({ value, label }) => {
+	const formatEndWorkTimeLabel = ({ value, label }, start) => {
 		const duration = moment(value, 'HH:mm').diff(
-			moment(selected.data.open_hours.start, 'HH:mm'),
+			moment(start, 'HH:mm'),
 			'minutes'
 		)
 		const h = Math.floor(duration / 60)
@@ -320,6 +326,7 @@ function SetOpenHours({ setData, open_hours, blocked_hours }) {
 										},
 									}))
 								}
+								isNotEditable
 								aria-labelledby="open-hours"
 							/>
 
@@ -340,7 +347,13 @@ function SetOpenHours({ setData, open_hours, blocked_hours }) {
 								}
 								beginLimit={selected.data.open_hours.start}
 								moreThanBeginLimit
-								formatOptionLabel={formatEndWorkTimeLabel}
+								formatOptionLabel={(val) =>
+									formatEndWorkTimeLabel(
+										val,
+										selected.data.open_hours.start
+									)
+								}
+								isNotEditable
 								aria-labelledby="open-hours"
 							/>
 						</FormControl.Inline>
@@ -352,9 +365,7 @@ function SetOpenHours({ setData, open_hours, blocked_hours }) {
 								<div>
 									{selected.data.blocked_hours.map(
 										(blocked_hour, idx) => (
-											<FormControl.Inline
-												key={blocked_hour.id}
-											>
+											<FormGroup key={blocked_hour.id}>
 												<FormControl>
 													<Label
 														htmlFor={`blocked-hours-${blocked_hour.id}-start`}
@@ -395,6 +406,7 @@ function SetOpenHours({ setData, open_hours, blocked_hours }) {
 														blockedHours={
 															timePickerBlockedHours
 														}
+														isNotEditable
 													/>
 												</FormControl>
 
@@ -435,6 +447,15 @@ function SetOpenHours({ setData, open_hours, blocked_hours }) {
 														}
 														lessThanEndLimit
 														endTime
+														isNotEditable
+														formatOptionLabel={(
+															val
+														) =>
+															formatEndWorkTimeLabel(
+																val,
+																blocked_hour.start
+															)
+														}
 													/>
 												</FormControl>
 
@@ -446,9 +467,9 @@ function SetOpenHours({ setData, open_hours, blocked_hours }) {
 														)
 													}
 												>
-													<IoTrashOutline size={20} />
+													<FiTrash2 size={20} />
 												</Button>
-											</FormControl.Inline>
+											</FormGroup>
 										)
 									)}
 								</div>
