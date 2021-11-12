@@ -303,6 +303,7 @@ class Dropdown extends Component {
 			editable,
 			regexValidation,
 			setDebouncedValue,
+			debouncedValue,
 			...props
 		} = this.props
 		const { inputValue, isOpen, loading, filteredOptions, navigatedIndex } =
@@ -358,6 +359,8 @@ class Dropdown extends Component {
 								filteredOptions.map((option, index) => (
 									<div
 										className={`dropdown-options__option${
+											option.disabled ? ' disabled' : ''
+										}${
 											navigatedIndex === index
 												? ' navigated'
 												: ''

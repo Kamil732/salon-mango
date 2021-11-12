@@ -12,7 +12,10 @@ function TimePicker({
 	endLimit,
 	moreThanBeginLimit,
 	lessThanEndLimit,
+	startTime,
+	endTime,
 	step,
+	blockedHours,
 	...props
 }) {
 	const [options, setOptions] = useState([])
@@ -21,14 +24,14 @@ function TimePicker({
 	endLimit = endLimit ? endLimit : '23:59'
 	step = step ? step : 15
 
-	if (beginLimit && moreThanBeginLimit)
+	if (moreThanBeginLimit || endTime)
 		beginLimit = moment(beginLimit, 'HH:mm')
-			.add(step, 'minutes')
+			.add(endTime ? step * 2 : step, 'minutes')
 			.format('HH:mm')
 
-	if (endLimit && lessThanEndLimit)
+	if (lessThanEndLimit || startTime)
 		endLimit = moment(endLimit, 'HH:mm')
-			.subtract(step, 'minutes')
+			.subtract(startTime ? step * 2 : step, 'minutes')
 			.format('HH:mm')
 
 	useEffect(() => {
@@ -36,7 +39,33 @@ function TimePicker({
 		let currentTime = beginLimit
 
 		while (true) {
-			_options.push({ label: currentTime, value: currentTime })
+			const newOption = { label: currentTime, value: currentTime }
+
+			// if currentTime is in range of blockedHours than set option to disabled
+			if (blockedHours?.length > 0)
+				for (let i = 0; i < blockedHours.length; i++) {
+					if (
+						blockedHours[i][0] === value ||
+						blockedHours[i][1] === value
+					)
+						continue
+
+					const start = moment(blockedHours[i][0], 'HH:mm').subtract(
+						endTime ? step : step * 2,
+						'minutes'
+					)
+					const end = moment(blockedHours[i][1], 'HH:mm').add(
+						startTime ? step : step * 2,
+						'minutes'
+					)
+
+					if (moment(currentTime, 'HH:mm').isBetween(start, end)) {
+						newOption.disabled = true
+						break
+					}
+				}
+
+			_options.push(newOption)
 
 			if (
 				moment(currentTime, 'HH:mm').isAfter(
@@ -55,7 +84,7 @@ function TimePicker({
 		}
 
 		setOptions(_options)
-	}, [beginLimit, endLimit, step])
+	}, [beginLimit, endLimit, step, blockedHours])
 
 	return (
 		<Dropdown
@@ -82,6 +111,9 @@ TimePicker.prototype.propTypes = {
 	endLimit: PropTypes.string,
 	moreThanBeginLimit: PropTypes.bool,
 	lessThanEndLimit: PropTypes.bool,
+	blockedHours: PropTypes.array,
+	startTime: PropTypes.bool,
+	endTime: PropTypes.bool,
 	step: PropTypes.number,
 }
 
