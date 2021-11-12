@@ -3,16 +3,6 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path(
-        'gallery/',
-        include([
-            path('',
-                 views.CustomerImageListAPIView.as_view(),
-                 name='gallery-list'),
-            path('<int:id>/',
-                 views.CustomerImageDetailAPIView.as_view(),
-                 name='gallery-detail'),
-        ])),
     path('buisness-categories/',
          views.BusinessCategoryListAPIView.as_view(),
          name='business-category-list'),

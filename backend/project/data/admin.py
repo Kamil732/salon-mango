@@ -1,10 +1,8 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin, TabularInline
-from django.db import models
 
 from .models import (
     Customer,
-    CustomerImage,
     Employee,
     Business,
     BusinessCategory,
@@ -68,13 +66,6 @@ class CustomerAdmin(ModelAdmin):
         'id',
         'slug',
     )
-
-
-@admin.register(CustomerImage)
-class CustomerImageAdmin(ModelAdmin):
-    list_display = ('title', )
-    search_fields = ('title', )
-    readonly_fields = ('id', )
 
 
 @admin.register(ServiceGroup)

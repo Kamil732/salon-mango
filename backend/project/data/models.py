@@ -74,7 +74,6 @@ class Business(models.Model):
         (12, '12h'),
     )
 
-    active = models.BooleanField(default=False)
     active_from = models.DateTimeField(null=True, blank=True)
     name = models.CharField(default='Your business', max_length=100)
     description = models.TextField(max_length=1000, blank=True)

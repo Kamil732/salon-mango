@@ -6,15 +6,14 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.vary import vary_on_headers
 from django.views.decorators.cache import cache_page
 
-from rest_framework import generics, mixins, status
+from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from server.permissions import IsAdminOrReadOnly, IsAdmin
-from data.models import Business, BusinessCategory, Service, ServiceGroup, Resource, ResourceGroup, Notification, Employee, Customer, CustomerImage
+from server.permissions import IsAdmin
+from data.models import Business, BusinessCategory, Service, ServiceGroup, Resource, ResourceGroup, Notification, Employee, Customer
 from . import serializers
-from . import pagination
 
 
 @method_decorator(cache_page(60 * 60 * 2), name='get')
@@ -55,7 +54,6 @@ class BusinessDetailAPIView(generics.RetrieveUpdateAPIView):
     def retrieve(self, request, *args, **kwargs):
         business_id = self.kwargs.get(self.lookup_url_kwarg)
         instance = self.get_object()
-        print('=' * 25)
 
         business_serializer = self.get_serializer(instance)
 
