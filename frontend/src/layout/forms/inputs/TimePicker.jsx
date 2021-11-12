@@ -16,6 +16,7 @@ function TimePicker({
 	endTime,
 	step,
 	blockedHours,
+	isNotEditable,
 	...props
 }) {
 	const [options, setOptions] = useState([])
@@ -84,7 +85,7 @@ function TimePicker({
 		}
 
 		setOptions(_options)
-	}, [beginLimit, endLimit, step, blockedHours])
+	}, [beginLimit, endLimit, startTime, endTime, step, blockedHours, value])
 
 	return (
 		<Dropdown
@@ -97,8 +98,8 @@ function TimePicker({
 			formatOptionLabel={({ label }) => (
 				<span className="word-break-all">{label}</span>
 			)}
-			editable
-			regexValidation={timeValidation}
+			editable={!isNotEditable}
+			regexValidation={isNotEditable ? null : timeValidation}
 			{...props}
 		/>
 	)
@@ -115,6 +116,7 @@ TimePicker.prototype.propTypes = {
 	startTime: PropTypes.bool,
 	endTime: PropTypes.bool,
 	step: PropTypes.number,
+	isNotEditable: PropTypes.bool,
 }
 
 export default TimePicker
