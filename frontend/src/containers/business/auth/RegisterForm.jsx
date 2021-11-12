@@ -24,7 +24,7 @@ const BusinessData = lazy(() => import('./steps/BusinessData'))
 const Credentials = lazy(() => import('./steps/Credentials'))
 const AcceptTerms = lazy(() => import('./steps/AcceptTerms'))
 const ChooseCategories = lazy(() => import('./steps/ChooseCategories'))
-const SetWorkingHours = lazy(() => import('./steps/SetWorkingHours'))
+const SetOpenHours = lazy(() => import('./steps/SetOpenHours'))
 const WorkType = lazy(() => import('./steps/WorkType'))
 const FindAddress = lazy(() => import('./steps/FindAddress'))
 const SetAddress = lazy(() => import('./steps/SetAddress'))
@@ -280,23 +280,11 @@ const INITIAL_STEPS_DATA = [
 	},
 	{
 		component: (props) => (
-			<SetWorkingHours
+			<SetOpenHours
 				onChangeIsWorkingDay={props.onChangeIsWorkingDay}
-				updateData={props.updateData}
-				start_work_monday={props.start_work_monday}
-				end_work_monday={props.end_work_monday}
-				start_work_tuesday={props.start_work_tuesday}
-				end_work_tuesday={props.end_work_tuesday}
-				start_work_wednesday={props.start_work_wednesday}
-				end_work_wednesday={props.end_work_wednesday}
-				start_work_thursday={props.start_work_thursday}
-				end_work_thursday={props.end_work_thursday}
-				start_work_friday={props.start_work_friday}
-				end_work_friday={props.end_work_friday}
-				start_work_saturday={props.start_work_saturday}
-				end_work_saturday={props.end_work_saturday}
-				start_work_sunday={props.start_work_sunday}
-				end_work_sunday={props.end_work_sunday}
+				setData={props.setData}
+				open_hours={props.open_hours}
+				blocked_hours={props.blocked_hours}
 				setErrors={props.setErrors}
 			/>
 		),
@@ -351,20 +339,34 @@ function RegisterForm({ closeModal, register }) {
 		recomendation_code: '',
 		accept_terms: false,
 		categories: [],
-		end_work_sunday: null,
-		start_work_sunday: null,
-		end_work_saturday: null,
-		start_work_saturday: null,
-		end_work_friday: '19:00',
-		start_work_friday: '10:00',
-		end_work_thursday: '19:00',
-		start_work_thursday: '10:00',
-		end_work_wednesday: '19:00',
-		start_work_wednesday: '10:00',
-		end_work_tuesday: '19:00',
-		start_work_tuesday: '10:00',
-		end_work_monday: '19:00',
-		start_work_monday: '10:00',
+		open_hours: [
+			{
+				weekday: 1,
+				start: '09:00',
+				end: '17:00',
+			},
+			{
+				weekday: 2,
+				start: '09:00',
+				end: '17:00',
+			},
+			{
+				weekday: 3,
+				start: '09:00',
+				end: '17:00',
+			},
+			{
+				weekday: 4,
+				start: '09:00',
+				end: '17:00',
+			},
+			{
+				weekday: 5,
+				start: '09:00',
+				end: '17:00',
+			},
+		],
+		blocked_hours: [],
 
 		work_stationary: true,
 		work_remotely: false,
@@ -500,13 +502,6 @@ function RegisterForm({ closeModal, register }) {
 				: [...data.categories, e.target.name],
 		}))
 
-	const onChangeIsWorkingDay = (e) =>
-		setData((prevData) => ({
-			...prevData,
-			[`start_work_${e.target.name}`]: e.target.checked ? '10:00' : null,
-			[`end_work_${e.target.name}`]: e.target.checked ? '19:00' : null,
-		}))
-
 	const loader = (
 		<div className="center-container">
 			<CircleLoader />
@@ -527,7 +522,6 @@ function RegisterForm({ closeModal, register }) {
 						setData,
 						onChange,
 						onChangeCategory,
-						onChangeIsWorkingDay,
 					})}
 				</Suspense>
 			</ErrorBoundary>

@@ -11,7 +11,7 @@ import getHeaders from '../../../../helpers/getHeaders'
 
 import { AiOutlinePlus } from 'react-icons/ai'
 import { GrClose } from 'react-icons/gr'
-import { VscTrash } from 'react-icons/vsc'
+import { IoTrashOutline } from 'react-icons/io5'
 import { IoIosAdd, IoIosArrowForward } from 'react-icons/io'
 
 import ReactTooltip from 'react-tooltip'
@@ -479,7 +479,7 @@ class AddService extends Component {
 											}
 											type="button"
 										>
-											<VscTrash
+											<IoTrashOutline
 												size="30"
 												color="#eb0043"
 											/>

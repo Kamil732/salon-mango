@@ -6,7 +6,7 @@ import '../../../../assets/css/table.css'
 import ReactTooltip from 'react-tooltip'
 import { IoIosArrowForward } from 'react-icons/io'
 import { AiOutlinePlus } from 'react-icons/ai'
-import { VscTrash } from 'react-icons/vsc'
+import { IoTrashOutline } from 'react-icons/io5'
 
 import Modal from '../../../../layout/Modal'
 import { FormControl } from '../../../../layout/forms/Forms'
@@ -180,7 +180,10 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 										onClick={removeEmployee}
 										type="button"
 									>
-										<VscTrash size="30" color="#eb0043" />
+										<IoTrashOutline
+											size="30"
+											color="#eb0043"
+										/>
 									</Button>
 									<Button
 										primary
