@@ -37,8 +37,12 @@ fieldset > .form-group {
 	margin: 1rem 0;
 
 	.#{$prefix},
-	.#{$prefix}-inline {
-		margin: 0;
+	.form-group {
+		margin: 0 0 1rem 0;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
 	}
 }
 
