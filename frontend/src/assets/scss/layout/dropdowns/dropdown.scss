@@ -36,6 +36,11 @@
 			padding: 0.6rem 1rem;
 			cursor: default;
 
+			&.disabled {
+				opacity: 0.4;
+				pointer-events: none;
+			}
+
 			&.navigated {
 				background-color: $shadow-color;
 			}

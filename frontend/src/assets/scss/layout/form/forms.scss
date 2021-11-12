@@ -15,8 +15,7 @@
 	}
 }
 
-.#{$prefix},
-.#{$prefix}-inline {
+.#{$prefix} {
 	position: relative;
 	margin: $form-control-vertical-margin 0;
 	width: 100%;
@@ -29,10 +28,18 @@ fieldset > .form-group {
 }
 
 .#{$prefix}-inline {
+	position: relative;
+	width: 100%;
 	display: inline-flex;
 	justify-content: space-between;
 	gap: 1rem;
-	align-items: center;
+	align-items: baseline;
+	margin: 1rem 0;
+
+	.#{$prefix},
+	.#{$prefix}-inline {
+		margin: 0;
+	}
 }
 
 .#{$prefix}__prefix {
