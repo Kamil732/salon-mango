@@ -3,7 +3,7 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('buisness-categories/',
+    path('business-categories/',
          views.BusinessCategoryListAPIView.as_view(),
          name='business-category-list'),
     path(
