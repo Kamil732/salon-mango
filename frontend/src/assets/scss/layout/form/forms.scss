@@ -4,7 +4,8 @@
 @import './config';
 
 .form-group {
-	@extend %flex-align-center;
+	display: flex;
+	align-items: baseline;
 	gap: 1rem;
 	width: 100%;
 	margin: $form-control-vertical-margin 0;

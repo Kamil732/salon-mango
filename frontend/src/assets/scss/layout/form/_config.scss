@@ -5,14 +5,15 @@ $form-control-vertical-margin: 2rem;
 
 %invalid {
 	box-shadow: none;
-	border: 1px solid $error-color;
+	border: 1px solid $error-color !important;
 	border-bottom: none;
 	border-radius: 4px 4px 0 0;
 	color: $error-color;
 	padding: 0.5rem;
 
 	&:focus {
-		border-color: $active-element;
+		outline: 1px solid $active-element;
+		border-color: $active-element !important;
 		color: inherit;
 	}
 }
@@ -25,9 +26,4 @@ $form-control-vertical-margin: 2rem;
 	padding: 0.25rem 0.7rem;
 	border: 1px solid $error-color;
 	border-top: none;
-
-	.invalid:focus + & {
-		border-color: $active-element;
-		background-color: $active-element;
-	}
 }
