@@ -18,6 +18,7 @@
     "input_title": "Please fill out this field",
     "error": {
         "title": "Error",
-        "description": "Unexpected error has occurred"
+        "unexcepted": "Unexpected error has occurred",
+        "not_match": "{{item}} don't match"
     }
 }

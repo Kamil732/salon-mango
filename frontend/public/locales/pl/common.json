@@ -18,6 +18,7 @@
     "input_title": "Proszę wypełnij to pole",
     "error": {
         "title": "Błąd",
-        "description": "Wystąpił nieoczekiwany błąd"
+        "unexcepted": "Wystąpił nieoczekiwany błąd",
+        "not_match": "{{item}} nie są takie same"
     }
 }
