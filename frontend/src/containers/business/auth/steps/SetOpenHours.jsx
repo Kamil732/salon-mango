@@ -167,7 +167,7 @@ function SetOpenHours({ setData, open_hours, blocked_hours }) {
 					.sort((a, b) =>
 						moment(b.start, 'HH:mm').isBefore(
 							moment(a.start, 'HH:mm')
-						)
+						) || a.start === null
 							? 1
 							: -1
 					),

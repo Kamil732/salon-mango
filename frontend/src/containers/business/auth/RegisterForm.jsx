@@ -130,59 +130,27 @@ const INITIAL_STEPS_DATA = [
 				confirm_password={props.confirm_password}
 				componentData={props.componentData}
 				changeComponentData={props.changeComponentData}
-				setErrors={props.setErrors}
+				errors={props.errors}
 			/>
 		),
-		validateStep: async (
-			{
-				business_name,
-				name,
-				phone_prefix: { dialCode: phone_prefix },
-				phone_number,
-				email,
-				password,
-			},
-			{ setErrors, register }
-		) => {
-			setErrors({})
+		validateStep: ({ password, confirm_password }, { setErrors }) => {
+			if (confirm_password === password) return true
 
-			try {
-				await register(email, password)
-
-				const business_body = JSON.stringify({
-					name: business_name,
-					calling_code: phone_prefix,
-					phone_number: phone_prefix + phone_number,
-					country,
-					employees: [
-						{
-							name,
-							email,
-							phone_number: phone_prefix + phone_number,
-							position: i18next.t('add_employees.owner', {
-								ns: 'business_register',
-							}),
-						},
-					],
-				})
-
-				await axios.post(
-					`${process.env.REACT_APP_API_URL}/data/businesses/`,
-					business_body,
-					getHeaders(true)
-				)
-
-				return true
-			} catch (err) {
-				if (err.response) setErrors(err.response.data)
-				else
-					NotificationManager.error(
-						i18next.t('error.description', { ns: 'common' }),
-						i18next.t('error.title', { ns: 'common' })
-					)
-
-				return false
-			}
+			setErrors({
+				password: [
+					i18next.t('error.not_match', {
+						ns: 'common',
+						item: i18next.t('password_plural', { ns: 'auth' }),
+					}),
+				],
+				confirm_password: [
+					i18next.t('error.not_match', {
+						ns: 'common',
+						item: i18next.t('password_plural', { ns: 'auth' }),
+					}),
+				],
+			})
+			return false
 		},
 		nextBtnDisabled: true,
 	},
@@ -319,6 +287,84 @@ const INITIAL_STEPS_DATA = [
 		),
 		nextBtnDisabled: false,
 		noForm: true,
+		validateStep: async (
+			{
+				email,
+				password,
+				business_name,
+				name,
+				phone_prefix: { dialCode: phone_prefix },
+				phone_number,
+				recomendation_code,
+				accept_terms,
+				categories,
+				open_hours,
+				blocked_hours,
+				work_stationary,
+				work_remotely,
+				country,
+				address,
+				premises_number,
+				city,
+				postal_code,
+				share_premises,
+				common_premises_name,
+				common_premises_number,
+				latitude,
+				longitude,
+				billing_type,
+				travel_fee,
+				max_travel_distance,
+				travel_fee_rules,
+				services,
+				employees,
+			},
+			{ setErrors, register }
+		) => {
+			setErrors({})
+
+			try {
+				await register(email, password)
+
+				const business_body = JSON.stringify({
+					name: business_name,
+					calling_code: phone_prefix,
+					phone_number: phone_prefix + phone_number,
+					country,
+
+					work_stationary,
+					work_remotely,
+
+					employees: [
+						{
+							name,
+							email,
+							phone_number: phone_prefix + phone_number,
+							position: i18next.t('add_employees.owner', {
+								ns: 'business_register',
+							}),
+						},
+					],
+				})
+
+				await axios.post(
+					`${process.env.REACT_APP_API_URL}/data/businesses/`,
+					business_body,
+					getHeaders(true)
+				)
+
+				return true
+			} catch (err) {
+				if (err.response) setErrors(err.response.data)
+				else
+					NotificationManager.error(
+						i18next.t('error.description', { ns: 'common' }),
+						i18next.t('error.title', { ns: 'common' })
+					)
+
+				return false
+			}
+		},
 	},
 ]
 

@@ -12,6 +12,7 @@ function Credentials({
 	confirm_password,
 	componentData,
 	changeComponentData,
+	errors,
 }) {
 	const { t } = useTranslation(['business_register', 'auth'])
 
@@ -61,6 +62,7 @@ function Credentials({
 					name="confirm_password"
 					onChange={onChange}
 					value={confirm_password}
+					errors={errors?.confirm_password}
 					min="6"
 				/>
 			</FormControl>
@@ -74,6 +76,7 @@ Credentials.prototype.propTypes = {
 	confirm_password: PropTypes.string,
 	componentData: PropTypes.object.isRequired,
 	changeComponentData: PropTypes.func.isRequired,
+	errors: PropTypes.object,
 }
 
 export default Credentials
