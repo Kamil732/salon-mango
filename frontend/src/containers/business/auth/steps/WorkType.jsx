@@ -37,7 +37,7 @@ function WorkType({
 			{
 				skip: !work_remotely,
 			},
-			7
+			8 // TravelFee idx
 		)
 	}, [work_remotely, changeComponentData])
 

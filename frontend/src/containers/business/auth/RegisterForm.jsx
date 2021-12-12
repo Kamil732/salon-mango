@@ -243,7 +243,7 @@ const INITIAL_STEPS_DATA = [
 				setErrors={props.setErrors}
 			/>
 		),
-		skip: false,
+		skip: true,
 		nextBtnDisabled: false,
 	},
 	{
