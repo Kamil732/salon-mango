@@ -1,26 +1,25 @@
-import i18next from 'i18next'
 import { COUNTRIES_DATA } from '../app/locale/consts'
 import { country } from '../app/locale/location-params'
 
 export const PRICE_TYPES = {
 	FIXED: {
-		label: i18next.t('price_types.fixed', { ns: 'business_common' }),
+		label: ['price_types.fixed', 'business_common'],
 		value: 'X',
 	},
 	VARIES: {
-		label: i18next.t('price_types.varies', { ns: 'business_common' }),
+		label: ['price_types.varies', 'business_common'],
 		value: 'V',
 	},
 	DONT_SHOW: {
-		label: i18next.t('price_types.dont_show', { ns: 'business_common' }),
+		label: ['price_types.dont_show', 'business_common'],
 		value: 'D',
 	},
 	FREE: {
-		label: i18next.t('price_types.free', { ns: 'business_common' }),
+		label: ['price_types.free', 'business_common'],
 		value: 'F',
 	},
 	STARTS_AT: {
-		label: i18next.t('price_types.starts_at', { ns: 'business_common' }),
+		label: ['price_types.starts_at', 'business_common'],
 		value: 'S',
 	},
 }

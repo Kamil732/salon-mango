@@ -7,6 +7,7 @@ import './location-params'
 i18n.use(Backend)
 	.use(initReactI18next)
 	.init({
+		debug: true,
 		whitelist: SUPPORTED_LANGUAGES,
 		lng: localStorage.getItem('lang'),
 		supportedLngs: SUPPORTED_LANGUAGES,
@@ -23,7 +24,7 @@ i18n.use(Backend)
 		cache: {
 			enabled: true,
 			prefix: 'i18n-',
-			expirationTime: 7 * 60 * 60 * 24 * 1000,
+			expirationTime: 7 * 60 * 60 * 24,
 		},
 		backend: {
 			loadPath: `${process.env.PUBLIC_URL}/locales/{{lng}}/{{ns}}.json`,

@@ -435,6 +435,7 @@ class AddService extends Component {
 										})}
 									</Label>
 									<Dropdown
+										translate
 										id="price-type"
 										options={PRICE_TYPES_DATA}
 										getOptionLabel={(opt) => opt.label}
@@ -563,14 +564,21 @@ class AddService extends Component {
 										<h4>
 											{service.price_type.value ===
 											PRICE_TYPES.FREE.value
-												? t('price_types.free', {
-														ns: 'business_common',
+												? t(PRICE_TYPES.FREE.label[0], {
+														ns: PRICE_TYPES.FREE
+															.label[1],
 												  })
 												: service.price_type.value ===
 												  PRICE_TYPES.VARIES.value
-												? t('price_types.varies', {
-														ns: 'business_common',
-												  })
+												? t(
+														PRICE_TYPES.VARIES
+															.label[0],
+														{
+															ns: PRICE_TYPES
+																.VARIES
+																.label[1],
+														}
+												  )
 												: service.price_type.value ===
 												  PRICE_TYPES.DONT_SHOW.value
 												? '--'

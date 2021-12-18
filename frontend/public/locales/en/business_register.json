@@ -50,7 +50,6 @@
     "travelling_fee": {
         "title": "What is your travel fee?",
         "description": "Add your minimum travel fee.",
-        "price_type_label": "Price type",
         "travel_fee_label": "Travel fee",
         "max_travel_distance_label": "Maximum travel distance",
         "travel_fee_rules_label": "Travel & Fee Policy (optional)"

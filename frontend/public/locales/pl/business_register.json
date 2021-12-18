@@ -50,7 +50,6 @@
     "travelling_fee": {
         "title": "Ile wynosi Twoja opłata za dojazd?",
         "description": "Podaj minimalną opłatę za dojazd",
-        "price_type_label": "Rodzaj ceny",
         "travel_fee_label": "Opłata za dojazd",
         "max_travel_distance_label": "Maks. odłegłość dojazdu",
         "travel_fee_rules_label": "Zazady dojazdu i opłat (opcjonalne)"

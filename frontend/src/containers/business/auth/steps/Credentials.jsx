@@ -48,6 +48,7 @@ function Credentials({
 					name="password"
 					onChange={onChange}
 					value={password}
+					errors={errors?.confirm_password}
 					min="6"
 				/>
 			</FormControl>

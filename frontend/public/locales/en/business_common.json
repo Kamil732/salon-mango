@@ -9,7 +9,8 @@
         "fixed": "Fixed",
         "varies": "Varies",
         "dont_show": "Starts at",
-        "hidden": "Hidden"
+        "hidden": "Hidden",
+        "starts_at": "Starts at"
     },
     "backwards": "Backwards",
     "forwards": "Forwards",

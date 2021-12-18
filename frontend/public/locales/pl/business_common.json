@@ -8,8 +8,9 @@
         "free": "Darmowa",
         "fixed": "Stała",
         "varies": "Cena zmienna",
-        "starts_at": "Zaczyna się od",
-        "dont_show": "Cena ukryta"
+        "dont_show": "Cena ukryta",
+        "hidden": "Ukryta",
+        "starts_at": "Zaczyna się od"
     },
     "backwards": "Do tyłu",
     "forwards": "Do przodu",

@@ -66,6 +66,7 @@ function TravellingFee({
 						{t('price_types.name', { ns: 'business_common' })}
 					</Label>
 					<Dropdown
+						translate
 						id="billing-type"
 						value={billing_type}
 						options={TRAVEL_FEE_PRICE_TYPES_DATA}

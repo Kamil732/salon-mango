@@ -10,10 +10,12 @@ import Button from '../Button'
 import { ImCross } from 'react-icons/im'
 import { Component } from 'react'
 import { withDebounce } from '../../../helpers/hooks/debounce'
+import i18next from 'i18next'
 
 class Dropdown extends Component {
 	static propTypes = {
 		required: PropTypes.bool,
+		translate: PropTypes.bool,
 		searchAsync: PropTypes.bool,
 		isLoading: PropTypes.bool,
 		loadOptions: PropTypes.func,
@@ -286,6 +288,7 @@ class Dropdown extends Component {
 
 	render() {
 		const {
+			translate,
 			required,
 			searchAsync,
 			loadOptions,
@@ -330,6 +333,10 @@ class Dropdown extends Component {
 						>
 							{formatSelectedOptionValue
 								? formatSelectedOptionValue(value)
+								: translate
+								? i18next.t(getOptionLabel(value)[0], {
+										ns: getOptionLabel(value)[1],
+								  })
 								: getOptionLabel(value)}
 						</div>
 					)}
@@ -378,6 +385,15 @@ class Dropdown extends Component {
 									>
 										{formatOptionLabel
 											? formatOptionLabel(option)
+											: translate
+											? i18next.t(
+													getOptionLabel(option)[0],
+													{
+														ns: getOptionLabel(
+															option
+														)[1],
+													}
+											  )
 											: getOptionLabel(option)}
 									</div>
 								))
