@@ -170,32 +170,32 @@ class Calendar extends Component {
 		const convertedDate = date.getHours() * 60 + date.getMinutes()
 		for (let i = 0; i < blocked_hours.length; i++) {
 			if (blocked_hours[i].weekday === weekday) {
-				const blocked_from_hour =
-					parseInt(blocked_hours[i].from_hour.split(':')[0]) * 60 +
-					parseInt(blocked_hours[i].from_hour.split(':')[1])
-				const blocked_to_hour =
-					parseInt(blocked_hours[i].to_hour.split(':')[0]) * 60 +
-					parseInt(blocked_hours[i].to_hour.split(':')[1])
+				const blocked_start =
+					parseInt(blocked_hours[i].start.split(':')[0]) * 60 +
+					parseInt(blocked_hours[i].start.split(':')[1])
+				const blocked_end =
+					parseInt(blocked_hours[i].end.split(':')[0]) * 60 +
+					parseInt(blocked_hours[i].end.split(':')[1])
 
 				if (
-					blocked_from_hour <= convertedDate &&
-					blocked_to_hour > convertedDate
+					blocked_start <= convertedDate &&
+					blocked_end > convertedDate
 				)
 					return true
 			}
 		}
 
 		// Check if the date is in the range of open hours
-		const work_from_hour =
-			parseInt(workDay.from_hour.split(':')[0]) * 60 +
-			parseInt(workDay.from_hour.split(':')[1])
-		const work_to_hour =
-			parseInt(workDay.to_hour.split(':')[0]) * 60 +
-			parseInt(workDay.to_hour.split(':')[1])
+		const work_start =
+			parseInt(workDay.start.split(':')[0]) * 60 +
+			parseInt(workDay.start.split(':')[1])
+		const work_end =
+			parseInt(workDay.end.split(':')[0]) * 60 +
+			parseInt(workDay.end.split(':')[1])
 
 		return (
-			work_from_hour > convertedDate ||
-			work_to_hour - calendar_step < convertedDate
+			work_start > convertedDate ||
+			work_end - calendar_step < convertedDate
 		)
 	}
 
@@ -217,8 +217,8 @@ class Calendar extends Component {
 						today.getFullYear(),
 						today.getMonth(),
 						today.getDate(),
-						open_hours[i].from_hour.split(':')[0],
-						open_hours[i].from_hour.split(':')[1]
+						open_hours[i].start.split(':')[0],
+						open_hours[i].start.split(':')[1]
 					)
 				)
 			)
@@ -228,8 +228,8 @@ class Calendar extends Component {
 						today.getFullYear(),
 						today.getMonth(),
 						today.getDate(),
-						open_hours[i].to_hour.split(':')[0],
-						open_hours[i].to_hour.split(':')[1]
+						open_hours[i].end.split(':')[0],
+						open_hours[i].end.split(':')[1]
 					)
 				)
 			)
@@ -346,8 +346,8 @@ class Calendar extends Component {
 			if (!(convertedDate in freeSlots)) freeSlots[convertedDate] = 0
 
 			if (workDay != null) {
-				let currentTime = moment(workDay.from_hour, 'HH:mm').toDate()
-				const toHour = moment(workDay.to_hour, 'HH:mm').toDate()
+				let currentTime = moment(workDay.start, 'HH:mm').toDate()
+				const toHour = moment(workDay.end, 'HH:mm').toDate()
 				while (currentTime < toHour) {
 					const isDisabled = this.getIsDisabledSlot(
 						moment(currentDate)

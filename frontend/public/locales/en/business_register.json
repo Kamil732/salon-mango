@@ -51,7 +51,7 @@
         "title": "What is your travel fee?",
         "description": "Add your minimum travel fee.",
         "travel_fee_label": "Travel fee",
-        "max_travel_distance_label": "Maximum travel distance",
+        "travel_max_distance_label": "Maximum travel distance",
         "travel_fee_rules_label": "Travel & Fee Policy (optional)"
     },
     "working_hours": {

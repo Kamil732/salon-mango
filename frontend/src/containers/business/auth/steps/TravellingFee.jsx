@@ -18,13 +18,13 @@ import { useTranslation } from 'react-i18next'
 import {
 	PRICE_TYPES,
 	TRAVEL_FEE_PRICE_TYPES_DATA,
-	MAX_TRAVEL_DISTANCES,
+	TRAVEL_MAX_DISTANCES,
 } from '../../../../helpers/consts'
 
 function TravellingFee({
-	billing_type,
+	travel_billing_type,
 	travel_fee,
-	max_travel_distance,
+	travel_max_distance,
 	travel_fee_rules,
 	latitude,
 	longitude,
@@ -37,7 +37,7 @@ function TravellingFee({
 	const { isLoaded } = useJsApiLoader({
 		googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
 	})
-	const [zoom, setZoom] = useState(max_travel_distance.zoom)
+	const [zoom, setZoom] = useState(travel_max_distance.zoom)
 
 	const center = {
 		lat: latitude,
@@ -50,7 +50,7 @@ function TravellingFee({
 		strokeWeight: 2,
 		fillColor: '$000',
 		fillOpacity: 0.15,
-		radius: getOptionValue(max_travel_distance),
+		radius: getOptionValue(travel_max_distance),
 	}
 
 	return (
@@ -62,20 +62,20 @@ function TravellingFee({
 
 			<FormGroup>
 				<FormControl>
-					<Label htmlFor="billing-type" inputValue>
+					<Label htmlFor="travel-billing-type" inputValue>
 						{t('price_types.name', { ns: 'business_common' })}
 					</Label>
 					<Dropdown
 						translate
-						id="billing-type"
-						value={billing_type}
+						id="travel-billing-type"
+						value={travel_billing_type}
 						options={TRAVEL_FEE_PRICE_TYPES_DATA}
 						getOptionLabel={getOptionLabel}
 						getOptionValue={getOptionValue}
 						getValuesValue={getOptionValue}
 						onChange={(val) =>
 							updateData({
-								billing_type: val,
+								travel_billing_type: val,
 								travel_fee:
 									getOptionValue(val) ===
 									getOptionValue(PRICE_TYPES.FREE)
@@ -106,9 +106,9 @@ function TravellingFee({
 						value={travel_fee === null ? '-' : travel_fee}
 						onChange={onChange}
 						disabled={
-							getOptionValue(billing_type) ===
+							getOptionValue(travel_billing_type) ===
 								getOptionValue(PRICE_TYPES.FREE) ||
-							getOptionValue(billing_type) ===
+							getOptionValue(travel_billing_type) ===
 								getOptionValue(PRICE_TYPES.VARIES)
 						}
 					/>
@@ -116,17 +116,17 @@ function TravellingFee({
 			</FormGroup>
 			<FormControl>
 				<Label htmlFor="max-travel-distance" inputValue>
-					{t('travelling_fee.max_travel_distance_label')}
+					{t('travelling_fee.travel_max_distance_label')}
 				</Label>
 				<Dropdown
 					id="max-travel-distance"
-					value={max_travel_distance}
-					options={MAX_TRAVEL_DISTANCES}
+					value={travel_max_distance}
+					options={TRAVEL_MAX_DISTANCES}
 					getOptionLabel={getOptionLabel}
 					getOptionValue={getOptionValue}
 					getValuesValue={getOptionValue}
 					onChange={(val) => {
-						updateData({ max_travel_distance: val })
+						updateData({ travel_max_distance: val })
 						setZoom(val.zoom)
 					}}
 				/>
@@ -165,13 +165,13 @@ function TravellingFee({
 }
 
 TravellingFee.prototype.propTypes = {
-	billing_type: PropTypes.shape({
+	travel_billing_type: PropTypes.shape({
 		label: PropTypes.string.isRequired,
 		value: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 			.isRequired,
 	}).isRequired,
 	travel_fee: PropTypes.number,
-	max_travel_distance: PropTypes.shape({
+	travel_max_distance: PropTypes.shape({
 		label: PropTypes.string.isRequired,
 		value: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 			.isRequired,

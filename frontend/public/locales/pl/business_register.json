@@ -51,7 +51,7 @@
         "title": "Ile wynosi Twoja opłata za dojazd?",
         "description": "Podaj minimalną opłatę za dojazd",
         "travel_fee_label": "Opłata za dojazd",
-        "max_travel_distance_label": "Maks. odłegłość dojazdu",
+        "travel_max_distance_label": "Maks. odłegłość dojazdu",
         "travel_fee_rules_label": "Zazady dojazdu i opłat (opcjonalne)"
     },
     "working_hours": {

@@ -45,7 +45,7 @@ function getMapRadius(value) {
 		: value * 1000
 }
 
-export const MAX_TRAVEL_DISTANCES = [
+export const TRAVEL_MAX_DISTANCES = [
 	{
 		label: '5 ' + COUNTRIES_DATA[country].distanceUnit,
 		value: getMapRadius(5),
