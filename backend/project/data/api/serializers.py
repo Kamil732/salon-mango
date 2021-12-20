@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from server.abstract.serializers import Subgroups
+from server.abstract.models import COLORS
 from data.models import Business, BusinessCategory, BlockedHours, OpenHours, Customer, Employee, Service, ServiceGroup, ServiceEmployee, Notification, Resource, ResourceGroup, ServiceRelatedData
 
 
@@ -155,8 +156,15 @@ class BusinessSerializer(serializers.ModelSerializer):
         Service.objects.bulk_create(services_models)
 
         employees_models = []
+        color_idx = 0
         for employee in employees:
-            employees_models.append(Employee(business=business, **employee))
+            employees_models.append(
+                Employee(business=business,
+                         color=COLORS[color_idx][0],
+                         **employee))
+            color_idx += 1
+            if (color_idx > len(COLORS) - 1):
+                color_idx = 0
         Employee.objects.bulk_create(employees_models)
 
         # Add categories

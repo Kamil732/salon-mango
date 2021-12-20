@@ -3,14 +3,14 @@ from django.db import models
 COLORS = (
     ('light-blue', 'Jasny niebieski'),
     ('light-green', 'Jasny Zielony'),
-    ('black', 'Czarny'),
-    ('blue', 'Niebieski'),
-    ('green', 'Zielony'),
-    ('pink', 'Różowy'),
     ('purple', 'Fioletowy'),
+    ('pink', 'Różowy'),
     ('brown', 'Brązowy'),
+    ('blue', 'Niebieski'),
     ('yellow', 'Żółty'),
     ('orange', 'Pomarańczowy'),
+    ('green', 'Zielony'),
+    ('black', 'Czarny'),
 )
 
 
