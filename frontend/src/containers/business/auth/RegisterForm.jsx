@@ -10,7 +10,7 @@ import { register } from '../../../redux/actions/auth'
 import NotificationManager from 'react-notifications/lib/NotificationManager'
 import { useTranslation } from 'react-i18next'
 import { HiOutlineArrowLeft } from 'react-icons/hi'
-import { PRICE_TYPES, MAX_TRAVEL_DISTANCES } from '../../../helpers/consts'
+import { PRICE_TYPES, TRAVEL_MAX_DISTANCES } from '../../../helpers/consts'
 import { COUNTRIES_DATA } from '../../../app/locale/consts'
 import { country } from '../../../app/locale/location-params'
 
@@ -234,9 +234,9 @@ const INITIAL_STEPS_DATA = [
 			<TravellingFee
 				onChange={props.onChange}
 				updateData={props.updateData}
-				billing_type={props.billing_type}
+				travel_billing_type={props.travel_billing_type}
 				travel_fee={props.travel_fee}
-				max_travel_distance={props.max_travel_distance}
+				travel_max_distance={props.travel_max_distance}
 				travel_fee_rules={props.travel_fee_rules}
 				latitude={props.latitude}
 				longitude={props.longitude}
@@ -289,6 +289,7 @@ const INITIAL_STEPS_DATA = [
 		noForm: true,
 		validateStep: async (
 			{
+				accept_terms,
 				email,
 				password,
 				business_name,
@@ -296,45 +297,41 @@ const INITIAL_STEPS_DATA = [
 				phone_prefix: { dialCode: phone_prefix },
 				phone_number,
 				recomendation_code,
-				accept_terms,
-				categories,
-				open_hours,
-				blocked_hours,
-				work_stationary,
-				work_remotely,
-				country,
-				address,
-				premises_number,
 				city,
-				postal_code,
-				share_premises,
-				common_premises_name,
-				common_premises_number,
-				latitude,
-				longitude,
-				billing_type,
-				travel_fee,
-				max_travel_distance,
-				travel_fee_rules,
+				travel_billing_type,
+				travel_max_distance,
 				services,
 				employees,
+				...data
 			},
 			{ setErrors, register }
 		) => {
+			if (!accept_terms)
+				NotificationManager.error(
+					i18next.t('error.description', { ns: 'common' }),
+					i18next.t('error.title', { ns: 'common' })
+				)
+
 			setErrors({})
 
 			try {
 				await register(email, password)
 
 				const business_body = JSON.stringify({
+					...data,
 					name: business_name,
 					calling_code: phone_prefix,
 					phone_number: phone_prefix + phone_number,
-					country,
+					city: city.placeName,
+					travel_billing_type: travel_billing_type.value,
+					travel_max_distance: parseInt(
+						travel_max_distance.label.slice(0, 2)
+					),
 
-					work_stationary,
-					work_remotely,
-
+					services: services.map(({ id, ...service }) => ({
+						...service,
+						price_type: service.price_type.value,
+					})),
 					employees: [
 						{
 							name,
@@ -344,6 +341,12 @@ const INITIAL_STEPS_DATA = [
 								ns: 'business_register',
 							}),
 						},
+						...employees.map((employee) => ({
+							...employee,
+							phone_number:
+								employee.phone_prefix.dialCode +
+								employee.phone_number,
+						})),
 					],
 				})
 
@@ -422,15 +425,15 @@ function RegisterForm({ closeModal, register }) {
 		premises_number: '',
 		city: {},
 		postal_code: '',
-		share_premises: '',
+		share_premises: false,
 		common_premises_name: '',
 		common_premises_number: '',
 		latitude: null,
 		longitude: null,
 
-		billing_type: PRICE_TYPES.FREE,
+		travel_billing_type: PRICE_TYPES.FREE,
 		travel_fee: 0,
-		max_travel_distance: MAX_TRAVEL_DISTANCES[3],
+		travel_max_distance: TRAVEL_MAX_DISTANCES[3],
 		travel_fee_rules: '',
 
 		services: [],
