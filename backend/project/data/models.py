@@ -6,6 +6,21 @@ from server.abstract.models import Group, Color
 from accounts.models import Account
 from meetings.models import Meeting
 
+PRICE_TYPES = (
+    ('X', 'Fixed'),
+    ('V', 'Vaires'),
+    ('D', "Don't show"),
+    ('F', 'Free'),
+    ('S', 'Starts at'),
+)
+
+TRAVEL_PRICE_TYPES = (
+    ('X', 'Fixed'),
+    ('V', 'Vaires'),
+    ('F', 'Free'),
+    ('S', 'Starts at'),
+)
+
 
 class BusinessCategory(models.Model):
     name = models.CharField(max_length=100)
@@ -27,14 +42,14 @@ class Hours(models.Model):
     )
 
     weekday = models.PositiveSmallIntegerField(choices=WEEKDAYS)
-    from_hour = models.TimeField()
-    to_hour = models.TimeField()
+    start = models.TimeField()
+    end = models.TimeField()
 
     class Meta:
         abstract = True
 
     def __str__(self):
-        return f"{self.get_weekday_display()} {self.from_hour} - {self.to_hour}"
+        return f"{self.get_weekday_display()} {self.start} - {self.end}"
 
 
 class OpenHours(Hours):
@@ -45,7 +60,7 @@ class OpenHours(Hours):
     )
 
     class Meta:
-        ordering = ('weekday', 'from_hour')
+        ordering = ('weekday', 'start')
         unique_together = ('weekday', 'business')
 
 
@@ -57,7 +72,7 @@ class BlockedHours(Hours):
     )
 
     class Meta:
-        ordering = ('weekday', 'from_hour')
+        ordering = ('weekday', 'start')
 
 
 class Business(models.Model):
@@ -72,6 +87,19 @@ class Business(models.Model):
     TIME_FORMAT = (
         (24, '24h'),
         (12, '12h'),
+    )
+
+    TRAVEL_MAX_DISTANCES = (
+        (5, '5'),
+        (10, '10'),
+        (15, '15'),
+        (20, '20'),
+        (25, '25'),
+        (30, '30'),
+        (35, '35'),
+        (40, '40'),
+        (45, '45'),
+        (50, '50'),
     )
 
     active_from = models.DateTimeField(null=True, blank=True)
@@ -92,6 +120,19 @@ class Business(models.Model):
     share_premises = models.BooleanField(default=False)
     common_premises_name = models.CharField(max_length=100, blank=True)
     common_premises_number = models.CharField(max_length=10, blank=True)
+    work_stationary = models.BooleanField(default=True)
+    work_remotely = models.BooleanField(default=False)
+    travel_billing_type = models.CharField(choices=TRAVEL_PRICE_TYPES,
+                                           max_length=1,
+                                           blank=True,
+                                           null=True)
+    travel_fee = models.DecimalField(max_digits=10,
+                                     decimal_places=2,
+                                     blank=True,
+                                     null=True)
+    travel_max_distance = models.PositiveSmallIntegerField(
+        blank=True, null=True, choices=TRAVEL_MAX_DISTANCES)
+    travel_fee_rules = models.TextField(blank=True, null=True)
 
     currency = models.CharField(max_length=3, default='EUR')
     date_format = models.CharField(max_length=10,
@@ -114,6 +155,19 @@ class Business(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class RecomendationCode(models.Model):
+    code = models.CharField(max_length=10)
+    business = models.OneToOneField(
+        Business,
+        on_delete=models.CASCADE,
+        related_name='recomendation_code',
+    )
+    used_times = models.PositiveSmallIntegerField(default=0)
+
+    def __str__(self):
+        return self.code
 
 
 class Customer(models.Model):
@@ -194,11 +248,18 @@ class Service(models.Model):
                                        related_name="services")
     name = models.CharField(max_length=25)
     time = models.PositiveIntegerField(default=0)
-    price = models.DecimalField(decimal_places=2, max_digits=5)
-    vat = models.DecimalField(max_digits=4, decimal_places=2)
+    price = models.DecimalField(decimal_places=2,
+                                max_digits=5,
+                                blank=True,
+                                null=True)
+    price_type = models.CharField(max_length=1,
+                                  choices=PRICE_TYPES,
+                                  default=PRICE_TYPES[0][0])
+    vat = models.DecimalField(max_digits=4, decimal_places=2, default=24)
     choosen_times = models.PositiveIntegerField(default=0)
     private_description = models.TextField(blank=True)
     public_description = models.TextField(blank=True)
+    is_mobile = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.name} - {self.price} zł"

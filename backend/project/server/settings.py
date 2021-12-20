@@ -93,6 +93,7 @@ ASGI_APPLICATION = "server.asgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# TODO: Create seperate databases for different countries
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",

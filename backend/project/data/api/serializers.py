@@ -61,19 +61,6 @@ class ServiceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ServiceSerializerAdmin(ServiceSerializer):
-    class Meta(ServiceSerializer.Meta):
-        fields = '__all__'
-
-
-class ServiceSerializerCustomer(ServiceSerializer):
-    class Meta(ServiceSerializer.Meta):
-        exclude = (
-            'private_description',
-            'choosen_times',
-        )
-
-
 class ServiceGroupSerializer(Subgroups):
     services = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
@@ -108,52 +95,83 @@ class BlockedHoursSerializer(serializers.ModelSerializer):
         )
 
 
+class RegisterSerivceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Service
+        fields = (
+            'name',
+            'price',
+            'price_type',
+            'time',
+            'is_mobile',
+        )
+
+
+class RegisterEmployeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = (
+            'name',
+            'email',
+            'phone_number',
+            'position',
+        )
+
+
 class BusinessSerializer(serializers.ModelSerializer):
-    open_hours = OpenHoursSerializer(many=True, required=False)
-    blocked_hours = BlockedHoursSerializer(many=True, required=False)
+    open_hours = OpenHoursSerializer(many=True)
+    blocked_hours = BlockedHoursSerializer(many=True)
     categories = serializers.SlugRelatedField(
         many=True,
-        read_only=True,
+        queryset=BusinessCategory.objects.all(),
         slug_field='slug',
     )
+    services = RegisterSerivceSerializer(many=True)
+    employees = RegisterEmployeeSerializer(many=True)
 
-    # service_groups = serializers.SerializerMethodField('get_service_groups')
-    # services = serializers.SerializerMethodField('get_services')
-    # resource_groups = serializers.SerializerMethodField('get_resource_groups')
-    # resources = serializers.SerializerMethodField('get_resources')
+    def create(self, validated_data):
+        open_hours = validated_data.pop('open_hours')
+        blocked_hours = validated_data.pop('blocked_hours')
+        categories = validated_data.pop('categories')
+        services = validated_data.pop('services')
+        employees = validated_data.pop('employees')
+        business = Business.objects.create(**validated_data)
 
-    # def get_services(self, obj):
-    #     user = self.context.get('request').user
-    #     serializer = ServiceSerializerAdmin if user.is_authenticated and user.is_admin else ServiceSerializerCustomer
+        # Create nested objects
+        open_hours_models = []
+        for open_hour in open_hours:
+            open_hours_models.append(OpenHours(business=business, **open_hour))
+        OpenHours.objects.bulk_create(open_hours_models)
 
-    #     return serializer(Service.objects.filter(
-    #         business_id=obj.id).select_related('group').prefetch_related(
-    #             'employees', 'related_data'),
-    #                       many=True).data
+        blocked_hours_models = []
+        for blocked_hour in blocked_hours:
+            blocked_hours_models.append(
+                BlockedHours(business=business, **blocked_hour))
+        BlockedHours.objects.bulk_create(blocked_hours_models)
 
-    # def get_service_groups(self, obj):
-    #     return ServiceGroupSerializer(ServiceGroup.objects.filter(
-    #         business_id=obj.id,
-    #         parent=None).prefetch_related('employees', 'services'),
-    #                                   many=True).data
+        services_models = []
+        for service in services:
+            services_models.append(Service(business=business, **service))
+        Service.objects.bulk_create(services_models)
 
-    # def get_resources(self, obj):
-    #     return ResourceSerializer(Resource.objects.filter(
-    #         business_id=obj.id).select_related('group'),
-    #                               many=True).data
+        employees_models = []
+        for employee in employees:
+            employees_models.append(Employee(business=business, **employee))
+        Employee.objects.bulk_create(employees_models)
 
-    # def get_resource_groups(self, obj):
-    #     return ResourceGroupSerializer(ResourceGroup.objects.filter(
-    #         business_id=obj.id, parent=None),
-    #                                    many=True).data
+        # Add categories
+        business.categories.add(*categories)
 
-    # def create(self, )
+        return business
 
     class Meta:
         model = Business
         fields = "__all__"
         extra_kwargs = {
-            'owner': {
+            'services': {
+                'write_only': True
+            },
+            'employees': {
                 'write_only': True
             },
         }
