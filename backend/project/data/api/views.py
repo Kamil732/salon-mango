@@ -12,7 +12,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from server.permissions import IsAdmin
-from data.models import Business, BusinessCategory, Service, ServiceGroup, Resource, ResourceGroup, Notification, Employee, Customer
+from server.abstract.views import BusinessResponse
+from data.models import Business, BusinessCategory, Notification, Employee, Customer
 from . import serializers
 
 
@@ -24,7 +25,7 @@ class BusinessCategoryListAPIView(generics.ListAPIView):
 
 
 @method_decorator(csrf_protect, name='post')
-class BusinessCreateListAPIView(generics.ListCreateAPIView):
+class BusinessCreateListAPIView(generics.ListCreateAPIView, BusinessResponse):
     serializer_class = serializers.BusinessSerializer
     queryset = Business.objects.all()
     permission_classes = (IsAuthenticated, )
@@ -38,13 +39,14 @@ class BusinessCreateListAPIView(generics.ListCreateAPIView):
         # Add business to the user
         request.user.businesses.add(serializer.data['id'])
 
-        return Response(serializer.data,
-                        status=status.HTTP_201_CREATED,
-                        headers=headers)
+        return Response(self.get_business_response(serializer.data,
+                                                   serializer.data['id']),
+                        headers=headers,
+                        status=status.HTTP_201_CREATED)
 
 
 @method_decorator(csrf_protect, name='patch')
-class BusinessDetailAPIView(generics.RetrieveUpdateAPIView):
+class BusinessDetailAPIView(generics.RetrieveUpdateAPIView, BusinessResponse):
     # permission_classes = (IsAdminOrReadOnly, )
     serializer_class = serializers.BusinessSerializer
     queryset = Business.objects.all()
@@ -57,37 +59,8 @@ class BusinessDetailAPIView(generics.RetrieveUpdateAPIView):
 
         business_serializer = self.get_serializer(instance)
 
-        employees_serializer = serializers.EmployeeSerializer(
-            Employee.objects.filter(business_id=business_id).prefetch_related(
-                'service_employee_data'),
-            many=True)
-
-        service_groups_serializer = serializers.ServiceGroupSerializer(
-            ServiceGroup.objects.filter(business_id=business_id,
-                                        parent=None).prefetch_related(
-                                            'employees', 'services'),
-            many=True)
-        services_serializer = serializers.ServiceSerializer(
-            Service.objects.filter(business_id=business_id).select_related(
-                'group').prefetch_related('employees', 'related_data'),
-            many=True)
-
-        resource_groups_serializer = serializers.ResourceGroupSerializer(
-            ResourceGroup.objects.filter(business_id=business_id, parent=None),
-            many=True)
-        resources_serializer = serializers.ResourceSerializer(
-            Resource.objects.filter(
-                business_id=business_id).select_related('group'),
-            many=True)
-
-        return Response({
-            'data': business_serializer.data,
-            'employees': employees_serializer.data,
-            'resource_groups': resource_groups_serializer.data,
-            'resources': resources_serializer.data,
-            'service_groups': service_groups_serializer.data,
-            'services': services_serializer.data,
-        })
+        return Response(
+            self.get_business_response(business_serializer.data, business_id))
 
 
 @method_decorator(csrf_protect, name='dispatch')
