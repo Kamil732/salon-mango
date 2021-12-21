@@ -3,6 +3,7 @@ import {
 	AUTH_ERROR,
 	AUTH_SUCCESS,
 	AUTH_LOADING,
+	ADD_BUSINESS_TO_USER,
 } from '../actions/types'
 
 const initialState = {
@@ -33,6 +34,14 @@ export default function (state = initialState, action) {
 				isAuthenticated: false,
 				loading: false,
 				data: initialState.data,
+			}
+		case ADD_BUSINESS_TO_USER:
+			return {
+				...state,
+				data: {
+					...state.data,
+					businesses: [...state.data.businesses, action.payload],
+				},
 			}
 		default:
 			return state

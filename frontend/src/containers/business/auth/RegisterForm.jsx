@@ -7,6 +7,7 @@ import '../../../assets/css/progressbar.css'
 import axios from 'axios'
 import getHeaders from '../../../helpers/getHeaders'
 import { register } from '../../../redux/actions/auth'
+import { getOrCreateBusinessData } from '../../../redux/actions/data'
 import NotificationManager from 'react-notifications/lib/NotificationManager'
 import { useTranslation } from 'react-i18next'
 import { HiOutlineArrowLeft } from 'react-icons/hi'
@@ -304,7 +305,7 @@ const INITIAL_STEPS_DATA = [
 				employees,
 				...data
 			},
-			{ setErrors, register }
+			{ setErrors, register, getOrCreateBusinessData }
 		) => {
 			if (!accept_terms)
 				NotificationManager.error(
@@ -350,11 +351,7 @@ const INITIAL_STEPS_DATA = [
 					],
 				})
 
-				await axios.post(
-					`${process.env.REACT_APP_API_URL}/data/businesses/`,
-					business_body,
-					getHeaders(true)
-				)
+				await getOrCreateBusinessData(business_body, true)
 
 				return true
 			} catch (err) {
@@ -371,7 +368,7 @@ const INITIAL_STEPS_DATA = [
 	},
 ]
 
-function RegisterForm({ closeModal, register }) {
+function RegisterForm({ closeModal, register, getOrCreateBusinessData }) {
 	const { t } = useTranslation('common')
 	const [loading, setLoading] = useState(false)
 	const [errors, setErrors] = useState({})
@@ -483,7 +480,6 @@ function RegisterForm({ closeModal, register }) {
 					shouldCloseModal = true
 					return 0
 				}
-				if (prevStep + step + i > STEPS.length - 1) return 0
 				if (!STEPS[prevStep + step + i].skip) {
 					step += i
 					break
@@ -515,6 +511,7 @@ function RegisterForm({ closeModal, register }) {
 					setErrors,
 					updateData,
 					register,
+					getOrCreateBusinessData,
 				})
 			)
 				changeStep()
@@ -617,10 +614,12 @@ function RegisterForm({ closeModal, register }) {
 RegisterForm.prototype.propTypes = {
 	closeModal: PropTypes.func.isRequired,
 	register: PropTypes.func.isRequired,
+	getOrCreateBusinessData: PropTypes.func.isRequired,
 }
 
 const mapDispatchToProps = {
 	register,
+	getOrCreateBusinessData,
 }
 
 export default connect(null, mapDispatchToProps)(RegisterForm)

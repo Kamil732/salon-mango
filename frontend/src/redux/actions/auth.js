@@ -12,7 +12,7 @@ import getHeaders from '../../helpers/getHeaders'
 
 import { NotificationManager } from 'react-notifications'
 import i18next from 'i18next'
-import { getBusinessData } from './data'
+import { getOrCreateBusinessData } from './data'
 
 export const loadUser = () => async (dispatch) => {
 	dispatch({ type: AUTH_LOADING })
@@ -27,7 +27,7 @@ export const loadUser = () => async (dispatch) => {
 			type: AUTH_SUCCESS,
 			payload: res.data,
 		})
-		dispatch(getBusinessData(res.data.businesses[0]))
+		dispatch(getOrCreateBusinessData(res.data.businesses[0]))
 	} catch (err) {
 		dispatch({
 			type: AUTH_ERROR,
@@ -56,7 +56,7 @@ export const login = (email, password, setErrors) => async (dispatch) => {
 
 		if (res.data.user.businesses.length > 0) {
 			NotificationManager.success(res.data.message, 'Zalogowano')
-			dispatch(getBusinessData(res.data.user.businesses[0]))
+			dispatch(getOrCreateBusinessData(res.data.user.businesses[0]))
 		}
 
 		dispatch({ type: CLEAR_MEETINGS })

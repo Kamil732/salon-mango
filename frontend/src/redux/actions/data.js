@@ -13,6 +13,7 @@ import {
 	LOADING_CUSTOMERS,
 	LOAD_PRODUCTS,
 	LOADING_PRODUCTS,
+	ADD_BUSINESS_TO_USER,
 } from './types'
 
 import { NotificationManager } from 'react-notifications'
@@ -21,54 +22,67 @@ import getHeaders from '../../helpers/getHeaders'
 import axios from 'axios'
 import { updateResourceMap } from './meetings'
 
-export const getBusinessData = (businessId) => async (dispatch, getState) => {
-	dispatch({ type: LOADING_BUSINESS_DATA })
+export const getOrCreateBusinessData =
+	(data, create = false) =>
+	async (dispatch, getState) => {
+		dispatch({ type: LOADING_BUSINESS_DATA })
 
-	try {
-		const res = await axios.get(
-			`${process.env.REACT_APP_API_URL}/data/businesses/${businessId}/`
-		)
+		try {
+			const res = create
+				? await axios.post(
+						`${process.env.REACT_APP_API_URL}/data/businesses/`,
+						data,
+						getHeaders(true)
+				  )
+				: await axios.get(
+						`${process.env.REACT_APP_API_URL}/data/businesses/${data}/`
+				  )
 
-		const employeeResourceData = {
-			id: `employee-${res.data.employees[0].id}`,
-			title: res.data.employees[0].name,
-			employeeId: res.data.employees[0].id,
-			resourceId: null,
-		}
+			const employeeResourceData = {
+				id: `employee-${res.data.employees[0].id}`,
+				title: res.data.employees[0].name,
+				employeeId: res.data.employees[0].id,
+				resourceId: null,
+			}
 
-		dispatch(
-			updateResourceMap('data', [
-				...getState().meetings.resourceMap.data,
-				employeeResourceData,
-			])
-		)
-		dispatch(updateResourceMap('selected', employeeResourceData))
-
-		if (res.data.resources.length > 0)
 			dispatch(
 				updateResourceMap('data', [
 					...getState().meetings.resourceMap.data,
-					{
-						id: `resource-${res.data.resources[0].id}`,
-						title: res.data.resources[0].name,
-						employeeId: null,
-						resourceId: res.data.resources[0].id,
-					},
+					employeeResourceData,
 				])
 			)
+			dispatch(updateResourceMap('selected', employeeResourceData))
 
-		dispatch({
-			type: GET_BUSINESS_DATA,
-			payload: res.data,
-		})
-	} catch (err) {
-		NotificationManager.error(
-			'Wystąpił błąd przy wczytywaniu strony, spróbuj odświeżyć stronę',
-			'Błąd',
-			10 ** 6
-		)
+			if (res.data.resources.length > 0)
+				dispatch(
+					updateResourceMap('data', [
+						...getState().meetings.resourceMap.data,
+						{
+							id: `resource-${res.data.resources[0].id}`,
+							title: res.data.resources[0].name,
+							employeeId: null,
+							resourceId: res.data.resources[0].id,
+						},
+					])
+				)
+
+			dispatch({
+				type: GET_BUSINESS_DATA,
+				payload: res.data,
+			})
+			if (create)
+				dispatch({
+					type: ADD_BUSINESS_TO_USER,
+					payload: res.data.id,
+				})
+		} catch (err) {
+			NotificationManager.error(
+				'Wystąpił błąd przy wczytywaniu strony, spróbuj odświeżyć stronę',
+				'Błąd',
+				10 ** 6
+			)
+		}
 	}
-}
 
 export const loadCustomers = (value) => async (dispatch, getState) => {
 	dispatch({ type: LOADING_CUSTOMERS })
