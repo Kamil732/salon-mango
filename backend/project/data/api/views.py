@@ -86,6 +86,9 @@ class CustomerListAPIView(generics.ListCreateAPIView):
                    | Q(first_name__istartswith=search_field)
                    | Q(last_name__istartswith=search_field)))[:10]
 
+    def perform_create(self, serializer):
+        serializer.save(business_id=self.kwargs.get('business_id'))
+
 
 class CustomerDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     # permission_classes = (IsAdmin,)

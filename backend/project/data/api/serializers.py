@@ -127,8 +127,8 @@ class BusinessSerializer(serializers.ModelSerializer):
         queryset=BusinessCategory.objects.all(),
         slug_field='slug',
     )
-    services = RegisterSerivceSerializer(many=True)
-    employees = RegisterEmployeeSerializer(many=True)
+    services = RegisterSerivceSerializer(many=True, write_only=True)
+    employees = RegisterEmployeeSerializer(many=True, write_only=True)
 
     def create(self, validated_data):
         open_hours = validated_data.pop('open_hours')
@@ -174,25 +174,18 @@ class BusinessSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Business
-        fields = "__all__"
-        extra_kwargs = {
-            'services': {
-                'write_only': True
-            },
-            'employees': {
-                'write_only': True
-            },
-        }
+        fields = '__all__'
 
 
 class CustomerSerializer(serializers.ModelSerializer):
-    # account = AccountSerializer()
     full_name = serializers.ReadOnlyField(source='get_full_name')
 
     class Meta:
         model = Customer
-        # fields = '__all__'
-        exclude = ('account', )
+        exclude = (
+            'business',
+            'account',
+        )
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
@@ -202,7 +195,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Employee
-        fields = '__all__'
+        exclude = ('business', )
 
 
 class NotificationSerializer(serializers.ModelSerializer):
