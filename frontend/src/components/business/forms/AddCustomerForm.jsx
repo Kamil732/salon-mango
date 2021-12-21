@@ -1,26 +1,27 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import axios from 'axios'
 
 import { addCustomer } from '../../../redux/actions/data'
 import { MdSwapHoriz } from 'react-icons/md'
 import getHeaders from '../../../helpers/getHeaders'
-import {
-	phoneNumberValidation,
-	phoneNumberValidationErrorMessage,
-} from '../../../helpers/validations'
+import { country } from '../../../app/locale/location-params'
 
 import { FormControl, FormGroup } from '../../../layout/forms/Forms'
 import Input from '../../../layout/forms/inputs/Input'
 import Label from '../../../layout/forms/inputs/Label'
+import PhoneNumberInput from '../../../layout/forms/inputs/PhoneNumberInput'
 
 import Button from '../../../layout/buttons/Button'
 import ReactTooltip from 'react-tooltip'
 import { NotificationManager } from 'react-notifications'
-import { connect } from 'react-redux'
+
+const countries = require('../../../assets/data/countries.json')
 
 class AddCustomerForm extends Component {
 	static propTypes = {
+		business_id: PropTypes.number.isRequired,
 		setCustomer: PropTypes.func.isRequired,
 		addCustomer: PropTypes.func.isRequired,
 	}
@@ -33,6 +34,9 @@ class AddCustomerForm extends Component {
 
 			first_name: '',
 			last_name: '',
+			phone_prefix: countries.find(
+				({ isoCode }) => isoCode.toLowerCase() === country
+			),
 			phone_number: '',
 			fax_number: '',
 		}
@@ -52,7 +56,14 @@ class AddCustomerForm extends Component {
 
 	onSubmit = async (e) => {
 		e.preventDefault()
-		const { first_name, last_name, phone_number, fax_number } = this.state
+		const { business_id } = this.props
+		const {
+			first_name,
+			last_name,
+			phone_prefix,
+			phone_number,
+			fax_number,
+		} = this.state
 
 		this.setState({ loading: true })
 
@@ -60,21 +71,14 @@ class AddCustomerForm extends Component {
 			const body = JSON.stringify({
 				first_name,
 				last_name,
-				phone_number,
-				fax_number,
+				phone_number: phone_prefix.dialCode + phone_number,
+				fax_number: fax_number
+					? phone_prefix.dialCode + fax_number
+					: '',
 			})
 
-			if (
-				!phone_number.match(phoneNumberValidation) ||
-				(fax_number && !fax_number.match(phoneNumberValidation))
-			) {
-				NotificationManager.error(phoneNumberValidationErrorMessage)
-
-				return
-			}
-
 			const res = await axios.post(
-				`${process.env.REACT_APP_API_URL}/accounts/customers/`,
+				`${process.env.REACT_APP_API_URL}/data/businesses/${business_id}/customers/`,
 				body,
 				getHeaders(true)
 			)
@@ -91,8 +95,14 @@ class AddCustomerForm extends Component {
 	}
 
 	render() {
-		const { loading, first_name, last_name, phone_number, fax_number } =
-			this.state
+		const {
+			loading,
+			first_name,
+			last_name,
+			phone_prefix,
+			phone_number,
+			fax_number,
+		} = this.state
 
 		return (
 			<form onSubmit={this.onSubmit}>
@@ -141,18 +151,18 @@ class AddCustomerForm extends Component {
 					</FormControl>
 				</FormGroup>
 				<FormGroup>
-					<FormControl>
-						<Label htmlFor="phone_number" inputValue={phone_number}>
-							Numer tel.
-						</Label>
-						<Input
-							required
-							id="phone_number"
-							name="phone_number"
-							value={phone_number}
-							onChange={this.onChange}
-						/>
-					</FormControl>
+					<PhoneNumberInput
+						required
+						phone_prefix={phone_prefix}
+						phone_number={phone_number}
+						onChange={this.onChange}
+						onChangePrefix={(val) =>
+							this.setState((prevState) => ({
+								...prevState,
+								phone_prefix: val,
+							}))
+						}
+					/>
 					<FormControl>
 						<Label htmlFor="fax_number" inputValue={fax_number}>
 							Drugi numer tel.
@@ -179,8 +189,12 @@ class AddCustomerForm extends Component {
 	}
 }
 
+const mapStateToProps = (state) => ({
+	business_id: state.data.business.data.id,
+})
+
 const mapDispatchToProps = {
 	addCustomer,
 }
 
-export default connect(null, mapDispatchToProps)(AddCustomerForm)
+export default connect(mapStateToProps, mapDispatchToProps)(AddCustomerForm)
