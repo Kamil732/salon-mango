@@ -15,8 +15,18 @@ import Input from '../../../../layout/forms/inputs/Input'
 import PhoneNumberInput from '../../../../layout/forms/inputs/PhoneNumberInput'
 import Button from '../../../../layout/buttons/Button'
 import { useTranslation } from 'react-i18next'
+import getHeaders from '../../../../helpers/getHeaders'
+import axios from 'axios'
+import NotificationManager from 'react-notifications/lib/NotificationManager'
 
-function AddEmployees({ name, phone_prefix, employees, setData }) {
+function AddEmployees({
+	name,
+	phone_prefix,
+	employees,
+	errors,
+	setData,
+	setErrors,
+}) {
 	const { t } = useTranslation([
 		'business_register',
 		'business_common',
@@ -54,20 +64,35 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 			[e.target.name]: e.target.value,
 		}))
 
-	const addEmployee = (e) => {
+	const addEmployee = async (e) => {
 		e.preventDefault()
+		setErrors({})
 
-		setData((prevData) => ({
-			...prevData,
-			employees: [
-				...prevData.employees,
-				{
-					id: nextId(),
-					...employeeData,
-				},
-			],
-		}))
-		resetForm()
+		try {
+			await axios.get(
+				`${process.env.REACT_APP_API_URL}/accounts/exists/?email=${employeeData.email}`,
+				getHeaders()
+			)
+
+			setData((prevData) => ({
+				...prevData,
+				employees: [
+					...prevData.employees,
+					{
+						id: nextId(),
+						...employeeData,
+					},
+				],
+			}))
+			resetForm()
+		} catch (err) {
+			if (err.response) setErrors(err.response.data)
+			else
+				NotificationManager.error(
+					t('error.description', { ns: 'common' }),
+					t('error.title', { ns: 'common' })
+				)
+		}
 	}
 
 	const removeEmployee = () => {
@@ -144,6 +169,7 @@ function AddEmployees({ name, phone_prefix, employees, setData }) {
 									name="email"
 									value={employeeData.email}
 									onChange={onChange}
+									errors={errors?.email}
 								/>
 							</FormControl>
 							<PhoneNumberInput
@@ -286,7 +312,9 @@ AddEmployees.prototype.propTypes = {
 			position: PropTypes.string.isRequired,
 		}).isRequired
 	).isRequired,
+	errors: PropTypes.object.isRequired,
 	setData: PropTypes.func.isRequired,
+	setErrors: PropTypes.func.isRequired,
 }
 
 export default AddEmployees

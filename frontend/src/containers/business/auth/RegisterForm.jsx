@@ -161,7 +161,6 @@ const INITIAL_STEPS_DATA = [
 				onChange={props.onChange}
 				accept_terms={props.accept_terms}
 				changeComponentData={props.changeComponentData}
-				setErrors={props.setErrors}
 			/>
 		),
 		skip: !COUNTRIES_DATA[country].gdpr,
@@ -175,7 +174,6 @@ const INITIAL_STEPS_DATA = [
 				categories={props.categories}
 				componentData={props.componentData}
 				changeComponentData={props.changeComponentData}
-				setErrors={props.setErrors}
 			/>
 		),
 		nextBtnDisabled: true,
@@ -189,7 +187,6 @@ const INITIAL_STEPS_DATA = [
 				onChange={props.onChange}
 				componentData={props.componentData}
 				changeComponentData={props.changeComponentData}
-				setErrors={props.setErrors}
 			/>
 		),
 		nextBtnDisabled: false,
@@ -211,7 +208,6 @@ const INITIAL_STEPS_DATA = [
 				setData={props.setData}
 				componentData={props.componentData}
 				changeComponentData={props.changeComponentData}
-				setErrors={props.setErrors}
 			/>
 		),
 		nextBtnDisabled: true,
@@ -225,7 +221,6 @@ const INITIAL_STEPS_DATA = [
 				latitude={props.latitude}
 				longitude={props.longitude}
 				updateData={props.updateData}
-				setErrors={props.setErrors}
 			/>
 		),
 		nextBtnDisabled: false,
@@ -241,7 +236,6 @@ const INITIAL_STEPS_DATA = [
 				travel_fee_rules={props.travel_fee_rules}
 				latitude={props.latitude}
 				longitude={props.longitude}
-				setErrors={props.setErrors}
 			/>
 		),
 		skip: true,
@@ -254,7 +248,6 @@ const INITIAL_STEPS_DATA = [
 				setData={props.setData}
 				open_hours={props.open_hours}
 				blocked_hours={props.blocked_hours}
-				setErrors={props.setErrors}
 			/>
 		),
 		nextBtnDisabled: false,
@@ -269,7 +262,6 @@ const INITIAL_STEPS_DATA = [
 				componentData={props.componentData}
 				changeComponentData={props.changeComponentData}
 				setData={props.setData}
-				setErrors={props.setErrors}
 			/>
 		),
 		nextBtnDisabled: false,
@@ -282,6 +274,7 @@ const INITIAL_STEPS_DATA = [
 				employees={props.employees}
 				name={props.name}
 				phone_prefix={props.phone_prefix}
+				errors={props.errors}
 				setData={props.setData}
 				setErrors={props.setErrors}
 			/>
@@ -342,7 +335,7 @@ const INITIAL_STEPS_DATA = [
 								ns: 'business_register',
 							}),
 						},
-						...employees.map((employee) => ({
+						...employees.map(({ id, ...employee }) => ({
 							...employee,
 							phone_number:
 								employee.phone_prefix.dialCode +
