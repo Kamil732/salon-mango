@@ -1,7 +1,6 @@
 import {
 	REMOVE_MEETING,
 	MEETINGS_LOADING,
-	MEETINGS_CONNECT_WS,
 	LOAD_MEETINGS,
 	ADD_LOADED_DATES,
 	CHANGE_VISIBLE_MEETINGS,
@@ -14,6 +13,7 @@ import moment from 'moment'
 
 import { NotificationManager } from 'react-notifications'
 import axios from 'axios'
+import getHeaders from '../../helpers/getHeaders'
 
 // Helper functions
 const setMeeting = (data, getState) => {
@@ -76,19 +76,6 @@ const getDates = (from, to, loadedDates) => {
 	return dates
 }
 
-const getMeeting = async (id) => {
-	try {
-		const res = await axios.get(
-			`${process.env.REACT_APP_API_URL}/meetings/${id}/`
-		)
-
-		NotificationManager.info('Zaktualizowano kalendarz')
-		return res.data
-	} catch (err) {
-		NotificationManager.error('Nie udało sie zaktualizować kalendarza')
-	}
-}
-
 export const updateCalendarDates = (data) => (dispatch) => {
 	dispatch({
 		type: UPDATE_CALENDAR_DATES,
@@ -124,9 +111,9 @@ export const loadMeetings =
 			// try {
 			let data = []
 			const res = await axios.get(
-				`${process.env.REACT_APP_API_URL}/meetings/?from=${
-					dates[0]
-				}&to=${dates[dates.length - 1]}`
+				`${process.env.REACT_APP_API_URL}/data/businesses/${
+					getState().data.business.data.id
+				}/meetings/?from=${dates[0]}&to=${dates[dates.length - 1]}`
 			)
 
 			for (let i = 0; i < res.data.length; i++)
@@ -147,44 +134,59 @@ export const loadMeetings =
 		}
 	}
 
-export const addMeeting = (data) => async (dispatch, getState) => {
-	const dates = getDates(data.from, data.to, getState().meetings.loadedDates)
+export const createMeeting = (data) => async (dispatch, getState) => {
+	try {
+		const res = await axios.post(
+			`${process.env.REACT_APP_API_URL}/data/businesses/${
+				getState().data.business.data.id
+			}/meetings/`,
+			data,
+			getHeaders(true)
+		)
 
-	if (
-		dates.length === 0 &&
-		!getState().meetings.data.some((meeting) => meeting.id === data.id)
-	) {
-		const meeting = await getMeeting(data.id)
-
-		if (meeting)
-			dispatch({
-				type: LOAD_MEETINGS,
-				payload: setMeeting(meeting, getState),
-			})
+		dispatch({
+			type: LOAD_MEETINGS,
+			payload: setMeeting(res.data, getState),
+		})
+	} catch (err) {
+		NotificationManager.error('Nie udało się zapisać wizyty', 'błąd')
 	}
 }
 
-export const removeMeeting = (id) => (dispatch) => {
-	dispatch({
-		type: REMOVE_MEETING,
-		payload: id,
-	})
+export const deleteMeeting = (id) => async (dispatch, getState) => {
+	try {
+		await axios.delete(
+			`${process.env.REACT_APP_API_URL}/data/businesses/${
+				getState().data.business.data.id
+			}/meetings/${id}/`,
+			getHeaders(true)
+		)
 
-	NotificationManager.info('Zaktualizowano kalendarz')
+		dispatch({
+			type: REMOVE_MEETING,
+			payload: id,
+		})
+	} catch (err) {
+		NotificationManager.error('Nie udało się usunąć wizyty', 'błąd')
+	}
 }
 
-export const updateMeeting = (id) => async (dispatch, getState) => {
-	if (getState().meetings.data.some((meeting) => meeting.data.id === id)) {
-		const meeting = await getMeeting(id)
+export const updateMeeting = (id, data) => async (dispatch, getState) => {
+	try {
+		const res = await axios.patch(
+			`${process.env.REACT_APP_API_URL}/data/businesses/${
+				getState().data.business.data.id
+			}/meetings/${id}/`,
+			data,
+			getHeaders(true)
+		)
 
-		if (meeting)
-			dispatch({
-				type: UPDATE_MEETING,
-				payload: {
-					id: meeting.id,
-					data: setMeeting(meeting, getState),
-				},
-			})
+		dispatch({
+			type: UPDATE_MEETING,
+			payload: setMeeting(res.data, getState)[0], // get the first element from array
+		})
+	} catch (err) {
+		NotificationManager.error('Nie udało się zapisać wizyty', 'Błąd')
 	}
 }
 
@@ -193,73 +195,4 @@ export const changeVisibleMeetings = (data) => (dispatch) => {
 		type: CHANGE_VISIBLE_MEETINGS,
 		payload: data,
 	})
-}
-
-export const connectMeetingWS = () => (dispatch) => {
-	const ws = new WebSocket(`${process.env.REACT_APP_SOCKET_URL}/meetings/`)
-	let connectInterval = null
-	let timeout = 250
-
-	// Check if websocket instance is closed, if so call `connect` function.
-	const checkIsWebSocketClosed = () => {
-		if (!ws || ws.readyState === WebSocket.CLOSED)
-			dispatch(connectMeetingWS())
-	}
-
-	// websocket onopen event listener
-	ws.onopen = () => {
-		console.log('Connected meeting websocket')
-		dispatch({
-			type: MEETINGS_CONNECT_WS,
-			payload: ws,
-		})
-
-		timeout = 250 // reset timer to 250 on open of websocket connection
-		clearTimeout(connectInterval) // clear Interval on on open of websocket connection
-		connectInterval = null
-	}
-
-	ws.onmessage = (e) => {
-		const data = JSON.parse(e.data)
-
-		switch (data.event) {
-			case REMOVE_MEETING:
-				dispatch(removeMeeting(data.payload))
-				break
-			case LOAD_MEETINGS:
-				dispatch(addMeeting(data.payload))
-				break
-			case UPDATE_MEETING:
-				dispatch(updateMeeting(data.payload))
-				break
-			default:
-				break
-		}
-	}
-
-	ws.onclose = (e) => {
-		console.log(
-			`Meeting socket is closed. Reconnect will be attempted in ${Math.min(
-				10000 / 1000,
-				(timeout + timeout) / 1000
-			)} second.`,
-			e.reason
-		)
-
-		timeout += timeout //increment retry interval
-		connectInterval = setTimeout(
-			checkIsWebSocketClosed,
-			Math.min(10000, timeout)
-		) //call checkIsWebSocketClosed function after timeout
-	}
-
-	ws.onerror = (err) => {
-		console.error(
-			'Meeting socket encountered error: ',
-			err.message,
-			'Closing socket'
-		)
-
-		ws.close()
-	}
 }

@@ -5,21 +5,15 @@ import { withTranslation } from 'react-i18next'
 import '../../assets/css/big-calendar.css'
 
 import moment from 'moment'
-import getHeaders from '../../helpers/getHeaders'
-import { NotificationManager } from 'react-notifications'
 
-import axios from 'axios'
 import {
-	LOAD_MEETINGS,
-	REMOVE_MEETING,
-	UPDATE_MEETING,
-} from '../../redux/actions/types'
-import {
-	connectMeetingWS,
 	loadMeetings,
+	createMeeting,
 	changeVisibleMeetings,
 	updateCalendarDates,
 	updateResourceMap,
+	updateMeeting,
+	deleteMeeting,
 } from '../../redux/actions/meetings'
 
 import CircleLoader from '../../layout/loaders/CircleLoader'
@@ -62,7 +56,6 @@ class Calendar extends Component {
 		t: PropTypes.func.isRequired,
 		i18n: PropTypes.object.isRequired,
 		userId: PropTypes.number,
-		ws: PropTypes.object,
 		loading: PropTypes.bool,
 		meetings: PropTypes.array,
 		loadedDates: PropTypes.array,
@@ -81,8 +74,10 @@ class Calendar extends Component {
 		}),
 
 		changeVisibleMeetings: PropTypes.func.isRequired,
-		connectMeetingWS: PropTypes.func.isRequired,
 		loadMeetings: PropTypes.func.isRequired,
+		createMeeting: PropTypes.func.isRequired,
+		updateMeeting: PropTypes.func.isRequired,
+		deleteMeeting: PropTypes.func.isRequired,
 		updateResourceMap: PropTypes.func.isRequired,
 
 		serivces: PropTypes.array,
@@ -111,7 +106,6 @@ class Calendar extends Component {
 		}
 
 		this.state = {
-			ws: null,
 			windowWidth: window.innerWidth,
 
 			view: window.innerWidth >= 768 ? view : Views.DAY,
@@ -382,19 +376,12 @@ class Calendar extends Component {
 
 	componentDidMount = () => {
 		const { view } = this.state
-		const {
-			ws,
-			loading,
-			loadedDates,
-			updateResourceMap,
-			loadMeetings,
-			connectMeetingWS,
-		} = this.props
+		const { loading, loadedDates, updateResourceMap, loadMeetings } =
+			this.props
 
 		window.addEventListener('resize', this.updateWindowDimensions)
 		updateResourceMap('isMany', view === 'reception')
 
-		if (ws === null) connectMeetingWS()
 		if (!loading && loadedDates.length === 0) loadMeetings()
 
 		this.getVisibleMeetings()
@@ -434,29 +421,14 @@ class Calendar extends Component {
 	}
 
 	deleteMeeting = async (loading = null) => {
-		const { selected } = this.state
+		const { id } = this.state.selected.data
 
 		if (loading) loading(true)
 
-		try {
-			await axios.delete(
-				`${process.env.REACT_APP_API_URL}/meetings/${selected.id}/`,
-				getHeaders(true)
-			)
+		await this.props.deleteMeeting(id)
+		this.setState({ selected: {} })
 
-			this.props.ws.send(
-				JSON.stringify({
-					event: REMOVE_MEETING,
-					payload: selected.id,
-				})
-			)
-
-			this.setState({ selected: {} })
-		} catch (err) {
-			NotificationManager.error('Nie udało się usunąć wizyty', 'błąd')
-		} finally {
-			if (loading) loading(false)
-		}
+		if (loading) loading(false)
 	}
 
 	addMeeting = async (data, loading = null) => {
@@ -467,66 +439,24 @@ class Calendar extends Component {
 
 		if (loading) loading(true)
 
-		try {
-			const body = JSON.stringify(data)
-			const res = await axios.post(
-				`${process.env.REACT_APP_API_URL}/meetings/`,
-				body,
-				getHeaders(true)
-			)
+		await this.props.createMeeting(JSON.stringify(data))
+		this.setState({ selected: {} })
 
-			this.props.ws.send(
-				JSON.stringify({
-					event: LOAD_MEETINGS,
-					payload: {
-						id: res.data.id,
-						from: res.data.start,
-						to: res.data.end,
-					},
-				})
-			)
-			this.setState({ selected: {} })
-		} catch (err) {
-			NotificationManager.error('Nie udało się zapisać wizyty', 'błąd')
-		} finally {
-			if (loading) loading(false)
-		}
+		if (loading) loading(false)
 	}
 
 	saveMeeting = async (data, loading = null) => {
-		const {
-			selected: {
-				data: { id, start, end },
-			},
-		} = this.state
+		const { id, start, end } = this.state.selected.data
 
 		data.start = start
 		data.end = end
 
 		if (loading) loading(true)
 
-		try {
-			const body = JSON.stringify(data)
+		await this.props.updateMeeting(id, JSON.stringify(data))
+		this.setState({ selected: {} })
 
-			const res = await axios.patch(
-				`${process.env.REACT_APP_API_URL}/meetings/${id}/`,
-				body,
-				getHeaders(true)
-			)
-
-			this.props.ws.send(
-				JSON.stringify({
-					event: UPDATE_MEETING,
-					payload: res.data.id,
-				})
-			)
-
-			this.setState({ selected: {} })
-		} catch (err) {
-			NotificationManager.error('Nie udało się zapisać wizyty', 'Błąd')
-		} finally {
-			if (loading) loading(false)
-		}
+		if (loading) loading(false)
 	}
 
 	onNavigate = (date) => this.props.updateCalendarDates(date)
@@ -895,7 +825,6 @@ class Calendar extends Component {
 
 const mapStateToProps = (state) => ({
 	userId: state.auth.data.profile?.id,
-	ws: state.meetings.ws,
 	loading: state.meetings.loading,
 	meetings: state.meetings.data,
 	loadedDates: state.meetings.loadedDates,
@@ -912,8 +841,10 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-	connectMeetingWS,
 	loadMeetings,
+	createMeeting,
+	updateMeeting,
+	deleteMeeting,
 	changeVisibleMeetings,
 	updateCalendarDates,
 	updateResourceMap,

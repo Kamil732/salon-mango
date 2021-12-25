@@ -2,7 +2,6 @@ import moment from 'moment'
 import {
 	REMOVE_MEETING,
 	MEETINGS_LOADING,
-	MEETINGS_CONNECT_WS,
 	LOAD_MEETINGS,
 	CLEAR_MEETINGS,
 	ADD_LOADED_DATES,
@@ -34,7 +33,6 @@ const initialState = {
 		startOf3days: moment().startOf('day').subtract(1, 'days').toDate(),
 		endOf3days: moment().endOf('day').add(1, 'days').toDate(),
 	},
-	ws: null,
 }
 
 // eslint-disable-next-line
@@ -44,11 +42,6 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				loading: true,
-			}
-		case MEETINGS_CONNECT_WS:
-			return {
-				...state,
-				ws: action.payload,
 			}
 		case CLEAR_MEETINGS:
 			return {
@@ -79,18 +72,18 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				data: state.data.filter(
-					(meeting) => meeting.id !== action.payload
+					(meeting) => meeting.data.id !== action.payload
 				),
 			}
 		case UPDATE_MEETING:
 			return {
 				...state,
-				data: [
-					...state.data.filter(
-						(item) => item.data.id !== action.payload.id
-					),
-					...action.payload.data,
-				],
+				data: state.data.map((meeting) => {
+					if (meeting.data.id === action.payload.data.id)
+						return action.payload
+
+					return meeting
+				}),
 			}
 		case UPDATE_CALENDAR_DATES:
 			return {
