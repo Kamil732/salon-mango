@@ -14,7 +14,8 @@ urlpatterns = [
         include([
             path('csrf_cookie/', views.getCSRFToken, name='set-csrf-cookie'),
             path('accounts/', include('accounts.api.urls')),
-            path('meetings/', include('meetings.api.urls')),
+            path('data/businesses/<int:business_id>/meetings/',
+                 include('meetings.api.urls')),
             path('data/', include('data.api.urls')),
             path(
                 'utils/',

@@ -15,11 +15,19 @@ from data.models import Notification, Service, Customer
 class ServiceDataSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(source="service",
                                             queryset=Service.objects.all())
-    name = serializers.CharField(source="service.name")
+    name = serializers.CharField(source="service.name", read_only=True)
 
     class Meta:
         model = ServiceData
         fields = ("id", "name", "start", "end", "employee", "resources")
+        extra_kwargs = {
+            "start": {
+                "required": False
+            },
+            "end": {
+                "required": False
+            },
+        }
 
 
 class MeetingSerializer(serializers.ModelSerializer):
@@ -69,21 +77,28 @@ class MeetingSerializer(serializers.ModelSerializer):
         # Create meeting
         services_data = validated_data.pop("services_data", None)
         meeting = super(MeetingSerializer, self).create(validated_data)
+
         if services_data:
             MeetingServicesThroughModel = meeting.services.through
-            services_data_models = MeetingServicesThroughModel.objects.bulk_create(
-                [
+            services = []
+            duration = 0
+            for service_data in services_data:
+                services.append(
                     MeetingServicesThroughModel(
                         meeting=meeting,
-                        service=service["service"],
-                        employee=service["employee"],
-                    ) for service in services_data
-                ])
+                        service=service_data["service"],
+                        employee=service_data["employee"],
+                        start=meeting.start + timedelta(minutes=duration),
+                        end=meeting.start + timedelta(
+                            minutes=duration + service_data["service"].time),
+                        price=service_data["service"].price))
+                duration += service_data["service"].time
 
-            if user.is_admin:
-                for idx, service_data in enumerate(services_data_models):
-                    service_data.resources.add(
-                        *services_data[idx]["resources"])
+            services_data_models = MeetingServicesThroughModel.objects.bulk_create(
+                services)
+
+            for idx, service_data in enumerate(services_data_models):
+                service_data.resources.add(*services_data[idx]["resources"])
 
         # if (validated_data['services']):
         #     meeting_duration = 0
@@ -117,10 +132,9 @@ class MeetingSerializer(serializers.ModelSerializer):
             key_fields=("service_id", ),
         )
 
-        if user.is_admin:
-            for idx, service_data in enumerate(
-                    ServiceData.objects.filter(meeting=instance)):
-                service_data.resources.set(services_data[idx]["resources"])
+        for idx, service_data in enumerate(
+                ServiceData.objects.filter(meeting=instance)):
+            service_data.resources.set(services_data[idx]["resources"])
 
         return super(MeetingSerializer, self).update(instance, validated_data)
 
