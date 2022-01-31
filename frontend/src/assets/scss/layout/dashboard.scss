@@ -78,11 +78,22 @@ $nav-color: $primary-color;
 		border-radius: 0;
 		border-right: 1px solid #000;
 
+		.business_logo {
+			object-fit: cover;
+			width: auto;
+			height: 2.5rem;
+			border-radius: 50%;
+		}
+
 		&__header {
 			margin: 1rem 0 0.5rem 0;
 		}
 		&__footer {
 			margin-bottom: 1rem;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 0.5rem;
 		}
 
 		&__body {

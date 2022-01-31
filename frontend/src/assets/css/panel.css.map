@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,cAAc,AAAC,CACd,UAAU,CAAE,KAAK,CACjB,KAAK,CAAE,IAAI,CACX,MAAM,CAAE,MAAM,CACd,aAAa,CAAE,GAAG,CAClB",
+    "sources": [
+        "../scss/components/business/panel.scss"
+    ],
+    "names": [],
+    "file": "panel.css"
+}
