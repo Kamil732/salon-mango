@@ -40,6 +40,8 @@ function Panel({
 	notificationLoaded,
 	notifications,
 	unReadNotificationsAmount,
+	business,
+	user_data,
 	getUnreadNotificationsAmount,
 	connectNotificationWS,
 	getNotifications,
@@ -212,6 +214,26 @@ function Panel({
 										</div>
 									}
 								/>
+								<DropdownSelect
+									btnContent={
+										<img
+											src={business.logo}
+											width={25}
+											height={25}
+											className="business_logo"
+											alt={business.name}
+										/>
+									}
+									rounded
+									aria-label={t('notifications')}
+								>
+									<h3>{user_data.name}</h3>
+									{user_data.businesses.map(
+										({ id, name }) => (
+											<div key={id}>{name}</div>
+										)
+									)}
+								</DropdownSelect>
 							</Dashboard.NavFooter>
 						</Dashboard.Nav>
 
@@ -323,6 +345,8 @@ Panel.prototype.propTypes = {
 	notificationLoaded: PropTypes.bool,
 	notifications: PropTypes.array,
 	unReadNotificationsAmount: PropTypes.number,
+	business: PropTypes.object,
+	user_data: PropTypes.object,
 	getUnreadNotificationsAmount: PropTypes.func.isRequired,
 	getNotifications: PropTypes.func.isRequired,
 	markNotificationAsRead: PropTypes.func.isRequired,
@@ -335,6 +359,8 @@ const mapStateToProps = (state) => ({
 	notificationLoaded: state.data.notifications.loaded,
 	notifications: state.data.notifications.data,
 	unReadNotificationsAmount: state.data.notifications.unRead,
+	business: state.data.business.data,
+	user_data: state.auth.data,
 })
 
 const mapDispatchToProps = {

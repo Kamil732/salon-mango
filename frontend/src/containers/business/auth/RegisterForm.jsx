@@ -309,7 +309,11 @@ const INITIAL_STEPS_DATA = [
 			setErrors({})
 
 			try {
-				await register(email, password)
+				await register({
+					email,
+					password,
+					name,
+				})
 
 				const business_body = JSON.stringify({
 					...data,

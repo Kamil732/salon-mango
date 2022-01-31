@@ -19,6 +19,7 @@ function DropdownSelect({
 	unReadItems,
 	markRead,
 	noItemsContent,
+	children,
 	...props
 }) {
 	const [isOpen, setIsOpen] = useState(false)
@@ -68,106 +69,138 @@ function DropdownSelect({
 				<div className="dropdown-select">
 					<div className="dropdown-select__inner">
 						<div className="dropdown-select__content">
-							{loading ? (
-								<div className="center-container">
-									<CircleLoader />
-								</div>
-							) : items.length > 0 ? (
-								<div
-									className={`dropdown-select__list${
-										selected.isOpen ? ' slide' : ''
-									}`}
-								>
-									<ul>
-										{items.map((item, idx) => (
-											<li
-												key={idx}
-												onClick={() =>
-													setSelected({
-														isOpen: true,
-														data: item,
-													})
-												}
-											>
-												<div
-													style={{
-														marginBottom: '0.5rem',
-													}}
-												>
-													{item.read === false ? (
-														<div className="dropdown-select__header">
-															<h4>
-																<Truncate
-																	lines={1}
-																>
-																	{item.title}
-																</Truncate>
-															</h4>
+							{loading == null ? (
+								children
+							) : (
+								<div>
+									{children}
 
-															<span className="text-broken info-text">
-																Nowe
+									{loading ? (
+										<div className="center-container">
+											<CircleLoader />
+										</div>
+									) : items.length > 0 ? (
+										<div
+											className={`dropdown-select__list${
+												selected.isOpen ? ' slide' : ''
+											}`}
+										>
+											<ul>
+												{items.map((item, idx) => (
+													<li
+														key={idx}
+														onClick={() =>
+															setSelected({
+																isOpen: true,
+																data: item,
+															})
+														}
+													>
+														<div
+															style={{
+																marginBottom:
+																	'0.5rem',
+															}}
+														>
+															{item.read ===
+															false ? (
+																<div className="dropdown-select__header">
+																	<h4>
+																		<Truncate
+																			lines={
+																				1
+																			}
+																		>
+																			{
+																				item.title
+																			}
+																		</Truncate>
+																	</h4>
+
+																	<span className="text-broken info-text">
+																		Nowe
+																	</span>
+																</div>
+															) : (
+																<h4>
+																	<Truncate
+																		lines={
+																			1
+																		}
+																	>
+																		{
+																			item.title
+																		}
+																	</Truncate>
+																</h4>
+															)}
+															<span className="text-broken">
+																{moment(
+																	item.date
+																).format(
+																	'DD-MM-YYYY H:mm'
+																)}
 															</span>
 														</div>
-													) : (
-														<h4>
-															<Truncate lines={1}>
-																{item.title}
+
+														<p>
+															<Truncate lines={2}>
+																{item.message}
 															</Truncate>
-														</h4>
-													)}
+														</p>
+													</li>
+												))}
+											</ul>
+
+											<div className="dropdown-select__selected">
+												<div
+													className="dropdown-select__header"
+													style={{
+														marginBottom: '1rem',
+													}}
+												>
+													<Button
+														rounded
+														onClick={() =>
+															setSelected({
+																...selected,
+																isOpen: false,
+															})
+														}
+													>
+														<BiLeftArrowAlt size="25" />
+													</Button>
+
 													<span className="text-broken">
 														{moment(
-															item.date
+															selected.data?.date
 														).format(
 															'DD-MM-YYYY H:mm'
 														)}
 													</span>
 												</div>
 
-												<p>
-													<Truncate lines={2}>
-														{item.message}
-													</Truncate>
+												<h4
+													style={{
+														marginBottom: '1rem',
+													}}
+												>
+													{selected.data?.title}
+												</h4>
+
+												<p
+													style={{
+														lineHeight: '1.3',
+													}}
+												>
+													{selected.data?.message}
 												</p>
-											</li>
-										))}
-									</ul>
-
-									<div className="dropdown-select__selected">
-										<div
-											className="dropdown-select__header"
-											style={{ marginBottom: '1rem' }}
-										>
-											<Button
-												rounded
-												onClick={() =>
-													setSelected({
-														...selected,
-														isOpen: false,
-													})
-												}
-											>
-												<BiLeftArrowAlt size="25" />
-											</Button>
-
-											<span className="text-broken">
-												{moment(
-													selected.data?.date
-												).format('DD-MM-YYYY H:mm')}
-											</span>
+											</div>
 										</div>
-
-										<h4 style={{ marginBottom: '1rem' }}>
-											{selected.data?.title}
-										</h4>
-
-										<p style={{ lineHeight: '1.3' }}>
-											{selected.data?.message}
-										</p>
-									</div>
+									) : (
+										noItemsContent
+									)}
 								</div>
-							) : (
-								noItemsContent
 							)}
 						</div>
 					</div>
