@@ -5,7 +5,22 @@ from django.core.exceptions import ValidationError
 from datetime import timedelta
 
 
+def get_meeting_logo_location(self, filename):
+    return f"meetings/{self.name}/logo"
+
+
+def get_meeting_bg_image_location(self, filename):
+    return f"meetings/{self.name}/bg"
+
+
 class Meeting(models.Model):
+    logo = models.ImageField(upload_to=get_meeting_logo_location,
+                             blank=True,
+                             null=True)
+    bg_image = models.ImageField(upload_to=get_meeting_bg_image_location,
+                                 blank=True,
+                                 null=True)
+
     business = models.ForeignKey('data.Business',
                                  on_delete=models.CASCADE,
                                  related_name='meetings')
@@ -39,6 +54,7 @@ class Meeting(models.Model):
     start = models.DateTimeField(verbose_name="Zaczyna się o")
     end = models.DateTimeField(verbose_name="Kończy się o")
     description = models.TextField(blank=True)
+    customer_description = models.TextField(blank=True)
     confirmed = models.BooleanField(default=False)
     customer_came = models.BooleanField(default=True)
     paid = models.BooleanField(default=False)

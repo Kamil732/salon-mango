@@ -33,6 +33,7 @@ class Account(AbstractBaseUser):
     email = models.EmailField(verbose_name="E-mail adres",
                               max_length=80,
                               unique=True)
+    name = models.CharField(max_length=50)
     is_active = models.BooleanField(verbose_name="Jest aktywowany?",
                                     default=True)
     is_admin = models.BooleanField(verbose_name="Jest adminem?", default=False)

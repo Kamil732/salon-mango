@@ -31,7 +31,9 @@ class ServiceDataSerializer(serializers.ModelSerializer):
 
 
 class MeetingSerializer(serializers.ModelSerializer):
-    services = ServiceDataSerializer(source="services_data", many=True)
+    services = ServiceDataSerializer(source="services_data",
+                                     many=True,
+                                     required=False)
     blocked = serializers.SerializerMethodField("get_blocked")
 
     def get_blocked(self, obj):
@@ -119,22 +121,23 @@ class MeetingSerializer(serializers.ModelSerializer):
         # Update meeting
         services_data = validated_data.pop("services_data", None)
 
-        bulk_sync(
-            new_models=[
-                ServiceData(
-                    meeting=instance,
-                    service=service_data["service"],
-                    employee=service_data["employee"],
-                ) for service_data in services_data
-            ],
-            filters=Q(meeting_id=instance.id),
-            fields=["employee", "service"],
-            key_fields=("service_id", ),
-        )
+        if (services_data):
+            bulk_sync(
+                new_models=[
+                    ServiceData(
+                        meeting=instance,
+                        service=service_data["service"],
+                        employee=service_data["employee"],
+                    ) for service_data in services_data
+                ],
+                filters=Q(meeting_id=instance.id),
+                fields=["employee", "service"],
+                key_fields=("service_id", ),
+            )
 
-        for idx, service_data in enumerate(
-                ServiceData.objects.filter(meeting=instance)):
-            service_data.resources.set(services_data[idx]["resources"])
+            for idx, service_data in enumerate(
+                    ServiceData.objects.filter(meeting=instance)):
+                service_data.resources.set(services_data[idx]["resources"])
 
         return super(MeetingSerializer, self).update(instance, validated_data)
 
@@ -150,6 +153,8 @@ class MeetingSerializer(serializers.ModelSerializer):
             "services",
             "confirmed",
             "blocked",
+            "description",
+            "customer_description",
         )
         read_only_fields = ("id", )
 

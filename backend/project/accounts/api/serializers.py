@@ -15,9 +15,21 @@ class UniqueEmailSerializer(serializers.Serializer):
     ])
 
 
+class AccountBusinessSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Business
+        fields = (
+            'id',
+            'name',
+            'city',
+            'address',
+        )
+
+
 class AccountSerializer(serializers.ModelSerializer):
     # Return profile
     profile = CustomerSerializer()
+    businesses = AccountBusinessSerializer(many=True)
 
     class Meta:
         model = Account
@@ -29,11 +41,13 @@ class AccountSerializer(serializers.ModelSerializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField()
-
     class Meta:
         model = Account
-        fields = ('email', 'password')
+        fields = (
+            'email',
+            'password',
+            'name',
+        )
         extra_kwargs = {
             'password': {
                 'write_only': True
