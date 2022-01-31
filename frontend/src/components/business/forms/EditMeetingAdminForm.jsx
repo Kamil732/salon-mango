@@ -83,7 +83,7 @@ class EditMeetingAdminForm extends Component {
 					(_service) => _service.id === service.id
 				),
 			})),
-			private_description: props.selected.data.private_description,
+			description: props.selected.data.description,
 			customer_description: props.selected.data.customer_description,
 		}
 
@@ -134,7 +134,7 @@ class EditMeetingAdminForm extends Component {
 			employee,
 			resource,
 			services,
-			private_description,
+			description,
 			customer_description,
 		} = this.state
 
@@ -142,7 +142,7 @@ class EditMeetingAdminForm extends Component {
 			? {
 					employee: employee?.id,
 					resource: resource?.id,
-					private_description,
+					description,
 			  }
 			: {
 					customer: customer.id,
@@ -153,7 +153,7 @@ class EditMeetingAdminForm extends Component {
 							(resource) => resource.id
 						),
 					})),
-					private_description,
+					description,
 					customer_description,
 			  }
 
@@ -172,7 +172,7 @@ class EditMeetingAdminForm extends Component {
 			employee,
 			resource,
 			services,
-			private_description,
+			description,
 			customer_description,
 		} = this.state
 
@@ -294,18 +294,18 @@ class EditMeetingAdminForm extends Component {
 
 							<FormControl>
 								<Label
-									htmlFor="private_description"
-									inputValue={private_description}
+									htmlFor="description"
+									inputValue={description}
 								>
 									{selected.data.blocked
 										? 'Powód'
 										: 'Opis (widoczny dla personelu)'}
 								</Label>
 								<Textarea
-									id="private_description"
-									name="private_description"
+									id="description"
+									name="description"
 									onChange={this.onChange}
-									value={private_description}
+									value={description}
 								/>
 							</FormControl>
 

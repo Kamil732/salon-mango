@@ -26,12 +26,14 @@ import Dropdown, {
 	DropdownClearBtn,
 } from '../../../../layout/buttons/dropdowns/Dropdown'
 import ButtonContainer from '../../../../layout/buttons/ButtonContainer'
+import { PRICE_TYPES } from '../../../../helpers/consts'
+import { useTranslation } from 'react-i18next'
 
 const EmployeeInput = lazy(() => import('./EmployeeInput'))
 const ResourcesInput = lazy(() => import('./ResourcesInput'))
 const ConsumptionInput = lazy(() => import('./ConsumptionInput'))
 
-const CATEOGRIES = [0, 1, 2]
+const SECTIONS = [0, 1, 2]
 
 function ServicesInput({
 	defaultEmployee,
@@ -46,8 +48,9 @@ function ServicesInput({
 	eventStartDate,
 	...props
 }) {
+	const { t } = useTranslation('business_common')
 	const [selected, setSelected] = useState({})
-	const [category, setCategory] = useState(CATEOGRIES[0])
+	const [category, setCategory] = useState(SECTIONS[0])
 	const [showCategories, setShowsCategories] = useState(false)
 	const [showInput, setShowInput] = useState(value.length === 0)
 	const [dropdownId] = useId(1, 'service-')
@@ -107,13 +110,26 @@ function ServicesInput({
 	}, [category, showMoreOptions])
 
 	const formatOptionLabel = (
-		{ id, name, display_time, price },
+		{ id, name, display_time, price, price_type },
 		employee = defaultEmployee,
 		selectedFormat
 	) => {
 		const time = employee
 			? getServiceEmployeeTime(employee, id) || display_time
 			: display_time
+
+		const priceDisplay =
+			price_type === PRICE_TYPES.FREE.value
+				? t(PRICE_TYPES.FREE.label[0], {
+						ns: PRICE_TYPES.FREE.label[1],
+				  })
+				: price_type === PRICE_TYPES.VARIES.value
+				? t(PRICE_TYPES.VARIES.label[0], {
+						ns: PRICE_TYPES.VARIES.label[1],
+				  })
+				: price_type === PRICE_TYPES.DONT_SHOW.value
+				? '--'
+				: `${price} zł`
 
 		return (
 			<div
@@ -133,7 +149,7 @@ function ServicesInput({
 							<>
 								(<span className="word-break-all">{time}</span>,{' '}
 								<span className="word-break-all">
-									{price} zł
+									{priceDisplay}
 								</span>
 								)
 							</>
@@ -143,7 +159,7 @@ function ServicesInput({
 					</small>
 				</span>
 				{!selectedFormat && (
-					<span className="text-broken">{price} zł</span>
+					<span className="text-broken">{priceDisplay}</span>
 				)}
 			</div>
 		)
@@ -297,11 +313,11 @@ function ServicesInput({
 							<Button
 								type="button"
 								className={`btn-category icon-container${
-									category === CATEOGRIES[0] ? ' active' : ''
+									category === SECTIONS[0] ? ' active' : ''
 								}`}
-								onClick={() => setCategory(CATEOGRIES[0])}
+								onClick={() => setCategory(SECTIONS[0])}
 							>
-								{category === CATEOGRIES[0] && (
+								{category === SECTIONS[0] && (
 									<FiMenu className="categories-group__icon" />
 								)}
 								<GiOfficeChair className="icon-container__icon" />
@@ -310,11 +326,11 @@ function ServicesInput({
 							<Button
 								type="button"
 								className={`btn-category icon-container${
-									category === CATEOGRIES[1] ? ' active' : ''
+									category === SECTIONS[1] ? ' active' : ''
 								}`}
-								onClick={() => setCategory(CATEOGRIES[1])}
+								onClick={() => setCategory(SECTIONS[1])}
 							>
-								{category === CATEOGRIES[1] && (
+								{category === SECTIONS[1] && (
 									<FiMenu className="categories-group__icon" />
 								)}
 								<BiTime className="icon-container__icon" />
@@ -323,11 +339,11 @@ function ServicesInput({
 							<Button
 								type="button"
 								className={`btn-category icon-container${
-									category === CATEOGRIES[2] ? ' active' : ''
+									category === SECTIONS[2] ? ' active' : ''
 								}`}
-								onClick={() => setCategory(CATEOGRIES[2])}
+								onClick={() => setCategory(SECTIONS[2])}
 							>
-								{category === CATEOGRIES[2] && (
+								{category === SECTIONS[2] && (
 									<FiMenu className="categories-group__icon" />
 								)}
 								<BsBoxArrowInDown className="icon-container__icon" />
@@ -359,7 +375,7 @@ function ServicesInput({
 									</td>
 
 									{!showMoreOptions ||
-									category === CATEOGRIES[0] ? (
+									category === SECTIONS[0] ? (
 										<>
 											<td style={{ width: '1px' }}>
 												<div className="inline-wrap">
@@ -488,7 +504,7 @@ function ServicesInput({
 												/>
 											</td>
 										</>
-									) : category === CATEOGRIES[1] ? (
+									) : category === SECTIONS[1] ? (
 										<td style={{ width: '1px' }}>
 											<div className="inline-inputs">
 												<FormControl
@@ -686,7 +702,7 @@ function ServicesInput({
 										</td>
 									) : null}
 								</tr>
-								{showMoreOptions && category === CATEOGRIES[2] && (
+								{showMoreOptions && category === SECTIONS[2] && (
 									<tr>
 										<td>
 											<ConsumptionInput
@@ -788,13 +804,13 @@ function ServicesInput({
 						</Button>
 					)}
 					{value.length > 0 &&
-						(!showMoreOptions || category !== CATEOGRIES[2]) && (
+						(!showMoreOptions || category !== SECTIONS[2]) && (
 							<div style={{ marginLeft: 'auto' }}>
 								Łącznie:{' '}
 								{!showMoreOptions ||
-								category === CATEOGRIES[0] ? (
+								category === SECTIONS[0] ? (
 									<b>{getServicesPriceSum()} zł</b>
-								) : category === CATEOGRIES[1] ? (
+								) : category === SECTIONS[1] ? (
 									<>
 										<b>
 											{moment(
