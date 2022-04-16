@@ -66,15 +66,20 @@ export const getOrCreateBusinessData =
 					])
 				)
 
+			if (create)
+				dispatch({
+					type: ADD_BUSINESS_TO_USER,
+					payload: {
+						address: res.data.address,
+						city: res.data.city,
+						id: res.data.id,
+						name: res.data.name,
+					},
+				})
 			dispatch({
 				type: GET_BUSINESS_DATA,
 				payload: res.data,
 			})
-			if (create)
-				dispatch({
-					type: ADD_BUSINESS_TO_USER,
-					payload: res.data.id,
-				})
 		} catch (err) {
 			NotificationManager.error(
 				'Wystąpił błąd przy wczytywaniu strony, spróbuj odświeżyć stronę',

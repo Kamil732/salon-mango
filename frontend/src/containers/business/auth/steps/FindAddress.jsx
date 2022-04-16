@@ -70,7 +70,7 @@ function FindAddress({
 									: undefined,
 								controls: ['Point'],
 								drawingMode: 'Point',
-								featureFactory: ({ g: { lat, lng } }) =>
+								featureFactory: ({ h: { lat, lng } }) =>
 									updateData({
 										latitude: lat(),
 										longitude: lng(),
