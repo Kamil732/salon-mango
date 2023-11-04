@@ -19,15 +19,18 @@ daphne==3.0.1
 Django==3.1.12
 django-autoslug==1.9.8
 django-bulk-sync==3.2.0
+django-compat==1.0.15
 django-cors-headers==3.7.0
 django-environ==0.4.5
+django-modeltranslation==0.17.3
 django-phonenumber-field==5.0.0
+django-threadlocals==0.10
 djangorestframework==3.12.4
 Faker==8.1.0
 hiredis==1.1.0
 http-ece==1.1.0
 hyperlink==21.0.0
-idna
+idna==2.10
 incremental==21.3.0
 msgpack==1.0.2
 mypy-extensions==0.4.3
@@ -43,6 +46,7 @@ pycparser==2.20
 pyOpenSSL==20.0.1
 python-dateutil==2.8.1
 pytz==2021.1
+pyuca==1.2
 regex==2021.3.17
 requests==2.25.1
 service-identity==18.1.0
