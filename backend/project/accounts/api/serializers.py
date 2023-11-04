@@ -1,10 +1,11 @@
+from asyncore import read
 from django.utils.translation import gettext as _
 
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from accounts.models import Account
-from data.models import Business, Employee
+from data.models import Business, Employee, OpenHours
 from data.api.serializers import CustomerSerializer
 
 
@@ -16,20 +17,35 @@ class UniqueEmailSerializer(serializers.Serializer):
 
 
 class AccountBusinessSerializer(serializers.ModelSerializer):
+    open_hour = serializers.SerializerMethodField()
+
+    def get_open_hour(self, obj):
+        start, end = obj.open_hours.filter(
+            weekday=self.context.get('weekday')).values_list(
+                'start', 'end').first() or [None, None]
+
+        return {
+            'start': start,
+            'end': end,
+        }
+
     class Meta:
         model = Business
-        fields = (
-            'id',
-            'name',
-            'city',
-            'address',
-        )
+        fields = ('id', 'name', 'city', 'address', 'open_hour')
 
 
 class AccountSerializer(serializers.ModelSerializer):
     # Return profile
     profile = CustomerSerializer()
-    businesses = AccountBusinessSerializer(many=True)
+    businesses = serializers.SerializerMethodField()
+
+    def get_businesses(self, obj):
+        return AccountBusinessSerializer(obj.businesses.all(),
+                                         many=True,
+                                         context={
+                                             'weekday':
+                                             self.context.get('weekday')
+                                         }).data
 
     class Meta:
         model = Account
