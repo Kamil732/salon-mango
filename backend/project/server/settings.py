@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
     "phonenumber_field",
     "channels",
     "modeltranslation",
@@ -100,7 +101,7 @@ DATABASES = {
         "NAME": env("DATABASE_NAME"),
         "USER": env("DATABASE_USER"),
         "PASSWORD": env("DATABASE_PASSWORD"),
-        "HOST": env("DATABASE_HOST", default="localhost"),
+        "HOST": env("DATABASE_HOST"),
         "PORT": env("DATABASE_PORT", default=""),
     }
 }
@@ -171,7 +172,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "build"),
 ]
 # STATIC_ROOT = os.path.join(BASE_DIR, "static")
-STATIC_ROOT = '192.168.1.31:8000/static/'
+STATIC_ROOT = '/static/'
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
