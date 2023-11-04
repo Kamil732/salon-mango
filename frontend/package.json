@@ -35,8 +35,8 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build && rm -rf ../backend/project/build && cp -r build ../backend/project",
+    "start": "SET NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
+    "build": "SET NODE_OPTIONS=--openssl-legacy-provider && react-scripts build && rmdir /s /q ..\\backend\\project\\build && move build ../backend/project",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
