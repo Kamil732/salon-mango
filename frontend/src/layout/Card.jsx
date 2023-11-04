@@ -17,6 +17,10 @@ Card.prototype.propTypes = {
 	formCard: PropTypes.bool,
 }
 
+function Title(props) {
+	return <div className="card__title" {...props} />
+}
+
 function Header(props) {
 	return <div className="card__header" {...props} />
 }
@@ -34,6 +38,7 @@ function CardContainer({ vertical, ...props }) {
 	)
 }
 
+Card.Title = Title
 Card.Header = Header
 Card.Body = Body
 

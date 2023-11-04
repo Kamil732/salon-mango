@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { baseRouteUrl, baseUrl } from '../../../app/locale/location-params'
+import moment from 'moment'
 
 import {
 	connectNotificationWS,
@@ -10,6 +11,8 @@ import {
 	getUnreadNotificationsAmount,
 	markNotificationAsRead,
 } from '../../../redux/actions/data'
+import { logout } from '../../../redux/actions/auth'
+import Button from '../../../layout/buttons/Button'
 import PrivateRoute from '../../../common/PrivateRoute'
 import { Link, NavLink, Redirect, Switch } from 'react-router-dom'
 
@@ -23,6 +26,8 @@ import { GoMegaphone } from 'react-icons/go'
 import ErrorBoundary from '../../../components/ErrorBoundary'
 import CircleLoader from '../../../layout/loaders/CircleLoader'
 import Dashboard from '../../../layout/Dashboard'
+import Card from '../../../layout/Card'
+import Truncate from 'react-truncate'
 
 const DropdownSelect = lazy(() =>
 	import('../../../layout/buttons/dropdowns/DropdownSelect')
@@ -46,8 +51,9 @@ function Panel({
 	connectNotificationWS,
 	getNotifications,
 	markNotificationAsRead,
+	logout,
 }) {
-	const { t } = useTranslation('business_panel')
+	const { t } = useTranslation(['business_panel', 'auth'])
 	const [isMenuOpen, toggleMenu] = useState(window.innerWidth >= 1024)
 	const navContainer = useRef(null)
 
@@ -227,12 +233,78 @@ function Panel({
 									rounded
 									aria-label={t('notifications')}
 								>
-									<h3>{user_data.name}</h3>
-									{user_data.businesses.map(
-										({ id, name }) => (
-											<div key={id}>{name}</div>
-										)
-									)}
+									<Card style={{ height: '100%' }}>
+										<Card.Title>
+											<h3>{user_data.name}</h3>
+											<Button
+												primary
+												small
+												onClick={logout}
+											>
+												{t('sign_out', { ns: 'auth' })}
+											</Button>
+										</Card.Title>
+										<Card.Body>
+											{user_data.businesses.map(
+												({ id, name, open_hour }) => {
+													// const start = moment(open.start)
+													// const end = moment(open.end)
+													const now = moment()
+													const isOpen =
+														now.isAfter(
+															moment(
+																open_hour.start,
+																'HH:mm'
+															)
+														) &&
+														now.isBefore(
+															moment(
+																open_hour.end,
+																'HH:mm'
+															)
+														)
+
+													return (
+														<Card
+															key={id}
+															style={{
+																marginTop:
+																	'1rem',
+															}}
+														>
+															<Card.Body>
+																<div className="space-between">
+																	<Truncate
+																		lines={
+																			1
+																		}
+																		width={
+																			150
+																		}
+																	>
+																		{name}
+																	</Truncate>
+																	{isOpen ? (
+																		<span className="success">
+																			{t(
+																				'open'
+																			)}
+																		</span>
+																	) : (
+																		<span className="error">
+																			{t(
+																				'closed'
+																			)}
+																		</span>
+																	)}
+																</div>
+															</Card.Body>
+														</Card>
+													)
+												}
+											)}
+										</Card.Body>
+									</Card>
 								</DropdownSelect>
 							</Dashboard.NavFooter>
 						</Dashboard.Nav>
@@ -368,6 +440,7 @@ const mapDispatchToProps = {
 	getUnreadNotificationsAmount,
 	getNotifications,
 	markNotificationAsRead,
+	logout,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Panel)

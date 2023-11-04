@@ -1,4 +1,5 @@
 import axios from 'axios'
+import moment from 'moment'
 import {
 	LOGOUT,
 	AUTH_LOADING,
@@ -15,6 +16,10 @@ import i18next from 'i18next'
 import { getOrCreateBusinessData } from './data'
 
 export const loadUser = () => async (dispatch) => {
+	const body = JSON.stringify({
+		weekday: moment().isoWeekday(),
+	})
+	console.log(body)
 	dispatch({ type: AUTH_LOADING })
 
 	try {
@@ -39,6 +44,7 @@ export const login = (email, password, setErrors) => async (dispatch) => {
 	const body = JSON.stringify({
 		email,
 		password,
+		weekday: moment().isoWeekday(),
 		// 'g-recaptcha-response': recaptchaToken,
 	})
 
