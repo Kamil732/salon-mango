@@ -1,12 +1,1 @@
-{
-    "version": 3,
-    "mappings": "AEoBA,AAAA,qBAAqB,AAAD,CCXnB,KAAK,CFFY,OAAO,CEGxB,gBAAgB,CFGH,OAAO,CCSpB,aAAa,CAAE,WAAW,CAC1B,OAAO,CAAE,QAAQ,CACjB,SAAS,CAAE,MAAM,CACjB,OAAO,CAAE,cAAc,CACvB,MAAM,CAAE,GAAG,CAAC,KAAK,CDbJ,OAAO,CCcpB,UAAU,CAAE,IAAI,CAChB,AFpBD,AALA,aAKa,AAcX,aAAa,CAAI,oBAAO,CAd1B,aAAa,CAoBT,oBAAO,AAAA,OAAO,AAzBJ,CACb,SAAS,CAAE,MAAM,CACjB,SAAS,CAAE,kBAAkB,CAAC,UAAU,CACxC,AAED,AACC,aADY,CACT,oBAAO,AAAC,CACV,MAAM,CAAE,IAAI,CACZ,GAAG,CAAE,MAAM,CACX,QAAQ,CAAE,QAAQ,CAClB,gBAAgB,CAAE,QAAQ,CAC1B,UAAU,CAAE,8BAA8B,CAC1C,OAAO,CAAE,CAAC,CACV,KAAK,CAAE,OAAwB,CAC/B,WAAW,CAAE,IAAI,CACjB,WAAW,CAAE,MAAM,CACnB,aAAa,CAAE,QAAQ,CACvB,AAZF,AAcC,aAdY,AAcX,aAAa,CAAI,oBAAO,AAAC,CACzB,WAAW,CAAE,GAAG,CAChB,KAAK,CCtBU,OAAO,CDwBtB",
-    "sources": [
-        "../scss/layout/form/label.scss",
-        "../scss/abstarct/_variables.scss",
-        "../scss/layout/form/_config.scss",
-        "../scss/abstarct/_config.scss"
-    ],
-    "names": [],
-    "file": "label.css"
-}
+{"version":3,"sources":["../scss/layout/form/_config.scss","../scss/abstarct/_config.scss","../scss/abstarct/_variables.scss","../scss/layout/form/label.scss"],"names":[],"mappings":"AAoBA,sBCXC,aAAA,CACA,wBCGa,CFSb,yBAAA,CACA,eAAA,CACA,eAAA,CACA,oBAAA,CACA,wBAAA,CACA,eAAA,CGxBD,0FACC,gBAAA,CACA,uCAAA,CAIA,mCACC,WAAA,CACA,SAAA,CACA,iBAAA,CACA,yBAAA,CACA,sCAAA,CACA,SAAA,CACA,aAAA,CACA,wBAAA,CAAA,qBAAA,CAAA,gBAAA,CACA,kBAAA,CACA,sBAAA,CAGD,gDACC,eAAA,CACA,aDtBe","file":"label.css"}

@@ -1,11 +1,1 @@
-{
-    "version": 3,
-    "mappings": "AAGA,AAAA,uBAAuB,AAAC,CEMvB,KAAK,CDMQ,OAAO,CCLpB,gBAAgB,CFNR,OAAO,CAEf,MAAM,CAAE,MAAM,CACd,OAAO,CAAE,cAAc,CACvB,WAAW,CAAE,GAAG,CAgBhB,AArBD,AAOC,uBAPsB,AAOrB,MAAM,AAAC,CEDR,KAAK,CDMQ,OAAO,CCLpB,gBAAgB,CFCG,OAAkB,CACpC,AAEA,AAAD,6BAAO,AAAC,CACP,gBAAgB,CAAE,IAAI,CACtB,aAAa,CAAE,GAAG,CAClB,KAAK,CAAE,IAAI,CACX,MAAM,CAAE,IAAI,CACZ,WAAW,CAAE,MAAM,CACnB,OAAO,CAAE,IAAI,CACb,eAAe,CAAE,MAAM,CACvB,WAAW,CAAE,MAAM,CACnB",
-    "sources": [
-        "../scss/components/register/register-add-services.scss",
-        "../scss/abstarct/_variables.scss",
-        "../scss/abstarct/_config.scss"
-    ],
-    "names": [],
-    "file": "register-add-services.css"
-}
+{"version":3,"sources":["../scss/components/register/register-add-services.scss","../scss/abstarct/_config.scss"],"names":[],"mappings":"AAGA,wBCMC,aAAA,CACA,wBDNQ,CAER,aAAA,CACA,qBAAA,CACA,eAAA,CAEA,8BCDA,aAAA,CACA,wBDCmB,CAGnB,8BACC,qBAAA,CACA,iBAAA,CACA,UAAA,CACA,WAAA,CACA,iBAAA,CACA,YAAA,CACA,sBAAA,CACA,kBAAA","file":"register-add-services.css"}
