@@ -72,7 +72,7 @@ function DropdownSelect({
 							{loading == null ? (
 								children
 							) : (
-								<div>
+								<>
 									{children}
 
 									{loading ? (
@@ -200,7 +200,7 @@ function DropdownSelect({
 									) : (
 										noItemsContent
 									)}
-								</div>
+								</>
 							)}
 						</div>
 					</div>
