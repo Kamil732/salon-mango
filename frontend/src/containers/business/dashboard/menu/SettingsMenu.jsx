@@ -33,8 +33,7 @@ function CalendarMenu() {
 			<NavLink
 				to={
 					baseUrl +
-					process.env
-						.REACT_APP_BUSINESS_PANEL_SETTINGS_BUSINESS_DATA_URL
+					process.env.REACT_APP_BUSINESS_PANEL_SETTINGS_SALON_DATA_URL
 				}
 				className="select-menu__item icon-container"
 			>
