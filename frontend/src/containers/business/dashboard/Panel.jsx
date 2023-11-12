@@ -32,7 +32,7 @@ import Truncate from 'react-truncate'
 const DropdownSelect = lazy(() =>
 	import('../../../layout/buttons/dropdowns/DropdownSelect')
 )
-const Calendar = lazy(() => import('../../../components/business/Calendar'))
+const Calendar = lazy(() => import('./content/Calendar'))
 const Settings = lazy(() => import('./content/Settings'))
 const Services = lazy(() => import('./content/Services'))
 
@@ -66,14 +66,14 @@ function Panel({
 		fetch()
 	}, [getUnreadNotificationsAmount, connectNotificationWS])
 
-	useEffect(() => {
-		const body = document.querySelector('body')
-		body.style.overflow = 'hidden'
+	// useEffect(() => {
+	// 	const body = document.querySelector('body')
+	// 	body.style.overflow = 'hidden'
 
-		return () => {
-			body.style.overflow = 'auto'
-		}
-	}, [])
+	// 	return () => {
+	// 		body.style.overflow = 'auto'
+	// 	}
+	// }, [])
 
 	return (
 		<ErrorBoundary>
@@ -342,7 +342,6 @@ function Panel({
 											component={ServicesMenu}
 										/>
 										<PrivateRoute
-											exact
 											path={
 												baseRouteUrl +
 												process.env
@@ -385,7 +384,6 @@ function Panel({
 										component={Services}
 									/>
 									<PrivateRoute
-										exact
 										path={
 											baseRouteUrl +
 											process.env
@@ -412,7 +410,6 @@ function Panel({
 }
 
 Panel.prototype.propTypes = {
-	ws: PropTypes.object,
 	notificationLoading: PropTypes.bool,
 	notificationLoaded: PropTypes.bool,
 	notifications: PropTypes.array,
@@ -426,7 +423,6 @@ Panel.prototype.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-	ws: state.data.notifications.ws,
 	notificationLoading: state.data.notifications.loading,
 	notificationLoaded: state.data.notifications.loaded,
 	notifications: state.data.notifications.data,

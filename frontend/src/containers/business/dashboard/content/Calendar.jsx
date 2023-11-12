@@ -2,7 +2,7 @@ import React, { Component, lazy, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withTranslation } from 'react-i18next'
-import '../../assets/css/big-calendar.css'
+import '../../../../assets/css/big-calendar.css'
 
 import moment from 'moment'
 
@@ -14,11 +14,11 @@ import {
 	updateResourceMap,
 	updateMeeting,
 	deleteMeeting,
-} from '../../redux/actions/meetings'
+} from '../../../../redux/actions/meetings'
 
-import CircleLoader from '../../layout/loaders/CircleLoader'
-import ErrorBoundary from '../ErrorBoundary'
-import Modal from '../../layout/Modal'
+import CircleLoader from '../../../../layout/loaders/CircleLoader'
+import ErrorBoundary from '../../../../components/ErrorBoundary'
+import Modal from '../../../../layout/Modal'
 
 import {
 	Calendar as BigCalendar,
@@ -27,27 +27,34 @@ import {
 } from 'react-big-calendar'
 import Day from 'react-big-calendar/lib/Day'
 
-import Toolbar from './tools/Toolbar'
-import TouchCellWrapper from './tools/TouchCellWrapper'
-import WeekHeader from './tools/WeekHeader'
-import MonthDateHeader from './tools/MonthDateHeader'
-import ThreeDaysView from './tools/views/ThreeDaysView'
-import EventWrapper from './tools/EventWrapper'
-import getEventTooltip from '../../helpers/getEventTooltip'
-import { country, language } from '../../app/locale/location-params'
+import Toolbar from '../../../../components/business/tools/Toolbar'
+import TouchCellWrapper from '../../../../components/business/tools/TouchCellWrapper'
+import WeekHeader from '../../../../components/business/tools/WeekHeader'
+import MonthDateHeader from '../../../../components/business/tools/MonthDateHeader'
+import ThreeDaysView from '../../../../components/business/tools/views/ThreeDaysView'
+import EventWrapper from '../../../../components/business/tools/EventWrapper'
+import getEventTooltip from '../../../../helpers/getEventTooltip'
+import { country, language } from '../../../../app/locale/location-params'
 
 try {
-	require(`moment/locale/${language}-${country}`)
+	moment.locale(`${language}-${country}`)
+	// require(`moment/locale/${language}-${country}`)
 } catch (err) {
 	try {
-		require(`moment/locale/${language}`)
+		moment.locale(language)
+		// require(`moment/locale/language)
 	} catch (err) {
-		require(`moment/locale/en-gb`)
+		moment.locale('en-gb')
+		// require(`moment/locale/en-gb`)
 	}
 }
 
-const AddMeetingAdminForm = lazy(() => import('./forms/AddMeetingAdminForm'))
-const EditMeetingAdminForm = lazy(() => import('./forms/EditMeetingAdminForm'))
+const AddMeetingAdminForm = lazy(() =>
+	import('../../../../components/business/forms/AddMeetingAdminForm')
+)
+const EditMeetingAdminForm = lazy(() =>
+	import('../../../../components/business/forms/EditMeetingAdminForm')
+)
 
 const localizer = momentLocalizer(moment)
 
@@ -624,8 +631,6 @@ class Calendar extends Component {
 					meetings.push(visibleMeetings[i])
 			}
 		}
-
-		console.log(view, meetings.length, visibleMeetings.length)
 
 		const loader = (
 			<div className="center-container">
