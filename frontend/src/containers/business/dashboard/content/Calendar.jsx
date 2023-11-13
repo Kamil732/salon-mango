@@ -37,15 +37,12 @@ import getEventTooltip from '../../../../helpers/getEventTooltip'
 import { country, language } from '../../../../app/locale/location-params'
 
 try {
-	moment.locale(`${language}-${country}`)
-	// require(`moment/locale/${language}-${country}`)
+	require(`moment/locale/${language}-${country}`)
 } catch (err) {
 	try {
-		moment.locale(language)
-		// require(`moment/locale/language)
+		require(`moment/locale/${language}`)
 	} catch (err) {
-		moment.locale('en-gb')
-		// require(`moment/locale/en-gb`)
+		require(`moment/locale/en-gb`)
 	}
 }
 
@@ -254,7 +251,8 @@ class Calendar extends Component {
 				today.getMonth(),
 				today.getDate(),
 				maxDate.hours(),
-				maxDate.minutes()
+				maxDate.minutes() +
+					this.props.calendar_step * this.props.calendar_timeslots
 			),
 		}
 	}
