@@ -47,14 +47,27 @@ $nav-color: $primary-color;
 	&__menu {
 		overflow: auto;
 		position: fixed;
-		left: 4rem;
+		left: 4.5rem;
 		top: 1rem;
 		background-color: $surface-color;
 		z-index: 5;
-		border-radius: 0 10px 10px;
-		max-height: 100%;
-		width: 100%;
+		border: 1px solid $border-color;
+		border-radius: 10px;
+		min-height: 50%;
+		width: 300px;
+		max-width: 75%;
 		@extend %shadow-sm;
+
+		&::before {
+			content: '';
+			position: absolute;
+			left: -2rem;
+			top: 2rem;
+			width: 0;
+			height: 0;
+			border: 16px solid transparent;
+			border-right-color: $surface-color;
+		}
 
 		&-btn {
 			margin-top: 0.5rem;
@@ -118,6 +131,7 @@ $nav-color: $primary-color;
 			align-items: flex-start;
 			position: static;
 			width: 220px;
+			max-width: 100%;
 			border-radius: 0;
 			box-shadow: none;
 			border-right: 1px solid $border-color;
