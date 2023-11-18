@@ -16,8 +16,7 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-# ALLOWED_HOSTS = env("ALLOWED_HOSTS").split(",")
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = env("ALLOWED_HOSTS", default='127.0.0.1').split(",")
 
 # Application definition
 
@@ -32,9 +31,9 @@ INSTALLED_APPS = [
     "phonenumber_field",
     "channels",
     "modeltranslation",
-    "data.apps.DataConfig",
-    "accounts.apps.AccountsConfig",
     "meetings.apps.MeetingsConfig",
+    "accounts.apps.AccountsConfig",
+    "data.apps.DataConfig",
 ]
 
 
@@ -179,10 +178,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 CORS_ALLOW_CREDENTIALS = True
 # change to https://app.example.com in production settings
-CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000']
+CORS_ORIGIN_WHITELIST = env("CORS_ORIGIN_WHITELIST", default='http://127.0.0.1:3000').split(",")
 
 # change to app.example.com in production settings
-CSRF_TRUSTED_ORIGINS = ['127.0.0.1:3000']
+CSRF_TRUSTED_ORIGINS =  env("CSRF_TRUSTED_ORIGINS", default='127.0.0.1:3000').split(",")
 
 # RECAPTCHA_SECRET_KEY = env("RECAPTCHA_SECRET_KEY")
 
