@@ -91,7 +91,7 @@ class Meeting(models.Model):
 
 
 class Payment(models.Model):
-    meeting = models.ForeignKey(Meeting, on_delete=models.DO_NOTHING)
+    meeting = models.ForeignKey('Meeting', on_delete=models.DO_NOTHING)
     method = models.ForeignKey("data.PaymentMethod", on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=8, decimal_places=2)
 
@@ -103,7 +103,7 @@ class ProductSale(models.Model):
     )
 
     product = models.ForeignKey("data.Product", on_delete=models.DO_NOTHING)
-    meeting = models.ForeignKey(Meeting, on_delete=models.DO_NOTHING)
+    meeting = models.ForeignKey('Meeting', on_delete=models.DO_NOTHING)
     item_price = models.DecimalField(max_digits=8, decimal_places=2)
     quantity = models.PositiveIntegerField(default=0)
     vat = models.DecimalField(max_digits=4, decimal_places=2)
@@ -113,7 +113,7 @@ class ProductSale(models.Model):
 class ServiceData(models.Model):
     DISCOUNT_TYPE = ((2, "Pieniądze"), (1, "%"))
 
-    meeting = models.ForeignKey(Meeting,
+    meeting = models.ForeignKey('Meeting',
                                 on_delete=models.CASCADE,
                                 related_name="services_data")
     start = models.DateTimeField(verbose_name="Zaczyna się o")
@@ -148,6 +148,6 @@ class ProductUsed(models.Model):
     )
 
     product = models.ForeignKey("data.Product", on_delete=models.CASCADE)
-    service_data = models.ForeignKey(ServiceData, on_delete=models.CASCADE)
+    service_data = models.ForeignKey('ServiceData', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=0)
     unit = models.PositiveSmallIntegerField(choices=UNIT, default=1)

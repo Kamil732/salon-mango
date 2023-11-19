@@ -3,8 +3,6 @@ from phonenumber_field.modelfields import PhoneNumberField
 from autoslug import AutoSlugField
 
 from server.abstract.models import Group, Color
-from accounts.models import Account
-from meetings.models import Meeting
 
 PRICE_TYPES = (
     ('X', 'Fixed'),
@@ -160,7 +158,7 @@ class Business(models.Model):
 class RecomendationCode(models.Model):
     code = models.CharField(max_length=10)
     business = models.OneToOneField(
-        Business,
+        'Business',
         on_delete=models.CASCADE,
         related_name='recomendation_code',
     )
@@ -171,7 +169,7 @@ class RecomendationCode(models.Model):
 
 
 class Customer(models.Model):
-    business = models.ForeignKey(Business,
+    business = models.ForeignKey('Business',
                                  on_delete=models.CASCADE,
                                  related_name='customers')
     account = models.OneToOneField(
@@ -200,7 +198,7 @@ class Customer(models.Model):
 
 
 class Employee(Color):
-    business = models.ForeignKey(Business,
+    business = models.ForeignKey('Business',
                                  on_delete=models.CASCADE,
                                  related_name='employees')
     name = models.CharField(verbose_name="Imię", max_length=20)
@@ -217,7 +215,7 @@ class Employee(Color):
 
 
 class PaymentMethod(models.Model):
-    business = models.ForeignKey(Business,
+    business = models.ForeignKey('Business',
                                  on_delete=models.CASCADE,
                                  related_name='payment_methods')
     name = models.CharField(max_length=50)
@@ -226,24 +224,24 @@ class PaymentMethod(models.Model):
 
 
 class ServiceGroup(Group):
-    business = models.ForeignKey(Business,
+    business = models.ForeignKey('Business',
                                  on_delete=models.CASCADE,
                                  related_name='service_groups')
-    employees = models.ManyToManyField(Employee, related_name="service_groups")
+    employees = models.ManyToManyField('Employee', related_name="service_groups")
 
 
 class Service(models.Model):
-    business = models.ForeignKey(Business,
+    business = models.ForeignKey('Business',
                                  on_delete=models.CASCADE,
                                  related_name='services')
     group = models.ForeignKey(
-        ServiceGroup,
+        'ServiceGroup',
         on_delete=models.CASCADE,
         blank=True,
         null=True,
         related_name="services",
     )
-    employees = models.ManyToManyField(Employee,
+    employees = models.ManyToManyField('Employee',
                                        through="ServiceEmployee",
                                        related_name="services")
     name = models.CharField(max_length=25)
@@ -266,7 +264,7 @@ class Service(models.Model):
 
 
 class ServiceRelatedData(models.Model):
-    service = models.ForeignKey(Service,
+    service = models.ForeignKey('Service',
                                 on_delete=models.CASCADE,
                                 related_name="related_data")
     resources = models.ManyToManyField("Resource", related_name="related_data")
@@ -274,17 +272,17 @@ class ServiceRelatedData(models.Model):
 
 
 class ServiceImage(models.Model):
-    service = models.ForeignKey(Service,
+    service = models.ForeignKey('Service',
                                 on_delete=models.CASCADE,
                                 related_name="images")
     image = models.ImageField(upload_to="service_images/%Y/%m/%d/")
 
 
 class ServiceEmployee(models.Model):
-    service = models.ForeignKey(Service,
+    service = models.ForeignKey('Service',
                                 on_delete=models.CASCADE,
                                 related_name="service_employee_data")
-    employee = models.ForeignKey(Employee,
+    employee = models.ForeignKey('Employee',
                                  on_delete=models.CASCADE,
                                  related_name="service_employee_data")
     time = models.PositiveIntegerField(default=0)
@@ -294,18 +292,18 @@ class ServiceEmployee(models.Model):
 
 
 class ResourceGroup(Group):
-    business = models.ForeignKey(Business,
+    business = models.ForeignKey('Business',
                                  on_delete=models.CASCADE,
                                  related_name='resource_groups')
 
 
 class Resource(Color):
-    business = models.ForeignKey(Business,
+    business = models.ForeignKey('Business',
                                  on_delete=models.CASCADE,
                                  related_name='resources')
     name = models.CharField(max_length=30)
     group = models.ForeignKey(
-        ResourceGroup,
+        'ResourceGroup',
         on_delete=models.CASCADE,
         blank=True,
         null=True,
@@ -318,7 +316,7 @@ class Resource(Color):
 
 
 class ProductGroup(Group):
-    business = models.ForeignKey(Business,
+    business = models.ForeignKey('Business',
                                  on_delete=models.CASCADE,
                                  related_name='product_groups')
 
@@ -327,7 +325,7 @@ class ProductGroup(Group):
 
 
 class Producer(models.Model):
-    business = models.ForeignKey(Business,
+    business = models.ForeignKey('Business',
                                  on_delete=models.CASCADE,
                                  related_name='producers')
     name = models.CharField(max_length=60)
@@ -348,7 +346,7 @@ class Product(models.Model):
         (1, "Jednostki"),
     )
 
-    business = models.ForeignKey(Business,
+    business = models.ForeignKey('Business',
                                  on_delete=models.CASCADE,
                                  related_name='products')
     name = models.CharField(max_length=200)
@@ -357,14 +355,14 @@ class Product(models.Model):
     is_material = models.BooleanField(default=False,
                                       help_text="Produkt do użytku")
     producer = models.ForeignKey(
-        Producer,
+        'Producer',
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
         related_name="products",
     )
     group = models.ForeignKey(
-        ProductGroup,
+        'ProductGroup',
         on_delete=models.CASCADE,
         blank=True,
         null=True,
@@ -385,12 +383,12 @@ class Product(models.Model):
 
 
 class Notification(models.Model):
-    recivers = models.ManyToManyField(Account, related_name="notifications")
+    recivers = models.ManyToManyField('accounts.Account', related_name="notifications")
     date = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=80)
     message = models.TextField()
     read = models.BooleanField(default=False)
-    meeting = models.ForeignKey(Meeting,
+    meeting = models.ForeignKey('meetings.Meeting',
                                 on_delete=models.SET_NULL,
                                 blank=True,
                                 null=True)
