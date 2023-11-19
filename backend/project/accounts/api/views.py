@@ -32,7 +32,6 @@ class LoginAPIView(APIView):
 
         email = data['email']
         password = data['password']
-        weekday = data['weekday']
 
         user = auth.authenticate(email=email, password=password)
 
@@ -44,10 +43,7 @@ class LoginAPIView(APIView):
                     'message':
                     _('Logged in successfully'),
                     'user':
-                    serializers.AccountSerializer(user,
-                                                  context={
-                                                      'weekday': weekday
-                                                  }).data,
+                    serializers.AccountSerializer(user).data,
                 },
                 status=status.HTTP_200_OK)
         raise ValidationError({'detail': _('Email or password is incorrect')})

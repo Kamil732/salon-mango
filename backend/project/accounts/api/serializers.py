@@ -17,21 +17,9 @@ class UniqueEmailSerializer(serializers.Serializer):
 
 
 class AccountBusinessSerializer(serializers.ModelSerializer):
-    open_hour = serializers.SerializerMethodField()
-
-    def get_open_hour(self, obj):
-        start, end = obj.open_hours.filter(
-            weekday=self.context.get('weekday')).values_list(
-                'start', 'end').first() or [None, None]
-
-        return {
-            'start': start,
-            'end': end,
-        }
-
     class Meta:
         model = Business
-        fields = ('id', 'name', 'city', 'address', 'open_hour')
+        fields = ('id', 'name', 'city', 'address')
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -40,12 +28,7 @@ class AccountSerializer(serializers.ModelSerializer):
     businesses = serializers.SerializerMethodField()
 
     def get_businesses(self, obj):
-        return AccountBusinessSerializer(obj.businesses.all(),
-                                         many=True,
-                                         context={
-                                             'weekday':
-                                             self.context.get('weekday')
-                                         }).data
+        return AccountBusinessSerializer(obj.businesses.all(), many=True).data
 
     class Meta:
         model = Account

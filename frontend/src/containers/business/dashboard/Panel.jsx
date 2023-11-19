@@ -246,23 +246,30 @@ function Panel({
 										</Card.Title>
 										<Card.Body>
 											{user_data.businesses.map(
-												({ id, name, open_hour }) => {
+												({ id, name }) => {
 													// const start = moment(open.start)
 													// const end = moment(open.end)
 													const now = moment()
-													const isOpen =
-														now.isAfter(
-															moment(
-																open_hour.start,
-																'HH:mm'
-															)
-														) &&
-														now.isBefore(
-															moment(
-																open_hour.end,
-																'HH:mm'
-															)
+													const open_hour =
+														business.open_hours.find(
+															(el) =>
+																el.weekday ===
+																moment().isoWeekday()
 														)
+													const isOpen = open_hour
+														? now.isAfter(
+																moment(
+																	open_hour.start,
+																	'HH:mm'
+																)
+														  ) &&
+														  now.isBefore(
+																moment(
+																	open_hour.end,
+																	'HH:mm'
+																)
+														  )
+														: false
 
 													return (
 														<Card
