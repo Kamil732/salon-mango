@@ -70,10 +70,10 @@ export const getOrCreateBusinessData =
 				dispatch({
 					type: ADD_BUSINESS_TO_USER,
 					payload: {
-						address: res.data.address,
-						city: res.data.city,
-						id: res.data.id,
-						name: res.data.name,
+						id: res.data.data.id,
+						name: res.data.data.name,
+						city: res.data.data.city,
+						address: res.data.data.address,
 					},
 				})
 			dispatch({
