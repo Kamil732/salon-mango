@@ -56,5 +56,10 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, data):
         email = data['email']
         password = data['password']
+        name = data['name']
 
-        return Account.objects.create_user(email=email, password=password)
+        account = Account.objects.create_user(email=email, password=password)
+        account.name = name
+        account.save()
+
+        return account
