@@ -76,6 +76,9 @@ class MeetingSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = self.context.get("request").user
 
+        print('='*25)
+        print(validated_data)
+
         # Create meeting
         services_data = validated_data.pop("services_data", None)
         meeting = super(MeetingSerializer, self).create(validated_data)
@@ -100,7 +103,8 @@ class MeetingSerializer(serializers.ModelSerializer):
                 services)
 
             for idx, service_data in enumerate(services_data_models):
-                service_data.resources.add(*services_data[idx]["resources"])
+                if (services_data[idx]['resources']):
+                    service_data.resources.add(*services_data[idx]["resources"])
 
         # if (validated_data['services']):
         #     meeting_duration = 0

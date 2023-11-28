@@ -19,7 +19,7 @@ export const loadUser = () => async (dispatch) => {
 	const body = JSON.stringify({
 		weekday: moment().isoWeekday(),
 	})
-	console.log(body)
+
 	dispatch({ type: AUTH_LOADING })
 
 	try {
@@ -32,7 +32,7 @@ export const loadUser = () => async (dispatch) => {
 			type: AUTH_SUCCESS,
 			payload: res.data,
 		})
-		dispatch(getOrCreateBusinessData(res.data.businesses[0].id))
+		await dispatch(getOrCreateBusinessData(res.data.businesses[0].id))
 	} catch (err) {
 		dispatch({
 			type: AUTH_ERROR,
@@ -62,7 +62,9 @@ export const login = (email, password, setErrors) => async (dispatch) => {
 
 		if (res.data.user.businesses.length > 0) {
 			NotificationManager.success(res.data.message, 'Zalogowano')
-			dispatch(getOrCreateBusinessData(res.data.user.businesses[0].id))
+			await dispatch(
+				getOrCreateBusinessData(res.data.user.businesses[0].id)
+			)
 		}
 
 		dispatch({ type: CLEAR_MEETINGS })

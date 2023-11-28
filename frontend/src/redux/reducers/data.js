@@ -188,13 +188,11 @@ export default function (state = initialState, action) {
 			request.onload = function () {
 				context.decodeAudioData(
 					request.response,
-					function (response) {
+					(response) => {
 						source.buffer = response
 						source.start(0) //play audio immediately
 					},
-					function () {
-						console.error('The request failed.')
-					}
+					() => console.error('The request failed.')
 				)
 			}
 			request.send()

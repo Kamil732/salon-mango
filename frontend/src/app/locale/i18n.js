@@ -7,7 +7,7 @@ import './location-params'
 i18n.use(Backend)
 	.use(initReactI18next)
 	.init({
-		debug: true,
+		// debug: true,
 		whitelist: SUPPORTED_LANGUAGES,
 		lng: localStorage.getItem('lang'),
 		supportedLngs: SUPPORTED_LANGUAGES,
